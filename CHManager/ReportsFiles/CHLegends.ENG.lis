@@ -1,0 +1,111 @@
+/* Fuentes usadas en este lis ----------------------------------- */
+
+Data[6699] lcpy="142,152,162"
+
+Vari[142]= 6081 /* --  Font 	-- */
+Vari[152]= 6080 /* --  Font 	-- */
+Vari[162]= 6080 /* --  Font 	-- */
+
+
+
+Vari[1]=  0    /* --  Posicion X de la tabla, o dato -- */
+Vari[2]=  0    /* --  Posicion Y de la tabla, o dato -- */
+Vari[3]=  0    /* --  Numero de Veces que se repite el Template -- */
+Vari[4]=  0    /* --  Numero de Veces que se repite la Celda -- */
+Vari[5]=  1    /* --  Linea Superior  para celda (upper)     -- */
+Vari[6]=  1    /* --  Linea Inferior  para celda (lower)     -- */
+Vari[7]=  1    /* --  Linea izquierda para celda (left)      -- */
+Vari[8]=  1    /* --  Linea Derecha   para celda (right)     -- */
+
+Vari[10]=  0   /* --  Height del Template -- */
+Vari[11]=  0   /* --  Height de la celda -- */
+Vari[12]=  0   /* --  Width de la celda -- */
+
+Vari[21]=  0   /* --  Alineación del Dato 1      -- */
+Vari[22]=  0   /* --  Fuente del Dato 1          -- */
+
+Vari[31]=  0   /* --  Desplazamiento en X del Dato dentro de la celda -- */
+Vari[32]=  0   /* --  Desplazamiento en Y del Dato -- */
+
+Vari[51]=  5   /* --  Minimo espacio entre altura y borde de caja -- */
+Vari[52]= 10   /* --  minimo espacio entre largo del texto y borde de caja -- */
+	
+Vari[61]=   3  /* --  Numero de columnas forzadas en el body -- */
+
+Vari[71]= 0000 /* --  Lineas que bordean las columnas  -- */
+Vari[72]= 0000 /* --  Lines que bordean las legendas -- */
+
+
+		/* Formato por defecto para la eDatOfBodyS (Descripcion Corta) */
+Vari[141]=    0 /* --  Alineacion  -- */
+Vari[143]= 	  0 /* --  Height 	(si 0 calculado) -- */-- */
+Vari[144]= 	  0 /* --  Width 	(si 0 calculado) -- */-- */
+Vari[145]= 0000 /* --  Lines 	-- */
+
+		/* Formato por defecto para la eDatOfHeader (primera Descripcion Larga) */
+Vari[151]=    0 /* --  Alineacion  -- */
+Vari[153]= 	  0 /* --  Height 	(si 0 calculado) -- */-- */
+Vari[154]= 	  0 /* --  Width 	(si 0 calculado) -- */-- */
+Vari[155]= 0000 /* --  Lines 	-- */
+
+		/* Formato por defecto para la eDatOfHeader (restante descripciones) */
+Vari[161]=    0 /* --  Alineacion  -- */
+Vari[163]= 	  0 /* --  Height 	(si 0 calculado) -- */-- */
+Vari[164]= 	  0 /* --  Width 	(si 0 calculado) -- */-- */
+Vari[165]= 0000 /* --  Lines 	-- */
+
+
+
+Data[0] 	d_al=&Vari[21]   font=&Vari[22]   /* - Dato Variable --*/
+
+
+	/* ****************** TABLA GENERAL PARA LA IMPLEMENTACION DE LAS CAJAS ****************** */
+Table 10485
+	template[100] { call=&Vari[3] , height=&Vari[10] } 
+		cell[ 10]                                                                                                                       /* Titulo del Listado */
+        	{ call=&Vari[4], height=&Vari[11], width=&Vari[12] }
+            { outline_upper=&Vari[5] } { outline_lower=&Vari[6] }
+            { outline_left =&Vari[7] } { outline_right=&Vari[8] }
+			{ Data=0 ,offset_dx=&Vari[31], offset_dy=&Vari[32] }
+
+Line 10
+	{ table = 10485, corx=&Vari[1] }
+/*	, cory=&Vari[2] } */
+
+/* ------------------------------------------------------------------ */
+/* ------------------------------ C30 ------------------------------- */
+/* ------------------------------------------------------------------ */
+/* Legend: */
+
+Data[10],lcpy= "MR|Men's Rapid"
+Data[11],lcpy= "MC|Men's Classic"
+Data[12],lcpy= "MB|Men's Blitz"
+Data[13],lcpy= "WR|Women's Rapid"
+Data[14],lcpy= "WC|Women's Classic"
+Data[15],lcpy= "WB|Women's Blitz"
+Data[16],lcpy= "TR|Team's Rapid"
+Data[17],lcpy= "TC|Team's Classic"
+Data[18],lcpy= "TB|Team's Blitz"
+Data[19],lcpy= "end"
+
+
+/* ------------------------------------------------------------------ */
+/* ------------------------------ C75 ------------------------------- */
+/* ------------------------------------------------------------------ */
+/* Legend: */
+
+Data[100],lcpy= "1|BH|Buchholz"
+Data[101],lcpy= "2|SB|Sonneborn-Berger"
+Data[102],lcpy= "end"
+
+
+/* ------------------------------------------------------------------ */
+/* ------------------------------ C96 ------------------------------- */
+/* ------------------------------------------------------------------ */
+/* Legend: */
+
+Data[150],lcpy= "1|G|Gold"
+Data[151],lcpy= "2|S|Silver"
+Data[152],lcpy= "1|B|Bronze"
+Data[153],lcpy= "2|Tot|Total"
+Data[154],lcpy= "end"

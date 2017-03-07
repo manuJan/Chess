@@ -1,0 +1,461 @@
+/* ------------------------------------------------------------------ */
+/* --------------------------- Variables ---------------------------- */
+/* ------------------------------------------------------------------ */
+
+Vari[1000]=50					/* coordenada y calculada	*/
+Vari[1001]= 0					/* coordenada x calculada	*/
+Vari[1002]= 0					/* coordenada x calculada	*/
+Vari[1003]= 5					/* variable salto signature	*/
+Vari[1004]						/* =Vari[1000]*Vari[1003]	*/
+Vari[1005]= 1					/* Partir Group si/no		*/
+
+Vari[ 111]=6071					/* fuente negrita			*/
+Vari[ 112]=6070					/* fuente normal			*/
+Vari[ 113]=6081					/* fuente negrita			*/
+
+/* ------------------------------------------------------------------ */
+/* ---------------------------- Carteles ---------------------------- */
+/* ------------------------------------------------------------------ */
+
+Data[   1],lcpy="%#d %b %Y"
+Data[   2],lcpy="Date: _____________________ Time: ______________  Signature: ________________________________________________"
+Data[   3],lcpy="Reference"
+Data[   4],lcpy="Height"
+Data[   5],lcpy="m/ft in"
+Data[   6],lcpy="Weight"
+Data[   7],lcpy="kg/lbs"
+
+Data[ 12 ], lcpy="Function"			,d_al=0,font=&Vari[111]
+Data[ 13 ], lcpy="Family Name"		,d_al=0,font=&Vari[111]
+Data[ 14 ], lcpy="Given Name"		,d_al=0,font=&Vari[111]
+Data[ 15 ], lcpy="G"				,d_al=1,font=&Vari[111]
+Data[ 16 ], lcpy="Date of Birth"	,d_al=2,font=&Vari[111]
+Data[ 19 ], lcpy="Accreditation"	,d_al=2,font=&Vari[111]
+
+Data[ 41 ], lcpy="Print Names"		,d_al=0,font=&Vari[111]
+Data[ 42 ], lcpy="TV Names"			,d_al=0,font=&Vari[111]
+Data[ 43 ], lcpy="Scoreboard Names"	,d_al=0,font=&Vari[111]
+Data[ 44 ], lcpy="WNPA Names"		,d_al=0,font=&Vari[111]
+
+Data[ 54 ], lcpy="Family"			,d_al=0,font=&Vari[111]
+Data[ 55 ], lcpy="Given"			,d_al=0,font=&Vari[111]
+
+/* ------------------------------------------------------------------ */
+/* ----------------------------- Datos ------------------------------ */
+/* ------------------------------------------------------------------ */
+
+Data[ 100],d_al=1,font=&Vari[113]		/* As of			*/
+Data[ 101],d_al=1,font=&Vari[113]		/* Group - Desc		*/
+Data[ 103],d_al=0,font=&Vari[113]		/* Signature		*/
+
+Data[ 111],d_al=2,font=&Vari[111]		/* Cartel1 Reference*/
+Data[ 112],d_al=2,font=&Vari[111]		/* Cartel2 Reference*/
+Data[ 171],d_al=1,font=&Vari[111]		/* Cartel1 Height	*/	
+Data[ 172],d_al=1,font=&Vari[111]		/* Cartel2 Height	*/
+Data[ 181],d_al=1,font=&Vari[111]		/* Cartel1 Weight	*/
+Data[ 182],d_al=1,font=&Vari[111]		/* Cartel2 Weight	*/
+Data[1101],d_al=2,font=&Vari[111]		/* Cartel1 IFNumber */
+Data[1102],d_al=2,font=&Vari[111]		/* Cartel2 IFNumber */
+
+Data[ 301],d_al=2,font=&Vari[112]		/* Reference		*/
+Data[ 302],d_al=0,font=&Vari[112]		/* Function			*/
+Data[ 303],d_al=0,font=&Vari[112]		/* Family Name		*/
+Data[ 304],d_al=0,font=&Vari[112]		/* Given Name		*/
+Data[ 305],d_al=1,font=&Vari[112]		/* G				*/
+Data[ 306],d_al=2,font=&Vari[112]		/* Date of Birht	*/
+Data[ 307],d_al=1,font=&Vari[112]		/* Height			*/
+Data[ 308],d_al=1,font=&Vari[112]		/* Weight			*/
+Data[ 309],d_al=2,font=&Vari[112]		/* Accreditation	*/
+Data[ 310],d_al=2,font=&Vari[112]		/* IF Number		*/
+
+Data[ 501],d_al=0,font=&Vari[112]		/* Prn LName		*/
+Data[ 502],d_al=0,font=&Vari[112]		/* TV LName			*/
+Data[ 503],d_al=0,font=&Vari[112]		/* SCB LName		*/
+
+Data[ 601],d_al=0,font=&Vari[112]		/* Prn SName		*/
+Data[ 602],d_al=0,font=&Vari[112]		/* TV SName			*/
+Data[ 603],d_al=0,font=&Vari[112]		/* SCB SName		*/
+Data[ 604],d_al=0,font=&Vari[112]		/* WNPA Family Name	*/
+Data[ 605],d_al=0,font=&Vari[112]		/* WNPA Given Name	*/
+
+/* ------------------------------------------------------------------ */
+/* ----------------------------- Tablas ----------------------------- */
+/* ------------------------------------------------------------------ */
+
+Table 10101
+
+	/*================================================================*/
+	/*====== cabecera 1 (datos personales) ===========================*/
+	/*================================================================*/ 
+
+	Vari[11]=100					/* Altura del Template 1		*/
+	Vari[12]=  1					/* veces a llamar al Template 1	*/
+	Vari[13]=  1					/* peso si/no					*/
+	Vari[14]= 60					/* Offset_dy Template 1	1line	*/
+	Vari[15]= 40					/* Offset_dy Template 1	2lines	*/
+	
+	template[1]	{ call=&Vari[12],height=&Vari[11] }
+
+		/*------ Reference ---------------------- */ 
+		Vari[1011]=180		/* w */
+		Vari[1012]=170		/* x */
+		cell[1] { call=1, height=&Vari[11], width=&Vari[1011] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =1 }
+			{ outline_right=1 }
+			{ Run_Line=11,Offset_lx=&Vari[1012],Offset_ly=&Vari[14] }
+
+		/*------ Function ----------------------- */ 
+		Vari[1021]=160		/* w */
+		Vari[1022]= 10		/* x */
+		cell[2] { call=1, height=&Vari[11], width=&Vari[1021] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ data=12,Offset_dx=&Vari[1022],Offset_dy=&Vari[14] }
+
+		/*------ Family Name -------------------- */ 
+		Vari[1031]=400		/* w */
+		Vari[1032]= 10		/* x */
+		cell[3] { call=1, height=&Vari[11], width=&Vari[1031] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ data=13,Offset_dx=&Vari[1032],Offset_dy=&Vari[14] }
+
+		/*------ Given Name --------------------- */ 
+		Vari[1041]=400		/* w */
+		Vari[1042]= 10		/* x */
+		cell[4] { call=1, height=&Vari[11], width=&Vari[1041] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ data=14,Offset_dx=&Vari[1042],Offset_dy=&Vari[14] }
+
+		/*------ G ------------------------------ */ 
+		Vari[1051]= 40		/* w */
+		Vari[1052]= 20		/* x */
+		cell[5] { call=1, height=&Vari[11], width=&Vari[1051] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ data=15,Offset_dx=&Vari[1052],Offset_dy=&Vari[14] }
+
+		/*------ Date of Birth ------------------ */ 
+		Vari[1061]=200		/* w */
+		Vari[1062]=190		/* x */
+		cell[6] { call=1, height=&Vari[11], width=&Vari[1061] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ data=16,Offset_dx=&Vari[1062],Offset_dy=&Vari[14] }
+
+		/*------ Height ------------------------- */ 
+		Vari[1071]=160		/* w */
+		Vari[1072]= 80		/* x */
+		cell[7] { call=1, height=&Vari[11], width=&Vari[1071] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ Run_Line=17,Offset_lx=&Vari[1072],Offset_ly=&Vari[15] }
+
+		/*------ Weight ------------------------- */ 
+		Vari[1081]=160		/* w */
+		Vari[1082]= 80		/* x */
+		cell[8] { call=&Vari[13], height=&Vari[11], width=&Vari[1081] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ Run_Line=18,Offset_lx=&Vari[1082],Offset_ly=&Vari[15] }
+
+		/*------ Accreditation ------------------ */ 
+		Vari[1091]=275		/* w */
+		Vari[1092]=270		/* x */
+		cell[9] { call=1, height=&Vari[11], width=&Vari[1091] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ data=19,Offset_dx=&Vari[1092],Offset_dy=&Vari[14] }
+
+		/*------ IF Number ---------------------- */ 
+		Vari[1101]=275		/* w */
+		Vari[1102]=270		/* x */
+		Vari[1103]			/* y = Vari[14] */
+		cell[10] { call=1, height=&Vari[11], width=&Vari[1101] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ Run_Line=110,Offset_lx=&Vari[1102],Offset_ly=&Vari[1103] }
+
+	/*================================================================*/
+	/*====== Salto ===================================================*/
+	/*================================================================*/ 
+
+	Vari[21]= 50					/* Altura del Template 2		*/
+	
+	template[2]	{ call=1,height=&Vari[21] }
+
+	/*================================================================*/
+	/*====== Datos personales ========================================*/
+	/*================================================================*/ 
+
+	Vari[31]= 50					/* Altura del Template 3		*/
+	Vari[33]= 40					/* Offset_dy Template 3			*/
+	
+	template[3]	{ call=1,height=&Vari[31] }
+
+		/*------ Reference ---------------------- */ 
+		cell[1] { call=1, height=&Vari[31], width=&Vari[1011] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =1 }
+			{ outline_right=0 }
+			{ data=301,Offset_dx=&Vari[1012],Offset_dy=&Vari[33] }
+
+		/*------ Function ----------------------- */ 
+		cell[2] { call=1, height=&Vari[31], width=&Vari[1021] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =1 }
+			{ outline_right=1 }
+			{ data=302,Offset_dx=&Vari[1022],Offset_dy=&Vari[33] }
+
+		/*------ Family Name -------------------- */ 
+		cell[3] { call=1, height=&Vari[31], width=&Vari[1031] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ data=303,Offset_dx=&Vari[1032],Offset_dy=&Vari[33] }
+
+		/*------ Given Name --------------------- */ 
+		cell[4] { call=1, height=&Vari[31], width=&Vari[1041] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ data=304,Offset_dx=&Vari[1042],Offset_dy=&Vari[33] }
+
+		/*------ G ------------------------------ */ 
+		cell[5] { call=1, height=&Vari[31], width=&Vari[1051] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ data=305,Offset_dx=&Vari[1052],Offset_dy=&Vari[33] }
+
+		/*------ Date of Birth ------------------ */ 
+		cell[6] { call=1, height=&Vari[31], width=&Vari[1061] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ data=306,Offset_dx=&Vari[1062],Offset_dy=&Vari[33] }
+
+		/*------ Height ------------------------- */ 
+		cell[7] { call=1, height=&Vari[31], width=&Vari[1071] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ data=307,Offset_dx=&Vari[1072],Offset_dy=&Vari[33] }
+
+		/*------ Weight ------------------------- */ 
+		cell[8] { call=&Vari[13], height=&Vari[31], width=&Vari[1081] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ data=308,Offset_dx=&Vari[1082],Offset_dy=&Vari[33] }
+
+		/*------ Accreditation ------------------ */ 
+		cell[9] { call=1, height=&Vari[31], width=&Vari[1091] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ data=309,Offset_dx=&Vari[1092],Offset_dy=&Vari[33] }
+
+		/*------ IF Number ---------------------- */ 
+		cell[10] { call=1, height=&Vari[31], width=&Vari[1101] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ data=310,Offset_dx=&Vari[1102],Offset_dy=&Vari[33] }
+
+	/*================================================================*/
+	/*====== cabecera 2 (carteles de Nombres) ========================*/
+	/*================================================================*/ 
+
+	Vari[41]= 50					/* Altura del Template 4		*/
+	Vari[43]= 40					/* Offset_dx Template 4			*/
+	
+	template[4]	{ call=1,height=&Vari[41] }
+				{ Offset_x = &Vari[1011]  }	
+
+		/*------ Print Names -------------------- */ 
+		Vari[4011]			/* w = Vari[1021] + Vari[1031] */
+		Vari[4012]= 10		/* x */
+		cell[1] { call=1, height=&Vari[41], width=&Vari[4011] }
+			{ outline_lower=1 }
+			{ outline_left =1 }
+			{ outline_right=1 }
+			{ data=41,Offset_dx=&Vari[4012],Offset_dy=&Vari[43] }
+
+		/*------ TV Names ----------------------- */ 
+		Vari[4021]			/* w = Vari[1041] + Vari[1051] + Vari[1061] */
+		Vari[4022]= 10		/* x */
+		cell[2] { call=1, height=&Vari[41], width=&Vari[4021] }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ data=42,Offset_dx=&Vari[4022],Offset_dy=&Vari[43] }
+
+		/*------ Scoreboard Names --------------- */ 
+		Vari[4031]			/* w = Vari[1071] + Vari[1081] */
+		Vari[4032]= 10		/* x */
+		cell[3] { call=1, height=&Vari[41], width=&Vari[4031] }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ data=43,Offset_dx=&Vari[4032],Offset_dy=&Vari[43] }
+
+		/*------ Wanpa Names -------------------- */ 
+		Vari[4041]			/* w = Vari[1091] + Vari[1101] */
+		Vari[4042]= 10		/* x */
+		cell[4] { call=1, height=&Vari[41], width=&Vari[4041] }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ data=44,Offset_dx=&Vari[4042],Offset_dy=&Vari[43] }
+
+	/*================================================================*/
+	/*====== Nombres Linea 1 =========================================*/
+	/*================================================================*/ 
+
+	Vari[51]= 50					/* Altura del Template 5		*/
+	Vari[53]= 40					/* Offset_dx Template 5			*/
+	
+	template[5]	{ call=1,height=&Vari[51] }
+				{ Offset_x = &Vari[1011]  }	
+
+		/*------ Print Names -------------------- */ 
+		cell[1] { call=1, height=&Vari[51], width=&Vari[4011] }
+			{ outline_lower=1 }
+			{ outline_left =1 }
+			{ outline_right=1 }
+			{ data=501,Offset_dx=&Vari[4012],Offset_dy=&Vari[53] }
+
+		/*------ TV Names ----------------------- */ 
+		cell[2] { call=1, height=&Vari[51], width=&Vari[4021] }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ data=502,Offset_dx=&Vari[4022],Offset_dy=&Vari[53] }
+
+		/*------ Scoreboard Names --------------- */ 
+		cell[3] { call=1, height=&Vari[51], width=&Vari[4031] }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ data=503,Offset_dx=&Vari[4032],Offset_dy=&Vari[53] }
+
+		/*------ Family ------------------------- */ 
+		Vari[5042]= 10		/* x */
+		cell[4] { call=1, height=&Vari[51], width=&Vari[1091] }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ data=54,Offset_dx=&Vari[5042],Offset_dy=&Vari[53] }
+
+		/*------ Given -------------------------- */ 
+		Vari[5052]= 10		/* x */
+		cell[5] { call=1, height=&Vari[51], width=&Vari[1101] }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ data=55,Offset_dx=&Vari[5052],Offset_dy=&Vari[53] }
+
+	/*================================================================*/
+	/*====== Nombres Linea 2 =========================================*/
+	/*================================================================*/ 
+
+	Vari[61]= 50					/* Altura del Template 5		*/
+	Vari[63]= 40					/* Offset_dx Template 5			*/
+	
+	template[6]	{ call=1,height=&Vari[61] }
+				{ Offset_x = &Vari[1011]  }	
+
+		/*------ Print Names -------------------- */ 
+		cell[1] { call=1, height=&Vari[61], width=&Vari[4011] }
+			{ outline_lower=1 }
+			{ outline_left =1 }
+			{ outline_right=1 }
+			{ data=601,Offset_dx=&Vari[4012],Offset_dy=&Vari[63] }
+
+		/*------ TV Names ----------------------- */ 
+		cell[2] { call=1, height=&Vari[61], width=&Vari[4021] }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ data=602,Offset_dx=&Vari[4022],Offset_dy=&Vari[63] }
+
+		/*------ Scoreboard Names --------------- */ 
+		cell[3] { call=1, height=&Vari[61], width=&Vari[4031] }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ data=603,Offset_dx=&Vari[4032],Offset_dy=&Vari[63] }
+
+		/*------ Family ------------------------- */ 
+		cell[4] { call=1, height=&Vari[61], width=&Vari[1091] }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ data=604,Offset_dx=&Vari[5042],Offset_dy=&Vari[63] }
+
+		/*------ Given -------------------------- */ 
+		cell[5] { call=1, height=&Vari[61], width=&Vari[1101] }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ data=605,Offset_dx=&Vari[5052],Offset_dy=&Vari[63] }
+
+/* ------------------------------------------------------------------ */
+/* ----------------------------- Líneas ----------------------------- */
+/* ------------------------------------------------------------------ */
+		
+Line  1	/* -- As of --*/	
+		{ data  = 100, corx=&Vari[1001], cory=&Vari[1000] }
+		{ jump_d= &Vari[1000] }
+
+Line  4 /* -- Group Code + Group Description --*/
+		{ data  = 101, corx=&Vari[1001] }
+		{ jump_d= &Vari[1000] }
+
+Line  2	/* -- Table --- */
+		{ table = 10101, corx=&Vari[1002] }
+
+Line  3	/* -- Signature --- */
+		{ jump_d= &Vari[1004] }
+		{ data  = 103, corx=&Vari[1002] }
+
+Line 11	/* -- Reference  -----*/
+		{ data	 = 111 }
+		{ jump_d =  40 }
+		{ data	 = 112 }
+
+Line 17	/* -- Height  -----*/
+		{ data	 = 171 }
+		{ jump_d =  40 }
+		{ data	 = 172 }
+
+Line 18	/* -- Weight  -----*/
+		{ data	 = 181 }
+		{ jump_d =  40 }
+		{ data	 = 182 }
+
+Line 110	/* -- IF Number ---*/
+		{ data	 = 1101 }
+		{ jump_d =  40  }
+		{ data	 = 1102 }

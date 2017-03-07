@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CHManager", "CHManager\CHManager.vcxproj", "{38467137-C4FC-3685-3C86-F12C9ED70394}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CHMngtModel", "CHMngtModel\CHMngtModel.vcxproj", "{64A83A7B-17DE-DF4F-3970-5A5310ECB52C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CHVMngtModel", "CHVMngtModel\CHVMngtModel.vcxproj", "{B5507D04-5672-0053-5C24-BEC70C5FBB14}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CHRSCDoha", "CHRSCDoha\CHRSCDoha.vcxproj", "{28094D65-253B-A720-8834-8DD23AFEE381}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CHDF", "CHDF\CHDF.vcxproj", "{DE05DEC2-DEF3-FA75-E424-2E6C530DF5B5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CHAfterInitialLoad", "CHAfterInitialLoad\CHAfterInitialLoad.vcxproj", "{78DCC6A9-D226-5321-6A1C-E939AA157436}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+		Template|Win32 = Template|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38467137-C4FC-3685-3C86-F12C9ED70394}.Debug|Win32.ActiveCfg = Debug|Win32
+		{38467137-C4FC-3685-3C86-F12C9ED70394}.Debug|Win32.Build.0 = Debug|Win32
+		{38467137-C4FC-3685-3C86-F12C9ED70394}.Release|Win32.ActiveCfg = Release|Win32
+		{38467137-C4FC-3685-3C86-F12C9ED70394}.Release|Win32.Build.0 = Release|Win32
+		{38467137-C4FC-3685-3C86-F12C9ED70394}.Template|Win32.ActiveCfg = Release|Win32
+		{38467137-C4FC-3685-3C86-F12C9ED70394}.Template|Win32.Build.0 = Release|Win32
+		{64A83A7B-17DE-DF4F-3970-5A5310ECB52C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{64A83A7B-17DE-DF4F-3970-5A5310ECB52C}.Debug|Win32.Build.0 = Debug|Win32
+		{64A83A7B-17DE-DF4F-3970-5A5310ECB52C}.Release|Win32.ActiveCfg = Release|Win32
+		{64A83A7B-17DE-DF4F-3970-5A5310ECB52C}.Release|Win32.Build.0 = Release|Win32
+		{64A83A7B-17DE-DF4F-3970-5A5310ECB52C}.Template|Win32.ActiveCfg = Template|Win32
+		{64A83A7B-17DE-DF4F-3970-5A5310ECB52C}.Template|Win32.Build.0 = Template|Win32
+		{B5507D04-5672-0053-5C24-BEC70C5FBB14}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B5507D04-5672-0053-5C24-BEC70C5FBB14}.Debug|Win32.Build.0 = Debug|Win32
+		{B5507D04-5672-0053-5C24-BEC70C5FBB14}.Release|Win32.ActiveCfg = Release|Win32
+		{B5507D04-5672-0053-5C24-BEC70C5FBB14}.Release|Win32.Build.0 = Release|Win32
+		{B5507D04-5672-0053-5C24-BEC70C5FBB14}.Template|Win32.ActiveCfg = Template|Win32
+		{B5507D04-5672-0053-5C24-BEC70C5FBB14}.Template|Win32.Build.0 = Template|Win32
+		{28094D65-253B-A720-8834-8DD23AFEE381}.Debug|Win32.ActiveCfg = Debug|Win32
+		{28094D65-253B-A720-8834-8DD23AFEE381}.Debug|Win32.Build.0 = Debug|Win32
+		{28094D65-253B-A720-8834-8DD23AFEE381}.Release|Win32.ActiveCfg = Release|Win32
+		{28094D65-253B-A720-8834-8DD23AFEE381}.Release|Win32.Build.0 = Release|Win32
+		{28094D65-253B-A720-8834-8DD23AFEE381}.Template|Win32.ActiveCfg = Template|Win32
+		{28094D65-253B-A720-8834-8DD23AFEE381}.Template|Win32.Build.0 = Template|Win32
+		{DE05DEC2-DEF3-FA75-E424-2E6C530DF5B5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DE05DEC2-DEF3-FA75-E424-2E6C530DF5B5}.Debug|Win32.Build.0 = Debug|Win32
+		{DE05DEC2-DEF3-FA75-E424-2E6C530DF5B5}.Release|Win32.ActiveCfg = Release|Win32
+		{DE05DEC2-DEF3-FA75-E424-2E6C530DF5B5}.Release|Win32.Build.0 = Release|Win32
+		{DE05DEC2-DEF3-FA75-E424-2E6C530DF5B5}.Template|Win32.ActiveCfg = Template|Win32
+		{DE05DEC2-DEF3-FA75-E424-2E6C530DF5B5}.Template|Win32.Build.0 = Template|Win32
+		{78DCC6A9-D226-5321-6A1C-E939AA157436}.Debug|Win32.ActiveCfg = Debug|Win32
+		{78DCC6A9-D226-5321-6A1C-E939AA157436}.Debug|Win32.Build.0 = Debug|Win32
+		{78DCC6A9-D226-5321-6A1C-E939AA157436}.Release|Win32.ActiveCfg = Release|Win32
+		{78DCC6A9-D226-5321-6A1C-E939AA157436}.Release|Win32.Build.0 = Release|Win32
+		{78DCC6A9-D226-5321-6A1C-E939AA157436}.Template|Win32.ActiveCfg = Template|Win32
+		{78DCC6A9-D226-5321-6A1C-E939AA157436}.Template|Win32.Build.0 = Template|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

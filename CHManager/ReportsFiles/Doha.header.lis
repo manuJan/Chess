@@ -1,0 +1,236 @@
+/* ------------------------------------------------------------------ */
+/* --------------------------- Fuentes ------------------------------ */
+/* ------------------------------------------------------------------ */
+
+Vari[1010]=6071						/* Verdana negrita 7-point	*/
+Vari[1011]=6070						/* Verdana normal 7-point	*/
+Vari[1012]=6091						/* Verdana negrita 9-point	*/
+Vari[1013]=6101						/* Verdana negrita 10-point	*/
+Vari[1014]=6080						/* Verdana normal 8-point	*/
+Vari[1015]=6060						/* Verdana normal 6-point	*/
+
+Vari[1100]=0						/* coordenada x Bmp H01		*/
+Vari[1101]=0						/* coordenada y Bmp H01		*/
+Vari[1102]=35001					/* coordenada x Bmp H02		*/
+Vari[1103]=0						/* coordenada y Bmp H02		*/
+
+Vari[1200]=0						/* coordenada x Bmp F01		*/
+Vari[1201]=35003					/* coordenada y Bmp F01		*/
+Vari[1202]=35000					/* coordenada x Bmp F02		*/
+Vari[1203]=35003					/* coordenada y Bmp F02		*/
+Vari[1204]=35001					/* coordenada x Bmp F03		*/
+Vari[1205]=35003					/* coordenada y Bmp F03		*/
+
+Vari[1300]=0						/* coordenada x comments	*/
+Vari[1301]=35001					/* coordenada x Corrected	*/
+
+/* ------------------------------------------------------------------ */
+/* --------------------------- Variables ---------------------------- */
+/* ------------------------------------------------------------------ */
+
+Vari[ 1]=0							/* Margen Derecho				*/
+Vari[ 2]=0							/* Posición x Columna 1			*/
+Vari[ 3]=0							/* Posición x Columna 2			*/
+Vari[ 4]=0							/* Centro del papel				*/
+Vari[ 5]=0							/* Posición y línea Header		*/
+Vari[ 6]=0							/* Posición y línea Footer		*/
+Vari[ 7]=0							/* Posición líneas				*/
+Vari[ 8]=0							/* Margen Izquierdo				*/
+Vari[ 9]=0							/* Ancho del papel				*/
+Vari[10]=35							/* Salto entre líneas   		*/
+Vari[11]=79							/* Salto entre footer-BMPs		*/
+Vari[12]=45							/* Salto líneas del Title		*/
+Vari[13]=0							/* Coordenada y lines-Venue		*/
+Vari[14]=270						/* Coordenada y Fechas			*/
+Vari[15]=110						/* Salto entre líneas			*/
+Vari[16]=0							/* Coordenada y Título			*/
+Vari[17]=0							/* No usado						*/
+Vari[18]=60							/* Salto headerLine y Title		*/
+Vari[19]=120						/* Coord. y 1 Linea Disciplina	*/
+
+Vari[20]=0							/* coordenada x Bmps			*/
+Vari[21]=0							/* coordenada y Bmps			*/
+Vari[22]=0							/* Coord. x Título				*/
+Vari[23]=1840						/* Coord. x Título LandScape	*/
+Vari[24]=115						/* Coord. y Título LandScape	*/
+
+Vari[40]=35							/* desplazamiento en portrait   */
+Vari[41]=0							/* desplazamiento en landScape  */
+Vari[42]=10							/* desde línea footer a comment	*/
+Vari[43]=0							/* desplaz. márgenes 40,41		*/
+
+Vari[44]=369						/* Posición x Columna 1			*/
+Vari[45]=946						/* Posición x Columna 2			*/
+Vari[46]=375						/* Posición y línea Header		*/
+Vari[47]=201						/* Posición y línea Footer		*/
+
+Vari[50]=2							/* Número de pictos header		*/
+Vari[51]=3							/* Número de pictos footer		*/
+
+/* ------------------------------------------------------------------ */
+/* --------------------- Variables de control ----------------------- */
+/* ------------------------------------------------------------------ */
+
+Vari[100]=1								/* Foot & Header si/no   	*/
+Vari[101]=1								/* Header si/no	   			*/
+Vari[102]=1								/* Footer si/no	   			*/
+Vari[103]=1								/* Bmps Header si/no		*/
+Vari[104]=0								/* Bmps Footer si/no		*/
+
+Vari[201]=1								/* Linea 1 si/no		  	*/
+Vari[202]=1								/* Linea 2 si/no		  	*/
+Vari[203]=1								/* Linea 3 si/no		  	*/
+Vari[204]=1								/* Linea 4 si/no		  	*/
+Vari[205]=1								/* Linea 5 si/no		  	*/
+Vari[206]=1								/* Linea 6 si/no		  	*/
+Vari[207]=1								/* Linea 7 si/no		  	*/
+Vari[208]=1								/* Linea 8 si/no		  	*/
+Vari[209]=1								/* Linea 9 si/no		  	*/
+Vari[210]=1								/* Linea 10 si/no		  	*/
+
+Vari[250]=1								/* Linea 50 si/no		  	*/
+Vari[251]=1								/* Linea 51 si/no		  	*/
+
+Vari[260]=1								/* Linea 60 si/no		  	*/
+Vari[261]=1								/* Linea 61 si/no		  	*/
+Vari[262]=1								/* Linea 62 si/no		  	*/
+
+/* ------------------------------------------------------------------ */
+/* --------------------------- Cajas -------------------------------- */
+/* ------------------------------------------------------------------ */
+
+_Box 1										
+	B_bb=0,B_fb=100,B_wi=&Vari[9],B_he=4	/* línea de cabecera */
+
+_Box 2										
+	B_bb=0,B_fb=100,B_wi=&Vari[9],B_he=4	/* línea de footer */
+
+/* ------------------------------------------------------------------ */
+/* --------------------------- Datos -------------------------------- */
+/* ------------------------------------------------------------------ */
+
+Data[  1],d_al=0,font=&Vari[1010]	/* Venue idioma 1		*/
+Data[  2],d_al=0,font=&Vari[1011]	/* Venue idioma 2		*/
+Data[  3],d_al=0,font=&Vari[1011]	/* Venue idioma 3		*/
+
+Data[  5],d_al=0,font=&Vari[1011]	/* Start date			*/
+Data[  6],d_al=0,font=&Vari[1011]	/* Start time			*/
+
+Data[ 11],d_al=0,font=&Vari[1012]	/* Línea 1 principal	*/
+Data[ 12],d_al=0,font=&Vari[1011]	/* Línea 1 secundaria	*/
+
+Data[ 21],d_al=0,font=&Vari[1012]	/* Línea 2 principal	*/
+Data[ 22],d_al=0,font=&Vari[1011]	/* Línea 2 secundaria	*/
+
+Data[ 31],d_al=0,font=&Vari[1012]	/* Línea 3 principal	*/
+Data[ 32],d_al=0,font=&Vari[1011]	/* Línea 3 secundaria	*/
+
+Data[ 71],d_al=0,font=&Vari[1013]	/* Title principal		*/
+Data[ 72],d_al=0,font=&Vari[1014]	/* Title secundaria		*/
+
+Data[ 91],d_al=0,font=&Vari[1015]	/* Report Id			*/
+Data[ 92],d_al=1,font=&Vari[1015]	/* Report date&time		*/
+Data[ 93],d_al=2,font=&Vari[1015]	/* Report pagination	*/
+
+Data[150],d_al=0,font=&Vari[1010]	/* Línea de comentario  */
+
+/* ------------------------------------------------------------------ */
+/* --------------------------- Carteles ----------------------------- */
+/* ------------------------------------------------------------------ */
+
+Data[100],lcpy="Report Created "
+Data[101],lcpy="Page xxx/yyy"
+Data[102],lcpy="Page %d/%d"
+Data[103],lcpy="%a %#d %b %Y "
+Data[104],lcpy="%#H:%M"
+Data[105],lcpy="English_USA"
+Data[106],lcpy="%a %#d %b %Y"
+Data[107],lcpy="As of "
+
+/* ------------------------------------------------------------------ */
+/* --------------------------- Pictos ------------------------------- */
+/* ------------------------------------------------------------------ */
+
+data[200],keyval="H01"			,bmpfile=40
+data[201],keylen=2				,bmpfile=40,d_al=2
+data[210],keyval="F01"			,bmpfile=40
+data[211],keyval="F02"			,bmpfile=40,d_al=1
+data[212],keyval="F03"			,bmpfile=40,d_al=2
+data[251],keyval="CORRECTED"	,bmpfile=40,d_al=2
+
+/* ------------------------------------------------------------------ */
+/* ---------------------- Datos Variables --------------------------- */
+/* ------------------------------------------------------------------ */
+
+data[300],lcpy="NOC"
+data[301],lcpy="NOC Code"
+
+/* ------------------------------------------------------------------ */
+/* --------------------------- Header ------------------------------- */
+/* ------------------------------------------------------------------ */
+
+Line 1
+			{ data=11, corx=&Vari[3], cory=&Vari[13] }	/* Line 1		*/
+			{ jump_d=&Vari[10]	}
+			{ data=12, corx=&Vari[3] }
+
+Line 2		{ data=21, corx=&Vari[3], cory=&Vari[13] }	/* Line 2		*/
+			{ jump_d=&Vari[10] }
+			{ data=22,corx=&Vari[3] }
+
+Line 3		{ data=31, corx=&Vari[3], cory=&Vari[13] }	/* Line 3		*/
+			{ jump_d=&Vari[10] }
+			{ data=32, corx=&Vari[3] }
+
+Line 4		{ data=1, corx=&Vari[2], cory=&Vari[13] }	/* Venue		*/
+			{ jump_d=&Vari[10]	}
+			{ data=2, corx=&Vari[2] }
+			{ jump_d=&Vari[10]	}
+			{ data=3, corx=&Vari[2] }
+
+Line 5		{ data=5, corx=&Vari[2], cory=&Vari[14] }	/* Date & Time	*/
+			{ jump_d=&Vari[10] }
+			{ data=6, corx=&Vari[2] }
+
+Line 6		{ _box=1, corx=&Vari[43], cory=&Vari[7] }	/* Line			*/
+			{ jump_d=24	}
+
+Line 7		{ data=71, corx=&Vari[22], cory=&Vari[16] }	/* Title		*/
+			{ jump_d=&Vari[12]	}
+			{ data=72, corx=&Vari[22] }
+
+
+/* ------------------------------------------------------------------ */
+/* --------------------------- Footer ------------------------------- */
+/* ------------------------------------------------------------------ */
+
+Line 8		{ _box=2, corx=&Vari[43], cory=&Vari[7] } /* Footer Data */ 
+Line 9		{ jump_d = 29	}
+			{ data=91, corx=&Vari[43] }
+			{ data=92, corx=&Vari[4]  }
+		
+Line 10		{ data=93,corx=&Vari[8]}			/* Número de Página */ 
+
+/* ------------------------------------------------------------------ */
+/* ---------------------- Corrected & Comments ---------------------- */
+/* ------------------------------------------------------------------ */
+
+Line 40		{ data=150, corx=&Vari[20],cory=&Vari[21] }	/* Comments		*/
+Line 41		{ data=251, corx=&Vari[20],cory=&Vari[21] }	/* Corrected	*/
+
+/* ------------------------------------------------------------------ */
+/* ------------------------ Pictos Header --------------------------- */
+/* ------------------------------------------------------------------ */
+
+Line 50		{ data=200, corx=&Vari[20],cory=&Vari[21] }	/* Bmp Header 1	*/ 
+Line 51		{ data=201, corx=&Vari[20],cory=&Vari[21] }	/* Bmp Header 2	*/
+
+/* ------------------------------------------------------------------ */
+/* ------------------------ Pictos Footer --------------------------- */
+/* ------------------------------------------------------------------ */
+
+Line 60		{ data=210, corx=&Vari[20],cory=&Vari[21] }	/* Bmp Footer 1	 */
+Line 61		{ data=211, corx=&Vari[20],cory=&Vari[21] }	/* Bmp Footer 2	 */
+Line 62		{ data=212, corx=&Vari[20],cory=&Vari[21] }	/* Bmp Footer 3	 */
+
+

@@ -1,0 +1,63 @@
+/* Fuentes usadas en este lis POR AHORA NO SE HACE ESTO ------------------------ */
+
+Data[6699] lcpy="1011..1012"
+
+Vari[1011]=4080 /* -  font para datos	-- */
+Vari[1012]=4081	/* -  font para titulos -- */
+
+Vari[1001]= 0	/* -  Alto de la celda	-- */
+Vari[1002]= 0	/* -  offset Y de los datos	-- */
+
+
+
+Vari[2001]=0	/* -  offset inicial -- */
+Vari[2011]=0	/* -  Ancho de la celda	10 -- */
+Vari[2012]=0	/* -  centrado 10	-- */
+Vari[2021]=0	/* -  Ancho de la celda	20 -- */
+Vari[2022]=0	/* -  centrado	20 -- */
+Vari[2031]=0	/* -  Ancho de la celda	30 -- */
+Vari[2032]=0	/* -  centrado	30 -- */
+Vari[2041]=0	/* -  Ancho de la celda	40 -- */
+Vari[2042]=0	/* -  centrado	40 -- */
+Vari[2051]=0	/* -  Ancho de la celda	50 -- */
+Vari[2052]=0	/* -  centrado	50 -- */
+
+Vari[100]=0	/* -  clase medica para paralimpicos - */
+Vari[101]=150	/* -  clase medica para paralimpicos - */
+Vari[102]=30	/* -  clase medica para paralimpicos - */
+
+Data[0]	font=&Vari[1011] /* - Primer  Dato Variable de una celda --*/
+
+Data[10] lcpy="Event(s):", font=&Vari[1012]
+Data[20] lcpy="Master Title:", font=&Vari[1012]
+
+Data[50] lcpy="Right";
+Data[60] lcpy="Left";
+
+Data[70] lcpy="Class:", font=&Vari[1012]
+
+Table 2000	/* --- TABLA ESPECIAL DE DETALLES DE TENIS DE MESA */
+
+  template[10] {call=1, height=&Vari[1001] } /* la altura es como las de detalles */
+				{Offset_x=&Vari[2001]}
+	cell[ 10]															/* Bib No. */
+			{ call=1, height=&Vari[1001], width=&Vari[2011] }
+			{ outline_upper=1 } { outline_lower=1 }
+			{ outline_left =1 } { outline_right=1 }
+			{ data=10, Offset_dx=40, Offset_dy=&Vari[1002] }
+			{ Run_line=10 ,offset_lx=&Vari[2012],offset_ly=&Vari[1002] }
+
+	cell[ 20]															/* Events (s): */
+			{ call=1, height=&Vari[1001], width=&Vari[2021] }
+			{ outline_upper=1 } { outline_lower=1 }
+			{ outline_left =1 } { outline_right=1 }
+			{ data=20, Offset_dx=10, Offset_dy=&Vari[1002] }
+			{ Run_line=10 ,offset_lx=&Vari[2022],offset_ly=&Vari[1002] }
+
+Line 2000
+	{ table = 2000 }
+
+Line 10
+	{ data = 0 }
+
+/* end */

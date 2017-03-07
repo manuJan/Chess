@@ -1,0 +1,320 @@
+/* -- ZONA DE DECLARACION DE VARIABLES DE FUENTES NO CAMBIAR--- */
+Vari[500]=6060
+Vari[501]=6061
+Vari[502]=6070
+Vari[503]=6071
+Vari[504]=6080
+Vari[505]=6081
+Vari[506]=6090
+Vari[507]=6091
+Vari[508]=6100
+Vari[509]=6101
+Vari[510]=6110
+Vari[511]=6111
+Vari[512]=6120
+Vari[513]=6121
+Vari[514]=6130
+Vari[515]=6131
+Vari[516]=6140
+Vari[517]=6141
+Vari[518]=6150
+Vari[519]=6151
+Vari[520]=6160
+Vari[521]=6161
+Vari[522]      
+Vari[523]     
+Vari[524]     
+Vari[525]  
+
+/* Variables de control */
+	Vari[900]= 400 /*510*/	/* Alto en pixel de la linea de datos. */
+	Vari[901]= 0   /**/	/* 1=Ordenacion de matches por session y match number  o 0=Ordenacion de matches por date,time,court,rink */
+	Vari[1000]=0	/* Posicion central del papel, se asigna internamente. */
+	Vari[1100]=4080	/* Font Normal  */
+	Vari[1200]=4081	/* Font Negrita */
+	Vari[1300]=&Vari[508]	/* Font Player1  */
+	Vari[1301]=&Vari[508]	/* Font Player2 */
+	Vari[1400]=7100	/* Coor X de la Note:  */
+	
+/*  Carteles para el nombre del report y datos de la cabecera, Se pintan en la linea 1000. */		
+	data[1000], d_al=2, lcpy= "Session",			font=&Vari[509] 
+	data[1001], d_al=2, lcpy= "matches",			font=&Vari[509] 
+	data[1002], d_al=2, lcpy= "match",			font=&Vari[509] 
+	data[1003], d_al=1, lcpy= "Legend:",			font=&Vari[503] 
+	data[1004], d_al=1,					font=&Vari[502] 
+	data[1005], d_al=1, 					font=&Vari[502] 
+	data[1006], d_al=1, lcpy= "BYE" ,			font=&Vari[508] 
+	data[1007], d_al=2, lcpy= "Total",			font=&Vari[509] 
+
+	data[1010], d_al=2, lcpy= "Starting",			font=&Vari[507] 
+	data[1011], d_al=2, lcpy= "Time",			font=&Vari[507] 
+	data[1012], d_al=1, lcpy= "Round",			font=&Vari[507] 
+	data[1013], d_al=2, lcpy= "Match",			font=&Vari[507] 
+	data[1014], d_al=2, lcpy= "Num.",			font=&Vari[507] 
+	data[1015], d_al=0, lcpy= "Event",			font=&Vari[507] 
+	data[1016], d_al=0, lcpy= "Name",			font=&Vari[507] 
+	data[1017], d_al=1, lcpy= "Phase",			font=&Vari[507] 
+	data[1018], d_al=1, lcpy= "Table",			font=&Vari[507] 
+	data[1019], d_al=1, lcpy= "Match",			font=&Vari[507] 
+	data[1020], d_al=0, 					font=&Vari[507] 
+	data[1021], d_al=0, lcpy= "Code",			font=&Vari[507] 
+	data[1022], d_al=0, lcpy= "Official",			font=&Vari[507] 
+	data[1023], d_al=0, lcpy= ""	,			font=&Vari[507] 
+	data[1024], d_al=1, lcpy= "vs",				font=&Vari[508] 
+		
+	
+Vari[2010]=30	/* Posicion inicial de pintado. Se asigna al dato World Ranking */
+Vari[2011]=120	/* Posicion relativa de pintado. Se desplaza antes del dato NOC */
+Vari[2012]=760	/* Posicion relativa de pintado. Se desplaza antes del dato Name */
+Vari[2013]=820	/* Posicion relativa de pintado. Se desplaza antes del dato Date of Birth */
+Vari[2014]=820	/* Posicion relativa de pintado. Se desplaza antes del dato Date of Birth */
+
+/*  Datos del cuerpo, se pintan en la linea 2000 */		
+	data[2000],font=&Vari[509], d_al=1		/* Session Detail */ 
+
+	data[2010],font=&Vari[508]		, d_al=2		/* starting Time */ 
+	data[2011],font=&Vari[508]		, d_al=1		/* Green */ 
+	data[2012],font=&Vari[508]		, d_al=2		/* Match Num. */ 
+	data[2013],font=&Vari[504]		, d_al=0		/* Event Name */ 
+	data[2014],font=&Vari[506]		, d_al=1		/* Round */ 
+	data[2015],font=&Vari[508]		, d_al=1		/* Ranking 1 */ 
+	data[2016],font=&Vari[508]		, d_al=1		/* Ranking 2 */ 
+	data[2017],font=&Vari[1300]	, d_al=1		/* Competitor 1 */ 
+	data[2018],font=&Vari[1301]	, d_al=1		/* Competitor 2 */ 
+	data[2019],font=&Vari[506]		, d_al=0		/* NOC Code 1*/ 
+	data[2020],font=&Vari[506]		, d_al=0		/* NOC Code 1 */ 
+	data[2021],font=&Vari[502]		, d_al=0		/* Judge 1 */ 
+	data[2022],font=&Vari[502]		, d_al=0		/* Judge 2*/ 
+	data[2023],font=&Vari[502]		, d_al=0		/* Judge 3*/ 
+	data[2024],font=&Vari[504]		, d_al=0		/* NOC Code Judge 1 */ 
+	data[2025],font=&Vari[504]		, d_al=0		/* NOC Code Judge 2 */ 
+	data[2026],font=&Vari[504]		, d_al=0		/* NOC Code Judge 3 */ 
+
+	data[2027],font=&Vari[508]		, d_al=1		/* Rink */ 
+
+	data[3013],font=&Vari[504]		, d_al=0		/* Event Name */ 
+
+Data[208], d_al=1 /* As of        */
+
+Table 101 /* -- TABLA DE CABECERAS -- */
+
+	T_cx = 10
+
+	template[0] { call=1, height=110  }
+
+		/* Starting Time */
+		cell[0] { call=1, height=110, width=180 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =1 }
+			{ Run_Line=1500, Offset_lx=170, Offset_ly=45 }
+
+		/* Ronda */
+		cell[1] { call=1, height=110, width=120 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ data=1012, Offset_dx=60, Offset_dy=70 }
+		
+		/* Mesa */
+		cell[2] { call=1, height=110, width=110 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ data=1018, Offset_dx=55, Offset_dy=70 }
+
+		/* Match Num. */
+		cell[3] { call=1, height=110, width=140 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ Run_Line=1510, Offset_lx=130, Offset_ly=45 }
+		
+		/* Event Name */
+		cell[4] { call=1, height=110, width=150 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ Run_Line=1520, Offset_lx=20, Offset_ly=45 }
+		
+		/* Fase */
+		cell[5] { call=1, height=110, width=130 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ data=1017, Offset_dx=55, Offset_dy=70 }
+		
+		/* Match */
+		cell[6] { call=1, height=110, width=760 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ data=1019, Offset_dx=360, Offset_dy=70 }
+		
+		/* NOC Code */
+		cell[7] { call=1, height=110, width=130 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ Run_Line=1530, Offset_lx=20, Offset_ly=45 }
+
+		/* Umpire and Service Judge */
+		cell[8] { call=1, height=110, width=380 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ Run_Line=1540, Offset_lx=10, Offset_ly=70 }
+
+		/* NOC Code */
+		cell[9] { call=1, height=110, width=130 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ Run_Line=1530, Offset_lx=20, Offset_ly=45 }
+
+
+Table 102 /* -- TABLA DE MATCHS -- */
+
+	template[0] { call=1, height=130  }
+
+		/* Starting Time */
+		cell[0] { call=1, height=130, width=180 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_left =1 }
+			{ data=2010, Offset_dx=170, Offset_dy=80 }
+
+		/* Ronda */
+		cell[1] { call=1, height=130, width=120 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ data=2011, Offset_dx=60, Offset_dy=80 }
+
+		/* Mesa */
+		cell[2] { call=1, height=130, width=110 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ data=2027, Offset_dx=55, Offset_dy=80 }
+		
+		/* Match Num. */
+		cell[3] { call=1, height=130, width=140 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ data=2012, Offset_dx=120, Offset_dy=80 }
+		
+		/* Event Name */
+		cell[4] { call=1, height=130, width=150 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			/*{ data=2013, Offset_dx=20, Offset_dy=80 }*/
+			{ Run_Line=2013, Offset_lx=20, Offset_ly=50 }
+		
+		/* Fase */
+		cell[5] { call=1, height=130, width=130 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ data=2014, Offset_dx=75, Offset_dy=80 }
+		
+		/* Competitors */
+		cell[6] { call=1, height=130, width=760 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ Run_Line=1560, Offset_lx=360, Offset_ly=45 }
+		
+		/* NOC Code */
+		cell[7] { call=1, height=130, width=130 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ Run_Line=1570, Offset_lx=20, Offset_ly=45 }
+
+		/* Umpire and Service Judge */
+		cell[8] { call=1, height=130, width=380 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ Run_Line=1580, Offset_lx=10, Offset_ly=45 }
+
+		/* NOC Code */
+		cell[9] { call=1, height=130, width=130 }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ Run_Line=1590, Offset_lx=45, Offset_ly=45 }
+
+/* -- ZONA DE DECLARACION DE LINEAS ------------------------------ */
+
+Line 105  /* **** As of ************************************ */
+	{ jump_d = 40 }
+	{ font = &Vari[513] }	
+	{ data=208, corx=  &Vari[1000] } /* As of ------- */
+
+Line 1000 /* Header */
+    	{ font   = &Vari[509] }
+    	{ jump_d =   40 }
+    	{ Table  =  101 }
+
+Line 1010 /* Match */
+    	{ font   = &Vari[509] }
+    	{ Table  =  102 }
+
+Line 1020 /* Session */
+    	{ jump_d =  90 }
+    	{ data  =  2000,corx=1000  }
+
+
+    	
+/* --------- Lineas de cabecera --------- */
+Line 1500 /*  Starting Time */
+	{ Data = 1010 }
+    	{ jump_d = 45 }
+	{ Data = 1011 }
+
+Line 1510 /* Match Num*/
+	{ Data = 1013 }
+    	{ jump_d = 45 }
+	{ Data = 1014 }
+
+Line 1520 /* Event Name */
+	{ Data = 1015 }
+    	{ jump_d = 45 }
+	{ Data = 1016 }
+
+Line 1530 /* NOC Code */
+	{ Data = 1020 }
+    	{ jump_d = 45 }
+	{ Data = 1021 }
+
+Line 1540 /* Umpires */
+	{ Data = 1022 }
+    	{ jump_d = 45 }
+	{ Data = 1023 }
+
+/* --------- Lineas de datos --------- */
+Line 1550 /* Rankings */
+	{ Data = 2015 }
+    	{ jump_d = 65 }
+	{ Data = 2016 }
+
+Line 1560 /* Competitors */
+	{ Data = 2017 }
+    	{ jump_d = 35 }
+	{ Data = 1024 }
+    	{ jump_d = 35 }
+	{ Data = 2018 }
+
+Line 1570 /* Competiror's NOC Code  */
+	{ Data = 2019 }
+    	{ jump_d = 65 }
+	{ Data = 2020 }
+
+Line 1580 /* Judges Name  */
+	{ Data = 2021 }
+    	{ jump_d = 35 }
+	{ Data = 2022 }
+		{ jump_d = 35 }
+	{ Data = 2023 }
+
+Line 1590 /* Judge's NOC Code    */
+	{ Data = 2024 }
+    	{ jump_d = 35 }
+	{ Data = 2025 }
+		{ jump_d = 35 }
+	{ Data = 2026 }
+	
+Line 2013
+	{ Data = 2013 }
+		{ jump_d = 45 }
+	{ Data = 3013 }

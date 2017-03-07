@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <Keyword>MFCProj</Keyword>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_MBCS;NOMINMAX;_RWCONFIG_4d;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
+      <BrowseInformation>true</BrowseInformation>
+      <PrecompiledHeaderOutputFile>.\Release\CHManager.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Release\CHManager.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release\CHManager.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>.\Release\CHManager.exe</OutputFile>
+      <AdditionalDependencies>GraphicsDll.lib;tls4d.lib;dbt4d.lib;flags.lib;gMngtModel.lib;GManagerInterface.lib;CHMngtModel.lib;CHVMngtModel.lib;thspmngtmodel.lib;gthmngtmodel.lib;guisports.lib;guithsports.lib;VMngtModel.lib;THVMngtModel.lib;Persistence.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>wWinMainCRTStartup</EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <MinimalRebuild>true</MinimalRebuild>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_MBCS;NOMINMAX;_RWCONFIG_7d;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
+      <BrowseInformation>true</BrowseInformation>
+      <PrecompiledHeaderOutputFile>.\Debug\CHManager.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Debug\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Debug\CHManager.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\CHManager.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>Debug/CHManagerd.exe</OutputFile>
+      <AdditionalDependencies>GraphicsDlld.lib;tls7d.lib;dbt7d.lib;flags.lib;gMngtModeld.lib;GManagerInterfaced.lib;CHMngtModeld.lib;CHVMngtModeld.lib;thspmngtmodeld.lib;gthmngtmodeld.lib;guisportsd.lib;guithsportsd.lib;VMngtModeld.lib;THVMngtModeld.lib;Persistenced.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>wWinMainCRTStartup</EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="CHCnfgDisciplineFormView.cpp" />
+    <ClCompile Include="CHCnfgEventsFormView.cpp" />
+    <ClCompile Include="CHCnfgMatchJudgeDlg.cpp" />
+    <ClCompile Include="CHCnfgTeamMembersDlg.cpp" />
+    <ClCompile Include="CHCnfgTeamSchedule.cpp" />
+    <ClCompile Include="CHEvenControlOperations.cpp" />
+    <ClCompile Include="CHEventCnfgGUIExtPhases.cpp" />
+    <ClCompile Include="CHEventCnfgGUIExtRank.cpp" />
+    <ClCompile Include="CHEventCnfgGUIExtRating.cpp" />
+    <ClCompile Include="CHEventControlFormView.cpp" />
+    <ClCompile Include="CHEventControlMoveManager.cpp" />
+    <ClCompile Include="CHEventControlMultiScrollBar.cpp" />
+    <ClCompile Include="CHEventControlSquare.cpp" />
+    <ClCompile Include="CHEventControlTable.cpp" />
+    <ClCompile Include="CHFideInformationDlg.cpp" />
+    <ClCompile Include="CHFinalStandingsDlg.cpp" />
+    <ClCompile Include="CHInscriptionFormView.cpp" />
+    <ClCompile Include="CHJudgesDlg.cpp" />
+    <ClCompile Include="CHManager.cpp" />
+    <ClCompile Include="CHManualEventControl.cpp" />
+    <ClCompile Include="CHMasterTypeDlg.cpp" />
+    <ClCompile Include="CHMatchVisorFormView.cpp" />
+    <ClCompile Include="CHNARegisterFormView.cpp" />
+    <ClCompile Include="CHPasswordDlg.cpp" />
+    <ClCompile Include="CHPgnMatchesDlg.cpp" />
+    <ClCompile Include="CHPhasesDlg.cpp" />
+    <ClCompile Include="CHProgression.cpp" />
+    <ClCompile Include="CHProgressionFormView.cpp" />
+    <ClCompile Include="CHRanking.cpp" />
+    <ClCompile Include="CHReadFile.cpp" />
+    <ClCompile Include="CHScheduleFormView.cpp" />
+    <ClCompile Include="CHStatusDlg.cpp" />
+    <ClCompile Include="CHStatusManager.cpp" />
+    <ClCompile Include="CHTeamCompCnfg.cpp" />
+    <ClCompile Include="CHTeamResults.cpp" />
+    <ClCompile Include="CHTreatPhases.cpp" />
+    <ClCompile Include="CHTreatPools.cpp" />
+    <ClCompile Include="CHTreatSession.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CHManager.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CHCnfgDisciplineFormView.h" />
+    <ClInclude Include="CHCnfgEventsFormView.h" />
+    <ClInclude Include="CHCnfgMatchJudgeDlg.h" />
+    <ClInclude Include="CHCnfgTeamMembersDlg.h" />
+    <ClInclude Include="CHCnfgTeamSchedule.h" />
+    <ClInclude Include="CHDefines.h" />
+    <ClInclude Include="CHEvenControlOperations.h" />
+    <ClInclude Include="CHEventCnfgGUIExtPhases.h" />
+    <ClInclude Include="CHEventCnfgGUIExtRank.h" />
+    <ClInclude Include="CHEventCnfgGUIExtRating.h" />
+    <ClInclude Include="CHEventControlFormView.h" />
+    <ClInclude Include="CHEventControlMoveManager.h" />
+    <ClInclude Include="CHEventControlMultiScrollBar.h" />
+    <ClInclude Include="CHEventControlSquare.h" />
+    <ClInclude Include="CHEventControlTable.h" />
+    <ClInclude Include="CHFideInformationDlg.h" />
+    <ClInclude Include="CHFinalStandingsDlg.h" />
+    <ClInclude Include="CHInscriptionFormView.h" />
+    <ClInclude Include="CHJudgesDlg.h" />
+    <ClInclude Include="CHManager.h" />
+    <ClInclude Include="CHManualEventControl.h" />
+    <ClInclude Include="CHMasterTypeDlg.h" />
+    <ClInclude Include="CHMatchVisorFormView.h" />
+    <ClInclude Include="CHMsgDefines.h" />
+    <ClInclude Include="CHNARegisterFormView.h" />
+    <ClInclude Include="CHPasswordDlg.h" />
+    <ClInclude Include="CHPgnMatchesDlg.h" />
+    <ClInclude Include="CHPhasesDlg.h" />
+    <ClInclude Include="CHProgression.h" />
+    <ClInclude Include="CHProgressionFormView.h" />
+    <ClInclude Include="CHRanking.h" />
+    <ClInclude Include="CHReadFile.h" />
+    <ClInclude Include="CHScheduleFormView.h" />
+    <ClInclude Include="CHStatusDlg.h" />
+    <ClInclude Include="CHStatusManager.h" />
+    <ClInclude Include="CHTeamCompCnfg.h" />
+    <ClInclude Include="CHTeamResults.h" />
+    <ClInclude Include="CHTreatPhases.h" />
+    <ClInclude Include="CHTreatPools.h" />
+    <ClInclude Include="CHTreatSession.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="res\b15o.bmp" />
+    <CustomBuild Include="res\b15s.bmp" />
+    <CustomBuild Include="res\b21o.bmp" />
+    <CustomBuild Include="res\b21s.bmp" />
+    <CustomBuild Include="res\backbrown2.bmp" />
+    <CustomBuild Include="res\backBrown3.bmp" />
+    <CustomBuild Include="res\Black_Pawn.bmp" />
+    <CustomBuild Include="res\blue_line_black.bmp" />
+    <CustomBuild Include="res\blue_line_white.bmp" />
+    <CustomBuild Include="res\bmp_back.bmp" />
+    <CustomBuild Include="res\bmp_background.bmp" />
+    <CustomBuild Include="res\BMP_BEFORE.bmp" />
+    <CustomBuild Include="res\BMP_Black.bmp" />
+    <CustomBuild Include="res\bmp_check.bmp" />
+    <CustomBuild Include="res\BMP_NEXT.bmp" />
+    <CustomBuild Include="res\BMP_POINT.bmp" />
+    <CustomBuild Include="res\bmp_save.bmp" />
+    <CustomBuild Include="res\BMP_Send_FIDE.bmp" />
+    <CustomBuild Include="res\bmp_uncheck.bmp" />
+    <CustomBuild Include="res\bmp_validate.bmp" />
+    <CustomBuild Include="res\BMP_White.bmp" />
+    <CustomBuild Include="res\bronze.bmp" />
+    <CustomBuild Include="res\chess_back.bmp" />
+    <CustomBuild Include="res\chess_logo.bmp" />
+    <CustomBuild Include="res\down.bmp" />
+    <CustomBuild Include="res\findMatch.bmp" />
+    <CustomBuild Include="res\green_select_black.bmp" />
+    <CustomBuild Include="res\green_select_white.bmp" />
+    <CustomBuild Include="idr_main.ico" />
+    <CustomBuild Include="res\k15o.bmp" />
+    <CustomBuild Include="res\k15s.bmp" />
+    <CustomBuild Include="res\k21o.bmp" />
+    <CustomBuild Include="res\k21s.bmp" />
+    <CustomBuild Include="res\MemberRight.bmp" />
+    <CustomBuild Include="res\n15o.bmp" />
+    <CustomBuild Include="res\n15s.bmp" />
+    <CustomBuild Include="res\n21o.bmp" />
+    <CustomBuild Include="res\n21s.bmp" />
+    <CustomBuild Include="res\p21o.bmp" />
+    <CustomBuild Include="res\p21s.bmp" />
+    <CustomBuild Include="res\q15o.bmp" />
+    <CustomBuild Include="res\q15s.bmp" />
+    <CustomBuild Include="res\q21o.bmp" />
+    <CustomBuild Include="res\q21s.bmp" />
+    <CustomBuild Include="res\r15o.bmp" />
+    <CustomBuild Include="res\r15s.bmp" />
+    <CustomBuild Include="res\r21o.bmp" />
+    <CustomBuild Include="res\r21s.bmp" />
+    <CustomBuild Include="res\undo.bmp" />
+    <CustomBuild Include="res\up.bmp" />
+    <CustomBuild Include="res\white_line_black.bmp" />
+    <CustomBuild Include="res\white_line_white.bmp" />
+    <CustomBuild Include="res\White_Pawn.bmp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

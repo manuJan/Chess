@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Template|Win32">
+      <Configuration>Template</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_RWCONFIG_4d;NDEBUG;_WINDOWS;_MBCS;_USRDLL;_CHMNGT_DLL;_WINDLL;_AFXDLL;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Release\CHMngtModel.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>.\Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>copy .\Release\*.dll D:\WorkingDll\Lib
+copy .\Release\*.lib D:\WorkingDll\Lib</Command>
+    </PostBuildEvent>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Release\CHMngtModel.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release\CHMngtModel.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <LinkDLL>true</LinkDLL>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>.\Release\CHMngtModel.dll</OutputFile>
+      <ImportLibrary>.\Release\CHMngtModel.lib</ImportLibrary>
+      <AdditionalDependencies>tls4d.lib;dbt4d.lib;GMngtModel.lib;GthmngtModel.lib;thspmngtmodel.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <MinimalRebuild>true</MinimalRebuild>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_MBCS;_USRDLL;_CHMNGT_DLL;_RWCONFIG_7d;NOMINMAX;_WINDLL;_AFXDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
+      <BrowseInformation>true</BrowseInformation>
+      <PrecompiledHeaderOutputFile>.\Debug\CHMngtModel.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdCHMngt.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Debug\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>copy .\Debug\*.dll D:\WorkingDll\Lib /Y
+copy .\Debug\*.lib D:\WorkingDll\Lib /Y</Command>
+    </PostBuildEvent>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Debug\CHMngtModel.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\CHMngtModel.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <LinkDLL>true</LinkDLL>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <OutputFile>Debug/CHMngtModeld.dll</OutputFile>
+      <ImportLibrary>.\Debug\CHMngtModeld.lib</ImportLibrary>
+      <AdditionalDependencies>tls7d.lib;dbt7d.lib;GMngtModeld.lib;gthmngtmodeld.lib;thspmngtmodeld.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="CHCourt.cpp" />
+    <ClCompile Include="CHDiscipline.cpp" />
+    <ClCompile Include="CHEvent.cpp" />
+    <ClCompile Include="CHEventResult.cpp" />
+    <ClCompile Include="CHInscription.cpp" />
+    <ClCompile Include="CHJudge.cpp" />
+    <ClCompile Include="CHMasterType.cpp" />
+    <ClCompile Include="CHMatch.cpp" />
+    <ClCompile Include="CHMatchJudge.cpp" />
+    <ClCompile Include="CHMatchMember.cpp" />
+    <ClCompile Include="CHMatchResult.cpp" />
+    <ClCompile Include="CHMember.cpp" />
+    <ClCompile Include="CHMemoryDataBase.cpp" />
+    <ClCompile Include="CHPhase.cpp" />
+    <ClCompile Include="CHPhaseBase.cpp" />
+    <ClCompile Include="CHPool.cpp" />
+    <ClCompile Include="CHPoolResult.cpp" />
+    <ClCompile Include="CHRatingDif.cpp" />
+    <ClCompile Include="CHRegister.cpp" />
+    <ClCompile Include="CHSession.cpp" />
+    <ClCompile Include="CHSplitMatch.cpp" />
+    <ClCompile Include="CHSplitMatchResult.cpp" />
+    <ClCompile Include="CHTeamMatchsCnfg.cpp" />
+    <ClCompile Include="QCHCourt.cpp" />
+    <ClCompile Include="QCHDiscipline.cpp" />
+    <ClCompile Include="QCHEvent.cpp" />
+    <ClCompile Include="QCHEventResult.cpp" />
+    <ClCompile Include="QCHInscription.cpp" />
+    <ClCompile Include="QCHJudge.cpp" />
+    <ClCompile Include="QCHMasterType.cpp" />
+    <ClCompile Include="QCHMatch.cpp" />
+    <ClCompile Include="QCHMatchJudge.cpp" />
+    <ClCompile Include="QCHMatchMember.cpp" />
+    <ClCompile Include="QCHMatchResult.cpp" />
+    <ClCompile Include="QCHMember.cpp" />
+    <ClCompile Include="QCHPhase.cpp" />
+    <ClCompile Include="QCHPhaseBase.cpp" />
+    <ClCompile Include="QCHPool.cpp" />
+    <ClCompile Include="QCHPoolResult.cpp" />
+    <ClCompile Include="QCHRatingDif.cpp" />
+    <ClCompile Include="QCHRegister.cpp" />
+    <ClCompile Include="QCHSession.cpp" />
+    <ClCompile Include="QCHSplitMatch.cpp" />
+    <ClCompile Include="QCHSplitMatchResult.cpp" />
+    <ClCompile Include="QCHTeamMatchsCnfg.cpp" />
+    <ClCompile Include="stdCHMngt.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdCHMngt.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="UCHCourt.cpp" />
+    <ClCompile Include="UCHDiscipline.cpp" />
+    <ClCompile Include="UCHEvent.cpp" />
+    <ClCompile Include="UCHEventResult.cpp" />
+    <ClCompile Include="UCHInscription.cpp" />
+    <ClCompile Include="UCHJudge.cpp" />
+    <ClCompile Include="UCHMasterType.cpp" />
+    <ClCompile Include="UCHMatch.cpp" />
+    <ClCompile Include="UCHMatchJudge.cpp" />
+    <ClCompile Include="UCHMatchMember.cpp" />
+    <ClCompile Include="UCHMatchResult.cpp" />
+    <ClCompile Include="UCHMember.cpp" />
+    <ClCompile Include="UCHPhase.cpp" />
+    <ClCompile Include="UCHPhaseBase.cpp" />
+    <ClCompile Include="UCHPool.cpp" />
+    <ClCompile Include="UCHPoolResult.cpp" />
+    <ClCompile Include="UCHRatingDif.cpp" />
+    <ClCompile Include="UCHRegister.cpp" />
+    <ClCompile Include="UCHSession.cpp" />
+    <ClCompile Include="UCHSplitMatch.cpp" />
+    <ClCompile Include="UCHSplitMatchResult.cpp" />
+    <ClCompile Include="UCHTeamMatchsCnfg.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CHClassIDs.h" />
+    <ClInclude Include="CHCourt.h" />
+    <ClInclude Include="CHDiscipline.h" />
+    <ClInclude Include="CHEvent.h" />
+    <ClInclude Include="CHEventResult.h" />
+    <ClInclude Include="CHInscription.h" />
+    <ClInclude Include="CHJudge.h" />
+    <ClInclude Include="CHMasterType.h" />
+    <ClInclude Include="CHMatch.h" />
+    <ClInclude Include="CHMatchJudge.h" />
+    <ClInclude Include="CHMatchMember.h" />
+    <ClInclude Include="CHMatchResult.h" />
+    <ClInclude Include="CHMember.h" />
+    <ClInclude Include="CHMemoryDataBase.h" />
+    <ClInclude Include="CHMsgDefines.h" />
+    <ClInclude Include="CHPhase.h" />
+    <ClInclude Include="CHPhaseBase.h" />
+    <ClInclude Include="CHPool.h" />
+    <ClInclude Include="CHPoolResult.h" />
+    <ClInclude Include="CHRatingDif.h" />
+    <ClInclude Include="CHRegister.h" />
+    <ClInclude Include="CHSession.h" />
+    <ClInclude Include="CHSplitMatch.h" />
+    <ClInclude Include="CHSplitMatchResult.h" />
+    <ClInclude Include="CHSportDefines.h" />
+    <ClInclude Include="CHStatisticDefines.h" />
+    <ClInclude Include="CHTeamMatchsCnfg.h" />
+    <ClInclude Include="QCHCourt.h" />
+    <ClInclude Include="QCHDiscipline.h" />
+    <ClInclude Include="QCHEvent.h" />
+    <ClInclude Include="QCHEventResult.h" />
+    <ClInclude Include="QCHInscription.h" />
+    <ClInclude Include="QCHJudge.h" />
+    <ClInclude Include="QCHMasterType.h" />
+    <ClInclude Include="QCHMatch.h" />
+    <ClInclude Include="QCHMatchJudge.h" />
+    <ClInclude Include="QCHMatchMember.h" />
+    <ClInclude Include="QCHMatchResult.h" />
+    <ClInclude Include="QCHMember.h" />
+    <ClInclude Include="QCHPhase.h" />
+    <ClInclude Include="QCHPhaseBase.h" />
+    <ClInclude Include="QCHPool.h" />
+    <ClInclude Include="QCHPoolResult.h" />
+    <ClInclude Include="QCHRatingDif.h" />
+    <ClInclude Include="QCHRegister.h" />
+    <ClInclude Include="QCHSession.h" />
+    <ClInclude Include="QCHSplitMatch.h" />
+    <ClInclude Include="QCHSplitMatchResult.h" />
+    <ClInclude Include="QCHTeamMatchsCnfg.h" />
+    <ClInclude Include="stdCHMngt.h" />
+    <ClInclude Include="UCHCourt.h" />
+    <ClInclude Include="UCHDiscipline.h" />
+    <ClInclude Include="UCHEvent.h" />
+    <ClInclude Include="UCHEventResult.h" />
+    <ClInclude Include="UCHInscription.h" />
+    <ClInclude Include="UCHJudge.h" />
+    <ClInclude Include="UCHMasterType.h" />
+    <ClInclude Include="UCHMatch.h" />
+    <ClInclude Include="UCHMatchJudge.h" />
+    <ClInclude Include="UCHMatchMember.h" />
+    <ClInclude Include="UCHMatchResult.h" />
+    <ClInclude Include="UCHMember.h" />
+    <ClInclude Include="UCHPhase.h" />
+    <ClInclude Include="UCHPhaseBase.h" />
+    <ClInclude Include="UCHPool.h" />
+    <ClInclude Include="UCHPoolResult.h" />
+    <ClInclude Include="UCHRatingDif.h" />
+    <ClInclude Include="UCHRegister.h" />
+    <ClInclude Include="UCHSession.h" />
+    <ClInclude Include="UCHSplitMatch.h" />
+    <ClInclude Include="UCHSplitMatchResult.h" />
+    <ClInclude Include="UCHTeamMatchsCnfg.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

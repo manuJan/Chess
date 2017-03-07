@@ -1,0 +1,188 @@
+
+
+		/* ********************************************************** */
+		/* *** NUMBER OF ENTRIES BY NOC (C30)
+Vari[10400]=7
+Data[10401] lcpy= "Legend:"
+Data[10402] lcpy= "MS"
+Data[10403] lcpy= "WS"
+Data[10404] lcpy= "MP"
+Data[10405] lcpy= "WP"
+Data[10406] lcpy= "MT"
+Data[10407] lcpy= "WT"
+
+Data[20402] lcpy= "Men's Singles                       "
+Data[20403] lcpy= "Women's Singles                     "
+Data[20404] lcpy= "Men's Pairs"
+Data[20405] lcpy= "Women's Pairs"
+Data[20406] lcpy= "Men's Triples"
+Data[20407] lcpy= "Women's Triples"
+
+		/* ********************************************************** */
+		/* *** NUMBER OF ENTRIES BY NOC (C30)
+Vari[10500]=13
+Data[10501] lcpy= "Legend:"
+Data[10502] lcpy= "M"
+Data[10503] lcpy= "MT"
+Data[10504] lcpy= "WT"
+Data[10505] lcpy= "MP"
+Data[10506] lcpy= "W"
+Data[10507] lcpy= "MS"
+Data[10508] lcpy= "WP"
+Data[10509] lcpy= "WS"
+Data[10510] lcpy= "(s)"
+Data[10511] lcpy= ""
+Data[10512] lcpy= ""
+Data[10513] lcpy= ""
+
+Data[20502] lcpy= "Man"
+Data[20503] lcpy= "Men큦 Triples"
+Data[20504] lcpy= "Women's Triples"
+Data[20505] lcpy= "Men큦 Pairs"
+Data[20506] lcpy= "Woman"
+Data[20507] lcpy= "Men큦 Singles"
+Data[20508] lcpy= "Women큦 Pairs"
+Data[20509] lcpy= "Women큦 Singles"
+Data[20510] lcpy= "Substitute"
+Data[20511] lcpy= ""
+Data[20512] lcpy= ""
+Data[20513] lcpy= ""
+
+		/* ********************************************************** */
+		/* *** NUMBER OF ENTRIES BY NOC (C32C)
+Vari[10600]=9
+Data[10601] lcpy= "Legend:"
+Data[10602] lcpy= "MS"
+Data[10603] lcpy= "MP"
+Data[10604] lcpy= "MT"
+Data[10605] lcpy= "WS"
+Data[10606] lcpy= "WP"
+Data[10607] lcpy= "WT"
+
+Data[20602] lcpy= "Men큦 Singles"
+Data[20603] lcpy= "Men큦 Pairs"
+Data[20604] lcpy= "Men큦 Triples"
+Data[20605] lcpy= "Women큦 Singles"
+Data[20606] lcpy= "Women큦 Pairs"
+Data[20607] lcpy= "Women큦 Triples"
+
+		/* ********************************************************** */
+		/* *** NUMBER OF ENTRIES BY NOC (C08)
+Vari[10700]=12
+Data[10701] lcpy= "Legend:"
+Data[10702] lcpy= "BM"
+Data[10703] lcpy= "MS"
+Data[10704] lcpy= "R2"
+Data[10705] lcpy= "SF"
+Data[10706] lcpy= "F"
+Data[10707] lcpy= "QF"
+Data[10708] lcpy= "R3"
+Data[10709] lcpy= "WD"
+Data[10710] lcpy= "MD"
+Data[10711] lcpy= "R1"
+Data[10712] lcpy= "R4"
+Data[10713] lcpy= "WS"
+
+Data[20702] lcpy= "Bronze Medal Match                "
+Data[20703] lcpy= "Men`s Singles                     "
+Data[20704] lcpy= "Round 2                           "
+Data[20705] lcpy= "Semifinal                         "
+Data[20706] lcpy= "Final"
+Data[20707] lcpy= "Quarterfinal"
+Data[20708] lcpy= "Round 3"
+Data[20709] lcpy= "Women`s Pairs"
+Data[20710] lcpy= "Men`s Pairs"
+Data[20711] lcpy= "Round 1"
+Data[20712] lcpy= "Round 4"
+Data[20713] lcpy= "Women`s Singles"
+
+
+/* ********************************************************** */
+/* *** Preliminary Round Summary (C76A)					  *** */
+/* ********************************************************** */
+Data[11200] lcpy= "Legend:"
+Data[11201] lcpy= "PLD -"
+Data[11202] lcpy= "WON -"
+Data[11203] lcpy= "LOST -"
+Data[11204] lcpy= "Agst -"
+Data[11205] lcpy= "SD -"
+Data[11206] lcpy= "PTS -"
+Data[11207] lcpy= "* -"
+Data[11208] lcpy= "Note:"	    /* Nota */
+
+Data[21201] lcpy= "Matches Played  "
+Data[21202] lcpy= "Won Matches "
+Data[21203] lcpy= "Lost Matches"
+Data[21204] lcpy= "Against  "
+Data[21205] lcpy= "Shot Difference  "
+Data[21206] lcpy= "Points  "
+Data[21207] lcpy= "Win in Tie-Breaker  "
+Data[21208] lcpy= "tbd * time of the matches will be determined after the competitors/teams are known"
+		
+
+		/* ********************************************************** */
+		/* *** WEATHER CONDITIONS (80)
+		/* *** 
+Data[11301] lcpy= "Legend:"
+Data[11302] lcpy= "N"
+Data[11303] lcpy= "E"
+Data[11304] lcpy= "S"
+Data[11305] lcpy= "W"
+Data[11306] lcpy= "NE"
+Data[11307] lcpy= "ESE"
+Data[11308] lcpy= "SSW"
+Data[11309] lcpy= "WNW"
+Data[11310] lcpy= "NNE"
+Data[11311] lcpy= "SE"
+Data[11312] lcpy= "SW"
+Data[11313] lcpy= "NW"
+Data[11314] lcpy= "ENE"
+Data[11315] lcpy= "SSE"
+Data[11316] lcpy= "WSW"
+Data[11317] lcpy= "NNW"
+
+Data[21302] lcpy= "- North  "
+Data[21303] lcpy= "- East  "
+Data[21304] lcpy= "- South  "
+Data[21305] lcpy= "- West  "
+Data[21306] lcpy= "- North East  "
+Data[21307] lcpy= "- East South East  "
+Data[21308] lcpy= "- South South West  "
+Data[21309] lcpy= "- West North West  "
+Data[21310] lcpy= "- North North East  "
+Data[21311] lcpy= "- South East  "
+Data[21312] lcpy= "- South West  "
+Data[21313] lcpy= "- North West  "
+Data[21314] lcpy= "- East North East  "
+Data[21315] lcpy= "- South South East  "
+Data[21316] lcpy= "- West South West  "
+Data[21317] lcpy= "- North North West  "
+
+
+
+				/* ********************************************************** */
+		/* *** Medal Standings Legend (95)
+Data[10501] lcpy= "Legend:"
+Data[95501] lcpy= "G -"
+Data[95502] lcpy= "Gold,  "
+Data[95503] lcpy= "S -"
+Data[95504] lcpy= "Silver,"
+Data[95505] lcpy= "B -"
+Data[95506] lcpy= "Bronze,"
+Data[95507] lcpy= "Tot -"
+Data[95508] lcpy= "Total,"
+Data[95509] lcpy= "'=' -"
+Data[95510] lcpy= "Equal sign indicates that two or more contestants or CGAs share the same rank"
+
+
+/* ********************************************************** */
+		/* *** Final Standings Legend (96)
+Data[10501] lcpy= "Legend:"
+Data[96501] lcpy= "I. Rating -"
+Data[96502] lcpy= "Initial Rating"
+Data[96503] lcpy= "F. Rating -"
+Data[96504] lcpy= "Final Rating"
+
+
+
+/* END */
