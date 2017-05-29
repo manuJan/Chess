@@ -22,35 +22,32 @@
 
 #include "stdCHMngt.h"
 #include "CHMatch.h"
+#include "CHMatchResult.h"
+#include "CHPoolResult.h"
 #include "UCHMatch.h"
-#include "CHClassIDs.h"
+#include "QCHMatch.h"
 #include "CHMemoryDataBase.h"
+#include "CHEvent.h"
 #include "CHStatisticDefines.h"
-#include "CHSession.h"
+#include "CHSportDefines.h"
 
-#include <core\TH\GTHHistoric.h>
+#include <ovr\core\TH\GTHHistoric.h>
 
 //////////////////////////////////////////////////////////////////////
 // Order Functions
 //////////////////////////////////////////////////////////////////////
-static int orderMatchBySubMatches(const GVectorElement** a, const GVectorElement** b)
-{
-	CHMatch* pMatchA=(CHMatch*)(*a)->getElement();
-	CHMatch* pMatchB=(CHMatch*)(*b)->getElement();
 
-	return pMatchA->getSubMatch() - pMatchB->getSubMatch();
-
-}
-static int orderByMatchNumber(const GVectorElement** a, const GVectorElement** b)
+static 
+int orderByMatchNumber(const MSLItem** a, const MSLItem** b)
 {
-	CHMatch* pMatchA=(CHMatch*)(*a)->getElement();
-	CHMatch* pMatchB=(CHMatch*)(*b)->getElement();
+	CHMatch* pMatchA=(CHMatch*)(*a);
+	CHMatch* pMatchB=(CHMatch*)(*b);
 
 	
-	if(pMatchA->isBye())
+	if(pMatchA->hasByes())
 		return 1;
 	
-	if(pMatchB->isBye())
+	if(pMatchB->hasByes())
 		return -1;
 
 	int order=pMatchA->getMatchNumber() - pMatchB->getMatchNumber();
@@ -59,32 +56,16 @@ static int orderByMatchNumber(const GVectorElement** a, const GVectorElement** b
 	
 
 	return strcmp(pMatchA->getKey(), pMatchB->getKey());
-
 }
 
-static RWBoolean subMatchOfParentMatch   (const RWCollectable * col, const void * param)
-{
-	CHMatch* pMatch = (CHMatch*)param;
-	CHMatch* pMatchAux = (CHMatch*)  col;
-	if ( pMatch->getPool()->getKey() == pMatchAux->getPool()->getKey() &&
-		 pMatch->getIdParent() == pMatchAux->getIdParent() &&
-		 pMatchAux->getSubMatch())
-		 return true;
-	return false;
-}
-
-RWDEFINE_COLLECTABLE(CHMatch, __CHMATCH);
+MSLDEFINE_ITEM(CHMatch, __CHMATCH);
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 CHMatch::CHMatch()
-:THSPMatch()
-,pSession(0)
-,pCourt(0) 
-,pVenue(0)
-,subMatch(0)
-,matchType(CHMatch::eNone)
-,round(0)
+:GTHMatch()
+,m_matchType(CHMatch::eNone)
+,m_round(0)
 {
 }
 
@@ -93,30 +74,17 @@ CHMatch::CHMatch(const CHMatch &copy)
 	operator =(copy);
 }
 
-CHMatch::CHMatch(CPack &aPack)
-{
-	unpack(aPack);
-}
-
-CHMatch::CHMatch(const RWDBBlob& aBlob)
-:THSPMatch(aBlob)
-,pSession(0)
-,pCourt(0)
-,pVenue(0)
-,subMatch(0)
-,matchType(eNone)
-,round(0)
+CHMatch::CHMatch(const MSLBinary& aBinary)
+:GTHMatch(aBinary)
+,m_matchType(eNone)
+,m_round(0)
 {
 }
 
-CHMatch::CHMatch(CHPool *poolMatch,short codeMatch)
-:THSPMatch(poolMatch,codeMatch)
-,pSession(0)
-,pCourt(0)
-,pVenue(0)
-,subMatch(0)
-,matchType(eNone)
-,round(0)
+CHMatch::CHMatch(GTHPool * poolMatch,short codeMatch, short codeSubMatch)
+:GTHMatch(poolMatch,codeMatch,codeSubMatch)
+,m_matchType(eNone)
+,m_round(0)
 {
 }
 
@@ -127,408 +95,135 @@ CHMatch::~CHMatch()
 //////////////////////////////////////////////////////////////////////
 // Operators
 //////////////////////////////////////////////////////////////////////
-CHMatch & CHMatch::operator  = (const CHMatch& copy)
+GData & CHMatch::operator  = (const GData& copy)
 {
 	if ( this != &copy )
 	{
-		THSPMatch::operator =(copy);
-		pSession	    = copy.pSession;
-		pCourt		    = copy.pCourt;
-		subMatch		= copy.subMatch;
-		matchType		= copy.matchType;
-		pVenue			= copy.pVenue;
-		round			= copy.round;
+		GTHMatch::operator =(copy);
+
+		CHMatch & aMatch = (CHMatch &)copy;
+
+		m_matchType		= aMatch.m_matchType;		
+		m_round			= aMatch.m_round;
 	}
 	
 	return *this;
 }
 
-RWBoolean CHMatch::operator == (const CHMatch& copy)
+bool CHMatch::operator == (const GData& copy)
 {
 	if ( this == &copy )
 		return true;
 	
-	return 	(	THSPMatch::operator ==(copy)			&&
-				pSession	    == copy.pSession		&&
-				pCourt		    == copy.pCourt			&&	
-				subMatch		== copy.subMatch		&&
-				matchType		== copy.matchType		&&
-				pVenue			== copy.pVenue			&&
-				round			== copy.round);
+	CHMatch & aMatch = (CHMatch &)copy;
+
+	return 	(	GTHMatch::operator ==(copy)				&&
+				m_matchType		== aMatch.m_matchType	&&				
+				m_round			== aMatch.m_round);
 }
 
-RWBoolean CHMatch::operator != (const CHMatch& copy)
+bool CHMatch::operator != (const GData& copy)
 {
 	return !operator==(copy);
 }
 
-RWBoolean CHMatch::uSQL(RWDBConnection& pConnect,RWBoolean remove/*=false*/)
+MSLPack& CHMatch::pack(MSLPack& aPack) const
 {
-	RWBoolean rc=false;
+	GTHMatch::pack(aPack);
 
-	UCHMatch upd(&pConnect);
-	if( remove )
-		rc=upd.remove(*this);
-	else
-		rc=upd.set(*this);
-
-	return rc;
-
-}
-
-RWCString CHMatch::msl() const
-{
-	GBuffer aBuffer;
-	RWCString str = THSPMatch::msl();
-
-	if(str==NULLRWSTRING)
-		return str;
-
-	short numSession = 0;
-	RWCString court("");
-	RWCString venue=NULLRWSTRING;
-	if(pSession)
-	{
-		//char aux[10];
-		//sprintf(aux,"%c",pSession->getSession());
-		numSession=short(pSession->getSession());
-	}
-	if (pCourt)
-	{
-		char aux[10];
-		sprintf(aux,"%d",pCourt->getCourt());
-		court=RWCString(aux);
-	}
-
-	if (pVenue)
-	{
-		venue = pVenue->getVenue();
-	}
-
-	return str + RWCString( aBuffer	<< numSession
-									<< court
-									<< subMatch
-									<< matchType
-									<< venue
-									<< round
-									<< endLine );
-}
-
-RWCString CHMatch::mslDescription(const char *language) const
-{
-	return THSPMatch::mslDescription(language);
-}
-
-CPack& CHMatch::pack(CPack& aPack)
-{
-	short idCourt = 0;
-
-	if (pCourt)
-		idCourt = pCourt->getCourt();
-
-	THSPMatch::pack(aPack);
-
-	aPack << pSession;
-	aPack << idCourt;
-	aPack << subMatch;
-	aPack << matchType;
-	aPack << pVenue;
-	aPack << round;
+	aPack << m_matchType;
+	aPack << m_round;
+	
 	return aPack;
 }
 
-CPack& CHMatch::unpack(CPack& aPack)
+MSLPack& CHMatch::unpack(MSLPack& aPack)
 {
-	long lMatchDuration=0L;
-	short idCourt = 0;
-
-	THSPMatch::unpack(aPack);	
-
-	aPack >> ((GTHSession **) &pSession);
-	aPack >> idCourt;
-	aPack >> subMatch;
-	aPack >> short(matchType);
-	aPack >> ((GVenue **) &pVenue);
-	aPack >> round;
-
-	if (CHMatch::getVenue())
-		 pCourt = GTHMemoryDataBase::findCourt(CHMatch::getVenue()->getVenue(),idCourt);
-	else pCourt = 0;
-
+	GTHMatch::unpack(aPack);	
+			
+	aPack >> short(m_matchType);
+	aPack >> m_round;
+		
 	return aPack;
 }
+
+UBase*  CHMatch::onU() const
+{
+	return new UCHMatch();
+}
+
+QBase*  CHMatch::onQ() const
+{
+	return new QCHMatch();	
+}
+
+
 //Sets
-void CHMatch::setSession(GTHSession *value)
-{ 
-	pSession = (CHSession *)value;
-}
-
-void CHMatch::setCourt(GCourt *value)
-{ 
-	pCourt = value;
-}
-
-void CHMatch::setVenue(GVenue *value)
-{
-	pVenue = value;
-}
-
-void CHMatch::setSubMatch(const short value )
-{ 
-	subMatch = value;
-}
 
 void CHMatch::setMatchType(const short value)
 { 
-	matchType = (value);
+	m_matchType = (value);
 }
 
 void CHMatch::setRound(const short value)
 { 
-	round = (value);
+	m_round = (value);
 }
 
-
-//Gets
-GTHSession* CHMatch::getSession() const
-{ 
-	return (GTHSession *)pSession;
-}
-GCourt* CHMatch::getCourt() const
-{ 
-	return pCourt;
-}
-short CHMatch::getSubMatch() const 
-{ 
-	return subMatch;
-}
 short CHMatch::getMatchType() const
 { 
-	return matchType;
+	return m_matchType;
 }
 short CHMatch::getRound() const
 { 
-	return round;
+	return m_round;
 }
 
-RWCString CHMatch::getMatchNumberAsString() const
-{
-	RWCString aux(NULLRWSTRING);
-	char tmp[10];
-
-	short matchNumber= getMatchNumber();
-	aux=itoa(matchNumber,tmp,10);
-
-	return aux;
-}
-
-RWBoolean CHMatch::areTeams() const
+bool CHMatch::areTeams() const
 { 
-	return (matchType==eTeam);
+	return (m_matchType==eTeam);
 }
 
-RWBoolean CHMatch::areTeamIndividual() const
+bool CHMatch::areTeamIndividual() const
 { 
-	return (matchType==eTeamIndividual);
+	return (m_matchType==eTeamIndividual);
 }
 
-int CHMatch::getEventMode() const
-{
-	return ((CHEvent *)getEvent())->getMode();
-}
-
-//methods from Phase
-GTHPhase::DescriptionMode CHMatch::getPhasePoolDescription() const
-{
-	return getPhase()->getPoolDescription();
-}
-
-//methods from Session
-char CHMatch::getSessionSession()const
-{
-	//return getSession()?getSession()->getSession():char(0);
-	if (pSession)
-		return pSession->getSession();
-	else
-		return char(0);
-}
-// methods for parentMatch
-CHMatch* CHMatch::getParentMatch() const
-{
-	CHMatch aMatch,*pMatch=0;
-	aMatch.setPool(getPool());
-	aMatch.setCode(short(getCode()-getSubMatch()));
-	pMatch=(CHMatch*)GTHMemoryDataBase::findMatch(aMatch);
-	return pMatch;
-	
-}
-
-short CHMatch::getParentMatchNumber() const
-{
-	if (areTeamIndividual())
-		return getParentMatch()->getMatchNumber();
-	return 0;
-}
-
-GSortedVector CHMatch::getSubMatches()
-{
-	GSortedVector vSubMatches;
-	RWSet* colSubMatches=0;
-	if(areTeams() && !this->getSubMatch())
-	{
-		colSubMatches = (RWSet *) CHMemoryDataBase::getColMatchs().select(subMatchOfParentMatch,this);
-		vSubMatches = GSortedVector(*colSubMatches,orderMatchBySubMatches);
-	}
-	delete colSubMatches;
-	return vSubMatches;
-}
-
-short CHMatch::getIdParent() const
-{ 
-	if (getCode()>cKindTeam)
-		return short((getCode()-cKindTeam)/cStepTeam); 
-	
-	return (getCode()); 
-}
-
-RWCString CHMatch::getIdParentAsString() const
-{
-	RWCString aux(NULLRWSTRING);
-	char tmp[10];
-
-	short idParent= getIdParent();
-	aux=itoa(idParent,tmp,10);
-
-	return aux;
-}
-
-//methods for matchResults
-CHMatchResult * CHMatch::getMatchResultHome() const
-{
-	if( getCompetitorsVector().entries() < 2 )
-		return 0;
-
-	CHMatchResult * pMR1 = (CHMatchResult*)getCompetitorsVector()[0]->getElement();
-	CHMatchResult * pMR2 = (CHMatchResult*)getCompetitorsVector()[1]->getElement();
-	
-	
-	if( !pMR1 || !pMR2) // || !pMR1->getInscription() || !pMR2->getInscription() )
-		return 0;
-
-	if( pMR1->getPosition() == 1 )
-		return pMR1;
-	else
-		return pMR2;
-}
-
-CHMatchResult * CHMatch::getMatchResultAway() const
-{
-	if( getCompetitorsVector().entries() < 2 )
-		return 0;
-
-	CHMatchResult * pMR1 = (CHMatchResult*)getCompetitorsVector()[0]->getElement();
-	CHMatchResult * pMR2 = (CHMatchResult*)getCompetitorsVector()[1]->getElement();
-	if( !pMR1 || !pMR2 ) // || !pMR1->getInscription() || !pMR2->getInscription() )
-		return 0;
-
-	if( pMR1->getPosition() == 2 )
-		return pMR1;
-	else
-		return pMR2;
-}
-
-CHMatchResult * CHMatch::getWhite() const
-{	
-	if( getCompetitorsVector().entries() < 2 )
-		return 0;
-
-	CHMatchResult * pMR1 = (CHMatchResult*)getCompetitorsVector()[0]->getElement();
-	CHMatchResult * pMR2 = (CHMatchResult*)getCompetitorsVector()[1]->getElement();
-
-	if( pMR1->getColor() == CHMatchResult::eWhite )
-		return pMR1;
-	else
-		return pMR2;
-}
-	
-CHMatchResult * CHMatch::getBlack() const
-{
-	if( getCompetitorsVector().entries() < 2 )
-		return 0;
-
-	CHMatchResult * pMR1 = (CHMatchResult*)getCompetitorsVector()[0]->getElement();
-	CHMatchResult * pMR2 = (CHMatchResult*)getCompetitorsVector()[1]->getElement();
-
-	if( pMR1->getColor() == CHMatchResult::eBlack )
-		return pMR1;
-	else
-		return pMR2;
-}
-
-//methods from Venue
-GVenue * CHMatch::getVenue() const
-{ 
-	return pVenue;
-}
-
-RWCString CHMatch::getVenueCode() const
-{
-	if (pVenue)
-		return (pVenue->getVenue());
-	else
-		return NULLRWSTRING;
-}
-//methods from Court
-int CHMatch::getCourtCode() const
-{
-	//return getCourt()?getCourt()->getCourt():0;
-	if (pCourt)
-		return pCourt->getCourt();
-	else
-		return 0;
-			
-}
-
-bool CHMatch::isBye()
+bool CHMatch::isEmpty()
 {
 	int k=0;
-	while (k<(int)getCompetitorsVector().entries())
-	{
-		GTHMatchResult *pMatchResult=(GTHMatchResult *)getCompetitorsVector()[k++]->getElement();
-		if (pMatchResult->getBye())
-			return true;
-	}
-	return false;
-}
+	MSLSortedVector vCompetitors;
+	getMatchResultsVector(vCompetitors);
 
-RWBoolean CHMatch::isEmpty()
-{
-	int k=0;
-	while (k<(int)getCompetitorsVector().entries())
+	while ( k < (int)vCompetitors.entries() )
 	{
-		GTHMatchResult *pMatchResult=(GTHMatchResult *)getCompetitorsVector()[k++]->getElement();
+		GTHMatchResult *pMatchResult=(GTHMatchResult *)vCompetitors[k++];
 		if (pMatchResult->getInscription())
 			return false;
 	}
 	return true;
 }
 
-RWBoolean CHMatch::isConfigured()
+bool CHMatch::isConfigured()
 {
 	int k=0;
-	while (k<(int)getCompetitorsVector().entries())
+
+	MSLSortedVector vCompetitors;
+	getMatchResultsVector(vCompetitors);
+
+	while ( k < (int)vCompetitors.entries() )
 	{
-		GTHMatchResult *pMatchResult=(GTHMatchResult *)getCompetitorsVector()[k++]->getElement();
+		GTHMatchResult *pMatchResult=(GTHMatchResult *)vCompetitors[k++];
 		if (!pMatchResult->getInscription())
 			return false;
 	}
 	return true;	
 }
 
-RWCString CHMatch::getResultWhiteBlackAsString() const
+MSLString CHMatch::getResultWhiteBlackAsString() const
 {
 	if( getStatus() < CHMemoryDataBase::eRunning )
-		return NULLRWSTRING;
+		return NULLSTRING;
 
 	CHMatchResult * pWhite = 0;
 	CHMatchResult * pBlack= 0;
@@ -537,9 +232,9 @@ RWCString CHMatch::getResultWhiteBlackAsString() const
 	pWhite = getWhite();
 	pBlack = getBlack();
 
-	RWCString result=NULLRWSTRING;
+	MSLString result=NULLSTRING;
 	char sResult[200];
-	RWCString qualita="";
+	MSLString qualita="";
 	if(thereAreQualitative())
 	{
 		qualita=getResultWhiteBlackIncidence();
@@ -548,26 +243,26 @@ RWCString CHMatch::getResultWhiteBlackAsString() const
 	memset(sResult,0,200);	
 	
 	// No hay qualitatives
-	sprintf(sResult,"%s-%s",pWhite->getPointsAsString(),pBlack->getPointsAsString());
-	return RWCString(sResult);
+	sprintf_s(sResult,"%s-%s",pWhite->getPointsAsString(),pBlack->getPointsAsString());
+	return MSLString(sResult);
 }
 
-RWCString CHMatch::getResultAsString() const
+MSLString CHMatch::getResultAsString() const
 {
 	
 	if( getStatus() < CHMemoryDataBase::eRunning )
-		return NULLRWSTRING;
+		return NULLSTRING;
 
 	CHMatchResult * pMatchResult1 = 0;
 	CHMatchResult * pMatchResult2= 0;
 	
 
-	pMatchResult1 = getMatchResultHome();
-	pMatchResult2 = getMatchResultAway();
+	pMatchResult1 = (CHMatchResult *) getHome();
+	pMatchResult2 = (CHMatchResult *) getAway();
 
-	RWCString result=NULLRWSTRING;
+	MSLString result=NULLSTRING;
 	char sResult[200];
-	RWCString qualita="";
+	MSLString qualita="";
 	if(thereAreQualitative())
 	{
 		qualita=getResultIncidence();
@@ -576,18 +271,20 @@ RWCString CHMatch::getResultAsString() const
 	memset(sResult,0,200);	
 	
 	// No hay qualitatives
-	sprintf(sResult,"%s-%s",pMatchResult1->getPointsAsString(),pMatchResult2->getPointsAsString());
-	return RWCString(sResult);
+	sprintf_s(sResult,"%s-%s",pMatchResult1->getPointsAsString(),pMatchResult2->getPointsAsString());
+	return MSLString(sResult);
 		
 }
-RWBoolean CHMatch::thereAreQualitative() const
+bool CHMatch::thereAreQualitative() const
 {
 	
-	GSortedVector & vMatchResult=getCompetitorsVector();
+	MSLSortedVector vMatchResult;
+	getMatchResultsVector(vMatchResult);
+
 	CHMatchResult *pMatchResult=0;
-	for(size_t i=0; i<vMatchResult.entries();i++)
+	for(short i=0; i<vMatchResult.entries();i++)
 	{
-		pMatchResult=(CHMatchResult*)vMatchResult[i]->getElement();
+		pMatchResult=(CHMatchResult*)vMatchResult[i];
 		if(pMatchResult)
 		{
 			if(pMatchResult->isQualitative())
@@ -598,33 +295,63 @@ RWBoolean CHMatch::thereAreQualitative() const
 	return false;
 }
 
-RWCString CHMatch::getResultIncidence() const
+MSLString CHMatch::getResultIncidence() const
 {
-	GSortedVector & vMatchResult=getCompetitorsVector();
+	MSLSortedVector vMatchResult;
+	getMatchResultsVector(vMatchResult);
 	CHMatchResult *pMatchResult1=0;
 	CHMatchResult *pMatchResult2=0;
 	char qualitative[30];
-	pMatchResult1=(CHMatchResult*)vMatchResult[0]->getElement();
-	pMatchResult2=(CHMatchResult*)vMatchResult[1]->getElement();
+	pMatchResult1=(CHMatchResult*)vMatchResult[0];
+	pMatchResult2=(CHMatchResult*)vMatchResult[1];
 
 	if(pMatchResult1->isQualitative() && pMatchResult2->isQualitative())
 	{
-		sprintf(qualitative,"%s%s-%s%s",pMatchResult1->getPointsAsString(),pMatchResult1->getQualitativeSDescription().toAscii(),pMatchResult2->getPointsAsString(),pMatchResult2->getQualitative()->getSDescription());
+		sprintf_s(qualitative,"%s%s-%s%s",pMatchResult1->getPointsAsString(),pMatchResult1->getQualitativeSDescription().toAscii(),pMatchResult2->getPointsAsString(),pMatchResult2->getQualitative()->getSDescription());
 		
 	}
 	else if(pMatchResult1->isQualitative())
 	{
-		sprintf(qualitative,"%s%s-%s",pMatchResult1->getPointsAsString(),pMatchResult1->getQualitativeSDescription().toAscii(),pMatchResult2->getPointsAsString());
+		sprintf_s(qualitative,"%s%s-%s",pMatchResult1->getPointsAsString(),pMatchResult1->getQualitativeSDescription().toAscii(),pMatchResult2->getPointsAsString());
 	}
 	else if(pMatchResult2->isQualitative())
 	{
-		sprintf(qualitative,"%s-%s%s",pMatchResult1->getPointsAsString(),pMatchResult2->getPointsAsString(),pMatchResult2->getQualitativeSDescription().toAscii());
+		sprintf_s(qualitative,"%s-%s%s",pMatchResult1->getPointsAsString(),pMatchResult2->getPointsAsString(),pMatchResult2->getQualitativeSDescription().toAscii());
 	}
 	
-	return RWCString(qualitative);
+	return MSLString(qualitative);
 }
 
-RWCString CHMatch::getResultWhiteBlackIncidence() const
+CHMatchResult * CHMatch::getWhite() const
+{
+	CHMatchResult* pHome= (CHMatchResult*) getHome();
+	CHMatchResult* pAway= (CHMatchResult*) getAway();
+
+	if (pHome && pHome->getColor()==CHMatchResult::eWhite)
+		return pHome;
+
+	if (pAway && pAway->getColor()==CHMatchResult::eWhite)
+		return pAway;
+
+	return pHome;
+}
+
+CHMatchResult * CHMatch::getBlack() const
+{
+	CHMatchResult* pHome= (CHMatchResult*) getHome();
+	CHMatchResult* pAway= (CHMatchResult*) getAway();
+
+	if (pHome && pHome->getColor()==CHMatchResult::eBlack)
+		return pHome;
+
+	if (pAway && pAway->getColor()==CHMatchResult::eBlack)
+		return pAway;
+
+	return pAway;
+}
+
+
+MSLString CHMatch::getResultWhiteBlackIncidence() const
 {
 	CHMatchResult *pWhite=getWhite();
 	CHMatchResult *pBlack=getBlack();
@@ -632,56 +359,23 @@ RWCString CHMatch::getResultWhiteBlackIncidence() const
 	
 	if(pWhite->isQualitative() && pBlack->isQualitative())
 	{
-		sprintf(qualitative,"%s%s-%s%s",pWhite->getPointsAsString(),pWhite->getQualitativeSDescription().toAscii(),pBlack->getPointsAsString(),pBlack->getQualitative()->getSDescription());
-		
+		sprintf_s(qualitative,"%s%s-%s%s",pWhite->getPointsAsString(),pWhite->getQualitativeSDescription().toAscii(),pBlack->getPointsAsString(),pBlack->getQualitative()->getSDescription());		
 	}
 	else if(pWhite->isQualitative())
 	{
-		sprintf(qualitative,"%s%s-%s",pWhite->getPointsAsString(),pWhite->getQualitativeSDescription().toAscii(),pBlack->getPointsAsString());
+		sprintf_s(qualitative,"%s%s-%s",pWhite->getPointsAsString(),pWhite->getQualitativeSDescription().toAscii(),pBlack->getPointsAsString());
 	}
 	else if(pBlack->isQualitative())
 	{
-		sprintf(qualitative,"%s-%s%s",pWhite->getPointsAsString(),pBlack->getPointsAsString(),pBlack->getQualitativeSDescription().toAscii());
+		sprintf_s(qualitative,"%s-%s%s",pWhite->getPointsAsString(),pBlack->getPointsAsString(),pBlack->getQualitativeSDescription().toAscii());
 	}
 	
-	return RWCString(qualitative);
-}
-
-short CHMatch::getWinner() const
-{
-	CHMatchResult *pMR1 = (CHMatchResult *)getMatchResult(0);
-	CHMatchResult *pMR2 = (CHMatchResult *)getMatchResult(1);
-
-	if( pMR1->isQualitative() && pMR2->isQualitative() )
-	{	
-		// Sin puntuacion y con incicencias los dos no hay ganador
-		if(pMR1->getPoints()==pMR2->getPoints())
-			return eNoWinner;
-		
-		// Gana el que mas puntos tenga 
-		return short(pMR1->getPoints()>pMR2->getPoints() ? short(1):short(2));
-	}
-	else if( pMR1->isQualitative() )
-	{
-		return eWinnerBlack;
-	}
-	else if( pMR2->isQualitative() )
-	{
-		return eWinnerWhite;
-	}
-	else if( pMR1->getPoints()>pMR2->getPoints() )
-		return eWinnerWhite;
-	else if( pMR2->getPoints()>pMR1->getPoints() )
-		return eWinnerBlack;
-	else if( pMR2->getPoints()==pMR1->getPoints() && getStatus()>=CHMemoryDataBase::eUnofficial)
-		return eDraw; // Tablas
-	
-	return eNoWinner;	// no ganador
+	return MSLString(qualitative);
 }
 
 short CHMatch::getTurn() const
 {
-	int turn=CHMatchResult::eWhite;
+	short turn=CHMatchResult::eWhite;
 	
 	if ( ((CHMatch*)this)->getHistoricNumber()>0)
 	{
@@ -701,9 +395,9 @@ short CHMatch::getNextPlayNumber() const
 	{
 		GTHHistoric aHist=((CHMatch*)this)->getHistoric(((CHMatch*)this)->getHistoricNumber()-1);
 		if (aHist.getValueOfData(DATA_PLAYER)==EV_WHITE)
-			return aHist.getValueOfData(DATA_NUMPLAY);
+			return short(aHist.getValueOfData(DATA_NUMPLAY));
 		
-		return aHist.getValueOfData(DATA_NUMPLAY)+1;		
+		return short(aHist.getValueOfData(DATA_NUMPLAY)+1);		
 	}
 	return 1;
 }
@@ -725,8 +419,8 @@ int	CHMatch::getResultCode() const
 		float scoreWhite = pWhite->getPoints();
 		float scoreBlack = pBlack->getPoints();
 
-		RWCString qCodeWhite = pWhite->getQualitativeCode();
-		RWCString qCodeBlack = pBlack->getQualitativeCode();
+		MSLString qCodeWhite = pWhite->getQualitativeCode();
+		MSLString qCodeBlack = pBlack->getQualitativeCode();
 
 		if (scoreWhite>=1.0 &&
 			scoreWhite>scoreBlack &&
@@ -767,10 +461,10 @@ int	CHMatch::getResultCode() const
 	return EV_EMPTY;
 }
 
-RWCString CHMatch::getTotalResult(RWBoolean onlyRound)
+MSLString CHMatch::getTotalResult(bool onlyRound)
 {
-	CHMatchResult *pHome=getMatchResultHome();
-	CHMatchResult *pAway=getMatchResultAway();
+	CHMatchResult *pHome=(CHMatchResult *) getHome();
+	CHMatchResult *pAway=(CHMatchResult *) getAway();
 	
 	char result[100]="";
 
@@ -778,53 +472,53 @@ RWCString CHMatch::getTotalResult(RWBoolean onlyRound)
 	CHPoolResult *pPoolResultAway=(CHPoolResult*)pAway->getPoolResult();
 	
 		
-	RWCString qualita="";
+	MSLString qualita="";
 	if(!pPoolResultHome || !pPoolResultAway)
-		return NULLRWSTRING;
+		return NULLSTRING;
 
 	if(pPoolResultHome->isQualitative() && pPoolResultAway->isQualitative())
 	{
 		char qualitative[30];
-		sprintf(qualitative,"%s-%s",pPoolResultHome->getQualitativeSDescription().toAscii(),pPoolResultAway->getQualitative()->getSDescription());
-		return RWCString(qualitative);
+		sprintf_s(qualitative,"%s-%s",pPoolResultHome->getQualitativeSDescription().toAscii(),pPoolResultAway->getQualitative()->getSDescription());
+		return MSLString(qualitative);
 	}
 
 	if(pPoolResultHome->isQualitative())
 	{
 		char qualitative[30];
-		sprintf(qualitative,"%s-%s",pPoolResultHome->getQualitativeSDescription().toAscii(),pPoolResultAway->getPoolPointsFStr(getRound()));
-		return RWCString(qualitative);
+		sprintf_s(qualitative,"%s-%s",pPoolResultHome->getQualitativeSDescription().toAscii(),pPoolResultAway->getPoolPointsFStr(getRound()));
+		return MSLString(qualitative);
 	}
 
 	if(pPoolResultAway->isQualitative())
 	{
 		char qualitative[30];
-		sprintf(qualitative,"%s-%s",pPoolResultHome->getPoolPointsFStr(getRound()),pPoolResultAway->getQualitativeSDescription().toAscii());
-		return RWCString(qualitative);
+		sprintf_s(qualitative,"%s-%s",pPoolResultHome->getPoolPointsFStr(getRound()),pPoolResultAway->getQualitativeSDescription().toAscii());
+		return MSLString(qualitative);
 	}
 
-	sprintf(result,"%s-%s",pPoolResultHome->getPoolPointsFStr(getRound(),onlyRound),pPoolResultAway->getPoolPointsFStr(getRound(),onlyRound));
-	return RWCString(result);
+	sprintf_s(result,"%s-%s",pPoolResultHome->getPoolPointsFStr(getRound(),onlyRound),pPoolResultAway->getPoolPointsFStr(getRound(),onlyRound));
+	return MSLString(result);
 }
 
-RWCString CHMatch::getRoundAsString(RWBoolean lDesc/*=true*/,RWBoolean date/*=true*/)
+MSLString CHMatch::getRoundAsString(bool lDesc/*=true*/,bool date/*=true*/)
 {
 
 	char tmp[20];
-	RWCString roundDesc=NULLRWSTRING;
+	MSLString m_roundDesc=NULLSTRING;
 	if(lDesc)
-		 sprintf(tmp,"Round %d", getRound());
-	else sprintf(tmp,"R.%d", getRound());
+		 sprintf_s(tmp,"Round %d", getRound());
+	else sprintf_s(tmp,"R.%d", getRound());
 
-	roundDesc=RWCString(tmp);
-	if(date && getStartDate()!=INVALID_RWDATE)
-		roundDesc+=", "+getStartDateAsString("%a %d %b %Y");
+	m_roundDesc=MSLString(tmp);
+	if(date && getStartDate()!=INVALID_DATE)
+		m_roundDesc+=", "+getStartDateAsString("%a %d %b %Y").toAscii();
 
-	return roundDesc;
+	return m_roundDesc;
 	
 }
 // From CHEvent
-RWBoolean CHMatch::isTeam()
+bool CHMatch::isTeam()
 {
 	CHEvent *pEvent=(CHEvent*)getEvent();
 	if(pEvent)
@@ -833,14 +527,19 @@ RWBoolean CHMatch::isTeam()
 	return false;
 }
 
-GSortedVector CHMatch::getRoundMatches()
+MSLSortedVector CHMatch::getRoundMatches()
 {
 	CHMatch* pMatch=0;
 	
-	GSortedVector vMatchesRound;
-	for (size_t i=0;i<getPool()->getMatchsVector().entries();i++)
+	MSLSortedVector vMatchesRound;
+
+	MSLSortedVector vMatches;
+	if (getPool())
+		getPool()->getMatchesVector(vMatches);
+
+	for (short i=0;i<vMatches.entries();i++)
 	{
-		pMatch = (CHMatch*) getPool()->getMatchsVector()[i]->getElement();
+		pMatch = (CHMatch*) vMatches[i];
 		if(pMatch->getSubMatch())
 			continue;
 
@@ -848,44 +547,45 @@ GSortedVector CHMatch::getRoundMatches()
 			vMatchesRound.insert(pMatch);
 	}
 	
-	vMatchesRound.sort(orderByMatchNumber);
+	vMatchesRound.setFcCompare(orderByMatchNumber);
+	vMatchesRound.sort();
 	
 	return vMatchesRound;
 
 }
-RWCString CHMatch::getRoundMatch()
+MSLString CHMatch::getRoundMatch()
 {
-	RWCString roundMatch=NULLRWSTRING;
+	MSLString m_roundMatch=NULLSTRING;
 
 	char tmp[10];
 
-	sprintf(tmp,"%d.",getRound());
+	sprintf_s(tmp,"%d.",getRound());
 
 	CHMatch* pMatch=0;
 	
-	roundMatch=RWCString(tmp);
-	GSortedVector vMatchesRound=getRoundMatches();
+	m_roundMatch=MSLString(tmp);
+	MSLSortedVector vMatchesRound=getRoundMatches();
 	
-	for (size_t i=0;i<vMatchesRound.entries();i++)
+	for (short i=0;i<vMatchesRound.entries();i++)
 	{
-		pMatch = (CHMatch*) vMatchesRound[i]->getElement();
+		pMatch = (CHMatch*) vMatchesRound[i];
 		
 		if (pMatch->getMatchNumber()==getMatchNumber())
-			sprintf(tmp," %d",i+1);
+			sprintf_s(tmp," %d",i+1);
 	}
-	roundMatch+=RWCString(tmp);
 
-	return roundMatch;
+	m_roundMatch+=MSLString(tmp);
+	return m_roundMatch;
 
 }
-RWBoolean CHMatch::getFinishedRound()
+bool CHMatch::getFinishedRound()
 {		
-	GSortedVector vMatchesRound=getRoundMatches();
+	MSLSortedVector vMatchesRound=getRoundMatches();
 	
 	CHMatch *pMatch=0;
-	for (size_t i=0;i<vMatchesRound.entries();i++)
+	for (short i=0;i<vMatchesRound.entries();i++)
 	{
-		pMatch = (CHMatch*) vMatchesRound[i]->getElement();
+		pMatch = (CHMatch*) vMatchesRound[i];
 		if(pMatch->getStatus()!=CHMemoryDataBase::eFinished)
 			return false;
 
@@ -893,16 +593,51 @@ RWBoolean CHMatch::getFinishedRound()
 	return true;
 }
 
-RWBoolean CHMatch::hasCompetitors(bool any/*=false*/)
+bool CHMatch::hasCompetitors(bool any/*=false*/)
 {
 	CHMatchResult* pMatchResult=0;
-	for (size_t j=0; j<getCompetitorsVector().entries(); j++)
+	MSLSortedVector vMatchResult;
+	getMatchResultsVector(vMatchResult);
+
+	for (short j=0; j<vMatchResult.entries(); j++)
 	{
-		pMatchResult=(CHMatchResult*)(getCompetitorsVector()[j]->getElement());
+		pMatchResult=(CHMatchResult*)vMatchResult[j];
 		if (!pMatchResult->getRegister() && !any)
 			return false;
 		else if (any && pMatchResult->getRegister())
 			return true;
 	}
 	return (!any);
+}
+
+short CHMatch::getWinner() const
+{
+	CHMatchResult *pMR1 = (CHMatchResult *)getHome();
+	CHMatchResult *pMR2 = (CHMatchResult *)getAway();
+
+	if( pMR1->isQualitative() && pMR2->isQualitative() )
+	{	
+		// Sin puntuacion y con incicencias los dos no hay ganador
+		if(pMR1->getPoints()==pMR2->getPoints())
+			return eNoWinner;
+		
+		// Gana el que mas puntos tenga 
+		return short(pMR1->getPoints()>pMR2->getPoints() ? short(1):short(2));
+	}
+	else if( pMR1->isQualitative() )
+	{
+		return eWinnerBlack;
+	}
+	else if( pMR2->isQualitative() )
+	{
+		return eWinnerWhite;
+	}
+	else if( pMR1->getPoints()>pMR2->getPoints() )
+		return eWinnerWhite;
+	else if( pMR2->getPoints()>pMR1->getPoints() )
+		return eWinnerBlack;
+	else if( pMR2->getPoints()==pMR1->getPoints() && getStatus()>=CHMemoryDataBase::eUnofficial)
+		return eDraw; // Tablas
+	
+	return eNoWinner;	// no ganador
 }

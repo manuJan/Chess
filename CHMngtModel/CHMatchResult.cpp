@@ -21,27 +21,28 @@
 **************************************************************************************///
 #include "stdCHMngt.h"
 #include "CHMatchResult.h"
-#include "CHDiscipline.h"
-#include "CHClassIDs.h"
+#include "CHMatch.h"
+#include "CHPoolResult.h"
 #include "UCHMatchResult.h"
+#include "QCHMatchResult.h"
 #include "CHEvent.h"
 #include "CHPhase.h"
 #include "CHInscription.h"
 #include "CHRegister.h"
 #include "CHMatch.h"
-#include "CHMatchMember.h"
 #include "CHStatisticDefines.h"
-#include <core/G/GScore.h>
+#include "CHSportDefines.h"
+#include <ovr/core/G/GScore.h>
 
 static
-RWBoolean matchResultsOfPoolResult(const RWCollectable * col, const void * param)
+bool matchResultsOfPoolResult(const MSLItem * col, const void * param)
 {
 	CHPoolResult * pPoolResult = (CHPoolResult *) param;
 	CHMatchResult  * pMatchResult = (CHMatchResult*) col;
 	
 	if (pPoolResult &&
 		pMatchResult &&
-		pMatchResult->getSubMatch()==0 &&
+		pMatchResult->getMatchSubCode()==0 &&
 		pMatchResult->getEvent() == pPoolResult->getEvent() &&
 		pMatchResult->getRegister() &&
 		pPoolResult->getRegister() &&
@@ -51,25 +52,25 @@ RWBoolean matchResultsOfPoolResult(const RWCollectable * col, const void * param
 	return false;
 }
 
-RWDEFINE_COLLECTABLE(CHMatchResult, __CHMATCHRESULT)
+MSLDEFINE_ITEM(CHMatchResult, __CHMATCHRESULT)
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 CHMatchResult::CHMatchResult()
 :GTHMatchResult()
-,points(0.0)
-,color(eWhite)
-,upFloater(false)
-,downFloater(false)
+,m_points(0.0)
+,m_color(eWhite)
+,m_upFloater(false)
+,m_downFloater(false)
 {
 }
 
 CHMatchResult::CHMatchResult(CHMatch * match,short pos)
 :GTHMatchResult(match,pos)
-,points(0.0)
-,color(eWhite)
-,upFloater(false)
-,downFloater(false)
+,m_points(0.0)
+,m_color(eWhite)
+,m_upFloater(false)
+,m_downFloater(false)
 {
 }
 
@@ -78,208 +79,158 @@ CHMatchResult::CHMatchResult(const CHMatchResult & copy)
 	operator =(copy);
 }
 
-CHMatchResult::CHMatchResult(CPack & aPack)
-{
-	unpack(aPack); 
-}
-
 CHMatchResult::~CHMatchResult()
 {
 }
 
-CHMatchResult & CHMatchResult::operator =(const CHMatchResult & copy)
+GData & CHMatchResult::operator =(const GData & copy)
 {
 	if ( this != &copy )
 	{
+		CHMatchResult & aMatchResult = (CHMatchResult &)copy;
+
 		GTHMatchResult::operator=(copy);	// Habrá que modificar
-		points				= copy.points;
-		color				= copy.color;
-		upFloater			= copy.upFloater;
-		downFloater			= copy.downFloater;
+	
+		m_points			= aMatchResult.m_points;
+		m_color				= aMatchResult.m_color;
+		m_upFloater			= aMatchResult.m_upFloater;
+		m_downFloater		= aMatchResult.m_downFloater;
 	}
 	return *this;
 }
 
-RWBoolean CHMatchResult::operator ==(const CHMatchResult & copy)
+bool CHMatchResult::operator ==(const GData & copy)
 {
 	if ( this == &copy )
 		return true;
 	
+	CHMatchResult & aMatchResult = (CHMatchResult &)copy;
+	
 	return (	GTHMatchResult::operator==(copy)					&&
-				points				==	copy.points					&&
-				color				==  copy.color					&&
-				upFloater			==  copy.upFloater				&&
-				downFloater			==  copy.downFloater);
+				m_points			==	aMatchResult.m_points		&&
+				m_color				==  aMatchResult.m_color		&&
+				m_upFloater			==  aMatchResult.m_upFloater	&&
+				m_downFloater		==  aMatchResult.m_downFloater);
 }
 
-RWBoolean CHMatchResult::operator !=(const CHMatchResult & copy)
+bool CHMatchResult::operator !=(const GData & copy)
 {
 	return !operator==(copy);
 }
 
-RWBoolean CHMatchResult::uSQL(RWDBConnection& pConnect,RWBoolean remove/*=false*/)
+UBase*  CHMatchResult::onU() const
 {
-	RWBoolean rc=false;
-
-	UCHMatchResult upd(&pConnect);
-	if( remove )
-		rc=upd.remove(*this);
-	else
-		rc=upd.set(*this);
-
-	return rc;
+	return new UCHMatchResult();
 }
 
-RWCString CHMatchResult::msl() const
+QBase*  CHMatchResult::onQ() const
 {
-	GBuffer aBuffer;
-	RWCString str = GTHMatchResult::msl();
-
-	if(str==NULLRWSTRING)
-		return str;
-	return str + RWCString( aBuffer	<< getPointsAsString()
-									<< getSubMatch()
-									<< color
-									<< upFloater
-									<< downFloater
-									<< endLine);
+	return new QCHMatchResult();	
 }
 
-RWCString CHMatchResult::mslDescription(const char *language) const
-{
-	return GTHMatchResult::mslDescription(language);
-}
-
-CPack& CHMatchResult::pack(CPack &aPack)
+MSLPack& CHMatchResult::pack(MSLPack &aPack) const
 {
  	GTHMatchResult::pack(aPack);
 
-	aPack << points;
-	aPack << color;
-	aPack << upFloater;
-	aPack << downFloater;
+	aPack << m_points;
+	aPack << m_color;
+	aPack << m_upFloater;
+	aPack << m_downFloater;
 
 	return aPack;
 }
 
-CPack& CHMatchResult::unpack(CPack &aPack)
+MSLPack& CHMatchResult::unpack(MSLPack &aPack)
 {
 	GTHMatchResult::unpack(aPack);	
 
-	aPack >> points;
-	aPack >> color;
-	aPack >> upFloater;
-	aPack >> downFloater;
+	aPack >> m_points;
+	aPack >> m_color;
+	aPack >> m_upFloater;
+	aPack >> m_downFloater;
 
 	return aPack;
 }
 //SETS
 void CHMatchResult::setPoints(const float value)
 { 
-	points = value;
+	m_points = value;
 }
+
 void CHMatchResult::setColor(const short value)
 {
-	color = value;
+	m_color = value;
 }
 
-void CHMatchResult::setUpFloater(const RWBoolean value)
+void CHMatchResult::setUpFloater(const bool value)
 {
-	upFloater = value;
+	m_upFloater = value;
 }
 
-void CHMatchResult::setDownFloater(const RWBoolean value)
+void CHMatchResult::setDownFloater(const bool value)
 {
-	downFloater = value;
+	m_downFloater = value;
 }
 
 
 // GETS
 float CHMatchResult::getPoints() const
 { 
-	return points;
+	return m_points;
 }
 
-RWCString CHMatchResult::getPointsAsString() const
+MSLString CHMatchResult::getPointsAsString() const
 {
-	RWCString aux(NULLRWSTRING);
+	MSLString aux(NULLSTRING);
 	char tmp[10];
  
-	float points= getPoints();
-	sprintf(tmp,"%.1f",points); //XXX.Y
+	float m_points= getPoints();
+	sprintf_s(tmp,"%.1f",m_points); //XXX.Y
 	
-	RWCString format="#";
+	MSLString format="#";
 	if((getPoints()-int(getPoints()))>0)
 		format="#.#"; // Decimales
 		
 	
-	GScore pointsS = GScore(getPoints());
-	return pointsS.asString(format);
+	GScore m_pointsS = GScore(getPoints());
+	return m_pointsS.asString(format);
 }
 
-short CHMatchResult::getSubMatch() const
-{
-	return getMatch()?((CHMatch*)getMatch())->getSubMatch():0;
-}
 short CHMatchResult::getColor() const
 {
-	return color;
-}
-RWBoolean CHMatchResult::getUpFloater() const
-{
-	return upFloater;
+	return m_color;
 }
 
-RWBoolean CHMatchResult::getDownFloater() const
+bool CHMatchResult::getUpFloater() const
 {
-	return downFloater;
+	return m_upFloater;
 }
 
-short CHMatchResult::getMatchNumber() const
+bool CHMatchResult::getDownFloater() const
 {
-	CHMatch * pMatch = (CHMatch*)getMatch();
-	return pMatch?pMatch->getMatchNumber():short(0);
+	return m_downFloater;
 }
-unsigned char CHMatchResult::getMatchStatus() const
-{
-	CHMatch * pMatch = (CHMatch*)getMatch();
-	return pMatch?pMatch->getStatus():CHMemoryDataBase::eAvailable;
-}
- 
+
+
 int CHMatchResult::getTeamMembers() const
 {
 	return ((CHEvent *)getEvent())->getTeamMembers();
 }
 
-GSortedVector CHMatchResult::getSubMatches()
-{
-	CHMatch *pMat=(CHMatch *)getMatch();
-	return pMat->getSubMatches();
-}
-
 CHMatchResult*	CHMatchResult::getMatchResultVersus()
 {
-	if(isHome())
-		 return ((CHMatch*)getMatch())->getMatchResultAway();
-	else return ((CHMatch*)getMatch())->getMatchResultHome();
+	if(getType()==CHMatchResult::eHome)
+		return (CHMatchResult*)getMatch()->getAway();
 	
+	return (CHMatchResult*)getMatch()->getHome();
 }
 
-RWBoolean CHMatchResult::isHome() const
-{
-	return (getPosition()==1);
-}
-
-RWBoolean CHMatchResult::isQualitative() const
+bool CHMatchResult::isQualitative() const
 {
 	if(getQualitative() && getQualitativeCode()!=OK)
 		return true;
 
 	return false;
-}
-GSortedVector &CHMatchResult::getInscriptionMembersVector() const
-{
-	return (GSortedVector &)(getInscription()->getMembersVector());
 }
 
 short CHMatchResult::getSeed()
@@ -287,16 +238,16 @@ short CHMatchResult::getSeed()
 	return getInscription()?((CHInscription*)getInscription())->getSeed():0;
 }
 	
-RWCString CHMatchResult::getSeedAsString()
+MSLString CHMatchResult::getSeedAsString()
 {
-	return getInscription()?((CHInscription*)getInscription())->getSeedAsString():NULLRWSTRING;
+	return getInscription()?((CHInscription*)getInscription())->getSeedAsString():NULLSTRING;
 }
 
 int CHMatchResult::getColorRGB()
 {
 	int ret=0;
 	
-	switch (color)
+	switch (m_color)
 	{
 		case eWhite:
 			ret=COLOR_BLANCO;
@@ -309,35 +260,39 @@ int CHMatchResult::getColorRGB()
 	return ret;
 }
 
-RWBoolean CHMatchResult::areTeams() const
+bool CHMatchResult::areTeams() const
 {
 	return ((CHEvent *)getEvent())->isTeam();
 }
 
 short CHMatchResult::getColorVersus()
 {
-	short colorVersus=eNone;
-	if(color==eWhite)
-		colorVersus=eBlack;
-	if(color==eBlack)
-		colorVersus=eWhite;
+	short m_colorVersus=eNone;
+	if(m_color==eWhite)
+		m_colorVersus=eBlack;
+	if(m_color==eBlack)
+		m_colorVersus=eWhite;
 
-	return colorVersus;
+	return m_colorVersus;
 
 }
 
 short CHMatchResult::getTeamMatchesWon()
 {
 	CHMatch *pTeamMatch=(CHMatch*)getMatch();
-	GSortedVector vSubMatches=pTeamMatch->getSubMatches();
-	CHMatch *pSubMatch=0;
+	MSLSet colSubMatches;
+	pTeamMatch->getSubMatches(colSubMatches);	
 	short matchesWon=0;
-	for(size_t i=0;i<vSubMatches.entries();i++)
+	MSLSetIterator iter(colSubMatches);
+	CHMatch *pSubMatch=0;
+	while ((pSubMatch= (CHMatch*) iter())!=0 )
 	{
-		pSubMatch=(CHMatch*)vSubMatches[i]->getElement();
-		if(isHome() && pSubMatch->getWinner()==CHMatch::eWinnerWhite)
+
+		if( getType()==CHMatchResult::eHome && 
+			pSubMatch->getWinner()==CHMatch::eWinnerWhite)
 			matchesWon++;
-		if(!isHome() && pSubMatch->getWinner()==CHMatch::eWinnerBlack)
+		if( getType()==CHMatchResult::eAway && 
+			pSubMatch->getWinner()==CHMatch::eWinnerBlack)
 			matchesWon++;
 	}
 	return matchesWon;
@@ -353,7 +308,7 @@ float CHMatchResult::getPointsSO()
 	if (!pEvent)
 		return 0.0;
 
-	if (pMatch->isBye())
+	if (pMatch->hasByes())
 		return 0.5;
 
 	if (pMatch->getWinner()==((CHMatchResult*)this)->getPosition() &&
@@ -362,95 +317,54 @@ float CHMatchResult::getPointsSO()
 	{
 		return 0.5;
 	}
-	return points;
+	return m_points;
 }
 
 // From CHMatchResult
-CHMatchMember* CHMatchResult::getMatchMember()
-{
-	return (CHMatchMember*)getMembersVector()[0]->getElement();
-	
-}
-RWWString CHMatchResult::getMatchMemberLDescription()
-{
-	GSortedVector vMatchMembers=getMembersVector();
-	RWCString txt = NULLRWSTRING;
-	CHMatchMember *pMatchMember=0;
-	for(size_t i=0;i<vMatchMembers.entries();i++)
-	{
-		pMatchMember = (CHMatchMember*)vMatchMembers[i]->getElement();
-		if(pMatchMember && pMatchMember->getRegister())
-		{
-			if(i!=0)
-				 txt+="-"+pMatchMember->getPrnLName().toMultiByte();
-			else txt+=pMatchMember->getPrnLName().toMultiByte();
-		}
-	}
-			
-	return RWWString(txt,RWWString::multiByte);
-}
-RWWString CHMatchResult::getMatchMemberSDescription()
-{
-	GSortedVector vMatchMembers=getMembersVector();
-	RWCString txt = NULLRWSTRING;
-	CHMatchMember *pMatchMember=0;
-	for(size_t i=0;i<vMatchMembers.entries();i++)
-	{
-		pMatchMember = (CHMatchMember*)vMatchMembers[i]->getElement();
-		if(pMatchMember && pMatchMember->getRegister())
-		{
-			if(i!=0)
-				 txt+="-"+pMatchMember->getPrnSName().toMultiByte();
-			else txt+=pMatchMember->getPrnSName().toMultiByte();
-		}
-	}
-			
-	return RWWString(txt,RWWString::multiByte);
-}
 
-RWCString CHMatchResult::getColorSDesc() const
+MSLString CHMatchResult::getColorSDesc() const
 {
 	if (getColor()==eWhite)
 		return "W";
 	else if (getColor()==eBlack)
 		return "B";
-	return NULLRWSTRING;
+	return NULLSTRING;
 }
 
-RWCString CHMatchResult::getColorLDesc() const
+MSLString CHMatchResult::getColorLDesc() const
 {
 	if (getColor()==eWhite)
 		return "White";
 	else if (getColor()==eBlack)
 		return "Black";
-	return NULLRWSTRING;
+	return NULLSTRING;
 }
 
-RWCString CHMatchResult::getColorVersusSDesc() const
+MSLString CHMatchResult::getColorVersusSDesc() const
 {
 	if (((CHMatchResult*)this)->getColorVersus()==eWhite)
 		return "W";
 	else if (((CHMatchResult*)this)->getColorVersus()==eBlack)
 		return "B";
-	return NULLRWSTRING;
+	return NULLSTRING;
 }
 
-RWCString CHMatchResult::getColorVersusLDesc() const
+MSLString CHMatchResult::getColorVersusLDesc() const
 {
 	if (((CHMatchResult*)this)->getColorVersus()==eWhite)
 		return "White";
 	else if (((CHMatchResult*)this)->getColorVersus()==eBlack)
 		return "Black";
-	return NULLRWSTRING;
+	return NULLSTRING;
 }
 
-void CHMatchResult::getPreviousMatchesVector(GSortedVector &vMatchResults,CHMatch* _pMatch)
+void CHMatchResult::getPreviousMatchesVector(MSLSortedVector &vMatchResults,CHMatch* _pMatch)
 {
 	if (!getPoolResult())
 		return;
 
-	RWSet* colMatchResults=(RWSet*)CHMemoryDataBase::getColMatchResults().select(matchResultsOfPoolResult,getPoolResult());
-	RWSetIterator it(*colMatchResults);
+	MSLSet colMatchResults=CHMemoryDataBase::getCol(__CHMATCHRESULT).select(matchResultsOfPoolResult,getPoolResult());
+	MSLSetIterator it(colMatchResults);
 		
 	CHMatchResult* pMatchResult=0;
 	while( (pMatchResult=(CHMatchResult*)it()) != 0)
@@ -465,20 +379,19 @@ void CHMatchResult::getPreviousMatchesVector(GSortedVector &vMatchResults,CHMatc
 	}
 }
 
-RWCString CHMatchResult::getPreviousMatchesAsString(CHMatch* pMatch)
+MSLString CHMatchResult::getPreviousMatchesAsString(CHMatch* pMatch)
 {
-	RWCString matches=NULLRWSTRING;
-	GSortedVector vMatchResults;
+	MSLString matches=NULLSTRING;
+	MSLSortedVector vMatchResults;
 	getPreviousMatchesVector(vMatchResults,pMatch);
-	char tmp[100];
-	for (size_t i=0;i<vMatchResults.entries();i++)
+	for (short i=0;i<vMatchResults.entries();i++)
 	{
-		CHMatchResult* pMatchResult = (CHMatchResult*)vMatchResults[i]->getElement();
+		CHMatchResult* pMatchResult = (CHMatchResult*)vMatchResults[i];
 		if (pMatchResult->getRegister())
 		{			
 			matches+=pMatchResult->getColorSDesc();
 			matches+=" - ";
-			matches+=pMatchResult->getScbSName().toMultiByte();		
+			matches+=pMatchResult->getScbSName().toAscii();		
 			matches+="\n";
 		}
 	}	

@@ -23,194 +23,163 @@
 #include "stdCHMngt.h"
 #include "CHInscription.h"
 #include "CHMember.h"
-#include "CHClassIDs.h"
+#include "QCHInscription.h"
 #include "UCHInscription.h"
 #include "CHEvent.h"
 #include "CHRegister.h"
 #include "CHMemoryDataBase.h"
 
-int orderMembersInscription(const GVectorElement** a, const GVectorElement** b)
-{
-	CHMember * pMemberA=(CHMember *)(*a)->getElement();
-	CHMember * pMemberB=(CHMember *)(*b)->getElement();
-
-	return pMemberA->getOrder() - pMemberB->getOrder();
-}
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-RWDEFINE_COLLECTABLE(CHInscription, __CHINSCRIPTION)
+MSLDEFINE_ITEM(CHInscription, __CHINSCRIPTION)
 
 CHInscription::CHInscription()
 :GTHInscription()
-,seed(0)
-,rating(0)
-,kConst(0)
-{
-	getMembersVector().sort(orderMembersInscription);
+,m_seed(0)
+,m_rating(0)
+,m_kConst(0)
+{	
 }
 
 CHInscription::CHInscription(GRegister *reg,GTHEvent *ev)
 :GTHInscription(reg,ev)
-,seed(0)
-,rating(0)
-,kConst(0)
-{
-	getMembersVector().sort(orderMembersInscription);
+,m_seed(0)
+,m_rating(0)
+,m_kConst(0)
+{	
 }
 
 CHInscription::CHInscription(const CHInscription &copy)
-{
-	getMembersVector().sort(orderMembersInscription);
+{	
 	operator=(copy);
-}
-
-CHInscription::CHInscription(CPack &iPack)
-{
-	getMembersVector().sort(orderMembersInscription);
-	unpack(iPack);
 }
 
 CHInscription::~CHInscription()
 {
 }
 
-CHInscription& CHInscription::operator = (const CHInscription &copy)
+GData& CHInscription::operator = (const GData &copy)
 {
 	if ( this != &copy )
 	{
+		const CHInscription & insc=(const CHInscription &) copy;
+		
 		GTHInscription::operator	= (copy);
-		seed						= copy.seed;
-		rating						= copy.rating;
-		kConst						= copy.kConst;
+		
+		m_seed						= insc.m_seed;
+		m_rating					= insc.m_rating;
+		m_kConst					= insc.m_kConst;
 		
 	}
 	return *this;
 }
 
-RWBoolean CHInscription::operator == (const CHInscription &copy)
+bool CHInscription::operator == (const GData &copy)
 {
 	if ( this == &copy )
 		return true;
 
-	if( GTHInscription::operator	== (copy)				&&
-		seed						== copy.seed			&&
-		rating						== copy.rating			&&
-		kConst						== copy.kConst)
-	{
-		return true;
-	}
-	return false;
+	const CHInscription & insc=(const CHInscription &) copy;
+
+	return( GTHInscription::operator	== (copy)				&&
+			m_seed						== insc.m_seed			&&
+			m_rating					== insc.m_rating		&&
+			m_kConst					== insc.m_kConst);	
 }
 
-RWBoolean CHInscription::operator != (const CHInscription &copy)
+bool CHInscription::operator != (const GData &copy)
 {
 	return !operator==(copy);
 }
 
-CHMember * CHInscription::operator [] (const size_t index) const
-{
-	if( index<getMembersVector().entries() )
-		return (CHMember *)getMember(index);
-	return 0;
-}
-
-RWBoolean CHInscription::uSQL(RWDBConnection& pConnect,RWBoolean remove/*=false*/)
-{
-	RWBoolean rc=false;
-	UCHInscription upd(&pConnect);
-	if(remove )
-		rc=upd.remove(*this);
-	else
-		rc=upd.set(*this);
-	return rc;
-}
-
-RWCString CHInscription::msl() const
-{
-	RWCString str = GTHInscription::msl();
-	if(!str.length() || str == NULLRWSTRING)
-		return NULLRWSTRING;
-
-	GBuffer aBuffer;
-	return str + RWCString(aBuffer	<< seed
-									<< rating
-									<< endLine);
-}
 //pack
-CPack& CHInscription::pack(CPack & aPack)
+MSLPack& CHInscription::pack(MSLPack & aPack) const
 {
 	GTHInscription::pack (aPack);
-	aPack << seed;
-	aPack << rating;
-	aPack << kConst;
+
+	aPack << m_seed;
+	aPack << m_rating;
+	aPack << m_kConst;
 	
 	return aPack;
 }
 
-CPack& CHInscription::unpack(CPack &aPack)
+MSLPack& CHInscription::unpack(MSLPack &aPack)
 {
 	GTHInscription::unpack (aPack);
-	aPack >> seed;
-	aPack >> rating;
-	aPack >> kConst;
+
+	aPack >> m_seed;
+	aPack >> m_rating;
+	aPack >> m_kConst;
 	
 	return aPack;
 }
+
+QBase* CHInscription::onQ() const
+{
+	return new QCHInscription();
+}
+
+UBase* CHInscription::onU() const
+{
+	return new UCHInscription();
+}
+
+
 // set
 void CHInscription::setSeed(const short value)
 {
-	seed = value;
+	m_seed = value;
 }
 void CHInscription::setRating(const short value)
 {
-	rating = value;
+	m_rating = value;
 }
 void CHInscription::setKConst(const short value)
 {
-	kConst = value;
+	m_kConst = value;
 }
 
 // get
 short CHInscription::getSeed() const
 {
-	return seed;
+	return m_seed;
 }
 short CHInscription::getRating() const
 {
-	return rating;
+	return m_rating;
 }
 short CHInscription::getKConst() const
 {
-	return kConst;
+	return m_kConst;
 }
 
-RWCString CHInscription::getSeedAsString() const
+MSLString CHInscription::getSeedAsString() const
 { 
-	RWCString aux=NULLRWSTRING;
-	char tmp[10];
+	MSLString aux=NULLSTRING;
 	
-	if (seed)
-		aux=itoa(seed,tmp,10);
+	if (m_seed)
+		aux=TOSTRING(m_seed);
+	
 	return aux; 
 }
 
-RWCString CHInscription::getRatingAsString() const
+MSLString CHInscription::getRatingAsString() const
 { 
-	RWCString aux="-";
-	char tmp[10];
+	MSLString aux="-";
 	
-	if (rating)
-		aux=itoa(rating,tmp,10);
+	if (m_rating)
+		aux=TOSTRING(m_rating);
+		
 	return aux; 
 }
-RWCString CHInscription::getKConstAsString() const
+MSLString CHInscription::getKConstAsString() const
 { 
-	RWCString aux="-";
-	char tmp[10];
+	MSLString aux="-";
 	
-	if (kConst)
-		aux=itoa(kConst,tmp,10);
+	if (m_kConst)
+		aux=TOSTRING(m_kConst);
 	return aux; 
 }
 
@@ -219,30 +188,6 @@ GRegister::TypeRegister CHInscription::getType() const
 	return getRegister()->getType();
 }
 
-RWWString CHInscription::getGroupLDescription(const char *language/*=DBApplication::getAppLanguage()*/) const
-{
-	return getRegister()?getRegister()->getGroupLDescription(language):_T("");
-}
-
-RWCString CHInscription::getRegisterBirthDate(const char *format/*="%x"*/) const
-{
-	return getRegister()?getRegister()->getBirthDate(format):"";
-}
-
-CHRegister *CHInscription::getMemberRegister(const size_t value) const
-{
-	return (CHRegister *)(getMember(value)?getMember(value)->getRegister():0);
-}
-
-int CHInscription::getRegisterCode() const
-{
-	return getRegister()->getRegister();
-}
-
-RWWString CHInscription::getMemberRegisterPrnLName(const size_t value) const
-{
-	return getMemberRegister(value)?getMemberRegister(value)->getPrnLName():_T("");
-}
 
 short CHInscription::getRegMasterType() const
 {
@@ -250,10 +195,10 @@ short CHInscription::getRegMasterType() const
 	return pRegister?pRegister->getMasterType():0;
 }	
 
-RWCString CHInscription::getRegMasterTypeAsString(bool longer/*=true*/) const
+MSLString CHInscription::getRegMasterTypeAsString(bool longer/*=true*/) const
 {
 	CHRegister* pRegister = (CHRegister*)getRegister();
-	return pRegister?pRegister->getMasterTypeAsString(longer):NULLRWSTRING;
+	return pRegister?pRegister->getMasterTypeAsString(longer):NULLSTRING;
 }
 
 short CHInscription::getRegMasterTypeOrder() const
@@ -262,18 +207,23 @@ short CHInscription::getRegMasterTypeOrder() const
 	return pRegister?pRegister->getMasterTypeOrder():0;
 }
 
-RWWString CHInscription::getTeamScbLName(const RWBoolean bFMember, const RWBoolean bSMember, const RWBoolean bTMember) const
+MSLWString CHInscription::getTeamScbLName(const bool bFMember, const bool bSMember, const bool bTMember) const
 { //si bXMember es true compongo el nombre del equipo con ellos 
-	if (getMembersVector().entries()<2)
-		return NULLRWWSTRING;
+	
+	MSLSortedVector vMembers;
+	getMembersVector(vMembers);
 
-	RWWString teamScbLName=NULLRWWSTRING;
-	RWWString blank=_T(" ");
-	RWWString slash=_T("/");
-	GSortedVector vMyMembers(getMembersVector());
-	for (size_t i=0; i<vMyMembers.entries(); i++)
+	if (vMembers.entries()<2)
+		return NULLWSTRING;
+
+	MSLWString teamScbLName=NULLWSTRING;
+	MSLWString blank=_T(" ");
+	MSLWString slash=_T("/");
+
+	MSLSortedVector vMyMembers(vMembers);
+	for (short i=0; i<vMyMembers.entries(); i++)
 	{ //elimino el substituto si existe
-		CHMember * pMember =(CHMember*) vMyMembers[i]->getElement();
+		CHMember * pMember =(CHMember*) vMyMembers[i];
 		if (pMember->getFunction()==CHMember::eSubstitute)
 		{
 			vMyMembers.remove(pMember);
@@ -283,11 +233,11 @@ RWWString CHInscription::getTeamScbLName(const RWBoolean bFMember, const RWBoole
 
 	CHMember *pFMember=0, *pSMember=0, *pTMember=0;
 	if (bFMember && vMyMembers.entries()>=1)
-		pFMember=(CHMember *) vMyMembers[0]->getElement();
+		pFMember=(CHMember *) vMyMembers[0];
 	if (bSMember && vMyMembers.entries()>=2)
-		pSMember=(CHMember *) vMyMembers[1]->getElement();
+		pSMember=(CHMember *) vMyMembers[1];
 	if (bTMember  && vMyMembers.entries()>=3)
-		pTMember=(CHMember *) vMyMembers[2]->getElement();
+		pTMember=(CHMember *) vMyMembers[2];
 
 	if (bFMember || bSMember)
 		teamScbLName=(pFMember?(pFMember->getName2()):_T(""))+

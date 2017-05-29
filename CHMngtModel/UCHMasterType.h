@@ -20,32 +20,45 @@
 *
 ***************************************************************************************/
 
-#if !defined(AFX_UCHMasterType_H__EC659569_DDDE_413E_AA76_54B9A464DF99__INCLUDED_)
-#define AFX_UCHMasterType_H__EC659569_DDDE_413E_AA76_54B9A464DF99__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include <OVR/CORE/G/UBase.h>
+#include "CHMasterType.h"
 
-#include <CORE/G/UBase.h>
-
-class UCHMasterType : public UBase  
+class UCHMasterType : public UBase
 {
+
 public:
-	UCHMasterType(RWDBConnection *pNewConnection):UBase(pNewConnection) {;}
-	virtual ~UCHMasterType() {;}
-	
-	void assignAtributes(CHMasterType& aMasterType);
+	UCHMasterType()
+		:UBase()
+	{;}
+	virtual ~UCHMasterType()
+	{;}
 
 protected:
-	RWBoolean insert (RWDBConnection& aConnection,GData& aData);
-	RWBoolean update (RWDBConnection& aConnection,GData& aData);
-	RWBoolean delete_(RWDBConnection& aConnection,GData& aData);
+	bool insert (GData& aData);
+	bool update (GData& aData);	
+	bool delete_(GData& aData);
+
+	long insertLang(MSLDBTable& table);
+	long updateLang(MSLDBTable& table);
+	void deleteLang(MSLDBTable& table);
+
+	long OnInsertLang(MSLDBTable& table,const CHMasterType& aMasterType);
+	long OnUpdateLang(MSLDBTable& table,const CHMasterType& aMasterType);
+	void OnDeleteLang(MSLDBTable& table,const CHMasterType& aMasterType);
+
+	void assignAttributes(CHMasterType& aEnd);
+	bool assignNames(const CHMasterType& aMasterType,const char *language);
 
 private:
+
 	short order;
-	RWDBNullIndicator nullorder;
+	MSLDBNullIndicator nullorder;
+
+	MSLDBNullIndicator nullLDescription,nullSDescription;
+	MSLString lang;	
+	MSLWString flDescription,fsDescription;
+	short masterType;
 
 };
 
-#endif // !defined(AFX_UCHMasterType_H__EC659569_DDDE_413E_AA76_54B9A464DF99__INCLUDED_)

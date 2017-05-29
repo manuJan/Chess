@@ -22,28 +22,27 @@
 
 #include "stdCHMngt.h"
 #include "CHMember.h"
-#include "CHClassIDs.h"
 #include "UCHMember.h"
+#include "QCHMember.h"
 #include "CHRegister.h"
-#include <Core/G/GFunction.h>
 
-RWDEFINE_COLLECTABLE(CHMember, __CHMEMBER);
+MSLDEFINE_ITEM(CHMember, __CHMEMBER);
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 CHMember::CHMember()
 :GMember(0,0)
-,function(eNone)
-,rating(0)
-,kConst(0)
+,m_function(eNone)
+,m_rating(0)
+,m_kConst(0)
 {
 }
 
-CHMember::CHMember(CHRegister* pRegister,CHInscription* pInscription)
-:GMember((GRegister*)pRegister,(GInscription*)pInscription)
-,function(eNone)
-,rating(0)
-,kConst(0)
+CHMember::CHMember(GRegister * iRegister, GRegister * tRegister)
+:GMember(iRegister,tRegister)
+,m_function(eNone)
+,m_rating(0)
+,m_kConst(0)
 {
 }
 
@@ -53,150 +52,125 @@ CHMember::CHMember(const CHMember &copy)
 	operator=(copy);
 }
 
-CHMember::CHMember(CPack &iPack)
-:GMember(0,0)
-{
-	unpack(iPack);
-}
-
 CHMember::~CHMember()
 {
 
 }
 
-CHMember &CHMember::operator = (const CHMember &copy)
+GData &CHMember::operator = (const GData &copy)
 {
 	if ( this != &copy )
 	{
+		const CHMember & aMember=(const CHMember &) copy;
+
 		GMember::operator	= (copy);
-		function			= copy.function;
-		rating				= copy.rating;
-		kConst				= copy.kConst;
+		
+		m_function			= aMember.m_function;
+		m_rating			= aMember.m_rating;
+		m_kConst			= aMember.m_kConst;
 	}
 	return *this;
 }
 
-RWBoolean CHMember::operator == (const CHMember &copy)
+bool CHMember::operator == (const GData &copy)
 {
 	if ( this == &copy )
 		return true;
-	else
-		return	(GMember::operator	==(copy)			&&
-				 function			== copy.function	&&
-				 rating				== copy.rating		&&
-				 kConst				== copy.kConst);
+	
+	const CHMember & aMember=(const CHMember &) copy;
+
+	return	(GMember::operator	==(copy)				&&
+			 m_function			== aMember.m_function	&&
+			 m_rating			== aMember.m_rating		&&
+			 m_kConst			== aMember.m_kConst);
 }
 
-RWBoolean CHMember::operator != (const CHMember &copy)
+bool CHMember::operator != (const GData &copy)
 {
 	return !operator==(copy);
 }
 
-RWBoolean CHMember::uSQL(RWDBConnection& pConnect,RWBoolean remove/*=false*/)
+QBase* CHMember::onQ() const
 {
-	RWBoolean rc=false;
-
-	UCHMember upd(&pConnect);
-	if(remove )
-		rc=upd.remove(*this);
-	else
-		rc=upd.set(*this);
-	
-	return rc;
+	return new QCHMember();
 }
 
-RWCString CHMember::msl() const
+UBase* CHMember::onU() const
 {
-	RWCString str = GMember::msl();
-	if(!str.length() || str == NULLRWSTRING)
-		return NULLRWSTRING;
+	return new UCHMember();
+}	
 
-	GBuffer aBuffer;
-	
-
-	aBuffer	<<	function
-			<<  rating
-			<<	endLine ;
-
-	return str + RWCString(aBuffer);
-
-}
-
-CPack& CHMember::pack(CPack & aPack)
+MSLPack& CHMember::pack(MSLPack & aPack) const
 {
 	GMember::pack (aPack);
 
-	aPack << function;
-	aPack << rating;
-	aPack << kConst;
+	aPack << m_function;
+	aPack << m_rating;
+	aPack << m_kConst;
 
 	return aPack;
 }
 
-CPack& CHMember::unpack(CPack &aPack)
+MSLPack& CHMember::unpack(MSLPack &aPack)
 {
 	GMember::unpack (aPack);
 
-	aPack >> function;
-	aPack >> rating;
-	aPack >> kConst;
+	aPack >> m_function;
+	aPack >> m_rating;
+	aPack >> m_kConst;
 
 	return aPack;
 }
 //set
 void CHMember::setFunction(const short value)
 {
-	function=value;
+	m_function=value;
 }
 void CHMember::setRating(const short value)
 {
-	rating = value;
+	m_rating = value;
 }
 void CHMember::setKConst(const short value)
 {
-	kConst = value;
+	m_kConst = value;
 }
 //get
 short CHMember::getFunction() const
 {
-	return function;
+	return m_function;
 }
 short CHMember::getRating() const
 {
-	return rating;
+	return m_rating;
 }
 short CHMember::getKConst() const
 {
-	return kConst;
+	return m_kConst;
 }
 
-RWCString CHMember::getRatingAsString() const
+MSLString CHMember::getRatingAsString() const
 { 
-	RWCString aux="-";
-	char tmp[10];
-	
-	if (rating)
-		aux=itoa(rating,tmp,10);
+	MSLString aux="-";	
+	if (m_rating)
+		aux=TOSTRING(m_rating);
 	return aux; 
 }
-RWCString CHMember::getKConstAsString() const
+MSLString CHMember::getKConstAsString() const
 { 
-	RWCString aux="-";
-	char tmp[10];
-	
-	if (kConst)
-		aux=itoa(kConst,tmp,10);
+	MSLString aux="-";
+	if (m_kConst)
+		aux=TOSTRING(m_kConst);
 	return aux; 
 }
 
 GFunction *CHMember::getCFunction() const
 {
-	return (!function?(GFunction *)0:((GFunction *)CHMemoryDataBase::findFunction(char(function))));
+	return (!m_function?(GFunction *)0:((GFunction *)CHMemoryDataBase::findFunction(char(m_function))));
 }
 
-RWWString CHMember::getFunctionLDescription() const
+MSLWString CHMember::getFunctionLDescription() const
 {
-	GFunction *pFunc=(!function?(GFunction *)0:((GFunction *)CHMemoryDataBase::findFunction(char(function))));
+	GFunction *pFunc=(!m_function?(GFunction *)0:((GFunction *)CHMemoryDataBase::findFunction(char(m_function))));
 	return !pFunc?_T("None"):pFunc->getLDescription();
 }
 
@@ -208,9 +182,4 @@ CHEvent *CHMember::getEvent() const
 int CHMember::getRegisterCode() const
 {
 	return getRegister()?getRegister()->getRegister():0;
-}
-
-RWCString CHMember::getRegisterBirthDate(const char *format/*="%x"*/) const
-{
-	return getRegister()?getRegister()->getBirthDate(format):"";
 }

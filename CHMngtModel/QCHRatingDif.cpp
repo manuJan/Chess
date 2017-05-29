@@ -24,24 +24,24 @@
 #include "CHRatingDif.h"
 #include "QCHRatingDif.h"
 
-size_t QCHRatingDif::selectCollection(RWDBConnection& aConnection,RWCollection& target)
+size_t QCHRatingDif::selectCollection(MSLCollection& target)
 {
-	RWCString table="CHT062_RATING_DIF";
+	MSLString table=CHT_RATING_DIF;
 
-	RWDBTable tRating		= DBApplication::getTable(table);
-	RWDBSelector select = DBApplication::getSelector();
+	MSLDBTable tRating	 = getTable(table);
+	MSLDBSelector select = getSelector();
 	
 	select	<< tRating["CODE_RAT"]
 			<< tRating["PROBABILITY"]
 			<< tRating["DIFFERENCE"]
 			;
 	
-	RWDBReader rdr = select.reader(aConnection);		
+	MSLDBReader rdr = select.reader();		
 
 	// fetch 
 	
 	short fCode,fProbability,fDifference;
-	RWDBNullIndicator	nullProbability, nullDifference;
+	MSLDBNullIndicator	nullProbability, nullDifference;
 	
 	CHRatingDif* pRatingDif=0;
 
@@ -61,7 +61,7 @@ size_t QCHRatingDif::selectCollection(RWDBConnection& aConnection,RWCollection& 
 
 		CHRatingDif aRatingDif(fCode);
 
-		pRatingDif=CHMemoryDataBase::findRatingDif(aRatingDif);
+		pRatingDif=(CHRatingDif*)target.find(&aRatingDif);
 		if (!pRatingDif)
 		{
 			pRatingDif=new CHRatingDif(fCode);

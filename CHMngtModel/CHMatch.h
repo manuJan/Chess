@@ -20,143 +20,95 @@
 *                                                                                      
 **************************************************************************************///
 
-#if !defined(AFX_CHMATCH_H__14EDC82E_5189_42B6_A693_CD2BF3E63065__INCLUDED_)
-#define AFX_CHMATCH_H__14EDC82E_5189_42B6_A693_CD2BF3E63065__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-
-#ifndef _CHMNGTMODELDLL_H
-#   include "CHMngtModelDll.h" 
-#endif // _CH_MNGTMODELDLL_H
-
-#include <Core\THSP\THSPMatch.h>
-#include <Core\G\GCourt.h>
-#include <Core\G\GVenue.h>
+#include "CHMemoryDataBaseDefs.h"
+#include <OVR/CORE/TH/GTHMatch.h>
 #include "CHEvent.h"
 
 //constantes para asignar el identificador del partido
-static const cKindTeam= 10000;
-static const cStepTeam= 10;
+static const int cKindTeam= 10000;
+static const int cStepTeam= 10;
 
 //constantes para qualitatives
 static const char *WALKOVER="w";
 static const char *DISQUALIFIED="d";
 static const char *RETIRED="r";
 
-class CHSession;
 class CHMatchResult;
-//class CHSplitMatch;
-//class CHMatchJudge;
-class CHPool;
-//class GTHMatchMember;
-class CHModelExport CHMatch : public THSPMatch  
+
+class CHMngtModelExport CHMatch : public GTHMatch  
 {
-	RWDECLARE_COLLECTABLE(CHMatch)
+
+	MSLDECLARE_ITEM(CHMatch)
+
 public:
-	enum type { eNone=CHEvent::eNone,eIndividual=1,eTeam=CHEvent::eTeam,
-				eTeamIndividual=CHEvent::eTeam+1};
+
+	enum type { eNone=CHEvent::eNone,eIndividual=1,eTeam=2, eTeamIndividual=3};
 	
-	enum typeWinner { eNoWinner=0,eWinnerWhite=1,eWinnerBlack=2,eDraw=3};
+	enum typeWinner { eNoWinner=0, eWinnerWhite=1, eWinnerBlack=2, eDraw=3};
 
 	CHMatch();
 	CHMatch(const CHMatch &copy);
-	CHMatch(CPack &aPack);
-	CHMatch(const RWDBBlob& aBlob);
-	CHMatch(CHPool *poolMatch,short codeMatch);
+	CHMatch(GTHPool * poolMatch,short codeMatch,short codeSubMatch);	
+	CHMatch(const MSLBinary& aBinary);
 	virtual ~CHMatch();
 
-	CHMatch & operator  = (const CHMatch& copy);
-	RWBoolean operator == (const CHMatch& copy);
-	RWBoolean operator != (const CHMatch& copy);
+	/**** Virtual operators inherited from GData ********************/
+	GData& operator= (const GData& copy);
+	bool   operator==(const GData& copy);
+	bool   operator!=(const GData& copy);
 
-	RWBoolean uSQL(RWDBConnection& pConnect,RWBoolean remove=false);
-	RWCString msl() const;
-	RWCString mslDescription(const char *language) const;
-	CPack& pack(CPack& aPack);
-	CPack& unpack(CPack& aPack);
+	/**** Virtual methods inherited from GData **********************/
+	MSLPack& pack  (MSLPack& pck) const;
+	MSLPack& unpack(MSLPack& pck);
+
+	QBase*			onQ() const;
+	UBase*			onU() const;
 
 	// Sets
-	void setSession(GTHSession *value);
-	void setCourt(GCourt *value);
-	void setSubMatch(const short value );
 	void setMatchType(const short value);
 	void setRound(const short value);
-	void setVenue(GVenue *value);
-
+	
 	//Gets
-	GTHSession * getSession() const;
-	GCourt * getCourt() const;
-	short getSubMatch() const ;
 	short getMatchType() const;
 	short getRound() const;
 
-	RWCString getMatchNumberAsString() const;
-	RWBoolean areTeams() const;
-	RWBoolean areTeamIndividual() const;
-	RWBoolean thereAreQualitative() const;
-	int		  getResultCode() const;
-	RWCString getResultAsString() const;
-	RWCString getResultWhiteBlackAsString() const;
-	RWCString getResultIncidence() const;
-	RWCString getResultWhiteBlackIncidence() const;
-
-	//methods from Phase
-	GTHPhase::DescriptionMode getPhasePoolDescription() const;
-
-	//methods from Session
-	char getSessionSession()const;
-
-	//methods from parentMatch
-	short getIdParent() const;
-	RWCString getIdParentAsString() const;
-	CHMatch * getParentMatch() const;
-	short getParentMatchNumber() const;
-	GSortedVector getSubMatches();
-
-	//methods for matchResults
-	CHMatchResult * getMatchResultHome() const;
-	CHMatchResult * getMatchResultAway() const;
-
+	bool areTeams() const;
+	bool areTeamIndividual() const;
+	bool thereAreQualitative() const;
+	int	  getResultCode() const;
+	MSLString getResultAsString() const;
+	MSLString getResultWhiteBlackAsString() const;
+	MSLString getResultIncidence() const;
+	MSLString getResultWhiteBlackIncidence() const;
+		
 	//methods for matchResults
 	CHMatchResult * getWhite() const;
 	CHMatchResult * getBlack() const;
 
-	//methods from Venue
-	GVenue * getVenue() const;
-	RWCString getVenueCode() const;
-
-	//methods from Court
-	int getCourtCode() const;
 	int getEventMode() const;
 
-	short	getWinner() const;
-	bool	isBye();
-	RWBoolean isEmpty();
-	RWBoolean isConfigured();
+	bool	isEmpty();
+	bool	isConfigured();
 	short	getTurn() const;
 	short	getNextPlayNumber() const;
-	size_t	getHistoricDataSize();
-	RWCString		getTotalResult(RWBoolean onlyRound=false);
-	RWCString		getRoundMatch();
-	GSortedVector	getRoundMatches();
-	RWBoolean		getFinishedRound();
 	
-	RWCString getRoundAsString(RWBoolean lDesc=true,RWBoolean date=true);
+	//virtual methods GTHMatch	
+	size_t getHistoricDataSize();
+
+	MSLString		getTotalResult(bool onlyRound=false);
+	MSLString		getRoundMatch();
+	MSLSortedVector	getRoundMatches();
+	bool			getFinishedRound();	
+	MSLString		getRoundAsString(bool lDesc=true,bool date=true);
 
 	// From CHEvent
-	RWBoolean isTeam();
+	bool isTeam();
 
-	RWBoolean hasCompetitors(RWBoolean any=false);
-
+	bool hasCompetitors(bool any=false);
+	short getWinner() const;
 private:
-	CHSession *pSession;
-	GVenue *pVenue;
-	GCourt *pCourt ;
-	short subMatch;
-	short matchType;
-	short round;
+	
+	short m_matchType;
+	short m_round;
 };
-
-#endif // !defined(AFX_CHMATCH_H__14EDC82E_5189_42B6_A693_CD2BF3E63065__INCLUDED_)

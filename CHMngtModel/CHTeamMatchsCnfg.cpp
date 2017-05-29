@@ -1,9 +1,9 @@
 /************************************************************************************* 
 *           © Copyright MSL Software, S.L., 1998                                       
-*   This document is the property of MSL Software and its content is confidential.     
+*   This document is the property of MSL Software and its content is confm_idential.     
 *   This work must not be reproduced or disclosed to others or used for purposes       
 *   other than that for which it is supplied without MSL's prior written permission.   
-*   MSL must not be considered liable for any mistake or omission in the edition of    
+*   MSL must not be consm_idered liable for any mistake or omission in the edition of    
 *   this document. MSL is a registered trademark.                                      
 *                                                                                      
 *   File name   : CHTeamMatchsCnfg.cpp
@@ -21,34 +21,33 @@
 **************************************************************************************///
 #include "stdCHMngt.h"
 #include "CHTeamMatchsCnfg.h"
-#include "CHClassIDs.h"
+#include "QCHTeamMatchsCnfg.h"
 #include "UCHTeamMatchsCnfg.h"
-#include <core/G/GBuffer.h>
+#include <ovr/core/G/GBuffer.h>
 
-RWDEFINE_COLLECTABLE(CHTeamMatchsCnfg, __CHTEAMMATCHSCNFG)
-//////////////////////////////////////////////////////////////////////
+MSLDEFINE_ITEM(CHTeamMatchsCnfg, __CHTEAMMATCHSCNFG)
+
+	//////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 CHTeamMatchsCnfg::CHTeamMatchsCnfg()
-:id(0)
-,nMatches(0)
-,nCompetitors(0)
-,matchesType("")
-,compMatchesDistribution("")
-,names()
-,fAwayChar("")
+:m_id(0)
+,m_nMatches(0)
+,m_nCompetitors(0)
+,m_matchesType("")
+,m_compMatchesDistribution("")
+,m_fAwayChar("")
 {
 	setKey();
 }
 
 CHTeamMatchsCnfg::CHTeamMatchsCnfg(short code)
-:id(code)
-,nMatches(0)
-,nCompetitors(0)
-,matchesType("")
-,compMatchesDistribution("")
-,names()
-,fAwayChar("")
+:m_id(code)
+,m_nMatches(0)
+,m_nCompetitors(0)
+,m_matchesType("")
+,m_compMatchesDistribution("")
+,m_fAwayChar("")
 {
 	setKey();
 }
@@ -58,53 +57,47 @@ CHTeamMatchsCnfg::CHTeamMatchsCnfg(const CHTeamMatchsCnfg & copy)
 	operator=(copy);
 }
 
-CHTeamMatchsCnfg::CHTeamMatchsCnfg(CPack& aPack)
-{
-	unpack(aPack);
-}
-
 CHTeamMatchsCnfg::~CHTeamMatchsCnfg()
 {
 }
 
 //Operator
-RWBoolean CHTeamMatchsCnfg::operator !=(const CHTeamMatchsCnfg & copy)
+bool CHTeamMatchsCnfg::operator !=(const GData & copy)
 {
 	return !operator==(copy);
 }
 
-RWBoolean CHTeamMatchsCnfg::operator ==(const CHTeamMatchsCnfg & copy)
+bool CHTeamMatchsCnfg::operator ==(const GData & copy)
 {
 	if (this == &copy)
 		return true;
-	else
-		return ( id			== copy.id	&&
-				 nMatches	== copy.nMatches &&	
-				 nCompetitors== copy.nCompetitors &&
-				 matchesType	== copy.matchesType &&
-				 compMatchesDistribution == copy.compMatchesDistribution &&
-				 names==copy.names	&&
-				 fAwayChar==copy.fAwayChar
-				 );
+
+	const CHTeamMatchsCnfg & teamMatchsCnfg=(const CHTeamMatchsCnfg &) copy;
+	
+	return ( m_id						== teamMatchsCnfg.m_id						&&
+			 m_nMatches					== teamMatchsCnfg.m_nMatches				&&	
+			 m_nCompetitors				== teamMatchsCnfg.m_nCompetitors			&&
+			 m_matchesType				== teamMatchsCnfg.m_matchesType				&&
+			 m_compMatchesDistribution	== teamMatchsCnfg.m_compMatchesDistribution	&&
+			 m_desc					    == teamMatchsCnfg.m_desc					&&
+			 m_fAwayChar				== teamMatchsCnfg.m_fAwayChar				 );
 }
 
-CHTeamMatchsCnfg & CHTeamMatchsCnfg::operator =(const CHTeamMatchsCnfg & copy)
+GData & CHTeamMatchsCnfg::operator =(const GData & copy)
 {
 	if (this != &copy)
 	{
-		id			= copy.id;
-		nMatches	= copy.nMatches;
-		nCompetitors= copy.nCompetitors;
-		matchesType	= copy.matchesType;
-		compMatchesDistribution	= copy.compMatchesDistribution;
-		names.clearAndDestroy();
-		fAwayChar	= copy.fAwayChar;
+		const CHTeamMatchsCnfg & teamMatchsCnfg=(const CHTeamMatchsCnfg &) copy;
 
-		GNames* pNames=0;
-		RWSetIterator iterator((RWSet&)copy.names);
-		while( (pNames=(GNames*)iterator())!=0 ) 
-			names.insert( new GNames(*pNames) );
-		setKey();
+		m_id			= teamMatchsCnfg.m_id;
+		m_nMatches		= teamMatchsCnfg.m_nMatches;
+		m_nCompetitors	= teamMatchsCnfg.m_nCompetitors;
+		m_matchesType	= teamMatchsCnfg.m_matchesType;
+		m_compMatchesDistribution	= teamMatchsCnfg.m_compMatchesDistribution;
+		m_desc			= teamMatchsCnfg.m_desc;
+		m_fAwayChar		= teamMatchsCnfg.m_fAwayChar;
+
+		
 	}
 	return * this;
 }
@@ -112,161 +105,120 @@ CHTeamMatchsCnfg & CHTeamMatchsCnfg::operator =(const CHTeamMatchsCnfg & copy)
 void CHTeamMatchsCnfg::setKey()
 {
 	char aux[10];
-	sprintf(aux,"%.3d",id);
-	key=RWCString(aux);
+	sprintf_s(aux,"%.3d",m_id);
+	key=MSLString(aux);
 }
 
-RWBoolean CHTeamMatchsCnfg::uSQL(RWDBConnection& pConnect,RWBoolean remove/*=false*/)
+QBase* CHTeamMatchsCnfg::onQ() const
 {
-	RWBoolean rc=false;
-
-	UCHTeamMatchsCnfg upd(&pConnect);
-
-	if( remove )  rc=upd.remove(*this);
-	else          rc=upd.set   (*this);
-
-	return rc;
+	return new QCHTeamMatchsCnfg();
 }
 
-RWCString CHTeamMatchsCnfg::msl() const
+UBase* CHTeamMatchsCnfg::onU() const
 {
-	GBuffer aBuffer;
-
-	return RWCString(	aBuffer	<< isA()
-								<< getKey()
-								<< nMatches
-								<< nCompetitors
-								<< matchesType
-								<< compMatchesDistribution
-								<< fAwayChar
-								<< endLine);
+	return new UCHTeamMatchsCnfg();
 }
 
-RWCString CHTeamMatchsCnfg::mslDescription(const char *language) const
+MSLPack& CHTeamMatchsCnfg::pack(MSLPack& aPack) const
 {
-	return GData::mslDescription(language);
-}
-
-CPack& CHTeamMatchsCnfg::pack(CPack &aPack)
-{
-	size_t namesEntries = names.entries();
-	GNames *pNames=0;
-	aPack << id	;
-	aPack << nMatches	;
-	aPack << nCompetitors	;
-	aPack << matchesType	;
-	aPack << compMatchesDistribution	;
-	aPack << namesEntries;
-	aPack << fAwayChar;
-
-	RWSetIterator it(names);
-	while( (pNames=(GNames *)it())!=0 )
-		pNames->pack(aPack);
+	aPack << m_id;
+	aPack << m_nMatches	;
+	aPack << m_nCompetitors	;
+	aPack << m_matchesType	;
+	aPack << m_compMatchesDistribution	;
+	aPack << m_desc;
+	aPack << m_fAwayChar;
 
 	return aPack;
 }
 
-CPack& CHTeamMatchsCnfg::unpack(CPack &aPack)
+MSLPack& CHTeamMatchsCnfg::unpack(MSLPack &aPack)
 {
-	size_t namesEntries=0; 
-	names.clearAndDestroy();
-	aPack >> id	;
-	aPack >> nMatches	;
-	aPack >> nCompetitors	;
-	aPack >> matchesType	;
-	aPack >> compMatchesDistribution	;
-	aPack >> namesEntries;
-	aPack >> fAwayChar;
+	aPack >> m_id	;
+	aPack >> m_nMatches	;
+	aPack >> m_nCompetitors	;
+	aPack >> m_matchesType	;
+	aPack >> m_compMatchesDistribution	;
+	aPack >> m_desc;
+	aPack >> m_fAwayChar;
 	
-	for (size_t i = 0; i < namesEntries; i++)
-		names.insert( new GNames(aPack) );
-
-	setKey();
-
 	return aPack;
 }
 //Set
 void CHTeamMatchsCnfg::setId(const short value)
 { 
-	id=value;
+	m_id=value;
 	setKey();
 }
 
 void CHTeamMatchsCnfg::setMatches(const short value)
 { 
-	nMatches=value;
+	m_nMatches=value;
 }
 
 void CHTeamMatchsCnfg::setCompetitors(const short value)
 { 
-	nCompetitors=value;
+	m_nCompetitors=value;
 }
 
 void CHTeamMatchsCnfg::setMatchesType(const char *value)
 { 
-	matchesType=value;
+	m_matchesType=value;
 }
 
 void CHTeamMatchsCnfg::setCompMatchesDistribution(const char *value)
 { 
-	compMatchesDistribution=value;
+	m_compMatchesDistribution=value;
 }
 
-void CHTeamMatchsCnfg::setDescription(const GNames& description)
+void CHTeamMatchsCnfg::setDescriptions(GDescription & desc)
 {
-	GNames* pNames=(GNames*)names.find(&description);
-	if( pNames ) 
-		*pNames=description;
-	else 
-		names.insert(new GNames(description));
+	m_desc.set(desc);	
 }
 
 void CHTeamMatchsCnfg::setFAwayC(const char *value)
 {
-	fAwayChar = value;
+	m_fAwayChar = value;
 }
 //Get
 short CHTeamMatchsCnfg::getId() const
 { 
-	return id;
+	return m_id;
 }
 
 short CHTeamMatchsCnfg::getMatches() const
 { 
-	return nMatches;
+	return m_nMatches;
 }
 
 short CHTeamMatchsCnfg::getCompetitors() const
 { 
-	return nCompetitors;
+	return m_nCompetitors;
 }
 
-RWCString CHTeamMatchsCnfg::getMatchesType() const
+MSLString CHTeamMatchsCnfg::getMatchesType() const
 { 
-	return matchesType;
+	return m_matchesType;
 }
 
-RWCString CHTeamMatchsCnfg::getCompMatchesDistribution() const
+MSLString CHTeamMatchsCnfg::getCompMatchesDistribution() const
 { 
-	return compMatchesDistribution;
+	return m_compMatchesDistribution;
 }
 
-RWSet CHTeamMatchsCnfg::getNames() const
-{ 
-	return names;
+GDescriptions& CHTeamMatchsCnfg::getDescriptions() const
+{
+	return (GDescriptions&)m_desc;
 }
+
 
 short CHTeamMatchsCnfg::getMatchType(short value) const
 {
-	if (value*2>int(matchesType.length()))
+	if (value*2>int(m_matchesType.length()))
 		return -1; //error
 
-	//int val=atoi(CString(matchesType).Mid(value*2-1,1));
-	RWCString aux(matchesType(value*2-1,1));
+	MSLString aux(m_matchesType(value*2-1,1));
 	int val=atoi(aux);
-//	CString aux=CString(matchesType).Mid(value*2-1,1);
-//	char tmp=aux.GetAt(0);
-//	int val=atoi(tmp);
 	if (val!=1 && val!=2)
 		return -1;
 	
@@ -275,37 +227,37 @@ short CHTeamMatchsCnfg::getMatchType(short value) const
 
 short CHTeamMatchsCnfg::getCompOrder(short value,short homeAway,short firstSecond/*=0*/) const
 {
-	RWCString matComp="";
+	MSLString matComp="";
 	if (getMatchType(value)==-1) //error o none
 		return -1;
 
 	int pos=(homeAway==1)*2+(firstSecond==1);
-	CString comp=CString(compMatchesDistribution).Mid(value*5-4+pos,1);
-	CString first=_T("@");
+/*	MSLString comp=MSLString(m_compMatchesDistribution).Mid(value*5-4+pos,1);
+	MSLString first=_T("@");
 	if (homeAway==1)
 	{ 
-		first=char(fAwayChar(0)-1);//_T("W");
+		first=char(m_fAwayChar(0)-1);//_T("W");
 	}
 
 	char aux1=char(comp.GetAt(0));
 	char aux=char(first.GetAt(0));
 	pos=aux1-aux;
-	if (pos>nCompetitors || pos<0)
-		return -1;
+	if (pos>m_nCompetitors || pos<0)
+		return -1;*/
 
 	return short(pos);
 }
 
 short CHTeamMatchsCnfg::getCompMember(short homeAway) const
 {
-	CString home(""), away("");
+	/*CString home(""), away("");
 	int pos=0;
-	for (short i=0; i<nMatches; i++)
+	for (short i=0; i<m_nMatches; i++)
 	{
 		for (short j=0; j<2; j++)
 		{
 			pos=(homeAway==1)*2+(j==1);
-			CString comp=CString(compMatchesDistribution).Mid(((i+1)*5)-4+pos,1);
+			CString comp=CString(m_compMatchesDistribution).Mm_id(((i+1)*5)-4+pos,1);
 			if (comp.Find(' ',0)!=-1)
 				continue;
 			if (homeAway==1)
@@ -331,33 +283,21 @@ short CHTeamMatchsCnfg::getCompMember(short homeAway) const
 		if (!away.GetLength())
 			return 0;
 		return short(away.GetLength());
-	}
+	}*/
 	return 0;
 }
 
-RWWString CHTeamMatchsCnfg::getSDescription(const char *language/*=DBApplication::getAppLanguage()*/) const
+MSLWString CHTeamMatchsCnfg::getSDescription(const char *lang/*=0*/)  const
 {
-	GNames aNames,*pNames=0;
-	aNames.setCode(language);
-
-	pNames=(GNames*)names.find(&aNames);
-	if( pNames ) 
-		return pNames->getSName();
-	return NULLRWWSTRING;
+	return m_desc.get(lang,_SNAME);	
 }
 
-RWWString CHTeamMatchsCnfg::getLDescription(const char *language/*=DBApplication::getAppLanguage()*/) const
+MSLWString CHTeamMatchsCnfg::getLDescription(const char *lang/*=0*/)  const
 {
-	GNames aNames,*pNames=0;
-	aNames.setCode(language);
-
-	pNames=(GNames*)names.find(&aNames);
-	if( pNames ) 
-		return pNames->getLName();
-	return NULLRWWSTRING;
+	return m_desc.get(lang,_LNAME);	
 }
 
-RWCString CHTeamMatchsCnfg::getFAwayC() const
+MSLString CHTeamMatchsCnfg::getFAwayC() const
 {
-	return fAwayChar;
+	return m_fAwayChar;
 }

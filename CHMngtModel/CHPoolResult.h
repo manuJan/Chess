@@ -21,48 +21,33 @@
 **************************************************************************************///
 
 
-#ifndef _CHPoolResult_H
-#define _CHPoolResult_H
-
-#if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#include "CHMemoryDataBaseDefs.h"
+#include <ovr/Core/TH/GTHPoolResult.h>
+#include "CHMatchResult.h"
 
-#ifndef _CHMNGTMODELDLL_H
-#   include "CHMngtModelDll.h" 
-#endif // _CH_MNGTMODELDLL_H
-
-#include <core/TH/GTHPoolResult.h>
-
-#include "CHSportDefines.h"
-#include "CHPhase.h"
-
-
-class CHModelExport CHPoolResult : public GTHPoolResult
+class CHMngtModelExport CHPoolResult : public GTHPoolResult
 {
-	RWDECLARE_COLLECTABLE(CHPoolResult)
+	MSLDECLARE_ITEM(CHPoolResult)
 
 public:
 
 	//Construction/Destruction
 	CHPoolResult();
-	CHPoolResult(const CHPoolResult & copy);
-	CHPoolResult(CPack& aPack);
+	CHPoolResult(const CHPoolResult & copy);	
 	virtual ~CHPoolResult();
+	
+	/**** Virtual operators inherited from GData ********************/
+	GData& operator= (const GData& copy);
+	bool   operator==(const GData& copy);
+	bool   operator!=(const GData& copy);
 
+	/**** Virtual methods inherited from GData **********************/
+	MSLPack& pack  (MSLPack& pck) const;
+	MSLPack& unpack(MSLPack& pck);
 
-	//Operators
-	RWBoolean		operator !=(const CHPoolResult & copy);
-	RWBoolean		operator ==(const CHPoolResult & copy);
-	CHPoolResult&	operator =(const CHPoolResult & copy);
-
-
-	//From GData
-	RWBoolean		uSQL(RWDBConnection& pConnect,RWBoolean remove=false);
-	CPack&			pack(CPack &iPack);
-	CPack&			unpack(CPack &iPack);
-	RWCString		msl() const;
-	RWCString		mslDescription(const char *language) const;
+	QBase* onQ() const;
+	UBase* onU() const;
 
 	// set
 	void setMPlayed(const short value);
@@ -82,15 +67,15 @@ public:
 	short getMLost() const;
 	short getMDrawn() const;
 	float getPointsF() const;
-	RWCString getPointsFStr() const;
+	MSLString getPointsFStr() const;
 	float getMSolkoff() const;
-	RWCString getMSolkOffStr() const;
+	MSLString getMSolkOffStr() const;
 	float getMMedianSolkoff() const;
-	RWCString getMMedianSolkOffStr() const;
+	MSLString getMMedianSolkOffStr() const;
 	float getMSonneBerger() const;
-	RWCString getMSonneBergerStr() const;
+	MSLString getMSonneBergerStr() const;
 	float getMProgressiveScore() const;
-	RWCString getMProgressiveScoreStr() const;
+	MSLString getMProgressiveScoreStr() const;
 
 
 	// Help Methods
@@ -100,33 +85,30 @@ public:
 	short			getMatchesDrawn(short nRound=0) const;
 	short			getPointsForWon(short nRound=0) const;
 	short			getAllRoundsPointsForWon() const;
-	float			getPoolPointsF(short nRound=0,RWBoolean onlyRound=false) const;
-	RWCString		getPoolPointsFStr(short nRound=0,RWBoolean onlyRound=false) const;
+	float			getPoolPointsF(short nRound=0,bool onlyRound=false) const;
+	MSLString		getPoolPointsFStr(short nRound=0,bool onlyRound=false) const;
 	float			getSolkOffF(short nRound=0) const;
-	RWCString		getSolkOffFStr(short nRound=0) const;
+	MSLString		getSolkOffFStr(short nRound=0) const;
 	float			getMedianSolkOffF(short nRound=0) const;
-	RWCString		getMedianSolkOffFStr(short nRound=0) const;
+	MSLString		getMedianSolkOffFStr(short nRound=0) const;
 	float			getSonneBergerF(short nRound=0) const;
-	RWCString		getSonneBergerFStr(short nRound=0) const;
+	MSLString		getSonneBergerFStr(short nRound=0) const;
 	float			getProgresiveF(short nRound=0) const;
-	RWCString		getProgressiveFStr(short nRound=0) const;
-	RWBoolean		isQualitative() const;
+	MSLString		getProgressiveFStr(short nRound=0) const;
+	bool			isQualitative() const;
 	short			getTeamMatchesWon(short nRound=0) const;
-	RWCString		getTeamMatchesWonStr(short nRound=0) const;
+	MSLString		getTeamMatchesWonStr(short nRound=0) const;
 	float			getPointsFR(short nRound=0) const;
-	float			getPointsSO(short nRound=0,RWBoolean onlyRound=false) const;
+	float			getPointsSO(short nRound=0,bool onlyRound=false) const;
 	
-	RWWString		getGroup() const;
-	RWCString		getIsoCountry() const;
-	RWWString		getDescription(RWBoolean longDescription=true) const;
-	RWWString		getSourceCompetitor();
+	MSLWString		getDescription(bool longDescription=true) const;
+	MSLWString		getSourceCompetitor();
 
 	// From CHInscription
 	short			getInscriptionSeed() const;
 	short			getInscriptionRating() const;
 	short			getMasterTypeOrder() const;
-
-
+	
 	CHMatchResult::colorPreference	getColorPreference(short round);
 	CHMatchResult::side				getSidePreference(short round);
 
@@ -136,18 +118,15 @@ public:
 	bool			isPlayingRound(CHMatch* _pMatch, short round);
 	bool			canPlayInColor(CHMatchResult::side color, short round);
 	float			getAveragePointsAllCompetitors(CHMatch *pMatch=0);
-
+	bool			isTeamEvent();
 private:
-	short	mPlayed,
-			mWon,
-			mLost,
-			mDrawn;
-	float   pointsF,
-			mSolkoff,
-			mMedianSolkoff,
-			mSonneBerger,
-			mProgressiveScore;
-
+	short		m_mPlayed,
+				m_mWon,
+				m_mLost,
+				m_mDrawn;
+	float		m_pointsF,
+				m_mSolkoff,
+				m_mMedianSolkoff,
+				m_mSonneBerger,
+				m_mProgressiveScore;
 };
-
-#endif //!defined(AFX_CHPoolResult_H)

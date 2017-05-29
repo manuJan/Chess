@@ -22,40 +22,26 @@
 
 #include "stdCHMngt.h"
 #include "QCHInscription.h"
-
+#include "CHInscription.h"
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-QCHInscription::QCHInscription(RWDBConnection *pNewConnection)
-:QGTHInscription(pNewConnection)
-{
-}
 
-QCHInscription::~QCHInscription()
-{
-}
-
-GInscription * QCHInscription::OnNewInscription()
-{ 
-	return new CHInscription();
-}
-
-void QCHInscription::OnSelect(RWDBSelector& aSelect,RWDBTable& tInscription)
+void QCHInscription::OnSelect(MSLDBSelector& aSelect,MSLDBTable& tInscription)
 {
 	QGTHInscription::OnSelect(aSelect,tInscription);
 
 	aSelect	<< tInscription["SEED"];
 	aSelect	<< tInscription["RATING"];
 	aSelect	<< tInscription["KCONST"];
-
 }
 
-void QCHInscription::OnReader(RWDBReader& aReader,GInscription *pInscription)
+void QCHInscription::OnReader(MSLDBReader& aReader,GInscription *pInscription)
 {
 	QGTHInscription::OnReader(aReader,pInscription);
 
 	short     seed,rating,kConst;
-	RWDBNullIndicator nullSeed,nullRating,nullKConst;
+	MSLDBNullIndicator nullSeed,nullRating,nullKConst;
 	
 		
 	aReader >> nullSeed					  >> seed

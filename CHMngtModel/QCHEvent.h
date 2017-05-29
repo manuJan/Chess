@@ -20,34 +20,20 @@
 *                                                                                      
 **************************************************************************************///
 
-#if !defined(AFX_QCHEVENT_H__E2BA6CEE_47AF_43BD_9007_9DFBAEA2A309__INCLUDED_)
-#define AFX_QCHEVENT_H__E2BA6CEE_47AF_43BD_9007_9DFBAEA2A309__INCLUDED_
-
-#ifndef _QCHEvent_H
-#define _QCHEvent_H
-#endif
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include <OVR/CORE/TH/QGTHEvent.h>
 
-#ifndef _CHMNGTMODELDLL_H
-#   include "CHMngtModelDll.h" 
-#endif // _CH_MNGTMODELDLL_H
-
-#include <CORE/TH/QGTHEvent.h>
-#include "CHEvent.h"
-
-class CHModelExport QCHEvent : public QGTHEvent  
+class CHMngtModelExport QCHEvent : public QGTHEvent  
 {
 public:
-	QCHEvent(RWDBConnection *pNewConnection,QEvent::SelectionMode selection=QEvent::eActive);
-	virtual ~QCHEvent();
+	QCHEvent() 
+		:QGTHEvent(){;}
+
+	virtual ~QCHEvent(){;}
 
 protected:
-	GEvent * OnNewEvent();
-	void OnSelect(RWDBSelector& aSelect,RWDBTable& tEvent);
-	void OnReader(RWDBReader& aReader,GEvent *pEvent);
-};
 
-#endif // !defined(AFX_QCHEVENT_H__E2BA6CEE_47AF_43BD_9007_9DFBAEA2A309__INCLUDED_)
+	void OnSelect(MSLDBSelector& aSelect,MSLDBTable& tEvent);
+	void OnReader(MSLDBReader& aReader,GEvent *pEvent);
+
+};

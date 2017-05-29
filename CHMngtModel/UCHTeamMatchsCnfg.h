@@ -19,40 +19,43 @@
 *   Changes :                                                                          
 *                                                                                      
 **************************************************************************************///
-#if !defined(AFX_UCHTEAMMATCHSCNFG_H__780F287B_1315_4403_A3DC_EEA63E4C710E__INCLUDED_)
-#define AFX_UCHTEAMMATCHSCNFG_H__780F287B_1315_4403_A3DC_EEA63E4C710E__INCLUDED_
 
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-
-#include <core/G/UBase.h>
+#include <OVR/CORE/G/UBase.h>
 #include "CHTeamMatchsCnfg.h"
 
-class UCHTeamMatchsCnfg : public UBase  
+class UCHTeamMatchsCnfg : public UBase
 {
+
 public:
-	UCHTeamMatchsCnfg(RWDBConnection *pNewConnection);
-	virtual ~UCHTeamMatchsCnfg();
+	UCHTeamMatchsCnfg()
+		:UBase()
+	{;}
+	virtual ~UCHTeamMatchsCnfg()
+	{;}
 
 protected:
-	RWBoolean insert (RWDBConnection& aConnection,GData& aData);
-	RWBoolean update (RWDBConnection& aConnection,GData& aData);
-	RWBoolean delete_(RWDBConnection& aConnection,GData& aData);
+	bool insert (GData& aData);
+	bool update (GData& aData);	
+	bool delete_(GData& aData);
 
-private:
-	void assignAtributes(CHTeamMatchsCnfg& aTeamMatCnfg);
-	void assignAtributesNames(GNames *names);
+	long insertLang(MSLDBTable& table,CHTeamMatchsCnfg& aTeamMatchsCnfg);
+	long updateLang(MSLDBTable& table,CHTeamMatchsCnfg& aTeamMatchsCnfg);
+	long OnInsertLang(MSLDBTable& table,CHTeamMatchsCnfg& aTeamMatchsCnfg);
+	long OnUpdateLang(MSLDBTable& table,CHTeamMatchsCnfg& aTeamMatchsCnfg);
+
+	void assignAtributes(CHTeamMatchsCnfg& aTeamMatchsCnfg);
+	bool assignNames(CHTeamMatchsCnfg& aTeamMatchsCnfg,const char *language);
 
 protected:
-	RWCString fSex, fEvent, fRound, fPhase, fCompMatchesDistribution,
-		fMatchesType, fFAwayC;
+
+	MSLString fSex, fEvent, fRound, fPhase, fCompMatchesDistribution, fMatchesType, fFAwayC;
 	short fId, fnMatches, fnComp;
-	RWDBNullIndicator nullRound, nullPhase, nullnComp, nullMatchesType,
+	MSLDBNullIndicator nullRound, nullPhase, nullnComp, nullMatchesType,
 		nullCompMatchesDistribution, nullnMatches, nullId, nullFAwayC;
-	RWCString flanguage;
-	RWWString fsDescription,flDescription;
-	RWDBNullIndicator nullSDescription,nullLDescription;
+	MSLString flanguage;
+	MSLWString fsDescription,flDescription;
+	MSLDBNullIndicator nullSDescription,nullLDescription;
 };
 
-#endif // !defined(AFX_UCHTEAMMATCHSCNFG_H__780F287B_1315_4403_A3DC_EEA63E4C710E__INCLUDED_)
+

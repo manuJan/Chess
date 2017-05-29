@@ -22,14 +22,14 @@
 
 #include "stdCHMngt.h"
 #include "CHEvent.h"
-#include "CHClassIds.h"
 #include "CHInscription.h"
 #include "CHMemoryDataBase.h"
+#include "QCHEvent.h"
 #include "UCHEvent.h"
-#include <core/G/GScore.h>
+#include <ovr/core/G/GScore.h>
 
 //select
-RWBoolean inscriptionsEvent(const RWCollectable *col, const void *param)
+bool inscriptionsEvent(const MSLItem *col, const void *param)
 {
 	CHInscription *pInscription = (CHInscription*)col;
 	CHEvent *pEvent = (CHEvent *)param;
@@ -39,20 +39,19 @@ RWBoolean inscriptionsEvent(const RWCollectable *col, const void *param)
 	return false;	
 }
 
-RWDEFINE_COLLECTABLE(CHEvent,__CHEVENT)
+MSLDEFINE_ITEM(CHEvent,__CHEVENT)
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 CHEvent::CHEvent()
 :GTHEvent()
-,typeEvent(eNone)
-,orderEvent(0)
-,mode(eIndividual)
-,twoBronces(0)
-,reqRankOrder(NULLRWSTRING)
-,idTeamMatchsCnfg(0)
-,constRating(0.0)
-,pointsBye(0.0)
+,m_typeEvent(eNone)
+,m_twoBronces(0)
+,m_reqRankOrder(NULLSTRING)
+,m_idTeamMatchsCnfg(0)
+,m_constRating(0.0)
+,m_pointsBye(0.0)
 {
 }
 
@@ -61,199 +60,151 @@ CHEvent::CHEvent(const CHEvent & copy)
 	operator=(copy);
 }
 
-CHEvent::CHEvent(CPack & aPack)
-{
-	unpack(aPack);
-}
 
 CHEvent::~CHEvent()
 {
 
 }
 
-CHEvent & CHEvent::operator =(const CHEvent & copy)
+GData & CHEvent::operator =(const GData & copy)
 {
 	if (this != &copy)
 	{
 		GTHEvent::operator =(copy);
-		typeEvent			= copy.typeEvent;
-		orderEvent			= copy.orderEvent;
-		mode				= copy.mode;
-		twoBronces			= copy.twoBronces;
-		reqRankOrder		= copy.reqRankOrder;
-		idTeamMatchsCnfg	= copy.idTeamMatchsCnfg;
-		constRating			= copy.constRating;
-		pointsBye			= copy.pointsBye;
-		
+
+		const CHEvent & aEvent=(const CHEvent &) copy;
+
+		m_typeEvent			= aEvent.m_typeEvent;
+		m_twoBronces		= aEvent.m_twoBronces;
+		m_reqRankOrder		= aEvent.m_reqRankOrder;
+		m_idTeamMatchsCnfg	= aEvent.m_idTeamMatchsCnfg;
+		m_constRating		= aEvent.m_constRating;
+		m_pointsBye			= aEvent.m_pointsBye;		
 	}
 	return * this;
 }
 
-RWBoolean CHEvent::operator==(const CHEvent & copy)
+bool CHEvent::operator==(const GData & copy)
 {
 	if (this == &copy)
 		return true;
-	else
-		return (GTHEvent::operator	==(copy)				&& 
-				typeEvent		== copy.typeEvent			&&
-				orderEvent		== copy.orderEvent			&&
-				mode			== copy.mode				&&
-				twoBronces		== copy.twoBronces			&&
-				reqRankOrder	== copy.reqRankOrder		&&
-				idTeamMatchsCnfg== copy.idTeamMatchsCnfg	&&
-				constRating		== copy.constRating			&&
-				pointsBye		== copy.pointsBye
-				);
+	
+	const CHEvent & aEvent=(const CHEvent &) copy;
+
+	return (GTHEvent::operator	==(copy)						&& 			
+			m_twoBronces		== aEvent.m_twoBronces			&&
+			m_reqRankOrder		== aEvent.m_reqRankOrder		&&
+			m_idTeamMatchsCnfg	== aEvent.m_idTeamMatchsCnfg	&&
+			m_constRating		== aEvent.m_constRating			&&
+			m_pointsBye			== aEvent.m_pointsBye			);
 }
 
-RWBoolean CHEvent::operator!=(const CHEvent & copy)
+bool CHEvent::operator!=(const GData & copy)
 {
 	return !operator==(copy);
 }
 
-RWBoolean CHEvent::uSQL(RWDBConnection & pConnect,RWBoolean remove/*=false*/)
-{
-	UCHEvent u(&pConnect);
-	if( remove )
-		return u.remove(*this);
-	return u.set(*this);
-}
-
-RWCString CHEvent::msl() const
-{
-	RWCString str=GTHEvent::msl();
-	GBuffer aBuffer;
-	if(str==NULLRWSTRING)
-		return str;
-		
-	aBuffer	<< typeEvent
-			<< orderEvent
-			<< mode
-			<< twoBronces
-			<< reqRankOrder
-			<< idTeamMatchsCnfg
-			<< getConstRatingStr()
-			<< endLine ;
-
-	return  str + RWCString(aBuffer);
-}
-
-RWCString CHEvent::mslDescription(const char *language) const
-{
-	return GTHEvent::mslDescription(language);
-}
-
-CPack& CHEvent::pack(CPack& aPack)
+MSLPack& CHEvent::pack(MSLPack& aPack) const
 {
 	GTHEvent::pack(aPack);
 
-	aPack << typeEvent;
-	aPack << orderEvent;
-	aPack << mode;
-	aPack << twoBronces;
-	aPack << reqRankOrder;
-	aPack << idTeamMatchsCnfg;
-	aPack << constRating;
-	aPack << pointsBye;
+	aPack << m_typeEvent;	
+	aPack << m_twoBronces;
+	aPack << m_reqRankOrder;
+	aPack << m_idTeamMatchsCnfg;
+	aPack << m_constRating;
+	aPack << m_pointsBye;
 	
 	return aPack;
 }
 
-CPack& CHEvent::unpack(CPack& aPack)
+MSLPack& CHEvent::unpack(MSLPack& aPack)
 {
 	GTHEvent::unpack(aPack);
 
-	aPack >> typeEvent;
-	aPack >> orderEvent;
-	aPack >> mode;
-	aPack >> twoBronces;
-	aPack >> reqRankOrder;
-	aPack >> idTeamMatchsCnfg;
-	aPack >> constRating;
-	aPack >> pointsBye;
+	aPack >> m_typeEvent;	
+	aPack >> m_twoBronces;
+	aPack >> m_reqRankOrder;
+	aPack >> m_idTeamMatchsCnfg;
+	aPack >> m_constRating;
+	aPack >> m_pointsBye;
 	
 	return aPack;
 }
+
+QBase* CHEvent::onQ() const
+{
+	return new QCHEvent();
+}
+
+UBase* CHEvent::onU() const
+{
+	return new UCHEvent();
+}
+
 //Set's
 void CHEvent::setTypeEvent(const short value)
 {
-	typeEvent=value;
-}
-
-void CHEvent::setOrderEvent(const short value)
-{
-	orderEvent=value;
-}
-void CHEvent::setMode(const short value)
-{
-	mode=value;
+	m_typeEvent=value;
 }
 
 void CHEvent::setTwoBronces(const short value)
 {
-	twoBronces=value;
+	m_twoBronces=value;
 }
 
 //son enum RankOrder guardados condos caractereres
-void CHEvent::setReqRankOrder(const RWCString value)
+void CHEvent::setReqRankOrder(const MSLString value)
 {
-	reqRankOrder=value;
+	m_reqRankOrder=value;
 }
 
 void CHEvent::setIdTeamMatchsCnfg(const short value)
 { 
-	idTeamMatchsCnfg=value;
+	m_idTeamMatchsCnfg=value;
 }
 void CHEvent::setConstRating(const float value)
 { 
-	constRating=value;
+	m_constRating=value;
 }
 void CHEvent::setPointsBye(const float value)
 { 
-	pointsBye=value;
+	m_pointsBye=value;
 }
 
 //Get´s
 short CHEvent::getTypeEvent() const
 {
-	return typeEvent;
+	return m_typeEvent;
 }
 
-short CHEvent::getOrderEvent() const
-{
-	return orderEvent;
-}
-short CHEvent::getMode() const
-{
-	return mode;
-}
 short CHEvent::getTwoBronces() const
 {
-	return twoBronces;
+	return m_twoBronces;
 }
 
 //son enum RankOrder guardados condos caractereres
-RWCString CHEvent::getReqRankOrder() const
+MSLString CHEvent::getReqRankOrder() const
 {
-	return reqRankOrder;
+	return m_reqRankOrder;
 }
 
 short CHEvent::getIdTeamMatchsCnfg() const
 { 
-	return idTeamMatchsCnfg;
+	return m_idTeamMatchsCnfg;
 }
 float CHEvent::getConstRating() const
 { 
-	return constRating;
+	return m_constRating;
 }
 float CHEvent::getPointsBye() const
 { 
-	return pointsBye;
+	return m_pointsBye;
 }
 
-RWCString CHEvent::getConstRatingStr() const
+MSLString CHEvent::getConstRatingStr() const
 {
-	RWCString format="##";
+	MSLString format="##";
 	float auxRating=getConstRating();
 
 	if((auxRating-int(auxRating))>0)
@@ -263,42 +214,39 @@ RWCString CHEvent::getConstRatingStr() const
 	}
 
 	GScore ratingF = GScore(auxRating);
-	RWCString p=ratingF.asString(format);
+	MSLString p=ratingF.asString(format);
 	
-	p=p.strip(RWCString::leading,' ');
+	p=p.strip(MSLString::leading,' ');
 	return p;
 }
 
-RWCString CHEvent::getPointsByeStr() const
+MSLString CHEvent::getPointsByeStr() const
 {
-	RWCString format="##";
+	MSLString format="##";
 	float aux=getPointsBye();
 
 	if((aux-int(aux))>0)
 		format="###.#"; // Decimales		
 	
 	GScore points = GScore(aux);
-	RWCString p=points.asString(format);
+	MSLString p=points.asString(format);
 	
-	p=p.strip(RWCString::leading,' ');
+	p=p.strip(MSLString::leading,' ');
 	return p;
 }
 
 short CHEvent::getInscriptions() const
-{
-	
-	RWSet * colInscriptions = (RWSet *) CHMemoryDataBase::getColInscriptions().select(inscriptionsEvent,(void *)this);
+{	
+	MSLSet colInscriptions = CHMemoryDataBase::getCol(__CHINSCRIPTION).select(inscriptionsEvent, (CHEvent*)this);
 
-	short nInsc=short(colInscriptions->entries());
+	short nInsc=short(colInscriptions.entries());
 	
-	delete colInscriptions;
-
 	return nInsc;
 }
 
 int CHEvent::getTeamMembers() const
 {
-	if(getMode()==eTeam)
+	if(isTeam())
 		return getTeamMatchsCnfgMembers(); //+1 para el recambio
 
 	return 0;
@@ -307,7 +255,7 @@ int CHEvent::getTeamMembers() const
 
 short CHEvent::getTeamMatchsCnfgMembers() const
 {
-	CHTeamMatchsCnfg *pTeamMatchsCnfg=(CHTeamMatchsCnfg *)CHMemoryDataBase::findTeamMatchsCnfg(idTeamMatchsCnfg);
+	CHTeamMatchsCnfg *pTeamMatchsCnfg=(CHTeamMatchsCnfg *)CHMemoryDataBase::findTeamMatchsCnfg(m_idTeamMatchsCnfg);
 	if (pTeamMatchsCnfg)
 		return pTeamMatchsCnfg->getCompetitors();
 	return 0;
@@ -315,7 +263,7 @@ short CHEvent::getTeamMatchsCnfgMembers() const
 
 short CHEvent::getTeamMatches() const
 {
-	CHTeamMatchsCnfg *pTeamMatchsCnfg=(CHTeamMatchsCnfg *)CHMemoryDataBase::findTeamMatchsCnfg(idTeamMatchsCnfg);
+	CHTeamMatchsCnfg *pTeamMatchsCnfg=(CHTeamMatchsCnfg *)CHMemoryDataBase::findTeamMatchsCnfg(m_idTeamMatchsCnfg);
 	if (pTeamMatchsCnfg)
 		return pTeamMatchsCnfg->getMatches();
 
@@ -325,11 +273,9 @@ short CHEvent::getTeamMatches() const
 //Vector Methods
 //////////////////////////////////////////////////////////////////////
 
-RWBoolean CHEvent::isTeam() const
+bool CHEvent::isTeam() const
 {
-	if (getMode()==eTeam)
-		return true;
-	return false;
+	return getRegType()==GRegister::team;
 }
 //////////////////////////////////////////////////////////////////////
 // Help Methods
@@ -338,7 +284,7 @@ RWBoolean CHEvent::isTeam() const
 //son enum RankOrder guardados condos caractereres
 CHEvent::TypeRank CHEvent::getRankOrder(short index) const
 {
-	RWCString rankOrder;
+	MSLString rankOrder;
 	if(getNumRankOrder()>index)
 		rankOrder=getReqRankOrder()(index*2,2);
 
@@ -354,7 +300,7 @@ short CHEvent::getNumRankOrder() const
 	return 0;
 }
 
-RWBoolean CHEvent::findRankOrder(CHEvent::TypeRank rankType) const
+bool CHEvent::findRankOrder(CHEvent::TypeRank rankType) const
 {
 	short nRanks=getNumRankOrder();
 	for(short i=0 ; i<nRanks ; i++)
@@ -365,26 +311,5 @@ RWBoolean CHEvent::findRankOrder(CHEvent::TypeRank rankType) const
 			return true;
 	}
 	return false;
-}
-
-CPack& operator << (CPack& aPack, CHEvent *pEvent)
-{
-	aPack << (pEvent ? pEvent->getEvent() : "");
-	aPack << (pEvent ? pEvent->getSex() : "");
-	aPack << (pEvent ? pEvent->getEventParent() : "");
-
-	return aPack;
-}
-
-CPack& operator >> (CPack& aPack, CHEvent **pEvent)
-{
-	RWCString event,sex,eventP;
-
-	aPack >> event;
-	aPack >> sex;
-	aPack >> eventP;
-	*pEvent=(CHEvent*)GMemoryDataBase::findEvent(event,sex,eventP);
-
-	return aPack;
 }
 

@@ -22,17 +22,16 @@
 
 #include "stdCHMngt.h"
 #include "CHPhaseBase.h"
-#include "UCHPhaseBase.h"
-#include "CHClassIds.h"
-#include <core/G/GBuffer.h>
+#include "QCHPhaseBase.h"
+#include <ovr/core/G/GBuffer.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-RWDEFINE_COLLECTABLE(CHPhaseBase, __CHPHASEBASE)
+MSLDEFINE_ITEM(CHPhaseBase, __CHPHASEBASE)
 CHPhaseBase::CHPhaseBase()
-:GTHPhaseGeneric()
-,typePhase(eElim)
+:GTHPhaseBase()
+,m_typePhase(eElim)
 {
 }
 CHPhaseBase::~CHPhaseBase()
@@ -44,94 +43,85 @@ CHPhaseBase::CHPhaseBase(const CHPhaseBase & copy)
 	operator=(copy);
 }
 
-CHPhaseBase::CHPhaseBase(CPack& aPack)
-:GTHPhaseGeneric()
-,typePhase(eElim)
-{
-	unpack(aPack);
-}
-
 //////////////////////////////////////////////////////////////////////
 // Overloaded Operators
 //////////////////////////////////////////////////////////////////////
-CHPhaseBase & CHPhaseBase::operator =(const CHPhaseBase & copy)
+GData & CHPhaseBase::operator =(const GData & copy)
 {
 	if (this != &copy)
 	{
-		GTHPhaseGeneric::operator =(copy);
-		typePhase			= copy.typePhase;
+		GTHPhaseBase::operator =(copy);
+
+		const CHPhaseBase & aPhaseBase=(const CHPhaseBase &) copy;
+
+		m_typePhase	= aPhaseBase.m_typePhase;
 		
 	}
 	return * this;
 }
 
-RWBoolean CHPhaseBase::operator ==(const CHPhaseBase & copy)
+bool CHPhaseBase::operator ==(const GData & copy)
 {
 	if (this == &copy)
 		return true;
-	else
-		return (GTHPhaseGeneric::operator ==(copy)			&& 
-				typePhase			== copy.typePhase		);
+	
+	const CHPhaseBase & aPhaseBase=(const CHPhaseBase &) copy;
+
+	return (GTHPhaseBase::operator ==(copy)	&& 
+			m_typePhase	== aPhaseBase.m_typePhase	);
 }
 
-RWBoolean CHPhaseBase::operator !=(const CHPhaseBase & copy)
+bool CHPhaseBase::operator !=(const GData & copy)
 {
 	return !operator==(copy);
 }
+
+/**** Virtual methods inherited from GData **********************/
+MSLPack& CHPhaseBase::pack(MSLPack& pack) const
+{
+	GTHPhaseBase::pack(pack);
+
+	pack << m_typePhase;
+		
+	return pack;
+}
+
+MSLPack& CHPhaseBase::unpack(MSLPack& pack)
+{
+	GTHPhaseBase::unpack(pack);
+
+	pack >> m_typePhase;
+	
+	return pack;
+}
+
+
 //////////////////////////////////////////////////////////////////////
 // SQL function
 //////////////////////////////////////////////////////////////////////
-RWBoolean CHPhaseBase::uSQL(RWDBConnection& pConnect,RWBoolean remove/*=false*/)
-{
-	RWBoolean rc=false;
 
-	UCHPhaseBase upd(&pConnect);
-	if( remove )
-		rc=upd.remove(*this);
-	else
-		rc=upd.set(*this);
-	return rc;
+QBase*	CHPhaseBase::onQ() const
+{
+	return new QCHPhaseBase();
 }
+
+UBase* CHPhaseBase::onU() const
+{
+	return 0;
+}
+
 //////////////////////////////////////////////////////////////////////
 // SETS
 //////////////////////////////////////////////////////////////////////
 void CHPhaseBase::setTypePhase(const short value)
 {
-	typePhase=value;
+	m_typePhase=value;
 }
 //////////////////////////////////////////////////////////////////////
 // GETS
 //////////////////////////////////////////////////////////////////////
 short CHPhaseBase::getTypePhase() const
 {
-	return typePhase;
+	return m_typePhase;
 }
 
-//////////////////////////////////////////////////////////////////////
-// GPack member funcions & external operators
-//////////////////////////////////////////////////////////////////////
-CPackObject CHPhaseBase::getPackObject()
-{
-	CPackObject aPack;
-	aPack.setId( isA() );
-	pack(aPack);
-	return aPack;
-}
-
-CPack& CHPhaseBase::pack(CPack& aPack)
-{
-	GTHPhaseGeneric::pack(aPack);
-	
-	aPack << typePhase;	
-	
-	return aPack;
-}
-
-CPack& CHPhaseBase::unpack(CPack& aPack)
-{
-	GTHPhaseGeneric::unpack(aPack);
-	
-	aPack >> typePhase;
-		
-	return aPack;
-}

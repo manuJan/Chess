@@ -20,35 +20,27 @@
 *                                                                                      
 **************************************************************************************///
 
-#if !defined(AFX_UCHREGISTER_H__97D444AB_57D2_47D0_B413_A5D69E738EDB__INCLUDED_)
-#define AFX_UCHREGISTER_H__97D444AB_57D2_47D0_B413_A5D69E738EDB__INCLUDED_
-
-#ifndef _UCHRegister_H
-#define _UCHRegister_H
-#endif
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include <OVR/CORE/G/URegister.h>
 
-#include <CORE/G/URegister.h>
-class CHRegister;
-class UCHRegister : public URegister  
+class UCHRegister : public URegister
 {
 public:
-	UCHRegister(RWDBConnection *pNewConnection);
-	virtual ~UCHRegister();
+	UCHRegister()
+	:URegister()
+	{;}
 
-private:
+	~UCHRegister()
+	{;}
+
+protected:
 	void OnAssignAttributes(GRegister& aRegister);
-	void OnInsert(RWDBInserter& aInserter,GRegister& aRegister);
-	void OnUpdate(RWDBUpdater& aUpdater,RWDBTable& z010register,GRegister& aRegister);
+	void OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,GRegister& aRegister);
+	void OnUpdate(MSLDBUpdater & aUpdater ,MSLDBTable& table,GRegister& aRegister);
 
 private:
 	short masterType;
 	
-	RWDBNullIndicator nullMasterType;
+	MSLDBNullIndicator nullMasterType;
 
 };
-
-#endif // !defined(AFX_UCHREGISTER_H__97D444AB_57D2_47D0_B413_A5D69E738EDB__INCLUDED_)

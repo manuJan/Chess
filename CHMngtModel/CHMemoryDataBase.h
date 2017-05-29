@@ -1,116 +1,73 @@
-/************************************************************************************* 
-*           © Copyright MSL Software, S.L., 1998                                       
-*   This document is the property of MSL Software and its content is confidential.     
-*   This work must not be reproduced or disclosed to others or used for purposes       
-*   other than that for which it is supplied without MSL's prior written permission.   
-*   MSL must not be considered liable for any mistake or omission in the edition of    
-*   this document. MSL is a registered trademark.                                      
-*                                                                                      
-*   File name   : CHMemoryDataBase.h                                                                 
-*   Description :                                                                      
-*                                                                                      
-*   Author      :Chess Team
-*   Date created:12-12-2005
-*   Project     :CH Model                  
-*                                                                                      
-*   Modification history                                                               
-*   By      :                                                                          
-*   Date    :                                                                          
-*   Changes :                                                                          
-*                                                                                      
-**************************************************************************************///
+/*************************************************************************************
+*			© Copyright MSL Software, S.L., 2002
+*	This document is the property of MSL Software and its content is confidential. 
+*   This work must not be reproduced or	disclosed to others or used for purposes 
+*   other than that for which it is supplied without MSL's prior written permission.
+*	MSL must not be considered liable for any mistake or omission in the edition of 
+*   this document. "MSL" is a registered trademark.	
+*
+*	File name	:ARMemoryDataBase.h
+*	Description	:
+*
+*	Author		: Javier Juste
+*	Date created: 9 Junio 2008
+* 	Project		: Archery DLL
+*	
+* 	Modification history
+*	By		:
+*	Date	:
+*	Changes	:
+*
+***************************************************************************************/
 
-#if !defined(AFX_CHMEMORYDATABASE_H__3A0F8BE0_F95B_4F9E_B0C4_AC10ECFE00AE__INCLUDED_)
-#define AFX_CHMEMORYDATABASE_H__3A0F8BE0_F95B_4F9E_B0C4_AC10ECFE00AE__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
-#ifndef _CHMNGTMODELDLL_H
-#   include "CHMngtModelDll.h" 
-#endif // _CH_MNGTMODELDLL_H
+#include <OVR/CORE/TH/GTHMemoryDataBase.h>
+#include <OVR/CORE/G/GMsgDefines.h>
 
-#include <core/THSP/THSPMemoryDataBase.h>
-#include "CHSportDefines.h"
-
-
-#include "CHEvent.h"
-#include "CHEventResult.h"
-#include "CHMatchResult.h"
-#include "CHPhase.h"
-#include "CHJudge.h"
-#include "CHSession.h"
-#include "CHMember.h"
-#include "CHMatchMember.h"
-#include "CHInscription.h"
-#include "CHMatch.h"
-#include "CHSplitMatchResult.h"
-#include "CHPool.h"
-#include "CHPoolResult.h"
-#include "CHPhaseBase.h"
-#include "CHSplitMatch.h"
-#include "CHCourt.h"
 #include "CHMasterType.h"
 #include "CHTeamMatchsCnfg.h"
 #include "CHRatingDif.h"
 
-
-
-extern "C" __declspec( dllexport ) GMemoryDataBase * fnGetMemory();
-extern "C" __declspec( dllexport ) long fnGetCollection(GMemoryDataBase *pMem,long id,RWSet &set);
-
-
-class CHModelExport CHMemoryDataBase : public THSPMemoryDataBase  
+class CHMngtModelExport CHMemoryDataBase : public GTHMemoryDataBase  
 {
-public:
-		enum SportStatus {	eAvailable=10,
-							eConfigured=20,
-							eSchedulled=30,
-							eStartList=40,
-							eRunning=50,
-							eSuspend=60,
-							eUnofficial=100,
-							eFinished=110,	
-							eProtested=120   };
 public:
 
 	//Construction/Destruction
 	CHMemoryDataBase();
 	virtual ~CHMemoryDataBase();
 
+	//
+	// Init / Reset
+	//
+	void onInit ();
+	
+	//
+	// Objects
+	//
+	GData *onNew (long isA);
 
-	// Collections
-	inline static RWSet&	getColJudges()
-		{ return colJudges; }
-	inline static RWSet&	getColMasterTypes()
-		{ return colMasterTypes; }
-	inline static RWSet& getColTeamMatchsCnfg()
-	{ return colTeamMatchsCnfg; }
-	inline static RWSet&	getColRatingDifs()
-		{ return colRatingDifs; }
-
+	// find functions (by Key)/////////////////////////
+    static CHMasterType  * findMasterType			(short masterType);
+	static CHTeamMatchsCnfg * findTeamMatchsCnfg	(short id);
+	static CHRatingDif * findRatingDif				(short ratingCode);
 			
-
 	// Find Methods
-	static CHJudge*				findJudge(const CHJudge& aJudge);	
-	static CHJudge*				findJudge(GRegister* pRegister,GFunction * pFunction);
-	static CHMasterType*		findMasterType(const CHMasterType& aMasterType);	
+	/*static CHMasterType*		findMasterType(const CHMasterType& aMasterType);	
 	static CHMasterType*		findMasterType(short masterType);
 	static CHTeamMatchsCnfg*	findTeamMatchsCnfg(CHTeamMatchsCnfg& aTeamMatchsCnfg);
 	static CHTeamMatchsCnfg*	findTeamMatchsCnfg(short id);
 	static CHTeamMatchsCnfg*	findTeamMatchsCnfg(CHPhase *pPhase);
 	static CHTeamMatchsCnfg*	findTeamMatchsCnfg(CHEvent *pEvent);
 	static CHRatingDif*			findRatingDif(const CHRatingDif& aRatingDif);	
-	static CHRatingDif*			findRatingDif(short ratingCode);
+	static CHRatingDif*			findRatingDif(short ratingCode);*/
 
-	
-	static CHMatch				*findMatchSource		(CHMatchResult *pMR);
+	/*static CHMatch				*findMatchSource		(CHMatchResult *pMR);
 	static CHPhase				*findPhaseSource		(CHMatchResult *pMR);
-	static CHPool				*findPoolSource		    (CHMatchResult *pMR);
+	static CHPool				*findPoolSource		    (CHMatchResult *pMR);*/
 	
 	//virtual functions from GMemoryDataBase
-	GRegister*				setRegister			(const GRegister			& target);
+	/*GRegister*				setRegister			(const GRegister			& target);
 	GInscription*			setInscription		(const GInscription			& target);
 	GEvent*					setEvent			(const GEvent				& target);
 	GPhase*					setPhase			(const GPhase				& target);
@@ -129,92 +86,92 @@ public:
 	GCourt*					setCourt			(const GCourt				& target);
 	CHMasterType*			setMasterType		(const CHMasterType			& target);
 	CHTeamMatchsCnfg*		setTeamMatchsCnfg	(const CHTeamMatchsCnfg		& target);
-	CHRatingDif*			setRatingDif		(const CHRatingDif			& target);
+	CHRatingDif*			setRatingDif		(const CHRatingDif			& target);	
 	
-	
-	GEventUnit *setEventUnit(const GEventUnit& target);
+	GEventUnit *setEventUnit(const GEventUnit& target);*/
 
 	// remove methods
-	virtual GTHSplitMatchResult* removeSplitMatchResult (const GTHSplitMatchResult & target);
+	/*virtual GTHSplitMatchResult* removeSplitMatchResult (const GTHSplitMatchResult & target);
 	virtual CHJudge*			 removeJudge			(const CHJudge& aJudge);
 	virtual CHCourt*			 removeCourt			(const CHCourt& target);
 	virtual CHMasterType*		 removeMasterType		(const CHMasterType& aMasterType);
 	virtual CHTeamMatchsCnfg*	 removeTeamMatchsCnfg	(const CHTeamMatchsCnfg &target);
 	virtual CHRatingDif*		 removeRatingDif		(const CHRatingDif& aRatingDif);
 	
-	RWBoolean updateModel(CPackObject& aPackObject);
-	GData * getObject(RWClassID aClassID,CPack &aPack);
+	bool updateModel(MSLPackObject& aPackObject);
+	GData * getObject(RWClassID aClassID,MSLPack &aPack);*/
 
 	static int  findColorStatus(unsigned char status);
 
+	virtual MSLString getRSC(const GData *pData);
 	
 	//Reports Descriptions (ResultCode)
-	static RWCString	getRSC(const GData *pData);
-	static RWCString getRSC			(GData * pData,RWBoolean withoutDiscipline=false,RWBoolean extraRSC=true,RWDate date=INVALID_RWDATE);
-	static RWCString traslateCode	(RWCString sex);
-	static RWCString traslateCode	(GTHEvent *pEvent);
-	static RWCString traslateCode	(GTHPhase * pPhase);
-	static RWCString traslateCode	(CHMatch * pMatch);
-	static RWCString traslateCode	(CHPool * pPool);
+	//static MSLString	getRSC(const GData *pData);
+	//static MSLString getRSC			(GData * pData,bool withoutDiscipline=false,bool extraRSC=true,RWDate date=INVALID_RWDATE);
+	//static MSLString traslateCode	(MSLString sex);
+	//static MSLString traslateCode	(GTHEvent *pEvent);
+	//static MSLString traslateCode	(GTHPhase * pPhase);
+	//static MSLString traslateCode	(CHMatch * pMatch);
+	//static MSLString traslateCode	(CHPool * pPool);
 
-protected:
+/*protected:
     //queries
 	GDiscipline * queryDiscipline   (RWDBConnection& aConnection);
-	size_t queryColEvents           (RWDBConnection& aConnection,RWSet& target);
-	size_t queryColMembers			(RWDBConnection& aConnection,RWSet& target);
-	size_t queryColInscriptions     (RWDBConnection& aConnection,RWSet& target);
-	size_t queryColEventUnits       (RWDBConnection& aConnection,RWSet& target);
-	size_t queryColEUnitNames		(RWDBConnection& aConnection,RWSet& target);
-	size_t queryColJudges	        (RWDBConnection& aConnection,RWSet& target);
-	size_t queryColPhases           (RWDBConnection& aConnection,RWSet& target);
-	size_t queryColPools            (RWDBConnection& aConnection,RWSet& target);
-	size_t queryColPoolResults      (RWDBConnection& aConnection,RWSet& target);
-	size_t queryColMatchs           (RWDBConnection& aConnection,RWSet& target);
-	size_t queryColMatchResults     (RWDBConnection& aConnection,RWSet& target);
-	size_t queryColSplitMatchResults(RWDBConnection& aConnection,RWSet& target);
-	size_t queryColSplitMatches		(RWDBConnection& aConnection,RWSet& target);
-	size_t queryColEventResults		(RWDBConnection& aConnection,RWSet& target);
-	size_t queryColMatchJudge		(RWDBConnection& aConnection,RWSet& target);
-	size_t queryColSessions			(RWDBConnection& aConnection,RWSet& target);
-	size_t queryColMatchMember		(RWDBConnection& aConnection,RWSet& target);
-	size_t queryColPhaseNames		(RWDBConnection& aConnection,RWSet& target);
-	size_t queryColCourts			(RWDBConnection& aConnection,RWSet& target);
-	size_t queryColMasterTypes      (RWDBConnection& aConnection,RWSet& target);
-	size_t queryColTeamMatchsCnfg	(RWDBConnection& aConnection,RWSet& target);
-	size_t queryColRegisters		(RWDBConnection& aConnection,RWSet& target);
-	size_t queryColRatingDifs       (RWDBConnection& aConnection,RWSet& target);
+	size_t queryColEvents           (RWSet& target);
+	size_t queryColMembers			(RWSet& target);
+	size_t queryColInscriptions     (RWSet& target);
+	size_t queryColEventUnits       (RWSet& target);
+	size_t queryColEUnitNames		(RWSet& target);
+	size_t queryColJudges	        (RWSet& target);
+	size_t queryColPhases           (RWSet& target);
+	size_t queryColPools            (RWSet& target);
+	size_t queryColPoolResults      (RWSet& target);
+	size_t queryColMatchs           (RWSet& target);
+	size_t queryColMatchResults     (RWSet& target);
+	size_t queryColSplitMatchResults(RWSet& target);
+	size_t queryColSplitMatches		(RWSet& target);
+	size_t queryColEventResults		(RWSet& target);
+	size_t queryColMatchJudge		(RWSet& target);
+	size_t queryColSessions			(RWSet& target);
+	size_t queryColMatchMember		(RWSet& target);
+	size_t queryColPhaseNames		(RWSet& target);
+	size_t queryColCourts			(RWSet& target);
+	size_t queryColMasterTypes      (RWSet& target);
+	size_t queryColTeamMatchsCnfg	(RWSet& target);
+	size_t queryColRegisters		(RWSet& target);
+	size_t queryColRatingDifs       (RWSet& target);
 
 	// desempaquetado de las colecciones hijas...
-	void unpackChildCollections		(CPack& aPack);
-	GDiscipline * unpackDiscipline	(CPack& aPack);
-	void unpackColEvents			(CPack& aPack,RWSet& target);
-	void unpackColInscriptions		(CPack& aPack,RWSet& target);
-	void unpackColEventUnits		(CPack& aPack,RWSet& target);
-	void unpackColJudges			(CPack& aPack,RWSet& target);
-	void unpackColPhases			(CPack& aPack,RWSet& target);
-	void unpackColPools				(CPack& aPack,RWSet& target);
-	void unpackColPoolResults		(CPack& aPack,RWSet& target);
-	void unpackColMatchs			(CPack& aPack,RWSet& target);
-	void unpackColMatchResults		(CPack& aPack,RWSet& target);
-	void unpackColSplitMatchResults	(CPack& aPack,RWSet& target);
-	void unpackColEventResults		(CPack& aPack,RWSet& target);
-	void unpackColMatchJudge		(CPack& aPack,RWSet& target);
-	void unpackSplitMatches			(CPack& aPack,RWSet& target);
-	void unpackColSessions			(CPack& aPack,RWSet& target);
-	void unpackColMembers			(CPack& aPack,RWSet& target);
-	void unpackColMatchMember		(CPack& aPack,RWSet& target);
-	void unpackColPhaseNames		(CPack& aPack,RWSet& target);
-	void unpackColCourts			(CPack& aPack,RWSet& target);
-	void unpackColMasterTypes		(CPack& aPack,RWSet& target);
-	void unpackColTeamMatchsCnfg	(CPack& aPack,RWSet& target);
-	void unpackColRegisters			(CPack& aPack,RWSet& target);
-	void unpackColRatingDifs		(CPack& aPack,RWSet& target);
+	void unpackChildCollections		(MSLPack& aPack);
+	GDiscipline * unpackDiscipline	(MSLPack& aPack);
+	void unpackColEvents			(MSLPack& aPack,RWSet& target);
+	void unpackColInscriptions		(MSLPack& aPack,RWSet& target);
+	void unpackColEventUnits		(MSLPack& aPack,RWSet& target);
+	void unpackColJudges			(MSLPack& aPack,RWSet& target);
+	void unpackColPhases			(MSLPack& aPack,RWSet& target);
+	void unpackColPools				(MSLPack& aPack,RWSet& target);
+	void unpackColPoolResults		(MSLPack& aPack,RWSet& target);
+	void unpackColMatchs			(MSLPack& aPack,RWSet& target);
+	void unpackColMatchResults		(MSLPack& aPack,RWSet& target);
+	void unpackColSplitMatchResults	(MSLPack& aPack,RWSet& target);
+	void unpackColEventResults		(MSLPack& aPack,RWSet& target);
+	void unpackColMatchJudge		(MSLPack& aPack,RWSet& target);
+	void unpackSplitMatches			(MSLPack& aPack,RWSet& target);
+	void unpackColSessions			(MSLPack& aPack,RWSet& target);
+	void unpackColMembers			(MSLPack& aPack,RWSet& target);
+	void unpackColMatchMember		(MSLPack& aPack,RWSet& target);
+	void unpackColPhaseNames		(MSLPack& aPack,RWSet& target);
+	void unpackColCourts			(MSLPack& aPack,RWSet& target);
+	void unpackColMasterTypes		(MSLPack& aPack,RWSet& target);
+	void unpackColTeamMatchsCnfg	(MSLPack& aPack,RWSet& target);
+	void unpackColRegisters			(MSLPack& aPack,RWSet& target);
+	void unpackColRatingDifs		(MSLPack& aPack,RWSet& target);
 
 protected:
 	//reset de las colecciones
 	void resetChild();
 
-	void packChildCollections(CPack& aPack);
+	void packChildCollections(MSLPack& aPack);
 
 	void queryChildCollections		(RWDBConnection	& aConnection	);	
 	void unionChildCollections		(RWHashTable	& sSource		);
@@ -223,9 +180,6 @@ private:
 	static RWSet colTeamMatchsCnfg;		// CHTeamMatchsCnfg's collection
 	static RWSet colJudges;				// CHJudge
 	static RWSet colMasterTypes;		// CHMasterType
-	static RWSet colRatingDifs;			// CHRatingDif
+	static RWSet colRatingDifs;			// CHRatingDif*/
 };
-
-#endif // !defined(AFX_CHMEMORYDATABASE_H__3A0F8BE0_F95B_4F9E_B0C4_AC10ECFE00AE__INCLUDED_)
-
 

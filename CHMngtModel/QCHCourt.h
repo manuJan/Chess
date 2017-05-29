@@ -16,31 +16,20 @@
 *
 ***************************************************************************************/
 
-#if !defined(AFX_QCHCOURT_H__AD0D9A1F_C4E8_462E_B906_B4FE474B284D__INCLUDED_)
-#define AFX_QCHCOURT_H__AD0D9A1F_C4E8_462E_B906_B4FE474B284D__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-
-#include <CORE/G/QCourt.h>
-#include "CHCourt.h"
+#include <OVR/CORE/G/QCourt.h>
 
 class QCHCourt : public QCourt  
 {
 public:
-	QCHCourt(RWDBConnection *pNewConnection)
-		:QCourt(pNewConnection) 
+	QCHCourt()
+		:QCourt() 
 		{;} 
 	virtual ~QCHCourt() 
 		{;}
 
 protected:
-	void OnSelect(RWDBSelector& aSelect,RWDBTable& tPhase);
-	void OnReader(RWDBReader& aReader,GCourt *pCourt);
 
-	GCourt * OnNewCourt()
-		{ return new CHCourt(); }
+	void OnSelect(MSLDBSelector& aSelect,MSLDBTable& tCourt);
+	void OnReader(MSLDBReader& aReader,GCourt *pCourt);
 };
-
-#endif // !defined(AFX_QCHCOURT_H__AD0D9A1F_C4E8_462E_B906_B4FE474B284D__INCLUDED_)

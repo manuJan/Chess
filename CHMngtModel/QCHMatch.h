@@ -20,26 +20,23 @@
 *                                                                                      
 **************************************************************************************///
 
-#if !defined(AFX_QCHMATCH_H__D7C89BE4_E723_4674_84CE_2002FE9997DF__INCLUDED_)
-#define AFX_QCHMATCH_H__D7C89BE4_E723_4674_84CE_2002FE9997DF__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-
-#include <CORE/TH/QGTHMatch.h>
-#include "CHMatch.h"
+#include <OVR/CORE/TH/QGTHMatch.h>
 
 class QCHMatch : public QGTHMatch  
 {
 public:
-	QCHMatch(RWDBConnection *pNewConnection);
-	virtual ~QCHMatch();
+
+	QCHMatch()
+		:QGTHMatch()
+	{;}
+
+	virtual ~QCHMatch() 
+	{;}
 
 protected:
-	GTHMatch * OnNewMatch(const RWDBBlob& aBlob);
-	void OnSelect(RWDBSelector& aSelect,RWDBTable& tMatch);
-	void OnReader(RWDBReader& aReader,GTHMatch *pMatch);
+
+	void OnSelect(MSLDBSelector& aSelect,MSLDBTable& tMatch);
+	void OnReader(MSLDBReader  & aReader,GTHMatch *pMatch);
 };
 
-#endif // !defined(AFX_QCHMATCH_H__D7C89BE4_E723_4674_84CE_2002FE9997DF__INCLUDED_)

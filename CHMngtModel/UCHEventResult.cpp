@@ -23,19 +23,14 @@
 
 #include "stdCHMngt.h"
 #include "UCHEventResult.h"
-//#include "CHMemoryDataBase.h"
+#include "CHEventResult.h"
 
+void UCHEventResult::OnAssignAttributes(const GEventResult& aEventResult)
+{	
+	UEventResult::OnAssignAttributes(aEventResult);
 
-void UCHEventResult::OnAssignAttributes(const GTHEventResult& aEventResult)
-{
-	
-	UGTHEventResult::OnAssignAttributes(aEventResult);
 	CHEventResult* pEventResult=(CHEventResult*)&aEventResult;
-
-	qualitative=		pEventResult->getQualitativeCode();
-	
-	nullqualitative	=	(qualitative =="") ? true:false;
-
+		
 	rating=pEventResult->getRating();
 	
 	if(!rating)
@@ -43,19 +38,16 @@ void UCHEventResult::OnAssignAttributes(const GTHEventResult& aEventResult)
 		
 }
 
-void UCHEventResult::OnInsert(RWDBInserter& aInserter,const GTHEventResult& aEventResult)
+void UCHEventResult::OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GEventResult& aEventResult)
 {
-	UGTHEventResult::OnInsert(aInserter,aEventResult);
-
-	aInserter["QUALITATIVE"]	<< RWDBBoundExpr(&qualitative,&nullqualitative);
-	aInserter["RATING"]			<< RWDBBoundExpr(&rating,&nullRating);
-	
+	UEventResult::OnInsert(aInserter,table,aEventResult);
+		
+	aInserter << table["RATING"].assign(rating,&nullRating); 	
 }
 
-void UCHEventResult::OnUpdate(RWDBUpdater& aUpdater,RWDBTable& t015EvRes,const GTHEventResult& aEventResult)
+void UCHEventResult::OnUpdate(MSLDBUpdater& aUpdater,MSLDBTable& t015EvRes,const GEventResult& aEventResult)
 {
-	UGTHEventResult::OnUpdate(aUpdater,t015EvRes,aEventResult);
-
-	aUpdater << t015EvRes["QUALITATIVE"]		.assign(RWDBBoundExpr(&qualitative,&nullqualitative));
-	aUpdater << t015EvRes["RATING"]		.assign(RWDBBoundExpr(&rating,&nullRating));
+	UEventResult::OnUpdate(aUpdater,t015EvRes,aEventResult);
+		
+	aUpdater << t015EvRes["RATING"].assign(rating,&nullRating);
 }

@@ -27,41 +27,24 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-QCHRegister::QCHRegister(RWDBConnection *pNewConnection)
-:QRegister(pNewConnection)
+void QCHRegister::OnSelect(MSLDBSelector& aSelect,MSLDBTable& z010register)
 {
+	aSelect<< z010register["MASTER_TYPE"];	
 }
 
-QCHRegister::~QCHRegister()
-{
-}
-
-GRegister *QCHRegister::OnNewRegister()
-{ 
-	return new CHRegister();
-}
-
-void QCHRegister::OnSelect(RWDBSelector& aSelect,RWDBTable& z010register)
-{
-	aSelect<< z010register["MASTER_TYPE"];
-	
-}
-
-void QCHRegister::OnReader(RWDBReader& aReader,GRegister *pRegister)
+void QCHRegister::OnReader(MSLDBReader& aReader,GRegister *pRegister)
 {
 	CHRegister * pCHRegister=(CHRegister*)pRegister;
 
-	RWDBNullIndicator nullMasterType;
+	MSLDBNullIndicator nullMasterType;
 	
 	short masterType;
 
 	aReader >> nullMasterType >> masterType;
-	
-		
+			
 	if( nullMasterType)
 		masterType=0;
 
-	
 	pCHRegister->setMasterType(masterType);
 }
 

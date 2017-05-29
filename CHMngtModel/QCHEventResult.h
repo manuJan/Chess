@@ -21,35 +21,23 @@
 **************************************************************************************///
 
 
-#ifndef _QCHEventResult_H
-#define _QCHEventResult_H
-
-#if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-
-#include <core/G/QBase.h>
-#include <core/TH/QGTHEventResult.h>
-
-#include "CHEventResult.h"
+#include "CHMemoryDataBaseDefs.h"
+#include <OVR/CORE/G/QEventResult.h>
 
 
-class CHModelExport QCHEventResult : public QGTHEventResult
+class QCHEventResult : public QEventResult
 {
-
 public:
 
-	QCHEventResult(RWDBConnection *pNewConnection)
-	:QGTHEventResult(pNewConnection)
+	QCHEventResult()
+		:QEventResult()
 	{;}
 
 	virtual ~QCHEventResult() {;}
 
 protected:
-	void OnSelect(RWDBSelector& aSelect,RWDBTable& tPool);
-	void OnReader(RWDBReader& aReader,GTHEventResult *pEventResult);
-	GTHEventResult * OnNewEventResult();
 
+	void OnSelect(MSLDBSelector& aSelect,MSLDBTable& tEvetResult);
+	void OnReader(MSLDBReader& aReader,GEventResult *pEventResult);
 };
-
-#endif //!defined(AFX_QCHEventResult_H)

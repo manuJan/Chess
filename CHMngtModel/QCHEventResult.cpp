@@ -24,48 +24,25 @@
 #include "stdCHMngt.h"
 #include "QCHEventResult.h"
 #include "CHEventResult.h"
-//#include "CHMemoryDatabase.h"
 
 
-void QCHEventResult::OnSelect(RWDBSelector& aSelect,RWDBTable& tPool)
+void QCHEventResult::OnSelect(MSLDBSelector& aSelect, MSLDBTable& tEvetResult)
 {
-	QGTHEventResult::OnSelect(aSelect,tPool);
-
-	aSelect << tPool["QUALITATIVE"];
-	aSelect << tPool["RATING"];
-			
+	aSelect << tEvetResult["RATING"];			
 }
 
-void QCHEventResult::OnReader(RWDBReader& aReader,GTHEventResult *pValue)
+void QCHEventResult::OnReader(MSLDBReader& aReader,GEventResult *pEventResult)
 {
-	QGTHEventResult::OnReader(aReader,pValue);
+	CHEventResult* pVal = (CHEventResult*)pEventResult;
 
-	CHEventResult* pVal = (CHEventResult*)pValue;
-
-	RWCString qualitative;
 	short     rating;
 			
-
-	RWDBNullIndicator nullqualitative,nullRating;
+	MSLDBNullIndicator nullRating;
 	
+	aReader >> nullRating		>> rating;
 	
-	aReader >> nullqualitative	>> qualitative
-			>> nullRating		>> rating
-			;
-	
-	
-	if ( nullqualitative ) qualitative="";
-		
-	pVal->setQualitative(qualitative);
-
 	if (nullRating)
 		rating=0;
 	
-	pVal->setRating(rating);
-	
-}
-
-GTHEventResult * QCHEventResult::OnNewEventResult()
-{
-	return new CHEventResult();
+	pVal->setRating(rating);	
 }

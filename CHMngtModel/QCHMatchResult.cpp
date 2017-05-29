@@ -27,25 +27,17 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-QCHMatchResult::QCHMatchResult(RWDBConnection *pNewConnection)
-:QGTHMatchResult(pNewConnection)
-{
-}
 
-QCHMatchResult::~QCHMatchResult()
+void QCHMatchResult::OnSelect(MSLDBSelector& aSelect,MSLDBTable& tMatchResult)
 {
-}
-
-void QCHMatchResult::OnSelect(RWDBSelector& aSelect,RWDBTable& tMatchResult)
-{
-	aSelect << tMatchResult["POINTS"]
+	aSelect << tMatchResult["POINTS_F"]
 			<< tMatchResult["UPFLOATER"]
 			<< tMatchResult["DOWNFLOATER"]
 			<< tMatchResult["COLOR"]
 			;
 }
 
-void QCHMatchResult::OnReader(RWDBReader& aReader,GTHMatchResult *pMatchResult)
+void QCHMatchResult::OnReader(MSLDBReader& aReader,GTHMatchResult *pMatchResult)
 {
 	float fPoints;
 	short upFloater;
@@ -64,9 +56,4 @@ void QCHMatchResult::OnReader(RWDBReader& aReader,GTHMatchResult *pMatchResult)
 	pCHMatchResult->setUpFloater(upFloater==1);
 	pCHMatchResult->setDownFloater(downFloater==1);
 	pCHMatchResult->setColor(fColor);
-}
-
-GTHMatchResult * QCHMatchResult::OnNewMatchResult()
-{
-	return new CHMatchResult();
 }

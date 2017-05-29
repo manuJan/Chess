@@ -41,67 +41,52 @@ void UCHRatingDif::assignAtributes(CHRatingDif& aRatingDif)
 		nulldifference=false;
 }
 
-RWBoolean UCHRatingDif::insert(RWDBConnection& aConnection,GData& aData)
+bool UCHRatingDif::insert(GData& aData)
 {
 	CHRatingDif& aRatingDif=(CHRatingDif&)aData;
 
-	RWDBTable ratingDifTable      = DBApplication::getTable("CHT062_RATING_DIF");
+	MSLDBTable ratingDifTable      = getTable(CHT_RATING_DIF);
 
-	RWDBInserter inserter = ratingDifTable.inserter();	
+	MSLDBInserter inserter = ratingDifTable.inserter();	
 
 	assignAtributes(aRatingDif);
 
-	inserter["CODE_RAT"]		<< aRatingDif.getCode();
-	inserter["PROBABILITY"]	<< RWDBBoundExpr(&probability,&nullprobability);
-	inserter["DIFFERENCE"]	<< RWDBBoundExpr(&difference,&nulldifference);
+	inserter << ratingDifTable["CODE_RAT"]		.assign(aRatingDif.getCode());
+	inserter << ratingDifTable["PROBABILITY"]	.assign(probability,&nullprobability);
+	inserter << ratingDifTable["DIFFERENCE"]	.assign(difference,&nulldifference);
 
-	RWDBResult aResult = inserter.execute(aConnection);
-	aResult.table();
-
-	return aResult.rowCount()>0L;
+	long count=inserter.execute();
+	return count>0L;
 }
 
-RWBoolean UCHRatingDif::update(RWDBConnection& aConnection,GData& aData)
+bool UCHRatingDif::update(GData& aData)
 {
 	CHRatingDif& aRatingDif=(CHRatingDif&)aData;
 
-	RWDBTable table = DBApplication::getTable("CHT062_RATING_DIF");
+	MSLDBTable table = getTable(CHT_RATING_DIF);
 	
-	RWDBUpdater updater = table.updater();	
+	MSLDBUpdater updater = table.updater();	
 
 	assignAtributes(aRatingDif);
 	updater.where(table["CODE_RAT"]   == aRatingDif.getCode());
 
-	updater << table["PROBABILITY"].assign(RWDBBoundExpr(&probability,&nullprobability));
-	updater << table["DIFFERENCE"].assign(RWDBBoundExpr(&difference,&nulldifference));
+	updater << table["PROBABILITY"]	.assign(probability,&nullprobability);
+	updater << table["DIFFERENCE"]	.assign(difference,&nulldifference);
 
-	RWDBResult aResult=updater.execute(aConnection);
-	aResult.table();
-	
-
-	return aResult.rowCount()>0L;
+	long count=updater.execute();
+	return count>0L;
 }
 
-RWBoolean UCHRatingDif::delete_(RWDBConnection& aConnection,GData& aData)
+bool UCHRatingDif::delete_(GData& aData)
 {
 	CHRatingDif& aRatingDif=(CHRatingDif&)aData;
 
-	RWDBTable ratingDifTable      = DBApplication::getTable("CHT062_RATING_DIF");
+	MSLDBTable ratingDifTable      = getTable(CHT_RATING_DIF);
 	
-	RWDBDeleter deleter = ratingDifTable.deleter();
-	deleter.where( ratingDifTable["CODE_RAT"] == aRatingDif.getCode() );
+	MSLDBCriterion aWhere=	ratingDifTable["CODE_RAT"] == aRatingDif.getCode();
 
-	RWDBResult aResult = deleter.execute(aConnection);
-	aResult.table();
+	MSLDBDeleter deleter = ratingDifTable.deleter();
+	deleter.where( aWhere );
 
-	if( aResult.rowCount()>0L )
-	{
-		deleter = ratingDifTable.deleter();
-		deleter.where( ratingDifTable["CODE_RAT"] == aRatingDif.getCode() );
-
-		aResult = deleter.execute(aConnection);
-		aResult.table();
-	}
-
-	return aResult.rowCount()!=-1L;
+	return  deleter.execute()!=-1;	
 }

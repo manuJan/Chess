@@ -26,7 +26,7 @@
 #include "CHPoolResult.h"
 
 
-void QCHPoolResult::OnSelect(RWDBSelector& aSelect,RWDBTable& table)
+void QCHPoolResult::OnSelect(MSLDBSelector& aSelect,MSLDBTable& table)
 {
 	QGTHPoolResult::OnSelect(aSelect,table);
 	
@@ -42,7 +42,7 @@ void QCHPoolResult::OnSelect(RWDBSelector& aSelect,RWDBTable& table)
 			;
 }
 
-void QCHPoolResult::OnReader(RWDBReader& aReader,GTHPoolResult *pValue)
+void QCHPoolResult::OnReader(MSLDBReader& aReader,GTHPoolResult *pValue)
 {
 	QGTHPoolResult::OnReader(aReader,pValue);
 
@@ -58,15 +58,15 @@ void QCHPoolResult::OnReader(RWDBReader& aReader,GTHPoolResult *pValue)
 	float sonneBerger;
 	float progressiveScore;
 
-	RWDBNullIndicator nullmatchesPlayed;
-	RWDBNullIndicator nullwonGames;
-	RWDBNullIndicator nulllostGames;
-	RWDBNullIndicator nulltieGames;
-	RWDBNullIndicator nullpointsF;
-	RWDBNullIndicator nullsolkoff;
-	RWDBNullIndicator nullmediansolkoff;
-	RWDBNullIndicator nullsonneBerger;
-	RWDBNullIndicator nullprogressiveScore;
+	MSLDBNullIndicator nullmatchesPlayed;
+	MSLDBNullIndicator nullwonGames;
+	MSLDBNullIndicator nulllostGames;
+	MSLDBNullIndicator nulltieGames;
+	MSLDBNullIndicator nullpointsF;
+	MSLDBNullIndicator nullsolkoff;
+	MSLDBNullIndicator nullmediansolkoff;
+	MSLDBNullIndicator nullsonneBerger;
+	MSLDBNullIndicator nullprogressiveScore;
 	
 
 	aReader >> nullmatchesPlayed >> matchesPlayed
@@ -101,7 +101,3 @@ void QCHPoolResult::OnReader(RWDBReader& aReader,GTHPoolResult *pValue)
 	pVal->setMProgressiveScore(progressiveScore);
 }
 
-GTHPoolResult * QCHPoolResult::OnNewPoolResult()
-{
-	return new CHPoolResult();
-}

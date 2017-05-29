@@ -21,37 +21,28 @@
 **************************************************************************************///
 
 
-#ifndef _UCHEventResult_H
-#define _UCHEventResult_H
-
-#if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#include <OVR/CORE/G/UEventResult.h>
 
-#include <core/TH/UGTHEventResult.h>
-#include "CHEventResult.h"
-
-class UCHEventResult : public UGTHEventResult
+class UCHEventResult : public UEventResult  
 {
-
 public:
 
-	UCHEventResult(RWDBConnection *pNewConnection)
-		:UGTHEventResult(pNewConnection)
-		{;}
-	virtual ~UCHEventResult(){}
+	UCHEventResult()
+		:UEventResult() 
+	{;}
 
+	~UCHEventResult() {;}
+
+protected:
+
+	void OnAssignAttributes(const GEventResult& aEventResult);
+	void OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GEventResult& aEventResult);
+	void OnUpdate(MSLDBUpdater & aUpdater ,MSLDBTable& table,const GEventResult& aEventResult);
 
 private:
 	
-	RWCString qualitative;
 	short     rating;	
+	MSLDBNullIndicator nullRating;
 	
-	RWDBNullIndicator nullqualitative,nullRating;
-	
-	void OnAssignAttributes(const GTHEventResult& aEventResult);
-	void OnInsert(RWDBInserter& aInserter,const GTHEventResult& aEventResult);
-	void OnUpdate(RWDBUpdater& aUpdater,RWDBTable& t015EvRes,const GTHEventResult& aEventResult);
 };
-
-#endif //!defined(AFX_UCHEventResult_H)

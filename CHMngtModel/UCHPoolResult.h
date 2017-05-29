@@ -21,24 +21,25 @@
 **************************************************************************************///
 
 
-#ifndef _UCHPoolResult_H
-#define _UCHPoolResult_H
-
-#if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#include <OVR/CORE/TH/UGTHPoolResult.h>
 
-#include <core/TH/UGTHPoolResult.h>
-#include "CHPoolResult.h"
-
-class CHModelExport UCHPoolResult : public UGTHPoolResult
+class UCHPoolResult : public UGTHPoolResult
 {
 public:
-	UCHPoolResult(RWDBConnection *pNewConnection)
-		:UGTHPoolResult(pNewConnection)
-		{;}
-	virtual ~UCHPoolResult(){}
+	// Constructors && Destructor
+	UCHPoolResult()
+		:UGTHPoolResult()
+	{};
 
+	virtual ~UCHPoolResult()
+	{};
+
+protected:
+	void	OnAssignAttributes	(GTHPoolResult& aPoolResult);
+	void	OnInsert			(MSLDBInserter& aInserter,MSLDBTable& table,GTHPoolResult& aPoolResult);
+	void	OnUpdate			(MSLDBUpdater & aUpdater ,MSLDBTable& table,GTHPoolResult& aPoolResult);
+	
 private:
 	short matchesPlayed;
 	short wonGames;
@@ -50,20 +51,14 @@ private:
 	float sonneBerger;
 	float progressiveScore;
 		
-	RWDBNullIndicator nullmatchesPlayed;
-	RWDBNullIndicator nullwonGames;
-	RWDBNullIndicator nulllostGames;
-	RWDBNullIndicator nulltieGames;
-	RWDBNullIndicator nullpointsF;
-	RWDBNullIndicator nullsolkoff;
-	RWDBNullIndicator nullmediansolkoff;
-	RWDBNullIndicator nullsonneBerger;
-	RWDBNullIndicator nullprogressiveScore;
+	MSLDBNullIndicator nullmatchesPlayed;
+	MSLDBNullIndicator nullwonGames;
+	MSLDBNullIndicator nulllostGames;
+	MSLDBNullIndicator nulltieGames;
+	MSLDBNullIndicator nullpointsF;
+	MSLDBNullIndicator nullsolkoff;
+	MSLDBNullIndicator nullmediansolkoff;
+	MSLDBNullIndicator nullsonneBerger;
+	MSLDBNullIndicator nullprogressiveScore;
 	
-
-	void OnAssignAttributes(GTHPoolResult& aPoolResult);
-	void OnInsert(RWDBInserter& aInserter,GTHPoolResult& aPoolResult);
-	void OnUpdate(RWDBUpdater& aUpdater,RWDBTable& table,GTHPoolResult& aPoolResult);
 };
-
-#endif //!defined(AFX_UCHPoolResult_H)

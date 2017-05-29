@@ -24,12 +24,12 @@
 #include "CHMasterType.h"
 #include "QCHMasterType.h"
 
-size_t QCHMasterType::selectCollection(RWDBConnection& aConnection,RWCollection& target)
+size_t QCHMasterType::selectCollection(MSLCollection& target)
 {
-	RWDBTable MasterType		= DBApplication::getTable("CHT064_MASTER_TYPE"   );
-	RWDBTable MasterTypeNames	= DBApplication::getTable("CHT564_MASTER_TYPE"   );
-	RWDBTable languages			= DBApplication::getTable("ZZT000_LANGUAGE");
-	RWDBSelector select			= DBApplication::getSelector();
+	MSLDBTable MasterType		= getTable(CHT_MASTER_TYPE);
+	MSLDBTable MasterTypeNames	= getTable(CHT_MASTER_TYPEL);
+	MSLDBTable languages		= getTable(ZZT_LANGUAGE);
+	MSLDBSelector select			= getSelector();
 
 	select << MasterType["NORDER"]
 		   << MasterTypeNames["MASTER_TYPE"]
@@ -42,15 +42,17 @@ size_t QCHMasterType::selectCollection(RWDBConnection& aConnection,RWCollection&
 				  languages["IDLANGUAGE"]	== MasterTypeNames["IDLANGUAGE"]	&&
 				  languages["FACTIVE"]		== "Y" );
 
-	RWDBReader rdr = select.reader(aConnection);
+	MSLDBReader rdr = select.reader();
 
 	short fmasterType;
 	short forder;
-	RWCString flanguage;
-	RWWString fsDescription,flDescription;
-	RWDBNullIndicator nullSDescription,nullLDescription, nullorder;
+	MSLString flanguage;
+	MSLWString fsDescription,flDescription;
+	MSLDBNullIndicator nullSDescription,nullLDescription, nullorder;
 
-	GNames aNames;
+	GDescription desc;
+	CHMasterType aMasterType,*pMasterType=0;
+
 	while( rdr() ) 
 	{
 		rdr >> nullorder >> forder
@@ -60,22 +62,29 @@ size_t QCHMasterType::selectCollection(RWDBConnection& aConnection,RWCollection&
 			>> nullLDescription >> flDescription
 			;
 
-		if( nullSDescription ) fsDescription = NULLRWWSTRING;
-		if( nullLDescription ) flDescription = NULLRWWSTRING;
+		if( nullSDescription ) fsDescription = NULLWSTRING;
+		if( nullLDescription ) flDescription = NULLWSTRING;
 		if( nullorder		 ) forder = 0;
 
-		aNames.setCode (flanguage    );
-		aNames.setSName(fsDescription);
-		aNames.setLName(flDescription);
+		if( nullSDescription  ) fsDescription  = NULLWSTRING;
+		if( nullLDescription  ) flDescription  = NULLWSTRING;
+		
+		desc.set(flanguage);
+		desc.set(_LNAME,flDescription);
+		desc.set(_SNAME,fsDescription);
 
-		CHMasterType * pMasterType = new CHMasterType();
-		if( pMasterType )
+		aMasterType.setMasterType(fmasterType);
+
+		pMasterType = (CHMasterType *)target.find(&aMasterType);
+		if( !pMasterType ) 
 		{
+			pMasterType = new CHMasterType;
 			pMasterType->setMasterType(fmasterType);
 			pMasterType->setOrder(forder);
-			pMasterType->setDescription(aNames);
 			target.insert(pMasterType);
 		}
+
+		pMasterType->setDescriptions(desc);	
 	}
 
 	return target.entries();

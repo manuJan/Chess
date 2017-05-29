@@ -20,16 +20,16 @@
 #include "stdCHMngt.h"
 #include "CHCourt.h"
 #include "UCHCourt.h"
-#include "CHClassIDs.h"
 
-RWDEFINE_COLLECTABLE(CHCourt, __CHCOURT);
+
+MSLDEFINE_ITEM(CHCourt, __CHCOURT);
 
 //////////////////////////////////////////////////////////////////////
 // Constructors/Destructor
 //////////////////////////////////////////////////////////////////////
 CHCourt::CHCourt()
 :GCourt()
-,order(0)
+,m_order(0)
 {
 }
 	
@@ -39,11 +39,6 @@ CHCourt::CHCourt(const CHCourt &copy)
 	operator=(copy);
 }
 
-CHCourt::CHCourt(CPack &iPack)
-:GCourt()
-{
-	unpack(iPack);
-}
 
 CHCourt::~CHCourt()
 {
@@ -59,27 +54,25 @@ CHCourt & CHCourt::operator=(const CHCourt & copy)
 	if ( this != &copy )
 	{
 		GCourt::operator = (copy);
-		order		 = copy.order;
+
+		m_order		 = copy.m_order;
 	}	
 	return *this;
 }
 
-RWBoolean CHCourt::operator==(const CHCourt & copy)
+bool CHCourt::operator==(const GData & copy)
 {
 	if ( this == &copy )
 		return true;
 
-	if( GCourt::operator == (copy)		   &&
-		order		 == copy.order )
-	{
-		return true;
-	}
+	const CHCourt & court=(const CHCourt &) copy;
 
-	return false;
+	return ( GCourt::operator == (copy)	&&
+			m_order		 == court.m_order );	
 }
 
 
-RWBoolean CHCourt::operator!=(const CHCourt & copy)
+bool CHCourt::operator!=(const GData & copy)
 {
 	return !operator==(copy);
 }
@@ -88,37 +81,42 @@ RWBoolean CHCourt::operator!=(const CHCourt & copy)
 //From GData
 //////////////////////////////////////////////////////////////////////
 
-RWBoolean CHCourt::uSQL(RWDBConnection& pConnect,RWBoolean remove/*=false*/)
+	/**** Virtual methods inherited from GData **********************/
+MSLPack& CHCourt::pack(MSLPack& pack) const
 {
-	UCHCourt upd(&pConnect);
-	if( remove )
-		return upd.remove(*this);
-	return upd.set(*this);	
+	GCourt::pack(pack);
+
+	pack << m_order;
+	
+	return pack;
 }
 
-RWCString CHCourt::msl() const
+MSLPack& CHCourt::unpack(MSLPack& pack)
 {
-	RWCString str = GCourt::msl();
-	if( !str.length() || str == NULLRWSTRING )
-		return NULLRWSTRING;
+	GCourt::unpack(pack);
 
-	GBuffer aBuffer;
-	return str + RWCString(aBuffer << order
-								   << endLine);
+	pack >> m_order;
+	
+	return pack;
 }
 
-RWCString CHCourt::mslDescription(const char *language) const
+QBase* ARDistance::onQ() const
 {
-	return GCourt::mslDescription(language);
+	return new QARDistance();
 }
 
-//////////////////////////////////////////////////////////////////////
+UBase* ARDistance::onU() const
+{
+	return 0;
+}
+
+
 //SETS
 //////////////////////////////////////////////////////////////////////
 
 void CHCourt::setOrder(const short value)
 { 
-	order = value; 
+	m_order = value; 
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -127,7 +125,7 @@ void CHCourt::setOrder(const short value)
 
 short CHCourt::getOrder() const
 { 
-	return order; 
+	return m_order; 
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -138,7 +136,7 @@ CPack& CHCourt::pack(CPack & aPack)
 {
 	GCourt::pack (aPack);
 
-	aPack << order;
+	aPack << m_order;
 	
 	return aPack;
 }
@@ -148,7 +146,7 @@ CPack& CHCourt::unpack(CPack &aPack)
 {
 	GCourt::unpack (aPack);
 	
-	aPack >> order;
+	aPack >> m_order;
 	
 	return aPack;
 }

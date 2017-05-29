@@ -23,34 +23,20 @@
 #ifndef _CHSPORTDEFINES_H_
 #define _CHSPORTDEFINES_H_
 
-// Sex
-#define	MEN						 "0"
-#define	WOMEN					 "1"
-#define	MIXED					 "2"
+///////////////////////////////////////////////////////////////////////////////////////
+//User Transactions
+///////////////////////////////////////////////////////////////////////////////////////
 
-// Qualitatives
-#define	DSQ						 "d"
-#define	FO						 "f"
-#define	RET						 "r"
-#define OK					     "0"
+#define TRN_CH_INSERT_TEAMMATCHSCNFG	1030 // Team Matches Configuration
+#define TRN_CH_REMOVE_TEAMMATCHSCNFG	1031 // Team Matches Configuration
 
-// Phases
+#define TRN_CH_INSERT_MASTERTYPE		1040 // Master Type
+#define TRN_CH_CHANGE_MASTERTYPE		1041 // Master Type
+#define TRN_CH_REMOVE_MASTERTYPE		1042 // Master Type
 
-// Points 
-#define WIN_POINTS				  1
-#define DRAW_POINTS				  0.5
-#define LOST_POINTS				  0
-
-#define WIN_POINTS_MEMBER		  2
-#define DRAW_POINTS_MEMBER		  1
-#define LOST_POINTS_MEMBER		  0
-
-
-#define CH_RESULT_AWAY		1	// Away
-#define CH_RESULT_HOME		0	// Home
-
-#define	SWISS_SISTEM				 "1"
-
+#define TRN_SET_RATING_DIF				1154 //set Rating Dif
+#define TRN_CHANGE_RATING_DIF			1155 //change Rating Dif
+#define TRN_DELETE_RATING_DIF			1156 //delete Rating Dif
 
 // Colores para los status.
 #define COLORSTATUS_AVAILABLE	RGB(150,150,150)	// Gris Oscuro
@@ -63,7 +49,5 @@
 #define COLORSTATUS_REVISION	RGB(128,64,0)		// Marron
 #define COLOR_NEGRO				RGB(  0,  0,  0)	// Negro
 #define COLOR_BLANCO			RGB(255,255,255)	// Blanco
-
-
 
 #endif // _CHSPORTDEFINES_H_

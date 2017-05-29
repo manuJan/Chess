@@ -20,67 +20,60 @@
 *                                                                                      
 **************************************************************************************///
 
-#if !defined(AFX_CHMEMBER_H__010616B3_702B_4DE2_8744_07666645878D__INCLUDED_)
-#define AFX_CHMEMBER_H__010616B3_702B_4DE2_8744_07666645878D__INCLUDED_
-
-#ifndef _CHMember_H
-#define _CHMember_H
-#endif 
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-
-#ifndef _CHMNGTMODELDLL_H
-#   include "CHMngtModelDll.h" 
-#endif // _CH_MNGTMODELDLL_H
+#include "CHMemoryDataBaseDefs.h"
+#include <OVR/CORE/G/GMember.h>
 
 class GMember;
 class CHEvent;
 class CHRegister;
 class CHInscription;
 class GFunction;
-class CHModelExport CHMember : public GMember  
-{
-	RWDECLARE_COLLECTABLE(CHMember)
 
-		enum Function { eNone=0, eFirst=7, eSecond=8, eThird=9, eSubstitute=11 };
+class CHMngtModelExport CHMember : public GMember  
+{
+	MSLDECLARE_ITEM(CHMember)
+
+	enum Function { eNone=0, eFirst=7, eSecond=8, eThird=9, eSubstitute=11 };
+
 public:
 	CHMember();
-	CHMember(CHRegister* pRegister,CHInscription* pInscription);
-	CHMember(const CHMember &copy);
-	CHMember(CPack &iPack);
+	CHMember(GRegister * iRegister, GRegister * tRegister);
+	CHMember(const CHMember &copy);	
 	virtual ~CHMember();
 
-	CHMember	&operator = (const CHMember &copy);
-	RWBoolean    operator == (const CHMember &copy);
-	RWBoolean    operator != (const CHMember &copy);
+	//Operators
+	GData& operator = (const GData & copy);
+	bool   operator ==(const GData & copy);
+	bool   operator !=(const GData & copy);
 
-	RWBoolean uSQL(RWDBConnection& pConnect,RWBoolean remove=false);
-	RWCString msl() const;
-	CPack& pack(CPack & aPack);
-	CPack& unpack(CPack &aPack);
+	/**** Virtual methods inherited from MSLItem ********************/
+	virtual MSLPack& pack  (MSLPack& pck) const;
+	virtual MSLPack& unpack(MSLPack& pck);
+
+	//Virtual methods inherited from GData
+	QBase*			onQ() const;
+	UBase*			onU() const;
+
 	//set
 	void setFunction(const short value);
 	void setRating(const short value);
 	void setKConst(const short value);
 	short getRating() const;
 	short getKConst() const;
-	RWCString getRatingAsString() const;
-	RWCString getKConstAsString() const;
+	
+	MSLString getRatingAsString() const;
+	MSLString getKConstAsString() const;
 	
 	//get
 	short getFunction() const;
 	GFunction *getCFunction() const;
-	RWWString getFunctionLDescription() const;
+	MSLWString getFunctionLDescription() const;
 	CHEvent *getEvent() const;
 	int getRegisterCode() const;
-	RWCString getRegisterBirthDate(const char *format/*="%x"*/) const;
-
+	
 private:
-	short		function;
-	short		rating;	// Puntuacion acumulada	
-	short		kConst;	// Constante calculo Rating
+	short		m_function;
+	short		m_rating;	// Puntuacion acumulada	
+	short		m_kConst;	// Constante calculo Rating
 };
-
-#endif // !defined(AFX_CHMEMBER_H__010616B3_702B_4DE2_8744_07666645878D__INCLUDED_)

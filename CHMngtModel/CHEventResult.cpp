@@ -23,38 +23,27 @@
 
 #include "stdCHMngt.h"
 #include "CHEventResult.h"
-#include "CHClassIds.h"
+#include "CHPoolResult.h"
+#include "CHSportDefines.h"
+#include "QCHEventResult.h"
 #include "UCHEventResult.h"
-#include <core/G/GBuffer.h>
+#include <ovr/core/G/GBuffer.h>
 
-RWDEFINE_COLLECTABLE(CHEventResult, __CHEVENTRESULT)
+MSLDEFINE_ITEM(CHEventResult, __CHEVENTRESULT)
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 CHEventResult::CHEventResult()
-:GTHEventResult()
-,qualitative("0")
-,rating(0)
+:GEventResult()
+,m_rating(0)
 {
-}
-
-CHEventResult::CHEventResult(CHInscription *pInsc)
-:GTHEventResult()
-,qualitative("0")
-,rating(0)
-{ 
-	setInscription((GTHInscription *)pInsc); 
+	setQualitative(OK);
 }
 
 CHEventResult::CHEventResult(const CHEventResult & copy)
 {
 	operator=(copy);
-}
-
-CHEventResult::CHEventResult(CPack& aPack)
-{
-	unpack(aPack);
 }
 
 CHEventResult::~CHEventResult()
@@ -65,28 +54,31 @@ CHEventResult::~CHEventResult()
 //////////////////////////////////////////////////////////////////////
 // Operators
 //////////////////////////////////////////////////////////////////////
-CHEventResult & CHEventResult::operator =(const CHEventResult & copy)
+GData & CHEventResult::operator =(const GData & copy)
 {
 	if (this != &copy)
 	{
-		GTHEventResult::operator =(copy);
-		qualitative			= copy.qualitative;
-		rating				= copy.rating;
+		GEventResult::operator =(copy);
+				
+		const CHEventResult & aEventResult=(const CHEventResult &) copy;
+
+		m_rating = aEventResult.m_rating;
 	}
 	return * this;
 }
 
-RWBoolean CHEventResult::operator ==(const CHEventResult & copy)
+bool CHEventResult::operator ==(const GData & copy)
 {
 	if (this == &copy)
 		return true;
-	else
-		return (GTHEventResult::operator ==(copy)		&& 
-				qualitative			== copy.qualitative	&&
-				rating				== copy.rating);
+	
+	const CHEventResult & aEventResult=(const CHEventResult &) copy;
+
+	return (GEventResult::operator ==(copy)		&& 
+			m_rating == aEventResult.m_rating);
 }
 
-RWBoolean CHEventResult::operator !=(const CHEventResult & copy)
+bool CHEventResult::operator !=(const GData & copy)
 {
 	return !operator==(copy);
 }
@@ -95,137 +87,67 @@ RWBoolean CHEventResult::operator !=(const CHEventResult & copy)
 //////////////////////////////////////////////////////////////////////
 // From GData
 //////////////////////////////////////////////////////////////////////
-RWBoolean CHEventResult::uSQL(RWDBConnection& pConnect,RWBoolean remove /*=false*/ )
+
+MSLPack& CHEventResult::pack(MSLPack& aPack) const
 {
-	RWBoolean rc=false;
-
-	UCHEventResult upd(&pConnect);
-
-	if( remove )  rc=upd.remove(*this);
-	else          rc=upd.set   (*this);
-
-	return rc;
-}
-
-CPack& CHEventResult::pack(CPack& aPack)
-{
-	GTHEventResult::pack(aPack);
-	
-	aPack << qualitative;
-	aPack << rating;
+	GEventResult::pack(aPack);
+		
+	aPack << m_rating;
 	
 	return aPack;
 }
 
-CPack& CHEventResult::unpack(CPack& aPack)
+MSLPack& CHEventResult::unpack(MSLPack& aPack)
 {
-	GTHEventResult::unpack(aPack);
-	
-	aPack >> qualitative;
-	aPack >> rating;
+	GEventResult::unpack(aPack);
+		
+	aPack >> m_rating;
 	
 	return aPack;
 }
 
-RWCString CHEventResult::msl() const
+QBase* CHEventResult::onQ() const
 {
-	RWCString str = GTHEventResult::msl();
-
-
-	GBuffer aBuffer;
-
-	//quitamos el otro salto de línea.
-	RWCString cadena=str;
-	char ant[300];
-	char * punt=strstr(cadena,endLine);
-	int lon=cadena.length()-strlen(punt);
-
-	strncpy(ant,cadena,lon); ant[lon]=0;
-
-	return RWCString(ant) +  RWCString (aBuffer		<< qualitative
-													<< rating
-													<< endLine );
+	return new QCHEventResult();
 }
 
-RWCString CHEventResult::mslDescription(const char *language) const
+UBase* CHEventResult::onU() const
 {
-	return GTHEventResult::mslDescription(language);
+	return new UCHEventResult();
 }
-
 
 
 //////////////////////////////////////////////////////////////////////
 // Sets
 //////////////////////////////////////////////////////////////////////
-void CHEventResult::setQualitative(const char * value)
-{ 
-	qualitative=value; 
-}
+
 void CHEventResult::setRating(const short value)
 {
-	rating = value;
+	m_rating = value;
 }
+
 //////////////////////////////////////////////////////////////////////
 // Gets
 //////////////////////////////////////////////////////////////////////
 
-GQualitative * CHEventResult::getQualitative() const
-{
-	return GMemoryDataBase::findQualitative(qualitative);
-}
-
-RWCString CHEventResult::getQualitativeCode() const
-{	
-	return qualitative;
-}
 short CHEventResult::getRating() const
 {
-	return rating;
+	return m_rating;
 }
-RWCString CHEventResult::getRatingAsString() const
+MSLString CHEventResult::getRatingAsString() const
 { 
-	RWCString aux="-";
-	char tmp[10];
-	
-	if (rating)
-		aux=itoa(rating,tmp,10);
+	MSLString aux="-";
+	if (m_rating)
+		aux=TOSTRING(m_rating);
 	return aux; 
 }
-//////////////////////////////////////////////////////////////////////
-// Help Methods
-//////////////////////////////////////////////////////////////////////
-RWCString CHEventResult::getIsoCountry() const
-{
-	return getRegister() ? getRegister()->getIsoCountry() : "";
-}
 
-RWWString CHEventResult::getGroup() const
-{
-	return RWWString(GTHEventResult::getGroup(),RWWString::multiByte);
-}
-
-RWWString CHEventResult::getQualitativeSDescription(const char * language/*=DBApplication::getAppLanguage()*/) const
-{
-	return getQualitative() ? getQualitative()->getSDescription(language) : NULLRWWSTRING;
-}
-
-RWWString CHEventResult::getQualitativeLDescription(const char * language/*=DBApplication::getAppLanguage()*/) const
-{
-	return getQualitative() ? getQualitative()->getLDescription(language) : NULLRWWSTRING;
-}
-
-RWBoolean CHEventResult::isQualitative() const
-{
-	if(getQualitative() && getQualitativeCode()!=OK)
-		return true;
-
-	return false;
-}
 CHPoolResult * CHEventResult::getPoolResult()
 {
-	RWSetIterator iter(CHMemoryDataBase::getColPoolResults());
+	MSLSetIterator iter(CHMemoryDataBase::getCol(__CHPOOLRESULT));
 	
 	CHPoolResult *pPoolResult = 0;
+
 	while ((pPoolResult = (CHPoolResult*) iter())!=0 )
 	{
 		if (pPoolResult->getInscription() == getInscription())
@@ -243,11 +165,11 @@ float CHEventResult::getPointsPoolResult()
 	return 0;
 }
 
-RWCString CHEventResult::getPointsPoolResultStr()
+MSLString CHEventResult::getPointsPoolResultStr()
 {
 	CHPoolResult *pPoolResult=getPoolResult();
 	if(pPoolResult)
 		return pPoolResult->getPointsFStr();
 	
-	return NULLRWSTRING;
+	return NULLSTRING;
 }

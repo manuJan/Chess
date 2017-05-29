@@ -20,45 +20,32 @@
 *                                                                                      
 **************************************************************************************///
 
-#if !defined(AFX_CHPHASE_H__7B990CAF_3853_48C2_9B8A_F6B3C98EEF3F__INCLUDED_)
-#define AFX_CHPHASE_H__7B990CAF_3853_48C2_9B8A_F6B3C98EEF3F__INCLUDED_
-
-#ifndef _CHPhase_H
-#define _CHPhase_H
-#endif 
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include "CHMemoryDataBaseDefs.h"
+#include <OVR/CORE/TH/GTHPhase.h>
 
-#ifndef _CHMNGTMODELDLL_H
-#   include "CHMngtModelDll.h" 
-#endif // _CH_MNGTMODELDLL_H
-
-#include <core/THSP/THSPPhase.h>
-
-
-
-class CHModelExport CHPhase : public THSPPhase  
+class CHMngtModelExport CHPhase : public GTHPhase  
 {
-	RWDECLARE_COLLECTABLE(CHPhase)
+	MSLDECLARE_ITEM(CHPhase)
 	
 
 public:
+
 	CHPhase();
-	CHPhase(const CHPhase& copy);
-	CHPhase(CPack &iPack);
+	CHPhase(const CHPhase& copy);	
 	virtual ~CHPhase();
 
-	CHPhase & operator = (const CHPhase & copy);
-	RWBoolean operator == (const CHPhase & copy);	
-	RWBoolean operator != (const CHPhase & copy);
+	/**** Virtual operators inherited from GData ********************/
+	GData& operator= (const GData& copy);
+	bool   operator==(const GData& copy);
+	bool   operator!=(const GData& copy);
 
-	RWBoolean uSQL(RWDBConnection& pConnect,RWBoolean remove=false);
-	RWCString msl() const;
-	RWCString mslDescription(const char *language) const;
-	CPack &pack(CPack &aPack);
-	CPack &unpack(CPack &aPack);
+	/**** Virtual methods inherited from GData **********************/
+	MSLPack& pack  (MSLPack& pck) const;
+	MSLPack& unpack(MSLPack& pck);
+
+	QBase*			onQ() const;
+	UBase*			onU() const;
 	
 	//set
 	void setTypePhase		(const short value);
@@ -71,13 +58,11 @@ public:
 	// From CHPool
 	short getNumRounds();
 
-	RWBoolean hasCompetitors();
+	bool hasCompetitors();
 	
 
 private:
-	short	typePhase;			//se utiliza para saber el tipo de fase
-	short	idTeamMatchsCnfg;	//se utiliza para poder cambiar el tipo de configuracion de partidos 
+	short	m_typePhase;			//se utiliza para saber el tipo de fase
+	short	m_idTeamMatchsCnfg;		//se utiliza para poder cambiar el tipo de configuracion de partidos 
 			
 };
-
-#endif // !defined(AFX_CHPHASE_H__7B990CAF_3853_48C2_9B8A_F6B3C98EEF3F__INCLUDED_)

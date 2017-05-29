@@ -19,42 +19,35 @@
 *   Changes :                                                                          
 *                                                                                      
 **************************************************************************************///
-#if !defined(AFX_CHTEAMMATCHSCNFG_H__512875F0_1B41_4367_884A_BB130F4B7B49__INCLUDED_)
-#define AFX_CHTEAMMATCHSCNFG_H__512875F0_1B41_4367_884A_BB130F4B7B49__INCLUDED_
 
-#ifndef _CHMNGTMODELDLL_H
-#   include "CHMngtModelDll.h" 
-#endif // _CH_MNGTMODELDLL_H
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include "CHMemoryDataBaseDefs.h"
 
-#include <Core/G/GNames.h>
-#include <Core/G/DBApplication.h>
-
-class CHModelExport CHTeamMatchsCnfg : public GData  
+class CHMngtModelExport CHTeamMatchsCnfg : public GData  
 {
-	RWDECLARE_COLLECTABLE(CHTeamMatchsCnfg)
+	MSLDECLARE_ITEM(CHTeamMatchsCnfg)
+
 	enum cfgMatchType { cfgIndividual=1, cfgDoubles };
+
 public:
+
 	CHTeamMatchsCnfg();
 	CHTeamMatchsCnfg(short code);
-	CHTeamMatchsCnfg(const CHTeamMatchsCnfg & copy);
-	CHTeamMatchsCnfg(CPack& aPack);
+	CHTeamMatchsCnfg(const CHTeamMatchsCnfg & copy);	
 	virtual ~CHTeamMatchsCnfg();
 
-//Operator
-	RWBoolean operator !=(const CHTeamMatchsCnfg & copy);
-	RWBoolean operator ==(const CHTeamMatchsCnfg & copy);
-	CHTeamMatchsCnfg & operator =(const CHTeamMatchsCnfg & copy);
+	/**** Virtual operators inherited from GData ********************/
+	GData& operator= (const GData& copy);
+	bool   operator==(const GData& copy);
+	bool   operator!=(const GData& copy);
+	
+	/**** Virtual methods inherited from GData **********************/
+	MSLPack& pack  (MSLPack& pck) const;
+	MSLPack& unpack(MSLPack& pck);
 
-	void setKey();
-	RWBoolean uSQL(RWDBConnection& pConnect,RWBoolean remove=false);
-	RWCString msl() const;
-	RWCString mslDescription(const char *language) const;
-	CPack& pack(CPack &iPack);
-	CPack& unpack(CPack &iPack);
+	QBase*			onQ() const;
+	UBase*			onU() const;
+	void			setKey();
 
 	//Set
 	void setId(const short value);
@@ -62,31 +55,33 @@ public:
 	void setCompetitors(const short value);
 	void setMatchesType(const char *value);
 	void setCompMatchesDistribution(const char *value);
-	void setDescription(const GNames & description);
+	void setDescriptions(GDescription& desc);
 	void setFAwayC(const char *value);
 
 	//Get
 	short getId() const;
 	short getMatches() const;
 	short getCompetitors() const;
-	RWCString getMatchesType() const;
-	RWCString getCompMatchesDistribution() const;
-	RWSet getNames() const;
+	MSLString getMatchesType() const;
+	MSLString getCompMatchesDistribution() const;
+	GDescriptions&  getDescriptions () const;
 	short getMatchType(short value) const;
 	short getCompOrder(short value,short homeAway,short firstSecond=0) const;
 	short getCompMember(short homeAway) const;
-	RWWString getSDescription(const char *language=DBApplication::getAppLanguage()) const;
-	RWWString getLDescription(const char *language=DBApplication::getAppLanguage()) const;
-	RWCString getFAwayC() const;
+
+	// Class Methods
+	MSLWString getSDescription(const char *lang=0) const;
+	MSLWString getLDescription(const char *lang=0) const;
+
+	MSLString getFAwayC() const;
 
 private:
-	short id;
-	short nMatches;
-	short nCompetitors;
-	RWCString matchesType;
-	RWCString compMatchesDistribution;
-	RWSet names;
-	RWCString fAwayChar;
-};
 
-#endif // !defined(AFX_CHTEAMMATCHSCNFG_H__512875F0_1B41_4367_884A_BB130F4B7B49__INCLUDED_)
+	short m_id;
+	short m_nMatches;
+	short m_nCompetitors;
+	MSLString m_matchesType;
+	MSLString m_compMatchesDistribution;
+	GDescriptions m_desc;
+	MSLString m_fAwayChar;
+};

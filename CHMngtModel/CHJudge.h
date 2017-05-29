@@ -49,23 +49,23 @@ public:
 	CHJudge(GRegister* pRegister);
 	CHJudge(GRegister* pRegister,GFunction * pFunction);
 	CHJudge(const CHJudge & copy);
-	CHJudge(CPack& aPack);
+	CHJudge(MSLPack& aPack);
 	virtual ~CHJudge();
 
 
 	//Operators
-	RWBoolean	operator !=(const CHJudge & copy);
-	RWBoolean	operator ==(const CHJudge & copy);
+	bool	operator !=(const CHJudge & copy);
+	bool	operator ==(const CHJudge & copy);
 	CHJudge&	operator =(const CHJudge & copy);
 
 
 	//From GData
 	void		setKey();
-	RWBoolean	uSQL(RWDBConnection& pConnect,RWBoolean remove=false);
-	CPack&		pack(CPack &iPack);
-	CPack&		unpack(CPack &iPack);
-	RWCString	msl() const;
-	RWCString	mslDescription(const char *language) const;
+	bool	uSQL(RWDBConnection& pConnect,bool remove=false);
+	MSLPack&		pack(MSLPack &iPack);
+	MSLPack&		unpack(MSLPack &iPack);
+	MSLString	msl() const;
+	MSLString	mslDescription(const char *language) const;
 
 	// Sets
 	void		setFunction(GFunction *value);
@@ -77,7 +77,7 @@ public:
 	
 
 	//From GRegister
-	RWWString getGroupLDescription(const char *language=DBApplication::getAppLanguage());
+	MSLWString getGroupLDescription(const char *language=getAppLanguage());
 	GRegister::TypeRegister getType();
 
 private:	

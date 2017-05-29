@@ -20,30 +20,27 @@
 *                                                                                      
 **************************************************************************************///
 
-#if !defined(AFX_UCHMATCHRESULT_H__4A4ECD3F_EB8A_401D_A6D4_A16FCC045809__INCLUDED_)
-#define AFX_UCHMATCHRESULT_H__4A4ECD3F_EB8A_401D_A6D4_A16FCC045809__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include <OVR/CORE/TH/UGTHMatchResult.h>
 
-#include <Core/TH/UGTHMatchResult.h>
-
-class UCHMatchResult : public UGTHMatchResult  
+class UCHMatchResult : public UGTHMatchResult
 {
 public:
-	UCHMatchResult(RWDBConnection *pNewConnection);
-	virtual ~UCHMatchResult();
+	UCHMatchResult()
+		:UGTHMatchResult() 
+	{;}
+	virtual ~UCHMatchResult()
+	{;}
 
 protected:
 	void OnAssignAttributes(GTHMatchResult& aMatchResult);
-	void OnInsert(RWDBInserter& aInserter,GTHMatchResult& aMatchResult);
-	void OnUpdate(RWDBUpdater& aUpdater,RWDBTable& t009matchResult,GTHMatchResult& aMatchResult);
-	void OnDelete(const GTHMatchResult& aMatchResult);
-
+	void OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GTHMatchResult& aMatchResult);
+	void OnUpdate(MSLDBUpdater & aUpdater ,MSLDBTable& table,const GTHMatchResult& aMatchResult);
+	
 private:
+
 	float fPoints;
-	short fSubMatch;	
+
 };
 
-#endif // !defined(AFX_UCHMATCHRESULT_H__4A4ECD3F_EB8A_401D_A6D4_A16FCC045809__INCLUDED_)
+

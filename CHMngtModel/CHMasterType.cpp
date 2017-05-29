@@ -22,10 +22,10 @@
 
 #include "stdCHMngt.h"
 #include "CHMasterType.h"
+#include "QCHMasterType.h"
 #include "UCHMasterType.h"
-#include "CHClassIDs.h"
 
-RWDEFINE_COLLECTABLE(CHMasterType,__CHMASTERTYPE)
+MSLDEFINE_ITEM(CHMasterType,__CHMASTERTYPE)
 
 /////////////////////////////////////////////////////////////////////
 // Constructors & Destructor
@@ -33,120 +33,79 @@ RWDEFINE_COLLECTABLE(CHMasterType,__CHMASTERTYPE)
 
 CHMasterType::CHMasterType()
 :GData()
-,masterType(0)
-,order(0)
-,masterTypeNames()
+,m_masterType(0)
+,m_order(0)
 {
-
+	setKey();
 }
-CHMasterType::CHMasterType(const short id,GNames aNames)
+
+CHMasterType::CHMasterType(const short id)
 :GData()
-,masterType(id)
-,order(0)
-,masterTypeNames()
+,m_masterType(id)
 {
-	setDescription(aNames);
 	setKey();
 }
 
 CHMasterType::CHMasterType(const CHMasterType & copy)
 {
-	copyMasterType(copy);
-	setKey();
+	operator=(copy);
 }
 
-CHMasterType::CHMasterType(CPack & aPack)
-{
-	unpack(aPack);
-	setKey();
-}
 
 CHMasterType::~CHMasterType()
 {
-	masterTypeNames.clearAndDestroy();
 }
 
 //////////////////////////////////////////////////////////////////////
 // Overloaded Operators
 //////////////////////////////////////////////////////////////////////
 
-CHMasterType & CHMasterType::operator = (const CHMasterType & copy)
+GData& CHMasterType::operator= (const GData& copy)
 {
-	copyMasterType(copy);
+	if (this != &copy)
+	{
+		const CHMasterType & distance=(const CHMasterType &) copy;
+
+		m_order		 = distance.m_order;
+		m_masterType = distance.m_masterType; 
+		m_Desc		 = distance.m_Desc;
+	}
 	return *this;
 }
 
-RWBoolean CHMasterType::operator == (const CHMasterType & copy)
+bool   CHMasterType::operator==(const GData& copy)
 {
-	return compareMasterType(copy);
-}
-
-RWBoolean CHMasterType::operator != (const CHMasterType & copy)
-{
-	return !compareMasterType(copy);
-}
-void CHMasterType::copyMasterType(const CHMasterType & copy)
-{
-	if( this == &copy )
-		return;
-
-	masterType = copy.masterType;
-
-	GNames * pNames = 0;
-	masterTypeNames.clearAndDestroy();
-	RWSetIterator it((RWSet &)copy.masterTypeNames);
-	while( (pNames=(GNames *)it())!=0 )
-		masterTypeNames.insert( new GNames(*pNames) );
-}
-
-RWBoolean CHMasterType::compareMasterType(const CHMasterType & copy)
-{
-	if( this == &copy )
+	if (this == &copy)
 		return true;
 
-	if( masterType	!= copy.masterType     ||
-		order		!= copy.order		   ||
-        masterTypeNames != copy.masterTypeNames )
-		return false;
+	const CHMasterType & eventDiscipline=(const CHMasterType &) copy;
 
-	return true;
+	return ( m_order	  == eventDiscipline.m_order		&&
+			 m_masterType == eventDiscipline.m_masterType	&&
+			 m_Desc		  == eventDiscipline.m_Desc);
 }
-//////////////////////////////////////////////////////////////////////
-// SQL Method
-//////////////////////////////////////////////////////////////////////
 
-RWBoolean CHMasterType::uSQL(RWDBConnection & pConnect,RWBoolean remove/*=false*/)
+bool CHMasterType::operator!=(const GData& copy)
 {
-	UCHMasterType upd(&pConnect);
-	return remove ? upd.remove(*this) : upd.set(*this);
+	return !operator==(copy);
 }
-//////////////////////////////////////////////////////////////////////
-// Outputs Methods
-//////////////////////////////////////////////////////////////////////
 
-RWCString CHMasterType::msl() const
+MSLPack& CHMasterType::pack(MSLPack& aPack) const
 {
-	GBuffer aBuffer;
+	aPack << m_order;
+	aPack << m_masterType;
+	aPack << m_Desc;
 	
-	char strMasterType[4];
-	sprintf(strMasterType,"%.3d",masterType);
-
-	return aBuffer << isA()
-				   << getKey()
-				   << strMasterType
-				   << order
-				   << endLine;
+	return aPack;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Key Method
-//////////////////////////////////////////////////////////////////////
-
-void CHMasterType::setKey()
+MSLPack& CHMasterType::unpack(MSLPack& aPack)
 {
-	char tmp[4];
-	sprintf(tmp,"%.3d",masterType);
-	key=tmp;
+	aPack >> m_order;
+	aPack >> m_masterType;
+	aPack >> m_Desc;
+	
+	return aPack;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -155,22 +114,35 @@ void CHMasterType::setKey()
 
 void CHMasterType::setMasterType(const short value)
 {
-	masterType = value;
+	m_masterType = value;
 	setKey();
 }
 
 void CHMasterType::setOrder(const short value)
 {
-	order = value;
+	m_order = value;
 }
 
-void CHMasterType::setDescription(const GNames & description)
+QBase* CHMasterType::onQ() const
 {
-	GNames * pNames = (GNames *)masterTypeNames.find(&description);
-	if( pNames ) 
-		*pNames=description;
-	else 
-		masterTypeNames.insert(new GNames(description));
+	return new QCHMasterType();
+}
+
+UBase* CHMasterType::onU() const
+{
+	return new UCHMasterType();
+}
+
+void CHMasterType::setKey()
+{
+	char tmp[10];
+	sprintf_s(tmp,"%d",m_masterType);
+	key=tmp;	
+}
+
+void CHMasterType::setDescriptions(GDescription & desc)
+{
+	m_Desc.set(desc);	
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -178,77 +150,31 @@ void CHMasterType::setDescription(const GNames & description)
 //////////////////////////////////////////////////////////////////////
 short CHMasterType::getMasterType() const
 { 
-	return masterType; 
+	return m_masterType; 
 }
 
 short CHMasterType::getOrder() const
 {
-	return order;
+	return m_order;
 }
 
-RWSet & CHMasterType::getNames()
+GDescriptions& CHMasterType::getDescriptions() const
 {
-	return masterTypeNames; 
+	return (GDescriptions&)m_Desc;
 }
 
-RWWString CHMasterType::getSDescription(const char * language/*=DBApplication::getAppLanguage()*/) const
+// Class Methods
+MSLWString CHMasterType::getSDescription(const char *lang/*=0*/)  const
 {
-	GNames find;
-	find.setCode(language);
-
-	GNames * pNames = (GNames *)masterTypeNames.find(&find);
-	if( !pNames ) 
-		return NULLRWWSTRING;
-
-	return pNames->getSName();
+	return m_Desc.get(lang,_SNAME);	
 }
 
-RWWString CHMasterType::getLDescription(const char * language/*=DBApplication::getAppLanguage()*/) const
+MSLWString CHMasterType::getLDescription(const char *lang/*=0*/)  const
 {
-	GNames find;
-	find.setCode(language);
-
-	GNames * pNames = (GNames *)masterTypeNames.find(&find);
-	if( !pNames )
-		return NULLRWWSTRING;
-
-	return pNames->getLName();
+	return m_Desc.get(lang,_LNAME);	
 }
 
-//////////////////////////////////////////////////////////////////////
-// Packing Methods
-//////////////////////////////////////////////////////////////////////
 
-CPack & CHMasterType::pack(CPack & aPack)
-{
-	size_t namesEntries = masterTypeNames.entries();
-
-	aPack << masterType;
-	aPack << order;
-	aPack << namesEntries;
-
-	GNames * pNames = 0;
-	RWSetIterator it(masterTypeNames);
-	while( (pNames=(GNames *)it())!=0 )
-		pNames->pack(aPack);
-
-	return aPack;
-}
-
-CPack & CHMasterType::unpack(CPack & aPack)
-{
-	size_t namesEntries = 0;
-	
-	aPack >> masterType;
-	aPack >> order;
-	aPack >> namesEntries;
-
-	masterTypeNames.clearAndDestroy();
-	for(size_t i=0 ; i<namesEntries ; i++)
-		masterTypeNames.insert( new GNames(aPack) );
-
-	return aPack;
-}
 
 
 

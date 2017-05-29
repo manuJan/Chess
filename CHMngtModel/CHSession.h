@@ -35,7 +35,7 @@
 
 class CHModelExport CHSession : public GTHSession  
 {
-	RWDECLARE_COLLECTABLE(CHSession);
+	MSLDECLARE_ITEM(CHSession);
 public:
 
 	//Construction/Destruction

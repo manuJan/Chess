@@ -28,13 +28,13 @@
 #endif // _MSC_VER >= 1000
 
 
-#include <CORE/G/UBase.h>
+#include <OVR/CORE/G/UBase.h>
 
 class UCHPhaseBase : public UBase
 {
 public:
-	inline UCHPhaseBase(RWDBConnection *pNewConnection)
-		:UBase(pNewConnection)
+	inline UCHPhaseBase()
+		:UBase()
 		{;}
 
 	inline virtual ~UCHPhaseBase(){}

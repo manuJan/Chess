@@ -23,14 +23,14 @@
 
 #include "stdCHMngt.h"
 #include "CHPool.h"
-#include "CHClassIds.h"
-#include "CHDiscipline.h"
-#include "UCHPool.h"
-#include <core/G/GBuffer.h>
+#include "CHPoolResult.h"
+#include "CHMatch.h"
+#include "CHDefinition.h"
+#include "CHMemoryDataBase.h"
+#include <ovr/core/G/GBuffer.h>
 
-RWDEFINE_COLLECTABLE(CHPool, __CHPOOL)
-
-
+MSLDEFINE_ITEM(CHPool, __CHPOOL)
+	
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -44,85 +44,10 @@ CHPool::CHPool(const CHPool & copy)
 	operator=(copy);
 }
 
-CHPool::CHPool(CPack& aPack)
-{
-	unpack(aPack);
-}
-
 CHPool::~CHPool()
 {
 }
 
-
-//////////////////////////////////////////////////////////////////////
-// Operators
-//////////////////////////////////////////////////////////////////////
-CHPool & CHPool::operator =(const CHPool & copy)
-{
-	if (this != &copy)
-	{
-		GTHPool::operator =(copy);
-	}
-	return * this;
-}
-
-RWBoolean CHPool::operator ==(const CHPool & copy)
-{
-	if (this == &copy)
-		return true;
-	else
-		return (GTHPool::operator ==(copy));
-}
-
-RWBoolean CHPool::operator !=(const CHPool & copy)
-{
-	return !operator==(copy);
-}
-
-
-//////////////////////////////////////////////////////////////////////
-// From GData
-//////////////////////////////////////////////////////////////////////
-RWBoolean CHPool::uSQL(RWDBConnection& pConnect,RWBoolean remove /*=false*/ )
-{
-	RWBoolean rc=false;
-
-	UCHPool upd(&pConnect);
-
-	if( remove )  rc=upd.remove(*this);
-	else          rc=upd.set   (*this);
-
-	return rc;
-}
-
-CPack& CHPool::pack(CPack& aPack)
-{
-	GTHPool::pack(aPack);
-	
-
-	return aPack;
-}
-
-CPack& CHPool::unpack(CPack& aPack)
-{
-	GTHPool::unpack(aPack);
-
-	return aPack;
-}
-
-RWCString CHPool::msl() const
-{
-	RWCString str = GTHPool::msl();
-
-	GBuffer aBuffer;
-
-	return str +  RWCString (aBuffer << endLine );
-}
-
-RWCString CHPool::mslDescription(const char *language) const
-{
-	return GTHPool::mslDescription(language);
-}
 
 //////////////////////////////////////////////////////////////////////
 // Help Methods
@@ -133,39 +58,40 @@ GTHPhase::DescriptionMode CHPool::getDescriptionMode() const
 	return getPhase() ? getPhase()->getPoolDescription() : GTHPhase::eNumeric;
 }
 
-RWWString CHPool::getOrderAsString(GTHPhase::DescriptionMode mode/*=GTHPhase::eNumeric*/) const
+MSLWString CHPool::getOrderAsString(GTHPhase::DescriptionMode mode/*=GTHPhase::eNumeric*/) const
 {
 	wchar_t txt[200];
 
 	if( mode == GTHPhase::eNumeric )
-		swprintf(txt,_T("%d"),getOrder());
+		swprintf_s(txt,_T("%d"),getOrder());
 	else
 	{
-		swprintf(txt,_T("%c"),(getOrder()-1)+'A');
+		swprintf_s(txt,_T("%c"),(getOrder()-1)+'A');
 	}
 
 	return txt;
 }
-RWWString CHPool::getDescription(GTHPhase::DescriptionMode mode/*=DescriptionMode::eNumber*/,const char *language/*=DBApplication::getAppLanguage()*/) const
-{
-	RWWString desc(NULLRWWSTRING);
-	wchar_t tmp[20];
 
+MSLWString CHPool::getDescription(GTHPhase::DescriptionMode mode/*=DescriptionMode::eNumber*/,const char *language/*=getAppLanguage()*/) const
+{
+	MSLWString desc(NULLWSTRING);
+
+	CHDefinition &aDefinition = (CHDefinition &)CHMemoryDataBase::getDefinition();	
 	if( getPhase()->getIsPool() )
-	{
-		desc=((CHDiscipline &)CHMemoryDataBase::getDiscipline()).getSPoolDescription(language)+RWWString(' ');
+	{					
+		desc=aDefinition.getSPoolDescription(language)+MSLWString(' ');
 		if( mode==GTHPhase::eNumeric )
-			desc+=_itow(getOrder(),tmp,10);
+			desc+=TOWSTRING(getOrder());
 		else
 		{
 			char car=char((getOrder()-1)+'A');
-			desc+=RWWString(car);
+			desc+=MSLWString(car);
 		}
 	}
 	else
 	{
-		desc=((CHDiscipline &)CHMemoryDataBase::getDiscipline()).getSMatchDescription(language)+RWWString(' ');
-		desc+=_itow(getOrder(),tmp,10);
+		desc=aDefinition.getSMatchDescription(language)+MSLWString(' ');
+		desc+=TOWSTRING(getOrder());
 	}
 
 	return desc;
@@ -174,31 +100,30 @@ RWWString CHPool::getDescription(GTHPhase::DescriptionMode mode/*=DescriptionMod
 	UNREFERENCED_PARAMETER(language);
 }
 
-RWWString CHPool::getSDescription(GTHPhase::DescriptionMode mode/*=GTHPhase::eNumeric*/,const char *language/*=DBApplication::getAppLanguage()*/) const
+MSLWString CHPool::getSDescription(GTHPhase::DescriptionMode mode/*=GTHPhase::eNumeric*/,const char *language/*=getAppLanguage()*/) const
 {
 	UNREFERENCED_PARAMETER(language);
-	RWWString desc(NULLRWWSTRING);
-	wchar_t tmp[20];
+	MSLWString desc(NULLWSTRING);
 
 	if( getPhase()->getIsPool() )
 	{
 		if( mode==GTHPhase::eNumeric )
-			desc+=_itow(getOrder(),tmp,10);
+			desc+=TOWSTRING(getOrder());
 		else
 		{
 			char car=char((getOrder()-1)+'A');
-			desc+=RWWString(car);
+			desc+=MSLWString(car);
 		}
 	}
 	else
 	{
-		desc+=_itow(getOrder(),tmp,10);
+		desc+=TOWSTRING(getOrder());
 	}
 
 	return desc;
 }
 
-RWWString CHPool::getLDescription(GTHPhase::DescriptionMode mode/*=GTHPhase::eNumeric*/,const char *language/*=DBApplication::getAppLanguage()*/) const
+MSLWString CHPool::getLDescription(GTHPhase::DescriptionMode mode/*=GTHPhase::eNumeric*/,const char *language/*=getAppLanguage()*/) const
 {
 	return getDescription(mode,language);
 	
@@ -210,9 +135,11 @@ unsigned char CHPool::getRoundStatus(short nRound)
 	unsigned char actualStatus=CHMemoryDataBase::eAvailable;
 	size_t totMatches=getRoundMatches(nRound);
 	CHMatch* pMatch=0;
-	for (size_t i=0;i<getMatchsVector().entries();i++)
+	MSLSortedVector vMatches;
+	getMatchesVector(vMatches);
+	for (short i=0;i<vMatches.entries();i++)
 	{
-		pMatch = (CHMatch*) getMatchsVector()[i]->getElement();
+		pMatch = (CHMatch*) vMatches[i];
 		if (pMatch->areTeamIndividual())
 			continue;
 		if (pMatch->getRound()==nRound)
@@ -279,7 +206,7 @@ unsigned char CHPool::getRoundStatus(short nRound)
 short CHPool::getNumRoundsPlayed()
 {
 	short nRounds=0;
-	for (size_t i=1;i<=getNumRounds();i++)
+	for (short i=1;i<=getNumRounds();i++)
 	{
 		if (getRoundStatus(i)==CHMemoryDataBase::eFinished)
 			nRounds++;
@@ -293,9 +220,11 @@ short CHPool::getRoundMatches(short nRound)
 {
 	short count=0;
 	CHMatch* pMatch=0;
-	for (size_t i=0;i<getMatchsVector().entries();i++)
+	MSLSortedVector vMatches;
+	getMatchesVector(vMatches);
+	for (short i=0;i<vMatches.entries();i++)
 	{
-		pMatch = (CHMatch*) getMatchsVector()[i]->getElement();
+		pMatch = (CHMatch*) vMatches[i];
 		if (pMatch->getRound()==nRound && pMatch->getSubMatch()==0)
 			count++;
 	}
@@ -306,7 +235,7 @@ bool CHPool::hasCompatibleColors(CHPoolResult* pPR1,CHPoolResult* pPR2, short ro
 {
 	if (pPR1 &&
 		pPR1->getEvent() &&
-		pPR1->getEvent()->isTeam())
+		pPR1->isTeamEvent())
 		return true;
 
 	CHMatchResult::colorPreference color1 = pPR1->getColorPreference(round);
@@ -323,12 +252,14 @@ bool CHPool::hasCompatibleColors(CHPoolResult* pPR1,CHPoolResult* pPR2, short ro
 	return true;
 }
 
-RWBoolean CHPool::hasCompetitors()
+bool CHPool::hasCompetitors()
 {	
 	CHPoolResult* pPoolResult=0;
-	for (size_t j=0; j<getPoolResultsVector().entries(); j++)
+	MSLSortedVector vPools;
+	getPoolResultsVector(vPools);
+	for (short j=0; j<vPools.entries(); j++)
 	{
-		pPoolResult=(CHPoolResult*)(getPoolResultsVector()[j]->getElement());
+		pPoolResult=(CHPoolResult*)(vPools[j]);
 		if (!pPoolResult->getRegister())
 			return false;
 	}

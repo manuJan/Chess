@@ -23,116 +23,163 @@
 #include "stdCHMngt.h"
 #include "CHMasterType.h"
 #include "UCHMasterType.h"
+#include "CHMemoryDataBaseDefs.h"
 
-void UCHMasterType::assignAtributes(CHMasterType& aMasterType)
+void UCHMasterType::assignAttributes(CHMasterType& aMasterType)
 {
+	masterType = aMasterType.getMasterType();
 	order = aMasterType.getOrder();
 	nullorder=true;
+
 	if (order!=0)
 		nullorder=false;
 }
 
-RWBoolean UCHMasterType::insert(RWDBConnection& aConnection,GData& aData)
+bool UCHMasterType::insert(GData& aData)
 {
 	CHMasterType& aMasterType=(CHMasterType&)aData;
 
-	RWDBTable masterTypeTable      = DBApplication::getTable("CHT064_MASTER_TYPE");
-	RWDBTable masterTypeNamesTable = DBApplication::getTable("CHT564_MASTER_TYPE");
+	MSLDBTable masterTypeTable      = getTable(CHT_MASTER_TYPE);
+	MSLDBTable masterTypeNamesTable = getTable(CHT_MASTER_TYPEL);
 
-	RWDBInserter inserter = masterTypeTable.inserter();	
+	MSLDBInserter inserter = masterTypeTable.inserter();	
 
-	inserter["MASTER_TYPE"] << aMasterType.getMasterType();
-	inserter["NORDER"]		<< RWDBBoundExpr(&order,&nullorder);
+	inserter << masterTypeTable["MASTER_TYPE"]	.assign(aMasterType.getMasterType());
+	inserter << masterTypeTable["NORDER"]		.assign(order,&nullorder);
 
-	RWDBResult aResult = inserter.execute(aConnection);
-	aResult.table();
+	long count=inserter.execute();
+	if( count>0L )
+		count += OnInsertLang(masterTypeNamesTable,aMasterType);
 
-	if( aResult.rowCount()>0L )
-	{	
-		inserter = masterTypeNamesTable.inserter();
-
-		GNames * pNames = 0;
-		RWSetIterator iter(aMasterType.getNames());
-		while((pNames=(GNames *)iter())!=0)
-		{
-			if( pNames )
-			{
-				inserter["MASTER_TYPE"]		<< aMasterType.getMasterType();
-				inserter["IDLANGUAGE"]		<< pNames->getCode();
-				inserter["LDESCRIPTION"]    << pNames->getLName();
-				inserter["SDESCRIPTION"]    << pNames->getSName();
-
-				aResult = inserter.execute(aConnection);
-			}
-		}
-	}
-
-	aResult.table();
-	return aResult.rowCount()>0L;
+	return count>0L;
 }
 
-RWBoolean UCHMasterType::update(RWDBConnection& aConnection,GData& aData)
+long UCHMasterType::OnInsertLang(MSLDBTable& table,const CHMasterType& aMasterType)
+{
+	long count=0L;
+	GLanguage *pLang=0;		
+	MSLSetIterator it(GMemoryDataBase::getCol(__GLANGUAGE));		
+	while( (pLang=(GLanguage *)it())!=0 )
+	{
+		if( pLang->getActiveFlag()!=0 && assignNames(aMasterType,pLang->get()) )
+			count+=insertLang(table);
+	}
+	return count;
+}
+
+long UCHMasterType::insertLang(MSLDBTable& table)
+{
+	MSLDBInserter inserterName=table.inserter();
+	inserterName << table["MASTER_TYPE"]	.assign(masterType);
+	inserterName << table["IDLANGUAGE"]		.assign(lang);
+	inserterName << table["SDESCRIPTION"]	.assign(fsDescription,&nullSDescription);
+	inserterName << table["LDESCRIPTION"]	.assign(flDescription,&nullLDescription);
+	return inserterName.execute();
+}
+
+bool UCHMasterType::assignNames(const CHMasterType& aMasterType, const char *language)
+{
+	GDescription &desc=aMasterType.getDescriptions()[language];	
+
+	lang		= language;
+	flDescription	= desc[_LNAME];		nullLDescription	= (flDescription	== L"");
+	fsDescription	= desc[_SNAME];		nullSDescription	= (fsDescription	== L"");
+	
+	return true;
+}
+
+bool UCHMasterType::update(GData& aData)
 {
 	CHMasterType& aMasterType=(CHMasterType&)aData;
 
-	RWDBTable table = DBApplication::getTable("CHT064_MASTER_TYPE");
-	RWDBTable masterTypeNamesTable = DBApplication::getTable("CHT564_MASTER_TYPE");
+	MSLDBTable table = getTable(CHT_MASTER_TYPE);
+	MSLDBTable masterTypeNamesTable = getTable(CHT_MASTER_TYPEL);
 
-	RWDBUpdater updater = table.updater();	
+	MSLDBUpdater updater = table.updater();	
 
-	assignAtributes(aMasterType);
+	assignAttributes(aMasterType);
+
 	updater.where(table["MASTER_TYPE"]   == aMasterType.getMasterType());
 
-	updater << table["NORDER"].assign(RWDBBoundExpr(&order,&nullorder));
+	updater << table["NORDER"].assign(order,&nullorder);
 
-	RWDBResult aResult=updater.execute(aConnection);
-	aResult.table();
+	long count=updater.execute();
 
-	if (aResult.rowCount()>0L)
-	{
-		updater = masterTypeNamesTable.updater();
-		GNames * pNames = 0;
-		RWSetIterator iter(aMasterType.getNames());
-		while((pNames=(GNames *)iter())!=0)
-		{
-			if( pNames )
-			{
-				updater.where(  masterTypeNamesTable["MASTER_TYPE"]  == aMasterType.getMasterType() &&
-								masterTypeNamesTable["IDLANGUAGE"]	 == pNames->getCode() );
+	if( count>0L )
+		count += OnUpdateLang(masterTypeNamesTable,aMasterType);
 
-				updater << masterTypeNamesTable["LDESCRIPTION"].assign( pNames->getLName() );
-				updater << masterTypeNamesTable["SDESCRIPTION"].assign( pNames->getSName() );
-
-				RWDBResult aResult = updater.execute(aConnection);
-				aResult.table();				
-			}
-		}
-	}
-
-	return aResult.rowCount()>0L;
+	return count>0;	
 }
 
-RWBoolean UCHMasterType::delete_(RWDBConnection& aConnection,GData& aData)
+long UCHMasterType::updateLang(MSLDBTable& table)
+{
+	MSLDBUpdater updaterName=table.updater();
+	updaterName.where(	table["MASTER_TYPE"]	== masterType			&&
+						table["IDLANGUAGE"]		== lang);
+	
+	updaterName << table["SDESCRIPTION"]	.assign(fsDescription,&nullSDescription);
+	updaterName << table["LDESCRIPTION"]	.assign(flDescription,&nullLDescription);
+
+	return updaterName.execute();
+}
+
+long UCHMasterType::OnUpdateLang(MSLDBTable& table,const CHMasterType& aMasterType)
+{
+	long count=0L,countLang=0L;
+	GLanguage *pLang=0;		
+	MSLSetIterator it(GMemoryDataBase::getCol(__GLANGUAGE));		
+	while( (pLang=(GLanguage *)it())!=0 )
+	{
+		if( pLang->getActiveFlag()!=0 && assignNames(aMasterType, pLang->get()) )
+		{
+			countLang=updateLang(table);
+			if( !countLang )
+				countLang=insertLang(table);
+			count+=countLang;
+		}
+	}
+	return count;
+}
+
+bool UCHMasterType::delete_(GData& aData)
 {
 	CHMasterType& aMasterType=(CHMasterType&)aData;
 
-	RWDBTable masterTypeTable      = DBApplication::getTable("CHT064_MASTER_TYPE");
-	RWDBTable masterTypeNamesTable = DBApplication::getTable("CHT564_MASTER_TYPE");
+	assignAttributes(aMasterType);
 
-	RWDBDeleter deleter = masterTypeNamesTable.deleter();
-	deleter.where( masterTypeNamesTable["MASTER_TYPE"] == aMasterType.getMasterType() );
+	MSLDBTable tableNames	= getTable(CHT_MASTER_TYPEL);
+	OnDeleteLang(tableNames, aMasterType);
+		
+	MSLDBTable table	= getTable(CHT_MASTER_TYPE);
+	MSLDBCriterion aWhere =	table["MASTER_TYPE"]==masterType;
 
-	RWDBResult aResult = deleter.execute(aConnection);
-	aResult.table();
-
-	if( aResult.rowCount()>0L )
-	{
-		deleter = masterTypeTable.deleter();
-		deleter.where( masterTypeTable["MASTER_TYPE"] == aMasterType.getMasterType() );
-
-		aResult = deleter.execute(aConnection);
-		aResult.table();
-	}
-
-	return aResult.rowCount()!=-1L;
+	MSLDBDeleter deleter=table.deleter();
+	deleter.where(aWhere);
+		
+	return deleter.execute()!=-1;
 }
+
+void UCHMasterType::OnDeleteLang(MSLDBTable& table,const CHMasterType& aMasterType)
+{
+	GLanguage *pLang=0;		
+	MSLSetIterator it(GMemoryDataBase::getCol(__GLANGUAGE));		
+	while( (pLang=(GLanguage *)it())!=0 )
+	{
+		if( assignNames(aMasterType,pLang->get()) )
+		{
+			deleteLang(table);
+		}
+	}
+}
+
+void UCHMasterType::deleteLang(MSLDBTable& table)
+{
+	MSLDBDeleter deleterName=table.deleter();
+	deleterName.where(	table["MASTER_TYPE"]	== masterType &&
+						table["IDLANGUAGE"]		== lang);
+
+	deleterName.execute();
+}
+
+
+	

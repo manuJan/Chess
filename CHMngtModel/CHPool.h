@@ -21,61 +21,37 @@
 **************************************************************************************///
 
 
-#ifndef _CHPool_H
-#define _CHPool_H
-
-#if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#include "CHMemoryDataBaseDefs.h"
+#include <OVR/CORE/TH/GTHPool.h>
+#include <OVR/CORE/TH/GTHPhase.h>
 
-#ifndef _CHMNGTMODELDLL_H
-#   include "CHMngtModelDll.h" 
-#endif // _CH_MNGTMODELDLL_H
+class CHPoolResult;
 
-#include <core/TH/GTHPool.h>
-
-
-class CHModelExport CHPool : public GTHPool
+class CHMngtModelExport CHPool : public GTHPool
 {
 
-	RWDECLARE_COLLECTABLE(CHPool)
+	MSLDECLARE_ITEM(CHPool)
 
 public:
 
 	//Construction/Destruction
 	CHPool();
-	CHPool(const CHPool & copy);
-	CHPool(CPack& aPack);
+	CHPool(const CHPool & copy);	
 	virtual ~CHPool();
-
-
-	//Operators
-	RWBoolean	operator !=(const CHPool & copy);
-	RWBoolean	operator ==(const CHPool & copy);
-	CHPool&		operator =(const CHPool & copy);
-
-
-	//From GData
-	RWBoolean	uSQL(RWDBConnection& pConnect,RWBoolean remove=false);
-	CPack&		pack(CPack &iPack);
-	CPack&		unpack(CPack &iPack);
-	RWCString	msl() const;
-	RWCString	mslDescription(const char *language) const;
-
-
+		
 	// Help Methods
 	GTHPhase::DescriptionMode	getDescriptionMode() const;
-	RWWString					getOrderAsString(GTHPhase::DescriptionMode mode=GTHPhase::eNumeric) const;
+	MSLWString					getOrderAsString(GTHPhase::DescriptionMode mode=GTHPhase::eNumeric) const;
 
-	RWWString getDescription(GTHPhase::DescriptionMode mode=GTHPhase::eNumeric,const char *language=DBApplication::getAppLanguage()) const;
-	RWWString getSDescription(GTHPhase::DescriptionMode mode=GTHPhase::eText,const char *language=DBApplication::getAppLanguage()) const;
-	RWWString getLDescription(GTHPhase::DescriptionMode mode=GTHPhase::eText,const char *language=DBApplication::getAppLanguage()) const;
+	MSLWString getDescription(GTHPhase::DescriptionMode mode= GTHPhase::eNumeric,const char *language=0) const;
+	MSLWString getSDescription(GTHPhase::DescriptionMode mode= GTHPhase::eText,const char *language=0) const;
+	MSLWString getLDescription(GTHPhase::DescriptionMode mode= GTHPhase::eText,const char *language=0) const;
+
 	unsigned char getRoundStatus(short nRound);
 	short getRoundMatches(short nRound);
 	short getNumRoundsPlayed();
 
-	bool		hasCompatibleColors(CHPoolResult* pPR1,CHPoolResult* pPR2, short round);
-	RWBoolean	hasCompetitors();
+	bool	hasCompatibleColors(CHPoolResult* pPR1,CHPoolResult* pPR2, short round);
+	bool	hasCompetitors();
 };
-
-#endif //!defined(AFX_CHPool_H)

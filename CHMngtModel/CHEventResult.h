@@ -21,79 +21,52 @@
 **************************************************************************************///
 
 
-#ifndef _CHEventResult_H
-#define _CHEventResult_H
-
-#if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-
-#ifndef _CHMNGTMODELDLL_H
-#   include "CHMngtModelDll.h" 
-#endif // _CH_MNGTMODELDLL_H
-
-#include <Core\TH\GTHEventResult.h>
+#include "CHMemoryDataBaseDefs.h"
+#include <OVR/CORE/G/GEventResult.h>
 
 class CHInscription;
 class CHPoolResult;
 
-class CHModelExport CHEventResult : public GTHEventResult
+class CHMngtModelExport CHEventResult : public GEventResult
 {
-
-	RWDECLARE_COLLECTABLE(CHEventResult)
+	MSLDECLARE_ITEM(CHEventResult)
 
 public:
 
 	//Construction/Destruction
-	CHEventResult();
-	CHEventResult(CHInscription *pInsc);
-	CHEventResult(const CHEventResult & copy);
-	CHEventResult(CPack& aPack);
+	CHEventResult();	
+	CHEventResult(const CHEventResult & copy);	
 	virtual ~CHEventResult();
+	
+	/**** Virtual operators inherited from GData ********************/
+	GData& operator= (const GData& copy);
+	bool   operator==(const GData& copy);
+	bool   operator!=(const GData& copy);
 
+	/**** Virtual methods inherited from GData **********************/
+	MSLPack& pack  (MSLPack& pck) const;
+	MSLPack& unpack(MSLPack& pck);
 
-	//Operators
-	RWBoolean		operator !=(const CHEventResult & copy);
-	RWBoolean		operator ==(const CHEventResult & copy);
-	CHEventResult&	operator =(const CHEventResult & copy);
-
-
-	//From GData
-	RWBoolean		uSQL(RWDBConnection& pConnect,RWBoolean remove=false);
-	CPack&			pack(CPack &iPack);
-	CPack&			unpack(CPack &iPack);
-	RWCString		msl() const;
-	RWCString		mslDescription(const char *language) const;
-
+	QBase*			onQ() const;
+	UBase*			onU() const;
 
 	//Sets
-	void			setQualitative(const char * value);
 	void			setRating(const short value);
 	
-
 	//Gets
-	GQualitative*	getQualitative() const;
-	RWCString		getQualitativeCode() const;
 	short			getRating() const;
-	RWCString		getRatingAsString() const;
-
-	RWCString		getIsoCountry() const;
-	RWWString		getGroup() const;
-	RWWString		getQualitativeSDescription(const char * language=DBApplication::getAppLanguage()) const;
-	RWWString		getQualitativeLDescription(const char * language=DBApplication::getAppLanguage()) const;
-
-	RWBoolean		isQualitative() const;
+	
+	MSLString		getRatingAsString() const;
 
 	// From CHPoolResult
 	CHPoolResult *	getPoolResult();
 	float			getPointsPoolResult();
-	RWCString		getPointsPoolResultStr();
+	MSLString		getPointsPoolResultStr();
 
 private:	
-	
-	RWCString		qualitative;
-	short			rating;		// Rating con el que acaba la competicion
+		
+	short			m_rating;		// Rating con el que acaba la competicion
 
 };
 
-#endif //!defined(AFX_CHEventResult_H)

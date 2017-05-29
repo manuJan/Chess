@@ -27,48 +27,29 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-UCHMatchResult::UCHMatchResult(RWDBConnection *pNewConnection)
-:UGTHMatchResult(pNewConnection)
-,fPoints(0)
-,fSubMatch(0)
-{
-}
-
-UCHMatchResult::~UCHMatchResult()
-{
-}
-
 void UCHMatchResult::OnAssignAttributes(GTHMatchResult& aMatchResult)
 {
 	CHMatchResult *pMatchResult=(CHMatchResult *)&aMatchResult;
 			
-	fPoints					= pMatchResult->getPoints();
-	fSubMatch				= pMatchResult->getSubMatch();
+	fPoints	= pMatchResult->getPoints();
 }
 
-void UCHMatchResult::OnInsert(RWDBInserter& aInserter,GTHMatchResult& aMatchResult)
+void UCHMatchResult::OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GTHMatchResult& aMatchResult)
 {
 	CHMatchResult *pMatchResult=(CHMatchResult *)&aMatchResult;
 
-	aInserter["POINTS"]				<< fPoints;
-	aInserter["IDSUBMATCH"]			<< fSubMatch;
-	aInserter["UPFLOATER"]			<< pMatchResult->getUpFloater();
-	aInserter["DOWNFLOATER"]		<< pMatchResult->getDownFloater();
-	aInserter["COLOR"]				<< pMatchResult->getColor();
+	aInserter << table["POINTS_F"]			.assign(fPoints);	
+	aInserter << table["UPFLOATER"]			.assign(pMatchResult->getUpFloater());
+	aInserter << table["DOWNFLOATER"]		.assign(pMatchResult->getDownFloater());
+	aInserter << table["COLOR"]				.assign(pMatchResult->getColor());
 }
 
-void UCHMatchResult::OnUpdate(RWDBUpdater& aUpdater,RWDBTable& t009matchResult,GTHMatchResult& aMatchResult)
+void UCHMatchResult::OnUpdate(MSLDBUpdater & aUpdater ,MSLDBTable& table,const GTHMatchResult& aMatchResult)
 {
 	CHMatchResult *pMatchResult=(CHMatchResult *)&aMatchResult;
 
-	aUpdater << t009matchResult["POINTS"]			.assign(fPoints);
-	aUpdater << t009matchResult["IDSUBMATCH"]		.assign(fSubMatch);
-	aUpdater << t009matchResult["UPFLOATER"]		.assign(pMatchResult->getUpFloater());
-	aUpdater << t009matchResult["DOWNFLOATER"]		.assign(pMatchResult->getDownFloater());
-	aUpdater << t009matchResult["COLOR"]			.assign(pMatchResult->getColor());
-}
-
-void UCHMatchResult::OnDelete(const GTHMatchResult& aMatchResult)
-{
-	UNREFERENCED_PARAMETER(aMatchResult);
+	aUpdater << table["POINTS_F"]		.assign(fPoints);	
+	aUpdater << table["UPFLOATER"]		.assign(pMatchResult->getUpFloater());
+	aUpdater << table["DOWNFLOATER"]	.assign(pMatchResult->getDownFloater());
+	aUpdater << table["COLOR"]			.assign(pMatchResult->getColor());
 }

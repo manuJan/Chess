@@ -27,42 +27,29 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-UCHMember::UCHMember(RWDBConnection *pNewConnection)
-:UMember(pNewConnection)
-{
-}
-
-UCHMember::~UCHMember()
-{
-}
 
 void UCHMember::OnAssignAttributes(const GMember& aMember)
 {
-	UMember::OnAssignAttributes(aMember);
-
 	function		= ((CHMember &)aMember).getFunction();
 	nullRating		= ((rating = ((CHMember&)aMember).getRating())== 0);
 	nullKConst		= ((kConst = ((CHMember&)aMember).getKConst())== 0);
 }
-void UCHMember::OnInsert(RWDBInserter& aInsert,const GMember& aMember)
-{
-	UMember::OnInsert(aInsert,aMember);
 
-	aInsert["IDFUNCTION"]	<< function;
-	aInsert["RATING"]		<< RWDBBoundExpr(&rating,&nullRating);
-	aInsert["KCONST"]		<< RWDBBoundExpr(&kConst,&nullKConst);
+void UCHMember::OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GMember& aMember)
+{
+	aInserter << table["IDFUNCTION"]	.assign(function);
+	aInserter << table["RATING"]		.assign(rating,&nullRating);
+	aInserter << table["KCONST"]		.assign(kConst,&nullKConst);
+
+	UNREFERENCED_PARAMETER(aMember);
 }
 
-void UCHMember::OnUpdate(RWDBUpdater& aUpdate,RWDBTable& table,const GMember& aMember)
+void UCHMember::OnUpdate(MSLDBUpdater & aUpdater ,MSLDBTable& table,const GMember& aMember)
 {
-	UMember::OnUpdate(aUpdate,table,aMember);
+	aUpdater << table["IDFUNCTION"].assign(function);
+	aUpdater << table["RATING"].assign(rating,&nullRating);
+	aUpdater << table["KCONST"].assign(kConst,&nullKConst);
 
-	aUpdate << table["IDFUNCTION"].assign(function);
-	aUpdate << table["RATING"].assign(RWDBBoundExpr(&rating,&nullRating));
-	aUpdate << table["KCONST"].assign(RWDBBoundExpr(&kConst,&nullKConst));
+	UNREFERENCED_PARAMETER(aMember);
 }
 
-void UCHMember::OnDelete(RWDBDeleter& aDelete,RWDBTable& table,const GMember& aMember)
-{
-	UMember::OnDelete(aDelete,table,aMember);
-}

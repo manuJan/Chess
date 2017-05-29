@@ -20,33 +20,21 @@
 *                                                                                      
 **************************************************************************************///
 
-
-#ifndef _QCHPoolResult_H
-#define _QCHPoolResult_H
-
-#if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#include <OVR/CORE/TH/QGTHPoolResult.h>
 
-#include <core/G/QBase.h>
-#include <core/TH/QGTHPoolResult.h>
-
-#include "CHPoolResult.h"
-
-
-class CHModelExport QCHPoolResult : public QGTHPoolResult
+class QCHPoolResult : public QGTHPoolResult
 {
 public:
-	QCHPoolResult(RWDBConnection *pNewConnection)
-	:QGTHPoolResult(pNewConnection)
-	{;}
-
-	virtual ~QCHPoolResult() {;}
+	QCHPoolResult()
+        :QGTHPoolResult()
+	{};
+	virtual ~QCHPoolResult()
+    {};
 
 protected:
-	void OnSelect(RWDBSelector& aSelect,RWDBTable& table);
-	void OnReader(RWDBReader& aReader,GTHPoolResult *pPoolResult);
-	GTHPoolResult * OnNewPoolResult();
+
+	void OnSelect(MSLDBSelector& aSelect, MSLDBTable& tPoolResult);
+	void OnReader(MSLDBReader& aReader, GTHPoolResult *pPoolResult);
 };
 
-#endif //!defined(AFX_QCHPoolResult_H)

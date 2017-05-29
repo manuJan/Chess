@@ -22,27 +22,23 @@
 
 #include "stdCHMngt.h"
 #include "CHRegister.h"
-#include "CHClassIds.h"
+#include "QCHRegister.h"
 #include "UCHRegister.h"
 #include "CHMasterType.h"
 #include "CHMemoryDataBase.h"
 
-#include <CORE/G/GBuffer.h>
-#include <CORE/G/GClassIDs.h>
-RWDEFINE_COLLECTABLE(CHRegister, __CHREGISTER);
+#include <ovr/core/G/GBuffer.h>
+
+
+MSLDEFINE_ITEM(CHRegister, __CHREGISTER);
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
 CHRegister::CHRegister()
 :GRegister()
-,masterType(0)
-{
-}
-
-CHRegister::CHRegister(const GRegister &copy)
-:GRegister(copy)
-,masterType(0)
+,m_masterType(0)
 {
 }
 
@@ -51,107 +47,92 @@ CHRegister::CHRegister(const CHRegister &copy)
 	operator=(copy);
 }
 
-CHRegister::CHRegister(CPack &iPack)
-{
-	unpack(iPack);
-}
-
 CHRegister::~CHRegister()
 {
 }
 //operator
-GRegister& CHRegister::operator =(const GRegister& copy)
+GData& CHRegister::operator =(const GData& copy)
 {
 	CHRegister& aCopy=(CHRegister&)copy;
-	UNREFERENCED_PARAMETER(aCopy);
+	
 	if ( this != &copy )
 	{
 		GRegister::operator = (copy);
-		masterType=aCopy.masterType;
+	
+		m_masterType=aCopy.m_masterType;
 	}	
+
 	return *this;
 }
 
-RWBoolean CHRegister::operator ==(const GRegister& copy)
+bool CHRegister::operator ==(const GData& copy)
 {
 	CHRegister& aCopy=(CHRegister&)copy;
-	UNREFERENCED_PARAMETER(aCopy);
+
 	if ( this == &copy )
 		return true;
 
 	if( GRegister::operator ==(copy) )
-	{
-		return masterType==aCopy.masterType;
-	}
+		return m_masterType==aCopy.m_masterType;
 
 	return false;
 }
 
-RWBoolean CHRegister::operator !=(const GRegister& copy)
+bool CHRegister::operator !=(const GData& copy)
 {
 	return !operator==(copy);
 }
 
-RWBoolean CHRegister::uSQL(RWDBConnection& pConnect,RWBoolean remove/*=false*/)
+QBase* CHRegister::onQ() const
 {
-	RWBoolean rc=false;
-	UCHRegister upd(&pConnect);
-	if(remove )
-		rc=upd.remove(*this);
-	else
-		rc=upd.set(*this);
-	return rc;
+	return new QCHRegister();
 }
 
-RWCString CHRegister::msl() const
+UBase* CHRegister::onU() const
 {
-	RWCString str = GRegister::msl();
-	if(!str.length() || str == NULLRWSTRING)
-		return NULLRWSTRING;
-
-	GBuffer aBuffer;
-	aBuffer << str;
-	aBuffer.Trim(); //quita el endLine del buffer
-	return aBuffer  << masterType
-					<< endLine;
+	return new UCHRegister();
 }
+
 //pack
-CPack& CHRegister::pack(CPack & aPack)
+MSLPack& CHRegister::pack(MSLPack & aPack) const
 {
 	GRegister::pack (aPack);
 
-	aPack << masterType;
+	aPack << m_masterType;
+
 	return aPack;
 }
 
-CPack& CHRegister::unpack(CPack &aPack)
+MSLPack& CHRegister::unpack(MSLPack &aPack)
 {
 	GRegister::unpack (aPack);
 
-	aPack >> masterType;
+	aPack >> m_masterType;
+
 	return aPack;
 }
 // set
 void CHRegister::setMasterType(const short value)
 {
-	masterType = value;
+	m_masterType = value;
 }
 // get
 short CHRegister::getMasterType() const
 {
-	return masterType;
+	return m_masterType;
 }
 
-RWCString CHRegister::getMasterTypeAsString(bool longer/*=true*/) const
+MSLString CHRegister::getMasterTypeAsString(bool longer/*=true*/) const
 {
-	CHMasterType *pMast=(CHMasterType *)CHMemoryDataBase::findMasterType(masterType);
+	CHMasterType *pMast=(CHMasterType *)CHMemoryDataBase::findMasterType(m_masterType);
 	if (pMast && pMast->getMasterType()>0)
-		return longer?pMast->getLDescription().toMultiByte():pMast->getSDescription().toMultiByte();
-	return NULLRWSTRING;
+		return longer ? pMast->getLDescription().toAscii() : pMast->getSDescription().toAscii();
+
+	return NULLSTRING;
 }
 
 short CHRegister::getMasterTypeOrder() const
 {
-	CHMasterType *pMast=(CHMasterType *)CHMemoryDataBase::findMasterType(masterType);
+	CHMasterType *pMast=(CHMasterType *)CHMemoryDataBase::findMasterType(m_masterType);
 	return (pMast?pMast->getOrder():0);
 }

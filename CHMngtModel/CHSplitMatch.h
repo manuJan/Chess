@@ -37,7 +37,7 @@
 
 class CHModelExport CHSplitMatch : public GTHSplitMatch
 {
-	RWDECLARE_COLLECTABLE(CHSplitMatch)
+	MSLDECLARE_ITEM(CHSplitMatch)
 
 	
 public:

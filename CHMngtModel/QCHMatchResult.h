@@ -20,26 +20,20 @@
 *                                                                                      
 **************************************************************************************///
 
-#if !defined(AFX_QCHMATCHRESULT_H__79C882F6_A108_4F3F_9406_045FC44AC0C2__INCLUDED_)
-#define AFX_QCHMATCHRESULT_H__79C882F6_A108_4F3F_9406_045FC44AC0C2__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include <OVR/CORE/TH/QGTHMatchResult.h>
 
-#include <CORE/TH/QGTHMatchResult.h>
-
-class QCHMatchResult : public QGTHMatchResult  
+class QCHMatchResult: public QGTHMatchResult
 {
 public:
-	QCHMatchResult(RWDBConnection *pNewConnection);
-	virtual ~QCHMatchResult();
+	QCHMatchResult()
+		:QGTHMatchResult() 
+	{;}
+	virtual ~QCHMatchResult()
+	{;}
 
 protected:
-	void OnSelect(RWDBSelector& aSelect,RWDBTable& tMatchResult);
-	void OnReader(RWDBReader& aReader,GTHMatchResult *pMatchResult);
-
-	GTHMatchResult * OnNewMatchResult();
+	void OnSelect(MSLDBSelector& aSelect,MSLDBTable& tMatchResult);
+	void OnReader(MSLDBReader& aReader,GTHMatchResult *pMatchResult);
 };
 
-#endif // !defined(AFX_QCHMATCHRESULT_H__79C882F6_A108_4F3F_9406_045FC44AC0C2__INCLUDED_)

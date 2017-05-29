@@ -20,34 +20,27 @@
 *                                                                                      
 **************************************************************************************///
 
-#if !defined(AFX_UCHMEMBER_H__3585D853_8CCC_4D1E_8D37_7BF4BBF8B1E9__INCLUDED_)
-#define AFX_UCHMEMBER_H__3585D853_8CCC_4D1E_8D37_7BF4BBF8B1E9__INCLUDED_
-
-#ifndef _UCHMember_H
-#define _UCHMember_H
-#endif
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-
-#include <CORE/G/UMember.h>
+#include <OVR/CORE/G/UMember.h>
 
 class UCHMember : public UMember  
 {
 public:
-	UCHMember(RWDBConnection *pNewConnection);
-	virtual ~UCHMember();
+
+	UCHMember()
+		:UMember()
+	{;}
+
+	~UCHMember() {;}
 
 protected:
-	void OnAssignAttributes(const GMember& aMember);
-	void OnInsert(RWDBInserter& aInsert,const GMember& aMember);
-	void OnUpdate(RWDBUpdater& aUpdate,RWDBTable& table,const GMember& aMember);
-	void OnDelete(RWDBDeleter& aDelete,RWDBTable& table,const GMember& aMember);
 
+	void OnAssignAttributes(const GMember& aMember);
+	void OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GMember& aMember);
+	void OnUpdate(MSLDBUpdater & aUpdater ,MSLDBTable& table,const GMember& aMember);
+	
 private:
 	short function,rating,kConst;
-	RWDBNullIndicator nullRating,nullKConst;
+	MSLDBNullIndicator nullRating,nullKConst;
 };
 
-#endif // !defined(AFX_UCHMEMBER_H__3585D853_8CCC_4D1E_8D37_7BF4BBF8B1E9__INCLUDED_)

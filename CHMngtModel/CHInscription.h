@@ -20,84 +20,65 @@
 *                                                                                      
 **************************************************************************************///
 
-#if !defined(AFX_CHINSCRIPTION_H__FDDA4A1D_1B61_47B1_AFE9_C3FC2F9938E9__INCLUDED_)
-#define AFX_CHINSCRIPTION_H__FDDA4A1D_1B61_47B1_AFE9_C3FC2F9938E9__INCLUDED_
-
-#ifndef _CHInscription_H
-#define _CHInscription_H
-#endif 
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include "CHMemoryDataBaseDefs.h"
+#include <OVR/CORE/TH/GTHInscription.h>
 
-#ifndef _CHMNGTMODELDLL_H
-#   include "CHMngtModelDll.h" 
-#endif // _CH_MNGTMODELDLL_H
-
-#include <Core/TH/GTHInscription.h>
 class GRegister;
 class GTHEvent;
 class CHRegister;
 class CHMember;
 
-class CHModelExport CHInscription : public GTHInscription  
+class CHMngtModelExport CHInscription : public GTHInscription  
 {
-	RWDECLARE_COLLECTABLE(CHInscription)
+	MSLDECLARE_ITEM(CHInscription)
 
 public:
 	CHInscription();
 	CHInscription(GRegister *reg,GTHEvent *ev);
-	CHInscription(const CHInscription &copy);
-	CHInscription(CPack &iPack);
+	CHInscription(const CHInscription &copy);	
 	virtual ~CHInscription();
 
-	CHInscription & operator = (const CHInscription &copy);
-	RWBoolean	    operator == (const CHInscription &copy);
-	RWBoolean	    operator != (const CHInscription &copy);
-	CHMember *		operator [] (const size_t index) const;
+	/**** Virtual operators inherited from GData ********************/
+	GData& operator= (const GData& copy);
+	bool   operator==(const GData& copy);
+	bool   operator!=(const GData& copy);
 
-	RWBoolean uSQL(RWDBConnection& pConnect,RWBoolean remove=false);
-	RWCString msl() const;
-	CPack& pack(CPack & aPack);
-	CPack& unpack(CPack &aPack);
+	/**** Virtual methods inherited from GData **********************/
+	MSLPack& pack  (MSLPack& pck) const;
+	MSLPack& unpack(MSLPack& pck);
+
+	QBase*			onQ() const;
+	UBase*			onU() const;
 
 	// set
 	void setSeed(const short value);
 	void setRating(const short value);
 	void setKConst(const short value);
 	
-
 	// get
 	short getSeed() const;
 	short getRating() const;
 	short getKConst() const;
-	RWCString getSeedAsString() const;
-	RWCString getRatingAsString() const;
-	RWCString getKConstAsString() const;
-	
-	
-	GRegister::TypeRegister getType() const;
-	RWWString getGroupLDescription(const char *language=DBApplication::getAppLanguage()) const;
 
-	RWCString getRegisterBirthDate(const char *format/*="%x"*/) const;
-	CHRegister *getMemberRegister(const size_t value) const;
-	int getRegisterCode() const;
-	RWWString getMemberRegisterPrnLName(const size_t value) const;
-	RWWString getTeamScbLName(const RWBoolean bFMember, const RWBoolean bSMember, const RWBoolean bTMember) const;
+	MSLString getSeedAsString() const;
+	MSLString getRatingAsString() const;
+	MSLString getKConstAsString() const;
+		
+	GRegister::TypeRegister getType() const;		
+	CHRegister *getMemberRegister(const size_t value) const;	
+	MSLWString getMemberRegisterPrnLName(const size_t value) const;
+	MSLWString getTeamScbLName(const bool bFMember, const bool bSMember, const bool bTMember) const;
 	short getTypeEvent() const;
 
 	// From CHRegister
 	short getRegMasterType() const;
-	RWCString getRegMasterTypeAsString(bool longer=true) const;
+	MSLString getRegMasterTypeAsString(bool longer=true) const;
 	short getRegMasterTypeOrder() const;
-
-
-private:
-	short		seed;	// cabeza de serie
-	short		rating;	// Puntuacion acumulada	
-	short		kConst;	// Constante calculo Rating
 	
+private:
+	short	m_seed;	// cabeza de serie
+	short	m_rating;	// Puntuacion acumulada	
+	short	m_kConst;	// Constante calculo Rating	
 };
 
-#endif // !defined(AFX_CHINSCRIPTION_H__FDDA4A1D_1B61_47B1_AFE9_C3FC2F9938E9__INCLUDED_)

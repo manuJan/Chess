@@ -27,14 +27,6 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-UCHInscription::UCHInscription(RWDBConnection *pNewConnection)
-:UGTHInscription(pNewConnection)
-{
-}
-
-UCHInscription::~UCHInscription()
-{
-}
 
 void UCHInscription::OnAssignAttributes(const GInscription& aInscription)
 {
@@ -46,31 +38,22 @@ void UCHInscription::OnAssignAttributes(const GInscription& aInscription)
 	
 }
 
-void UCHInscription::OnInsert(RWDBInserter& aInsert,const GInscription& aInscription)
+void UCHInscription::OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GInscription& aInscription)
 {
-	UGTHInscription::OnInsert(aInsert,aInscription);
+	UGTHInscription::OnInsert(aInserter,table,aInscription);
 
-	aInsert["SEED"]			<< RWDBBoundExpr(&seed,&nullSeed);
-	aInsert["RATING"]		<< RWDBBoundExpr(&rating,&nullRating);
-	aInsert["KCONST"]		<< RWDBBoundExpr(&kConst,&nullKConst);
-	
+	aInserter << table["SEED"]		.assign(seed,&nullSeed);
+	aInserter << table["RATING"]	.assign(rating,&nullRating);
+	aInserter << table["KCONST"]	.assign(kConst,&nullKConst);	
 }
 
-void UCHInscription::OnUpdate(RWDBUpdater& aUpdate,RWDBTable& table,const GInscription& aInscription)
+void UCHInscription::OnUpdate(MSLDBUpdater& aUpdate,MSLDBTable& table,const GInscription& aInscription)
 {
 	UGTHInscription::OnUpdate(aUpdate,table,aInscription);
 
-	aUpdate << table["SEED"]		.assign(RWDBBoundExpr(&seed,&nullSeed));
-	aUpdate << table["RATING"]		.assign(RWDBBoundExpr(&rating,&nullRating));
-	aUpdate << table["KCONST"]		.assign(RWDBBoundExpr(&kConst,&nullKConst));
+	aUpdate << table["SEED"]		.assign(seed,&nullSeed);
+	aUpdate << table["RATING"]		.assign(rating,&nullRating);
+	aUpdate << table["KCONST"]		.assign(kConst,&nullKConst);
 	
 }
 
-void UCHInscription::OnDelete(RWDBDeleter& aDelete,RWDBTable& table,const GInscription& aInscription)
-{
-	UGTHInscription::OnDelete(aDelete,table,aInscription);
-
-	UNREFERENCED_PARAMETER(aDelete);
-	UNREFERENCED_PARAMETER(table);
-	UNREFERENCED_PARAMETER(aInscription);
-}

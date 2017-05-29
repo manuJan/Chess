@@ -28,31 +28,27 @@
 //////////////////////////////////////////////////////////////////////
 
 
-void QCHPhaseBase::OnSelect(RWDBSelector& aSelect,RWDBTable& z012phase,RWDBTable& z512phase)
+void QCHPhaseBase::OnSelect(MSLDBSelector& aSelect,MSLDBTable& z012phase,MSLDBTable& z512phase)
 {
-	QGTHPhaseGeneric::OnSelect(aSelect,z012phase,z512phase);
+	QGTHPhaseBase::OnSelect(aSelect,z012phase,z512phase);
+
 	aSelect << z012phase["TYPEPHASE"];
 			
 	
 	UNREFERENCED_PARAMETER(z512phase);
 }
 
-void QCHPhaseBase::OnReader(RWDBReader& aReader,GNamesEx& aDescription,GPhaseBase *pValue)
+void QCHPhaseBase::OnReader(MSLDBReader& aReader,GDescription& aDescription,GPhaseBase *pPhaseBase)
 {
-	CHPhaseBase* pVal = (CHPhaseBase*)pValue;
+	CHPhaseBase* pVal = (CHPhaseBase*)pPhaseBase;
 
-	QGTHPhaseGeneric::OnReader(aReader,aDescription,pValue);
+	QGTHPhaseBase::OnReader(aReader,aDescription,pPhaseBase);
+
 	short typePhase;
 	
 	aReader >> typePhase;
 	
-
 	pVal->setTypePhase(typePhase);
 	
 	UNREFERENCED_PARAMETER(aDescription);
-}
-
-GPhaseBase * QCHPhaseBase::OnNewPhaseBase()
-{
-	return new CHPhaseBase();
 }

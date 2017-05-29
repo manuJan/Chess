@@ -20,59 +20,41 @@
 *                                                                                      
 **************************************************************************************///
 
-#if !defined(AFX_CHREGISTER_H__EFBFD2EA_5DCE_43C7_8D2F_EC08A7C91AA0__INCLUDED_)
-#define AFX_CHREGISTER_H__EFBFD2EA_5DCE_43C7_8D2F_EC08A7C91AA0__INCLUDED_
-
-#ifndef _CHRegister_H
-#define _CHRegister_H
-#endif 
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include "CHMemoryDataBaseDefs.h"
+#include <OVR/CORE/G/GRegister.h>
 
-#ifndef _CHMNGTMODELDLL_H
-#   include "CHMngtModelDll.h" 
-#endif // _CH_MNGTMODELDLL_H
-
-#include <CORE\G\GDefines.h>
-
-class GRegister;
-class CHModelExport CHRegister : public GRegister  
+class CHMngtModelExport CHRegister : public GRegister  
 {
-	RWDECLARE_COLLECTABLE(CHRegister)
-
-	enum TypeRegister {individual,team,doubles,judge=6,official};
+	MSLDECLARE_ITEM(CHRegister)
+			
 	enum masterType {mNone=0,mGMaster,mFMaster,mIMaster};
 
 public:
-	CHRegister();
-	CHRegister(const GRegister &copy);
-	CHRegister(const CHRegister &copy);
-	CHRegister(CPack &iPack);
+	CHRegister();	
+	CHRegister(const CHRegister &copy);	
 	virtual ~CHRegister();
 
-	//Operators
-	GRegister& operator =(const GRegister& copy);
-	RWBoolean  operator ==(const GRegister& copy);
-	RWBoolean  operator !=(const GRegister& copy);
+	/**** Virtual operators inherited from GData ********************/
+	GData& operator= (const GData& copy);
+	bool   operator==(const GData& copy);
+	bool   operator!=(const GData& copy);
 
-	RWBoolean uSQL(RWDBConnection& pConnect,RWBoolean remove=false);
-	RWCString msl() const;
-	//Packing Methods
-	CPack& pack(CPack & aPack);
-	CPack& unpack(CPack &aPack);
+	/**** Virtual methods inherited from GData **********************/
+	MSLPack& pack  (MSLPack& pck) const;
+	MSLPack& unpack(MSLPack& pck);
+
+	QBase*			onQ() const;
+	UBase*			onU() const;
 
 	// set
 	void setMasterType(const short value);
 
 	// get
 	short getMasterType() const;
-	RWCString getMasterTypeAsString(bool longer=true) const;
+	MSLString getMasterTypeAsString(bool longer=true) const;
 	short getMasterTypeOrder() const;
 
 private:	
-	short masterType;
+	short m_masterType;
 };
-
-#endif // !defined(AFX_CHREGISTER_H__EFBFD2EA_5DCE_43C7_8D2F_EC08A7C91AA0__INCLUDED_)

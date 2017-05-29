@@ -16,38 +16,31 @@
 *
 ***************************************************************************************/
 
-#if !defined(AFX_CHMATCHMEMBER_H__CB507405_4F6F_4446_B576_768B4805FA3F__INCLUDED_)
-#define AFX_CHMATCHMEMBER_H__CB507405_4F6F_4446_B576_768B4805FA3F__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include "CHMemoryDataBaseDefs.h"
+#include <Ovr/Core/TH/GTHMatchMember.h>
 
-#ifndef _CHMNGTMODELDLL_H_
-#	include "CHMngtModelDll.h"
-#endif // _CHMNGTMODELDLL_H_
-
-#include <CORE/TH/GTHMatchMember.h>
-
-class CHModelExport CHMatchMember : public GTHMatchMember  
+class CHMngtModelExport CHMatchMember : public GTHMatchMember  
 {
-	RWDECLARE_COLLECTABLE(CHMatchMember)
+	MSLDECLARE_ITEM(CHMatchMember)
 
 public:
 	CHMatchMember();
-	CHMatchMember(const CHMatchMember &copy);
-	CHMatchMember(CPack &aPack);
+	CHMatchMember(const CHMatchMember &copy);	
 	virtual ~CHMatchMember();
 
-	CHMatchMember  &operator  =(const CHMatchMember &copy);
-	RWBoolean		operator ==(const CHMatchMember &copy);
-	RWBoolean		operator !=(const CHMatchMember &copy);
+	//Operators
+	GData& operator= (const GData & copy);
+	bool   operator==(const GData & copy);
+	bool   operator!=(const GData & copy);
 
-	inline RWBoolean uSQL(RWDBConnection &pConnect,RWBoolean remove/*=false*/);
-	RWCString msl() const;
-	RWCString mslDescription(const char *language) const;
-	CPack&		pack(CPack &aPack);
-	CPack&		unpack(CPack &iPack);
+	/**** Virtual methods inherited from MSLItem ********************/
+	virtual MSLPack& pack  (MSLPack& pck) const;
+	virtual MSLPack& unpack(MSLPack& pck);
+
+	//Virtual methods inherited from GData
+	QBase*			onQ() const;
+	UBase*			onU() const;
 
 	//Get
 	GSortedVector &getMembersVector() const;

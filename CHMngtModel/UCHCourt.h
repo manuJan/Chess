@@ -16,33 +16,27 @@
 *
 ***************************************************************************************/
 
-#if !defined(AFX_UCHCOURT_H__9D6124C7_88CA_4B7C_9C93_B322C4873D63__INCLUDED_)
-#define AFX_UCHCOURT_H__9D6124C7_88CA_4B7C_9C93_B322C4873D63__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-
-#include <CORE/G/UCourt.h>
+#include <OVR/CORE/G/UCourt.h>
 
 class UCHCourt : public UCourt  
 {
 public:
-	UCHCourt(RWDBConnection *pNewConnection)
-	:UCourt(pNewConnection) 
+	UCHCourt()
+	:UCourt() 
 	{ ; } 
+
 	virtual ~UCHCourt()
 	{ ; }
 
 protected:
+
 	void OnAssignAttributes(const GCourt& aCourt);
-	void OnInsert(RWDBInserter& aInsert,const GCourt& aCourt);
-	RWBoolean OnUpdate(RWDBUpdater& aUpdate,RWDBTable& table,const GCourt& aCourt);
-	void OnDelete(RWDBDeleter& aDelete,RWDBTable& table,const GCourt& aCourt);
+	void OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GCourt& aCourt);
+	void OnUpdate(MSLDBUpdater & aUpdater ,MSLDBTable& table,const GCourt& aCourt);
+	void OnDelete(const GCourt& aCourt);
 
 private:
 	short order;
 	
 };
-
-#endif // !defined(AFX_UCHCOURT_H__9D6124C7_88CA_4B7C_9C93_B322C4873D63__INCLUDED_)

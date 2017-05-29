@@ -15,12 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CHCourt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CHDiscipline.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CHEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -30,19 +24,10 @@
     <ClCompile Include="CHInscription.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CHJudge.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CHMasterType.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CHMatch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CHMatchJudge.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CHMatchMember.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CHMatchResult.cpp">
@@ -72,22 +57,10 @@
     <ClCompile Include="CHRegister.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CHSession.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CHSplitMatch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CHSplitMatchResult.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CHTeamMatchsCnfg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QCHCourt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QCHDiscipline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="QCHEvent.cpp">
@@ -99,19 +72,10 @@
     <ClCompile Include="QCHInscription.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QCHJudge.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="QCHMasterType.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="QCHMatch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QCHMatchJudge.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QCHMatchMember.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="QCHMatchResult.cpp">
@@ -126,9 +90,6 @@
     <ClCompile Include="QCHPhaseBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QCHPool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="QCHPoolResult.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -138,25 +99,10 @@
     <ClCompile Include="QCHRegister.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QCHSession.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QCHSplitMatch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QCHSplitMatchResult.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="QCHTeamMatchsCnfg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="stdCHMngt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UCHCourt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UCHDiscipline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UCHEvent.cpp">
@@ -168,19 +114,10 @@
     <ClCompile Include="UCHInscription.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UCHJudge.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="UCHMasterType.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UCHMatch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UCHMatchJudge.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UCHMatchMember.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UCHMatchResult.cpp">
@@ -192,12 +129,6 @@
     <ClCompile Include="UCHPhase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UCHPhaseBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UCHPool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="UCHPoolResult.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -207,29 +138,20 @@
     <ClCompile Include="UCHRegister.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UCHSession.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UCHSplitMatch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UCHSplitMatchResult.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="UCHTeamMatchsCnfg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHDefinition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QCHDefinition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UCHDefinition.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CHClassIDs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CHCourt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CHDiscipline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CHEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -239,19 +161,10 @@
     <ClInclude Include="CHInscription.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CHJudge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CHMasterType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CHMatch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CHMatchJudge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CHMatchMember.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CHMatchResult.h">
@@ -261,9 +174,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CHMemoryDataBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CHMsgDefines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CHPhase.h">
@@ -284,12 +194,6 @@
     <ClInclude Include="CHRegister.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CHSession.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CHSplitMatch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CHSplitMatchResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -302,12 +206,6 @@
     <ClInclude Include="CHTeamMatchsCnfg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="QCHCourt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QCHDiscipline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="QCHEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -317,19 +215,10 @@
     <ClInclude Include="QCHInscription.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="QCHJudge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="QCHMasterType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="QCHMatch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QCHMatchJudge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QCHMatchMember.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="QCHMatchResult.h">
@@ -344,9 +233,6 @@
     <ClInclude Include="QCHPhaseBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="QCHPool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="QCHPoolResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -356,25 +242,10 @@
     <ClInclude Include="QCHRegister.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="QCHSession.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QCHSplitMatch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QCHSplitMatchResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="QCHTeamMatchsCnfg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="stdCHMngt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UCHCourt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UCHDiscipline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UCHEvent.h">
@@ -386,19 +257,10 @@
     <ClInclude Include="UCHInscription.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UCHJudge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="UCHMasterType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UCHMatch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UCHMatchJudge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UCHMatchMember.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UCHMatchResult.h">
@@ -410,12 +272,6 @@
     <ClInclude Include="UCHPhase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UCHPhaseBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UCHPool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="UCHPoolResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -425,16 +281,19 @@
     <ClInclude Include="UCHRegister.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UCHSession.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UCHSplitMatch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UCHSplitMatchResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="UCHTeamMatchsCnfg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHMemoryDataBaseDefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHDefinition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QCHDefinition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UCHDefinition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -27,21 +27,8 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-QCHPhase::QCHPhase(RWDBConnection *pNewConnection)
-:QGTHPhase(pNewConnection)
-{
-}
 
-QCHPhase::~QCHPhase()
-{
-}
-
-GPhase * QCHPhase::OnNewPhase()
-{
-	return new CHPhase();
-}
-
-void QCHPhase::OnSelect(RWDBSelector& aSelect,RWDBTable& tPhase)
+void QCHPhase::OnSelect(MSLDBSelector& aSelect,MSLDBTable& tPhase)
 {
 	QGTHPhase::OnSelect(aSelect,tPhase);
 	
@@ -51,16 +38,16 @@ void QCHPhase::OnSelect(RWDBSelector& aSelect,RWDBTable& tPhase)
 		
 }
 
-void QCHPhase::OnReader(RWDBReader& aReader,GPhase *pPhase)
+void QCHPhase::OnReader(MSLDBReader& aReader,GPhase *pPhase)
 {
 	QGTHPhase::OnReader(aReader,pPhase);
 	
-	short typePhase,idTeamMatchsCnfg;
+	short m_typePhase,idTeamMatchsCnfg;
 	
-	aReader		>> typePhase
+	aReader		>> m_typePhase
 				>> idTeamMatchsCnfg;
 	
-	((CHPhase*)pPhase)->setTypePhase(typePhase);
+	((CHPhase*)pPhase)->setTypePhase(m_typePhase);
 	((CHPhase*)pPhase)->setIdTeamMatchsCnfg(idTeamMatchsCnfg);
 		
 }

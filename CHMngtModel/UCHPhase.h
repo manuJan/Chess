@@ -20,32 +20,27 @@
 *                                                                                      
 **************************************************************************************///
 
-#if !defined(AFX_UCHPHASE_H__9C008000_6870_4A13_9885_F5C3E375938F__INCLUDED_)
-#define AFX_UCHPHASE_H__9C008000_6870_4A13_9885_F5C3E375938F__INCLUDED_
-
-#ifndef _UCHPhase_H
-#define _UCHPhase_H
-#endif
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-
-#include <Core/TH/UGTHPhase.h>
+#include <OVR/CORE/TH\UGTHPhase.h>
 
 class UCHPhase : public UGTHPhase  
 {
 public:
-	UCHPhase(RWDBConnection *pNewConnection);
-	virtual ~UCHPhase();
+
+	UCHPhase()
+		:UGTHPhase() 
+	{;}
+	~UCHPhase() 
+	{;}
 
 protected:
+
 	void OnAssignAttributes(const GPhase& aPhase);
-	void OnInsert(RWDBInserter& aInsert,const GPhase& aPhase);
-	void OnUpdate(RWDBUpdater& aUpdate,RWDBTable& table,const GPhase& aPhase);
-	void OnDelete(RWDBDeleter& aDelete,RWDBTable& table,const GPhase& aPhase);
+	void OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GPhase& aPhase);
+	void OnUpdate(MSLDBUpdater & aUpdater ,MSLDBTable& table,const GPhase& aPhase);
+	
+private:
 
 	short typePhase,idTeamMatchsCnfg;
 };
 
-#endif // !defined(AFX_UCHPHASE_H__9C008000_6870_4A13_9885_F5C3E375938F__INCLUDED_)

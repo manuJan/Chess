@@ -27,14 +27,7 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-UCHRegister::UCHRegister(RWDBConnection *pNewConnection)
-:URegister(pNewConnection)
-{
-}
 
-UCHRegister::~UCHRegister()
-{
-}
 void UCHRegister::OnAssignAttributes(GRegister& aRegister)
 {
 	CHRegister & aCHRegister = (CHRegister&)aRegister;
@@ -43,19 +36,17 @@ void UCHRegister::OnAssignAttributes(GRegister& aRegister)
 	nullMasterType	= (masterType==0);
 }
 
-void UCHRegister::OnInsert(RWDBInserter& aInserter,GRegister& aRegister)
+void UCHRegister::OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,GRegister& aRegister)
 {
 	UNREFERENCED_PARAMETER(aRegister);
 
-	aInserter["MASTER_TYPE"]<< RWDBBoundExpr(&masterType,&nullMasterType);
-	
+	aInserter << table["MASTER_TYPE"].assign( masterType,&nullMasterType);	
 }
 
-void UCHRegister::OnUpdate(RWDBUpdater& aUpdater,RWDBTable& z010register,GRegister& aRegister)
+void UCHRegister::OnUpdate(MSLDBUpdater& aUpdater,MSLDBTable& z010register,GRegister& aRegister)
 {
 	UNREFERENCED_PARAMETER(aRegister);
 
-	aUpdater << z010register["MASTER_TYPE"].assign( RWDBBoundExpr(&masterType,&nullMasterType) );
-	
+	aUpdater << z010register["MASTER_TYPE"].assign( masterType,&nullMasterType);	
 }
 

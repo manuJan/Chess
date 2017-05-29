@@ -20,30 +20,22 @@
 *                                                                                      
 **************************************************************************************///
 
-#if !defined(AFX_QCHPHASE_H__AC4514A0_F4B4_4E71_92CA_204FA4611C71__INCLUDED_)
-#define AFX_QCHPHASE_H__AC4514A0_F4B4_4E71_92CA_204FA4611C71__INCLUDED_
-
-#ifndef _QCHPhase_H
-#define _QCHPhase_H
-#endif 
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-
-#include <Core/TH/QGTHPhase.h>
+#include <OVR/CORE/TH/QGTHPhase.h>
 
 class QCHPhase : public QGTHPhase  
 {
 public:
-	QCHPhase(RWDBConnection *pNewConnection);
-	virtual ~QCHPhase();
+
+	QCHPhase()
+		:QGTHPhase()
+	{;}
+	virtual ~QCHPhase() {;}
 
 protected:
-	void OnSelect(RWDBSelector& aSelect,RWDBTable& tPhase);
-	void OnReader(RWDBReader& aReader,GPhase *pPhase);
 
-	GPhase * OnNewPhase();
+	void OnSelect(MSLDBSelector& aSelect,MSLDBTable& tPhase);
+	void OnReader(MSLDBReader& aReader,GPhase *pPhase);
+
 };
 
-#endif // !defined(AFX_QCHPHASE_H__AC4514A0_F4B4_4E71_92CA_204FA4611C71__INCLUDED_)

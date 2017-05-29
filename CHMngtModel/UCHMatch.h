@@ -20,37 +20,30 @@
 *                                                                                      
 **************************************************************************************///
 
-#if !defined(AFX_UCHMATCH_H__91823F8A_4F93_4A2F_AC04_A63E8BE1F9EA__INCLUDED_)
-#define AFX_UCHMATCH_H__91823F8A_4F93_4A2F_AC04_A63E8BE1F9EA__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include <OVR/CORE/TH/UGTHMatch.h>
 
-#include <Core\THSP\UTHSPMatch.h>
-
-class UCHMatch : public UTHSPMatch  
+class UCHMatch : public UGTHMatch  
 {
 public:
-	UCHMatch(RWDBConnection *pNewConnection);
-	virtual ~UCHMatch();
+
+	UCHMatch()
+		:UGTHMatch()
+	{;}
+
+	~UCHMatch() {;}
 
 protected:
+
 	void OnAssignAttributes(GTHMatch& aMatch);
-	void OnInsert(RWDBInserter& aInserter,GTHMatch& aMatch);
-	void OnUpdate(RWDBUpdater& aUpdater,RWDBTable& t008match,GTHMatch& aMatch);
-	void OnDelete(const GTHMatch& aMatch);
-
+	void OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GTHMatch& aMatch);
+	void OnUpdate(MSLDBUpdater & aUpdater ,MSLDBTable& table,const GTHMatch& aMatch);
+	
 private:
-	short session;
-	short court;
-	short fSubMatch,fMatchType,fRound;
-	RWCString rVenue;
+	
+	short fMatchType,fRound;
+	
 
-	RWDBNullIndicator nullSession ;
-	RWDBNullIndicator nullCourt;
-	RWDBNullIndicator nullVenue;
-	RWDBNullIndicator nullRound;
+	MSLDBNullIndicator nullRound;
 };
 
-#endif // !defined(AFX_UCHMATCH_H__91823F8A_4F93_4A2F_AC04_A63E8BE1F9EA__INCLUDED_)

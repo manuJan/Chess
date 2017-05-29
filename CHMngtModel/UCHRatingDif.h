@@ -20,32 +20,30 @@
 *
 ***************************************************************************************/
 
-#if !defined(AFX_UCHRatingDif_H__EC659569_DDDE_413E_AA76_54B9A464DF99__INCLUDED_)
-#define AFX_UCHRatingDif_H__EC659569_DDDE_413E_AA76_54B9A464DF99__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include <OVR/CORE/G/UBase.h>
+#include "CHRatingDif.h"
 
-#include <CORE/G/UBase.h>
-
-class UCHRatingDif : public UBase  
+class UCHRatingDif : public UBase
 {
+
 public:
-	UCHRatingDif(RWDBConnection *pNewConnection):UBase(pNewConnection) {;}
-	virtual ~UCHRatingDif() {;}
-	
-	void assignAtributes(CHRatingDif& aRatingDif);
+	UCHRatingDif()
+		:UBase()
+	{;}
+	virtual ~UCHRatingDif()
+	{;}
 
 protected:
-	RWBoolean insert (RWDBConnection& aConnection,GData& aData);
-	RWBoolean update (RWDBConnection& aConnection,GData& aData);
-	RWBoolean delete_(RWDBConnection& aConnection,GData& aData);
+	bool insert (GData& aData);
+	bool update (GData& aData);	
+	bool delete_(GData& aData);
+
+	void assignAtributes(CHRatingDif& aEnd);
 
 private:
 	short code,probability,difference;
-	RWDBNullIndicator nullprobability,nulldifference;
+	MSLDBNullIndicator nullprobability,nulldifference;
 
 };
 
-#endif // !defined(AFX_UCHRatingDif_H__EC659569_DDDE_413E_AA76_54B9A464DF99__INCLUDED_)

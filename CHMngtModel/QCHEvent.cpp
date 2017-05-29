@@ -22,31 +22,15 @@
 
 #include "stdCHMngt.h"
 #include "QCHEvent.h"
+#include "CHEvent.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-QCHEvent::QCHEvent(RWDBConnection *pNewConnection,QEvent::SelectionMode selection/*=QEvent::eActive*/)
-:QGTHEvent(pNewConnection,selection)
-{
-}
 
-QCHEvent::~QCHEvent()
+void QCHEvent::OnSelect(MSLDBSelector& aSelect,MSLDBTable& tEvent)
 {
-}
-
-GEvent* QCHEvent::OnNewEvent()
-{
-	return new CHEvent;
-}
-
-void QCHEvent::OnSelect(RWDBSelector& aSelect,RWDBTable& tEvent)
-{
-	QGTHEvent::OnSelect(aSelect,tEvent);
-
-	aSelect << tEvent["ORDER_EVENT"]
-			<< tEvent["MODE"]
-			<< tEvent["TWO_BRONCES"]
+	aSelect << tEvent["TWO_BRONCES"]
 			<< tEvent["TYPE_EVENT"]
 			<< tEvent["REQRANKORDER"]
 			<< tEvent["TEAMCFG"]
@@ -55,23 +39,18 @@ void QCHEvent::OnSelect(RWDBSelector& aSelect,RWDBTable& tEvent)
 			;
 }
 
-void QCHEvent::OnReader(RWDBReader& aReader,GEvent* pEvent)
+void QCHEvent::OnReader(MSLDBReader& aReader,GEvent* pEvent)
 {
-	QGTHEvent::OnReader(aReader,pEvent);
-	
-	short fOrderEvent=0,
-		  fTwoBronces=0,
+	short fTwoBronces=0,
 		  fTypeEvent=-1,
-		  fidTeamMatCnfg,
-		  fMode=0;
+		  fidTeamMatCnfg;
+
 	float constRating=0.0;
 	float pointsBye=0.0;
 	
-	RWCString reqRankOrd(NULLRWSTRING);
+	MSLString reqRankOrd(NULLSTRING);
 	
-	aReader	>> fOrderEvent
-			>> fMode
-			>> fTwoBronces
+	aReader	>> fTwoBronces
 			>> fTypeEvent
 			>> reqRankOrd
 			>> fidTeamMatCnfg
@@ -80,8 +59,6 @@ void QCHEvent::OnReader(RWDBReader& aReader,GEvent* pEvent)
 	
 	CHEvent * pNewEvent = (CHEvent *)pEvent;
 
-	pNewEvent->setOrderEvent(fOrderEvent);
-	pNewEvent->setMode(fMode);
 	pNewEvent->setTwoBronces(fTwoBronces);
 	pNewEvent->setTypeEvent(fTypeEvent);
 	pNewEvent->setReqRankOrder(reqRankOrd);

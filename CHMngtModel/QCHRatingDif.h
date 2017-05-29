@@ -20,23 +20,20 @@
 *
 ***************************************************************************************/
 
-#if !defined(AFX_QCHRatingDif_H__BA4FBA08_3EB9_457A_8072_F24F2A98A6CC__INCLUDED_)
-#define AFX_QCHRatingDif_H__BA4FBA08_3EB9_457A_8072_F24F2A98A6CC__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-
-#include <CORE/G/QBase.h>
+#include <OVR/CORE/G/QBase.h>
 
 class QCHRatingDif : public QBase  
 {
 public:
-	QCHRatingDif(RWDBConnection *pNewConnection):QBase(pNewConnection) {;}
-	virtual ~QCHRatingDif() {;}
+	QCHRatingDif()
+		:QBase() 
+	{;}
+	virtual ~QCHRatingDif()
+	{;}
 
 protected:
-	size_t selectCollection(RWDBConnection& aConnection,RWCollection& target);
+
+	size_t selectCollection(MSLCollection& target);
 };
 
-#endif // !defined(AFX_QCHRatingDif_H__BA4FBA08_3EB9_457A_8072_F24F2A98A6CC__INCLUDED_)

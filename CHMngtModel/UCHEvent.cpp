@@ -27,21 +27,11 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-UCHEvent::UCHEvent(RWDBConnection *pNewConnection)
-:UGTHEvent(pNewConnection)
-{
-}
-
-UCHEvent::~UCHEvent()
-{
-}
 
 void UCHEvent::OnAssignAttributes(const GEvent& aEvent)
 {
 	CHEvent *pEvent = (CHEvent*)&aEvent;
 
-	fOrderEvent		= pEvent->getOrderEvent();
-	fMode			= pEvent->getMode();
 	fTwoBronces		= pEvent->getTwoBronces();
 	fTypeEvent		= pEvent->getTypeEvent();
 	
@@ -53,41 +43,32 @@ void UCHEvent::OnAssignAttributes(const GEvent& aEvent)
 			
 }
 
-void UCHEvent::OnInsert(RWDBInserter& aInserter,const GEvent& aEvent)
+void UCHEvent::OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GEvent& aEvent)
 {
-	UGTHEvent::OnInsert(aInserter,aEvent);
+	UGTHEvent::OnInsert(aInserter,table,aEvent);
 
 	CHEvent* pEvent=(CHEvent*)&aEvent;
 
-	aInserter["ORDER_EVENT"]	<< fOrderEvent;
-	aInserter["MODE"]			<< fMode;
-	aInserter["TWO_BRONCES"]	<< fTwoBronces;
-	aInserter["TYPE_EVENT"]		<< fTypeEvent;
-	aInserter["REQRANKORDER"]	<< reqRankOrd;
-	aInserter["TEAMCFG"]		<< pEvent->getIdTeamMatchsCnfg();
-	aInserter["CONST_RATING"]	<< fConstRating;
-	aInserter["POINTS_BYE"]		<< fPointsBye;
+	aInserter << table["TWO_BRONCES"]	.assign(fTwoBronces);
+	aInserter << table["TYPE_EVENT"]	.assign(fTypeEvent);
+	aInserter << table["REQRANKORDER"]	.assign(reqRankOrd);
+	aInserter << table["TEAMCFG"]		.assign(pEvent->getIdTeamMatchsCnfg());
+	aInserter << table["CONST_RATING"]	.assign(fConstRating);
+	aInserter << table["POINTS_BYE"]	.assign(fPointsBye);
 	
 }
 
-void UCHEvent::OnUpdate(RWDBUpdater& aUpdater,RWDBTable& table,const GEvent& aEvent)
+void UCHEvent::OnUpdate(MSLDBUpdater& aUpdater,MSLDBTable& table,const GEvent& aEvent)
 {
 	UGTHEvent::OnUpdate(aUpdater,table,aEvent);
 
 	CHEvent* pEvent=(CHEvent*)&aEvent;
-
-	aUpdater << table["ORDER_EVENT"]	.assign(fOrderEvent);
-	aUpdater << table["MODE"]			.assign(fMode);
+		
 	aUpdater << table["TWO_BRONCES"]	.assign(fTwoBronces);
 	aUpdater << table["TYPE_EVENT"]		.assign(fTypeEvent);
 	aUpdater << table["REQRANKORDER"]	.assign(reqRankOrd);
 	aUpdater << table["TEAMCFG"]		.assign(pEvent->getIdTeamMatchsCnfg());
 	aUpdater << table["CONST_RATING"]	.assign(fConstRating);
 	aUpdater << table["POINTS_BYE"]		.assign(fPointsBye);
-		
 }
 
-void UCHEvent::OnDelete(RWDBUpdater& aUpdate,RWDBTable& table,const GEvent& aEvent)
-{
-	UGTHEvent::OnDelete(aUpdate, table, aEvent);
-}

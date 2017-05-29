@@ -17,41 +17,31 @@
 *
 ***************************************************************************************/
 
-#if !defined(AFX_CHCOURT_H__9F760635_0A5B_4D17_9320_C39C9337EEBB__INCLUDED_)
-#define AFX_CHCOURT_H__9F760635_0A5B_4D17_9320_C39C9337EEBB__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include "CHMemoryDataBaseDefs.h"
+#include <OVR/CORE/G/GCourt.h>
 
-#include <Core/G/GCourt.h>
-
-#ifndef _CHMNGTMODELDLL_H
-#   include "CHMngtModelDll.h" 
-#endif // _CH_MNGTMODELDLL_H
-
-class CHModelExport CHCourt : public GCourt  
+class CHMngtModelExport CHCourt : public GCourt  
 {
-	RWDECLARE_COLLECTABLE(CHCourt)
+	MSLDECLARE_ITEM(CHCourt)
 
 public:
 	// Constructors/Destructor
 	CHCourt();
-	CHCourt(const CHCourt &copy);
-	CHCourt(CPack &iPack);
+	CHCourt(const CHCourt &copy);	
 	virtual ~CHCourt();
 
-	// Overloaded operators 
-	CHCourt	    &operator = (const CHCourt &copy);
-	RWBoolean    operator == (const CHCourt &copy);
-	RWBoolean    operator != (const CHCourt &copy);
+	/**** Virtual operators inherited from GData ********************/
+	GData& operator= (const GData& copy);
+	bool   operator==(const GData& copy);
+	bool   operator!=(const GData& copy);
+	
+	/**** Virtual methods inherited from GData **********************/
+	MSLPack& pack  (MSLPack& pck) const;
+	MSLPack& unpack(MSLPack& pck);
 
-	//From Data
-	RWBoolean uSQL(RWDBConnection& pConnect,RWBoolean remove=false);
-	RWCString msl() const;
-	RWCString mslDescription(const char *language) const;
-	CPack &   pack(CPack & aPack);
-	CPack & unpack(CPack & aPack);
+	QBase*	onQ() const;
+	UBase*	onU() const;
 	
 	//SETS
 	void setOrder(const short value);
@@ -60,7 +50,7 @@ public:
 	short getOrder() const;
 
 private:
-	short order;		// Numero de Orden 
+	short m_order;		// Numero de Orden 
 };
 
-#endif // !defined(AFX_CHCOURT_H__9F760635_0A5B_4D17_9320_C39C9337EEBB__INCLUDED_)
+

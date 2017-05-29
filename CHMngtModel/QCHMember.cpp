@@ -22,39 +22,26 @@
 
 #include "stdCHMngt.h"
 #include "QCHMember.h"
-
+#include "CHMember.h"
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-QCHMember::QCHMember(RWDBConnection *pNewConnection)
-:QGTHMember(pNewConnection)
-{
-}
 
-QCHMember::~QCHMember()
+void QCHMember::OnSelect(MSLDBSelector& aSelect,MSLDBTable& tMember)
 {
-}
-
-GMember * QCHMember::OnNewMember()
-{
-	return new CHMember();
-}
-
-void QCHMember::OnSelect(RWDBSelector& aSelect,RWDBTable& tMember)
-{
-	QGTHMember::OnSelect(aSelect,tMember);
+	QMember::OnSelect(aSelect,tMember);
 
 	aSelect	<< tMember["IDFUNCTION"];
 	aSelect	<< tMember["RATING"];
 	aSelect	<< tMember["KCONST"];
 }
 
-void QCHMember::OnReader(RWDBReader& aReader,GMember *pMember)
+void QCHMember::OnReader(MSLDBReader& aReader,GMember *pMember)
 {
-	QGTHMember::OnReader(aReader,pMember);
+	QMember::OnReader(aReader,pMember);
 
 	short     function,rating,kConst;
-	RWDBNullIndicator nullFunction,nullRating,nullKConst;
+	MSLDBNullIndicator nullFunction,nullRating,nullKConst;
 	
 	aReader >> nullFunction				  >> function
 			>> nullRating				  >> rating

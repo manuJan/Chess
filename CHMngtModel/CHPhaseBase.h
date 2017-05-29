@@ -20,53 +20,41 @@
 *                                                                                      
 **************************************************************************************///
 
-#if !defined(AFX_CHPHASEBASE_H__8C865870_B1EC_4165_A6FF_AF227CC0C44E__INCLUDED_)
-#define AFX_CHPHASEBASE_H__8C865870_B1EC_4165_A6FF_AF227CC0C44E__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include "CHMemoryDataBaseDefs.h"
+#include <OVR/CORE/TH/GTHPhaseBase.h>
 
-#ifndef _CHMNGTMODELDLL_H
-#   include "CHMngtModelDll.h" 
-#endif // _CH_MNGTMODELDLL_H
-
-#include <core\TH\GTHPhaseGeneric.h>
-
-class CHModelExport CHPhaseBase : public GTHPhaseGeneric  
+class CHMngtModelExport CHPhaseBase : public GTHPhaseBase  
 {
-	RWDECLARE_COLLECTABLE(CHPhaseBase)
+	MSLDECLARE_ITEM(CHPhaseBase)
 
 public:
-	enum TypePhase			{ eElim=1, ePool=2, eSwiss=3, eRepechage=4 };
+	enum TypePhase	{ eElim=1, ePool=2, eSwiss=3, eRepechage=4 };
 	
-	CHPhaseBase();
-	
-	CHPhaseBase(const CHPhaseBase & copy);
-	CHPhaseBase(CPack& aPack);
+	CHPhaseBase();	
+	CHPhaseBase(const CHPhaseBase & copy);	
 	virtual ~CHPhaseBase();
 
-	RWBoolean operator !=(const CHPhaseBase & copy);
-	RWBoolean operator ==(const CHPhaseBase & copy);
-	CHPhaseBase & operator =(const CHPhaseBase & copy);
+	/**** Virtual operators inherited from GData ********************/
+	GData& operator= (const GData& copy);
+	bool   operator==(const GData& copy);
+	bool   operator!=(const GData& copy);
 
-	// Update SQL
-	RWBoolean uSQL(RWDBConnection& pConnect,RWBoolean remove=false);
+	/**** Virtual methods inherited from GData **********************/
+	MSLPack& pack  (MSLPack& pck) const;
+	MSLPack& unpack(MSLPack& pck);
+
+	QBase*			onQ() const;
+	UBase*			onU() const;
+
 	//set
-	void setTypePhase		(const short value);
+	void setTypePhase(const short value);
 	
 	//get
-	short		getTypePhase()			const;
+	short getTypePhase() const;
 		
-
-	CPackObject getPackObject();
-	CPack& pack(CPack &iPack);
-	CPack& unpack(CPack &iPack);
-
 	
 private:	
-	short		typePhase;		//se utiliza para saber el tipo de fase
+	short m_typePhase;	//se utiliza para saber el tipo de fase
 		
 };
-
-#endif // !defined(AFX_CHPHASEBASE_H__8C865870_B1EC_4165_A6FF_AF227CC0C44E__INCLUDED_)

@@ -25,25 +25,17 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-UCHTeamMatchsCnfg::UCHTeamMatchsCnfg(RWDBConnection *pNewConnection)
-:UBase(pNewConnection)
-{
-}
-
-UCHTeamMatchsCnfg::~UCHTeamMatchsCnfg()
-{
-}
 
 void UCHTeamMatchsCnfg::assignAtributes(CHTeamMatchsCnfg & aTeamMatCnfg)
 {
 	fCompMatchesDistribution = aTeamMatCnfg.getCompMatchesDistribution();
 	nullCompMatchesDistribution=true;
-	if (fCompMatchesDistribution!=NULLRWSTRING)
+	if (fCompMatchesDistribution!=NULLSTRING)
 		nullCompMatchesDistribution=false;
 
 	fMatchesType = aTeamMatCnfg.getMatchesType();
 	nullMatchesType=true;
-	if (fMatchesType!=NULLRWSTRING)
+	if (fMatchesType!=NULLSTRING)
 		nullMatchesType=false;
 
 	fId = aTeamMatCnfg.getId();
@@ -60,151 +52,156 @@ void UCHTeamMatchsCnfg::assignAtributes(CHTeamMatchsCnfg & aTeamMatCnfg)
 	nullnComp=true;
 	if (fnComp!=0)
 		nullnComp=false;
-	flanguage=DBApplication::getAppLanguage();
-	fsDescription=aTeamMatCnfg.getSDescription();
-	nullSDescription=true;
-	if (fsDescription!=NULLRWWSTRING)
-		nullSDescription=false;
-	flDescription=aTeamMatCnfg.getLDescription();
-	nullLDescription=true;
-	if (fsDescription!=NULLRWWSTRING)
-		nullLDescription=false;
-
+		
 	fFAwayC = aTeamMatCnfg.getFAwayC();
 	nullFAwayC=true;
-	if (fFAwayC!=NULLRWSTRING)
+	if (fFAwayC!=NULLSTRING)
 		nullFAwayC=false;
 }
 
-RWBoolean UCHTeamMatchsCnfg::delete_(RWDBConnection& aConnection,GData& aData)
+bool UCHTeamMatchsCnfg::assignNames(CHTeamMatchsCnfg& aTeamMatchsCnfg,const char *language)
 {
-	CHTeamMatchsCnfg & aTeamMatCnfg=(CHTeamMatchsCnfg &)aData;
-	assignAtributes(aTeamMatCnfg);
+	GDescription &desc=aTeamMatchsCnfg.getDescriptions()[language];	
 
-	RWDBTable table = DBApplication::getTable("CHT068_TEAM_MATCH_CNFG");
-	RWCString tableName="CHT568_TEAM_MATCH_CNFG";
-	RWDBTable teamMatchCnfgName	= DBApplication::getTable(tableName);
-	RWDBTable languages			= DBApplication::getTable("ZZT000_LANGUAGE");
-
-	RWDBDeleter deleter=teamMatchCnfgName.deleter();
+	flanguage		= language;
+	flDescription	= desc[_LNAME];		nullLDescription	= (flDescription	== L"");
+	fsDescription	= desc[_SNAME];		nullSDescription	= (fsDescription	== L"");
 	
-	deleter.where(teamMatchCnfgName["TEAMCFG"] == fId);
-
-	RWDBResult aResult=deleter.execute(aConnection);
-	aResult.table();
-	if (aResult.rowCount()>0L)
-	{
-		deleter = table.deleter();
-
-		deleter.where(table["TEAMCFG"]		== fId );
-		aResult=deleter.execute(aConnection);
-		aResult.table();
-	}
-
-	return aResult.rowCount()>0L;
+	return true;
 }
 
-RWBoolean UCHTeamMatchsCnfg::insert(RWDBConnection& aConnection,GData& aData)
+bool UCHTeamMatchsCnfg::insert(GData& aData)
 {
-	RWDBTable table = DBApplication::getTable("CHT068_TEAM_MATCH_CNFG");
-	RWCString tableName="CHT568_TEAM_MATCH_CNFG";
-	RWDBTable teamMatchCnfgName	= DBApplication::getTable(tableName);
-	RWDBTable languages			= DBApplication::getTable("ZZT000_LANGUAGE");
+	MSLDBTable table = getTable(CHT_TEAM_MATCH_CNFG);	
+	MSLDBTable teamMatchCnfgName	= getTable(CHT_TEAM_MATCH_CNFGL);
+	MSLDBTable languages			= getTable(ZZT_LANGUAGE);
 
 	CHTeamMatchsCnfg & aTeamMatCnfg=(CHTeamMatchsCnfg &)aData;
 	assignAtributes(aTeamMatCnfg);
 
-	RWDBInserter inserter = table.inserter();
+	MSLDBInserter inserter = table.inserter();
 
-	inserter["TEAMCFG"]				<< fId;
-	inserter["NCOMPETITORS"]	<< RWDBBoundExpr(&fnComp,&nullnComp);
-	inserter["NMATCHES"]		<< RWDBBoundExpr(&fnMatches,&nullnMatches);
-	inserter["NMATCHESTYPE"]	<< RWDBBoundExpr(&fMatchesType,&nullMatchesType);
-	inserter["COMPMATCHESDISTRIBUTION"]	<< RWDBBoundExpr(&fCompMatchesDistribution,&nullCompMatchesDistribution);
-	inserter["FAWAYC"]			<< RWDBBoundExpr(&fFAwayC,&nullFAwayC);
+	inserter << table["TEAMCFG"]		.assign(fId);
+	inserter << table["NCOMPETITORS"]	.assign(fnComp,&nullnComp);
+	inserter << table["NMATCHES"]		.assign(fnMatches,&nullnMatches);
+	inserter << table["NMATCHESTYPE"]	.assign(fMatchesType,&nullMatchesType);
+	inserter << table["COMPMATCHESDISTRIBUTION"]	.assign(fCompMatchesDistribution,&nullCompMatchesDistribution);
+	inserter << table["FAWAYC"]			.assign(fFAwayC,&nullFAwayC);
 
-	RWDBResult aResult = inserter.execute(aConnection);
-	aResult.table();
+	long count=inserter.execute();
 
-	if (aResult.rowCount()>0L)
-	{
-		inserter=teamMatchCnfgName.inserter();
-		RWSet sVector=aTeamMatCnfg.getNames();
-		RWSetIterator it(sVector);
-		GNames *name=0;
-		while( (name=(GNames *)it()) != 0)
-		{
-			assignAtributesNames(name);
+	if( count>0L )
+		count += OnInsertLang(teamMatchCnfgName,aTeamMatCnfg);
 
-			inserter["TEAMCFG"]	<<	fId;
-			inserter["IDLANGUAGE"]	<<	flanguage;
-			inserter["SDESCRIPTION"]	<<	RWDBBoundExpr(&fsDescription,&nullSDescription);
-			inserter["LDESCRIPTION"]	<<	RWDBBoundExpr(&flDescription,&nullLDescription);
-
-			aResult =  inserter.execute(aConnection);
-			aResult.table();
-		}
-	}
-
-	return aResult.rowCount()!=-1L;
+	return count>0L;
 }
 
-RWBoolean UCHTeamMatchsCnfg::update(RWDBConnection& aConnection,GData& aData)
+long UCHTeamMatchsCnfg::OnInsertLang(MSLDBTable& table, CHTeamMatchsCnfg& aTeamMatchsCnfg)
 {
-	RWDBTable table = DBApplication::getTable("CHT068_TEAM_MATCH_CNFG");
-	RWCString tableName="CHT568_TEAM_MATCH_CNFG";
-	RWDBTable teamMatchCnfgName	= DBApplication::getTable(tableName);
-	RWDBTable languages			= DBApplication::getTable("ZZT000_LANGUAGE");
+	long count=0L;
+	GLanguage *pLang=0;		
+	MSLSetIterator it(GMemoryDataBase::getCol(__GLANGUAGE));		
+	while( (pLang=(GLanguage *)it())!=0 )
+	{
+		if( pLang->getNamesFlag() && assignNames(aTeamMatchsCnfg,pLang->get()) )
+			count+=insertLang(table, aTeamMatchsCnfg);
+	}
+	return count;
+}
 
-	RWDBUpdater updater = table.updater();	
+long UCHTeamMatchsCnfg::insertLang(MSLDBTable& table, CHTeamMatchsCnfg& aTeamMatchsCnfg)
+{
+	MSLDBInserter inserterName=table.inserter();
+	
+	inserterName << table["TEAMCFG"]		.assign(fId);
+	inserterName << table["IDLANGUAGE"]		.assign(flanguage);
+	inserterName << table["SDESCRIPTION"]	.assign(fsDescription,&nullSDescription);
+	inserterName << table["LDESCRIPTION"]	.assign(flDescription,&nullLDescription);
+	
+	return inserterName.execute();
+	UNREFERENCED_PARAMETER(aTeamMatchsCnfg);
+}
+
+
+bool UCHTeamMatchsCnfg::update(GData& aData)
+{
+	MSLDBTable table				= getTable(CHT_TEAM_MATCH_CNFG);	
+	MSLDBTable teamMatchCnfgName	= getTable(CHT_TEAM_MATCH_CNFGL);
+	MSLDBTable languages			= getTable(ZZT_LANGUAGE);
 
 	CHTeamMatchsCnfg & aTeamMatCnfg=(CHTeamMatchsCnfg &)aData;
 	assignAtributes(aTeamMatCnfg);
 
+
+	MSLDBUpdater updater=table.updater();
 	updater.where(table["TEAMCFG"]   == fId);
 
-	updater << table["NCOMPETITORS"]		.assign(RWDBBoundExpr(&fnComp,&nullnComp));
-	updater << table["NMATCHES"]		.assign(RWDBBoundExpr(&fnMatches,&nullnMatches));
-	updater << table["NMATCHESTYPE"]		.assign(RWDBBoundExpr(&fMatchesType,&nullMatchesType));
-	updater << table["COMPMATCHESDISTRIBUTION"]		.assign(RWDBBoundExpr(&fCompMatchesDistribution,&nullCompMatchesDistribution));
-	updater << table["FAWAYC"]			.assign(RWDBBoundExpr(&fFAwayC,&nullFAwayC));
+	updater << table["NCOMPETITORS"]			.assign(fnComp,&nullnComp);
+	updater << table["NMATCHES"]				.assign(fnMatches,&nullnMatches);
+	updater << table["NMATCHESTYPE"]			.assign(fMatchesType,&nullMatchesType);
+	updater << table["COMPMATCHESDISTRIBUTION"]	.assign(fCompMatchesDistribution,&nullCompMatchesDistribution);
+	updater << table["FAWAYC"]					.assign(fFAwayC,&nullFAwayC);
 
-	RWDBResult aResult=updater.execute(aConnection);
-	aResult.table();
+	long count=updater.execute();
 
-	if (aResult.rowCount()>0L)
+	if( count>0L )
+		count += OnUpdateLang(teamMatchCnfgName,aTeamMatCnfg);
+
+	return count>0;	
+}
+
+long UCHTeamMatchsCnfg::updateLang(MSLDBTable& table, CHTeamMatchsCnfg& aTeamMatchsCnfg)
+{
+	MSLDBUpdater updaterName=table.updater();
+	updaterName.where(	table["TEAMCFG"]	== fId		&&
+						table["IDLANGUAGE"]	== flanguage);
+	
+	updaterName << table["SDESCRIPTION"]	.assign(fsDescription,&nullSDescription);
+	updaterName << table["LDESCRIPTION"]	.assign(flDescription,&nullLDescription);
+
+	return updaterName.execute();
+	UNREFERENCED_PARAMETER(aTeamMatchsCnfg);
+}
+
+long UCHTeamMatchsCnfg::OnUpdateLang(MSLDBTable& table, CHTeamMatchsCnfg& aTeamMatchsCnfg)
+{
+	long count=0L,countLang=0L;
+	GLanguage *pLang=0;		
+	MSLSetIterator it(GMemoryDataBase::getCol(__GLANGUAGE));		
+	while( (pLang=(GLanguage *)it())!=0 )
 	{
-		updater = teamMatchCnfgName.updater();
-		RWSet sVector=aTeamMatCnfg.getNames();
-		RWSetIterator it(sVector);
-		GNames *name=0;
-		while( (name=(GNames *)it()) != 0)
+		if( pLang->getNamesFlag() && assignNames(aTeamMatchsCnfg,pLang->get()) )
 		{
-			assignAtributesNames(name);
-			updater.where(  teamMatchCnfgName["TEAMCFG"]    == fId
-					&& teamMatchCnfgName["IDLANGUAGE"]  == flanguage 
-					);
-
-			updater << teamMatchCnfgName["SDESCRIPTION"].assign(RWDBBoundExpr(&fsDescription,&nullSDescription));
-			updater << teamMatchCnfgName["LDESCRIPTION"].assign(RWDBBoundExpr(&flDescription,&nullLDescription));
-
-			aResult=updater.execute(aConnection);
-			aResult.table();
+			countLang=updateLang(table,aTeamMatchsCnfg);
+			if( !countLang )
+				countLang=insertLang(table,aTeamMatchsCnfg);
+			count+=countLang;
 		}
 	}
-
-	return aResult.rowCount()>0L;
+	return count;
 }
 
-void UCHTeamMatchsCnfg::assignAtributesNames(GNames *names)
+bool UCHTeamMatchsCnfg::delete_(GData& aData)
 {
-	flanguage=names->getCode();
-	fsDescription=names->getSName();
-	nullSDescription=true;
-	if (fsDescription!=NULLRWWSTRING)
-		nullSDescription=false;
-	flDescription=names->getLName();
-	nullLDescription=true;
-	if (fsDescription!=NULLRWWSTRING)
-		nullLDescription=false;
+	CHTeamMatchsCnfg & aTeamMatCnfg=(CHTeamMatchsCnfg &)aData;
+	
+	MSLDBTable table        = getTable(CHT_TEAM_MATCH_CNFG);
+	MSLDBTable namesTable   = getTable(CHT_TEAM_MATCH_CNFGL);
+
+	MSLDBDeleter deleter=namesTable.deleter().
+				where(namesTable["TEAMCFG"]==aTeamMatCnfg.getId());
+
+	if (deleter.execute()<=0)
+		return false;
+	
+	MSLDBDeleter deleter2=table.deleter().
+	where(table["TEAMCFG"]==aTeamMatCnfg.getId());
+
+	return deleter2.execute()!=-1L;
 }
+
+
+
+
+
+

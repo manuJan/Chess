@@ -21,35 +21,24 @@
 **************************************************************************************///
 
 
-#if !defined(AFX_QCHREGISTER_H__D4BEC758_9C87_4DBE_9D41_D2E209C037ED__INCLUDED_)
-#define AFX_QCHREGISTER_H__D4BEC758_9C87_4DBE_9D41_D2E209C037ED__INCLUDED_
-
-#ifndef _QCHRegister_H
-#define _QCHRegister_H
-#endif 
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include <OVR/CORE/G/QRegister.h>
 
-#ifndef _CHMNGTMODELDLL_H
-#   include "CHMngtModelDll.h" 
-#endif // _CH_MNGTMODELDLL_H
-
-#include <CORE/G/QRegister.h>
-
-class CHRegister;
 class QCHRegister : public QRegister  
 {
 public:
-	QCHRegister(RWDBConnection *pNewConnection);
-	virtual ~QCHRegister();
+
+	QCHRegister()
+		:QRegister() 
+	{;}
+
+	virtual ~QCHRegister() 
+	{;}
 
 private:
-	void OnSelect(RWDBSelector& aSelect,RWDBTable& z010register);
-	void OnReader(RWDBReader& aReader,GRegister *pRegister);
 
-	GRegister *OnNewRegister();
+	void OnSelect(MSLDBSelector& aSelect,MSLDBTable& z010register);
+	void OnReader(MSLDBReader& aReader,GRegister *pRegister);
 };
 
-#endif // !defined(AFX_QCHREGISTER_H__D4BEC758_9C87_4DBE_9D41_D2E209C037ED__INCLUDED_)
+

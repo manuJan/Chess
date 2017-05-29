@@ -22,11 +22,10 @@
 
 #include "stdCHMngt.h"
 #include "UCHPoolResult.h"
+#include "CHPoolResult.h"
 
 void UCHPoolResult::OnAssignAttributes(GTHPoolResult& aPoolResult)
-{
-	
-	UGTHPoolResult::OnAssignAttributes(aPoolResult);
+{	
 	CHPoolResult* pPoolResult=(CHPoolResult*)&aPoolResult;
 
 	matchesPlayed=pPoolResult->getMPlayed();
@@ -51,34 +50,32 @@ void UCHPoolResult::OnAssignAttributes(GTHPoolResult& aPoolResult)
 	
 }
 
-void UCHPoolResult::OnInsert(RWDBInserter& aInserter,GTHPoolResult& aPoolResult)
+void UCHPoolResult::OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,GTHPoolResult& aPoolResult)
 {
-	UGTHPoolResult::OnInsert(aInserter,aPoolResult);
+	aInserter << table["MATCHES_PLAYED"]	.assign(matchesPlayed,&nullmatchesPlayed);
+	aInserter << table["WON_GAMES"]			.assign(wonGames,&nullwonGames);
+	aInserter << table["LOST_GAMES"]		.assign(lostGames,&nulllostGames);
+	aInserter << table["TIE_GAMES"]			.assign(tieGames,&nulltieGames);
+	aInserter << table["POINTS_F"]			.assign(pointsF,&nullpointsF);
+	aInserter << table["SOLKOFF"]			.assign(solkoff,&nullsolkoff);
+	aInserter << table["MEDIAN_SOLKOFF"]	.assign(mediansolkoff,&nullmediansolkoff);
+	aInserter << table["SONNEBERGER"]		.assign(sonneBerger,&nullsonneBerger);
+	aInserter << table["PROGRESSIVE_SCORE"]	.assign(progressiveScore,&nullprogressiveScore);	
 
-	aInserter["MATCHES_PLAYED"]		<< RWDBBoundExpr(&matchesPlayed,&nullmatchesPlayed);
-	aInserter["WON_GAMES"]			<< RWDBBoundExpr(&wonGames,&nullwonGames);
-	aInserter["LOST_GAMES"]			<< RWDBBoundExpr(&lostGames,&nulllostGames);
-	aInserter["TIE_GAMES"]			<< RWDBBoundExpr(&tieGames,&nulltieGames);
-	aInserter["POINTS_F"]			<< RWDBBoundExpr(&pointsF,&nullpointsF);
-	aInserter["SOLKOFF"]			<< RWDBBoundExpr(&solkoff,&nullsolkoff);
-	aInserter["MEDIAN_SOLKOFF"]		<< RWDBBoundExpr(&mediansolkoff,&nullmediansolkoff);
-	aInserter["SONNEBERGER"]		<< RWDBBoundExpr(&sonneBerger,&nullsonneBerger);
-	aInserter["PROGRESSIVE_SCORE"]	<< RWDBBoundExpr(&progressiveScore,&nullprogressiveScore);
-	
+	UNREFERENCED_PARAMETER(aPoolResult);
 }
 
-void UCHPoolResult::OnUpdate(RWDBUpdater& aUpdater,RWDBTable& table,GTHPoolResult& aPoolResult)
+void UCHPoolResult::OnUpdate(MSLDBUpdater& aUpdater,MSLDBTable& table,GTHPoolResult& aPoolResult)
 {
-	UGTHPoolResult::OnUpdate(aUpdater,table,aPoolResult);
+	aUpdater << table["MATCHES_PLAYED"]		.assign(matchesPlayed,&nullmatchesPlayed);
+	aUpdater << table["WON_GAMES"]			.assign(wonGames,&nullwonGames);
+	aUpdater << table["LOST_GAMES"]			.assign(lostGames,&nulllostGames);
+	aUpdater << table["TIE_GAMES"]			.assign(tieGames,&nulltieGames);
+	aUpdater << table["POINTS_F"]			.assign(pointsF,&nullpointsF);
+	aUpdater << table["SOLKOFF"]			.assign(solkoff,&nullsolkoff);
+	aUpdater << table["MEDIAN_SOLKOFF"]		.assign(mediansolkoff,&nullmediansolkoff);
+	aUpdater << table["SONNEBERGER"]		.assign(sonneBerger,&nullsonneBerger);
+	aUpdater << table["PROGRESSIVE_SCORE"]	.assign(progressiveScore,&nullprogressiveScore);	
 
-	aUpdater << table["MATCHES_PLAYED"]		.assign(RWDBBoundExpr(&matchesPlayed,&nullmatchesPlayed));
-	aUpdater << table["WON_GAMES"]			.assign(RWDBBoundExpr(&wonGames,&nullwonGames));
-	aUpdater << table["LOST_GAMES"]			.assign(RWDBBoundExpr(&lostGames,&nulllostGames));
-	aUpdater << table["TIE_GAMES"]			.assign(RWDBBoundExpr(&tieGames,&nulltieGames));
-	aUpdater << table["POINTS_F"]			.assign(RWDBBoundExpr(&pointsF,&nullpointsF));
-	aUpdater << table["SOLKOFF"]			.assign(RWDBBoundExpr(&solkoff,&nullsolkoff));
-	aUpdater << table["MEDIAN_SOLKOFF"]		.assign(RWDBBoundExpr(&mediansolkoff,&nullmediansolkoff));
-	aUpdater << table["SONNEBERGER"]		.assign(RWDBBoundExpr(&sonneBerger,&nullsonneBerger));
-	aUpdater << table["PROGRESSIVE_SCORE"]	.assign(RWDBBoundExpr(&progressiveScore,&nullprogressiveScore));
-	
+	UNREFERENCED_PARAMETER(aPoolResult);
 }

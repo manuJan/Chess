@@ -20,73 +20,53 @@
 *
 ***************************************************************************************/
 
-#if !defined(AFX_CHMasterType_H__EE4E4030_F708_4BC0_AAF6_E43CB04C85C2__INCLUDED_)
-#define AFX_CHMasterType_H__EE4E4030_F708_4BC0_AAF6_E43CB04C85C2__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include "CHMemoryDataBaseDefs.h"
+#include <OVR/CORE/G/GData.h>
 
-#ifndef _CHMNGTMODELDLL_H
-#   include "CHMngtModelDll.h" 
-#endif // _CH_MNGTMODELDLL_H
-
-class GData;
-
-class CHModelExport CHMasterType : public GData  
+class CHMngtModelExport CHMasterType : public GData  
 {
-	RWDECLARE_COLLECTABLE(CHMasterType)
+	MSLDECLARE_ITEM(CHMasterType)
 
 public:
 	// Constructors & Destructor
 	CHMasterType();
-	CHMasterType(const short id,GNames aNames);
-	CHMasterType(const CHMasterType & copy);
-	CHMasterType(CPack & aPack);
+	CHMasterType(const short id);
+	CHMasterType(const CHMasterType & copy);	
 	virtual ~CHMasterType();
 
 	// Overloaded Operators
-	CHMasterType & operator  = (const CHMasterType & copy);
-	RWBoolean operator == (const CHMasterType & copy);
-	RWBoolean operator != (const CHMasterType & copy);
+	/**** Virtual operators inherited from GData ********************/
+	GData& operator= (const GData& copy);
+	bool   operator==(const GData& copy);
+	bool   operator!=(const GData& copy);
+	
+	/**** Virtual methods inherited from GData **********************/
+	MSLPack& pack  (MSLPack& pck) const;
+	MSLPack& unpack(MSLPack& pck);
 
-	// From GData
-	// SQL Method
-	RWBoolean uSQL(RWDBConnection & pConnect,RWBoolean remove=false);
-	// Packing Methods
-	CPack & pack  (CPack & aPack);
-	CPack & unpack(CPack & aPack);	
-	// Outputs Methods
-	RWCString msl() const;
-	//RWCString mslDescription(const char * language) const;
+	QBase*			onQ() const;
+	UBase*			onU() const;
+	void			setKey();
 
-	// Key Method
-	void setKey();
 	// Set Methods
 	void setMasterType(const short value);
-	void setDescription(const GNames & description);
+	void setDescriptions(GDescription& desc);
 	void setOrder(const short value);
 
 	// Get Methods
 	short getMasterType() const;
 	short getOrder() const;
-	RWSet & getNames();	
-	RWWString getLDescription(const char * language=DBApplication::getAppLanguage()) const;
-	RWWString getSDescription(const char * language=DBApplication::getAppLanguage()) const;
+	GDescriptions&  getDescriptions () const;
 
+	// Class Methods
+	MSLWString getSDescription(const char *lang=0) const;
+	MSLWString getLDescription(const char *lang=0) const;
 	
-
-	
-
 private:
-	// Private Methods
-	void      copyMasterType   (const CHMasterType & copy);
-	RWBoolean compareMasterType(const CHMasterType & copy);
-
-private:
-	short masterType;
-	short order;
-	RWSet masterTypeNames;
+	short m_masterType;
+	short m_order;
+	GDescriptions	m_Desc;
 };
 
-#endif // !defined(AFX_CHMasterType_H__EE4E4030_F708_4BC0_AAF6_E43CB04C85C2__INCLUDED_)
+

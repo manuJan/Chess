@@ -20,73 +20,53 @@
 *
 ***************************************************************************************/
 
-#if !defined(AFX_CHRatingDif_H__EE4E4030_F708_4BC0_AAF6_E43CB04C85C2__INCLUDED_)
-#define AFX_CHRatingDif_H__EE4E4030_F708_4BC0_AAF6_E43CB04C85C2__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include "CHMemoryDataBaseDefs.h"
 
-#ifndef _CHMNGTMODELDLL_H
-#   include "CHMngtModelDll.h" 
-#endif // _CH_MNGTMODELDLL_H
-
-class GData;
-
-class CHModelExport CHRatingDif : public GData  
+class CHMngtModelExport CHRatingDif : public GData  
 {
-	RWDECLARE_COLLECTABLE(CHRatingDif)
+	MSLDECLARE_ITEM(CHRatingDif)
 
 public:
 	// Constructors & Destructor
 	CHRatingDif();
 	CHRatingDif(const short id);
-	CHRatingDif(const CHRatingDif & copy);
-	CHRatingDif(CPack & aPack);
+	CHRatingDif(const CHRatingDif & copy);	
 	virtual ~CHRatingDif();
 
-	// Overloaded Operators
-	CHRatingDif & operator  = (const CHRatingDif & copy);
-	RWBoolean operator == (const CHRatingDif & copy);
-	RWBoolean operator != (const CHRatingDif & copy);
+	/**** Virtual operators inherited from GData ********************/
+	GData& operator= (const GData& copy);
+	bool   operator==(const GData& copy);
+	bool   operator!=(const GData& copy);
 
-	// From GData
-	// SQL Method
-	RWBoolean uSQL(RWDBConnection & pConnect,RWBoolean remove=false);
-	// Packing Methods
-	CPack & pack  (CPack & aPack);
-	CPack & unpack(CPack & aPack);	
-	// Outputs Methods
-	RWCString msl() const;
-	//RWCString mslDescription(const char * language) const;
+	/**** Virtual methods inherited from GData **********************/
+	MSLPack& pack  (MSLPack& pck) const;
+	MSLPack& unpack(MSLPack& pck);
+
+	QBase* onQ() const;
+	UBase* onU() const;
 
 	// Key Method
 	void setKey();
+
 	// Set Methods
 	void setCode(const short value);
 	void setDifference(const short value);
 	void setProbability(const short value);
 	
-
 	// Get Methods
 	short getCode() const;
 	short getDifference() const;
 	short getProbability() const;
 		
 	// Help Methods
-	float getProbabilityCode(RWBoolean positive=true);
-	RWCString getProbabilityCodeStr();
-private:
-	// Private Methods
-	void      copyRatingDif   (const CHRatingDif & copy);
-	RWBoolean compareRatingDif(const CHRatingDif & copy);
+	float getProbabilityCode(bool positive=true);
+	MSLString getProbabilityCodeStr();
+
 
 private:
-	short code;
-	short difference;
-	short probability;
-	
-	
+	short m_code;
+	short m_difference;
+	short m_probability;
 };
 
-#endif // !defined(AFX_CHRatingDif_H__EE4E4030_F708_4BC0_AAF6_E43CB04C85C2__INCLUDED_)

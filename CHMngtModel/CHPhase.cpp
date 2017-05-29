@@ -22,21 +22,24 @@
 
 #include "stdCHMngt.h"
 #include "CHPhase.h"
+#include "CHPhaseBase.h"
 #include "CHEvent.h"
+#include "CHPool.h"
+#include "CHMatch.h"
 #include "UCHPhase.h"
-#include "CHClassIDs.h"
+#include "QCHPhase.h"
 #include "CHMemoryDataBase.h"
 
 
-RWDEFINE_COLLECTABLE(CHPhase, __CHPHASE);
+MSLDEFINE_ITEM(CHPhase, __CHPHASE);
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 CHPhase::CHPhase()
-:THSPPhase()
-,typePhase(CHPhaseBase::eElim)
-,idTeamMatchsCnfg(0)
+:GTHPhase()
+,m_typePhase(CHPhaseBase::eElim)
+,m_idTeamMatchsCnfg(0)
 {
 }
 
@@ -45,88 +48,67 @@ CHPhase::CHPhase(const CHPhase& copy)
 	operator=(copy);
 }
 
-CHPhase::CHPhase(CPack &aPack)
-{
-	unpack(aPack);
-}
-
 CHPhase::~CHPhase()
 {
 }
 
-CHPhase & CHPhase::operator = (const CHPhase & copy)
+GData & CHPhase::operator = (const GData & copy)
 {
 	if (this != &copy)
 	{
-		THSPPhase::operator=(copy);
-		typePhase			= copy.typePhase;
-		idTeamMatchsCnfg	= copy.idTeamMatchsCnfg;
+		GTHPhase::operator=(copy);
+
+		const CHPhase & aPhase=(const CHPhase &) copy;
+
+		m_typePhase			= aPhase.m_typePhase;
+		m_idTeamMatchsCnfg	= aPhase.m_idTeamMatchsCnfg;
 	}
 	return *this;
 }
 
-RWBoolean CHPhase::operator == (const CHPhase & copy)
+bool CHPhase::operator == (const GData & copy)
 {
 	if (this == &copy)
 		return true;
 	
-	else 
-		return (THSPPhase::operator==(copy)					&&
-				typePhase			== copy.typePhase		&&
-				idTeamMatchsCnfg	== copy.idTeamMatchsCnfg);
+	const CHPhase & aPhase=(const CHPhase &) copy;
+	
+	return (GTHPhase::operator==(copy)						&&
+			m_typePhase			== aPhase.m_typePhase		&&
+			m_idTeamMatchsCnfg	== aPhase.m_idTeamMatchsCnfg);
 }
 
-RWBoolean CHPhase::operator != (const CHPhase & copy)
+bool CHPhase::operator != (const GData & copy)
 {
 	return !operator==(copy);
 }
 
-RWBoolean CHPhase::uSQL(RWDBConnection& pConnect,RWBoolean remove/*=false*/)
+QBase*	CHPhase::onQ() const
 {
-	RWBoolean rc=false;
-
-	UCHPhase upd(&pConnect);
-	if( remove )
-		rc=upd.remove(*this);
-	else
-		rc=upd.set(*this);
-	return rc;
+	return new QCHPhase();
 }
 
-RWCString CHPhase::msl() const
+UBase* CHPhase::onU() const
 {
-	RWCString str=THSPPhase::msl();
-	GBuffer aBuffer;
-	if(str==NULLRWSTRING)
-		return str;
-
-	return str + RWCString (aBuffer << getOrder()
-									<< typePhase
-									<< idTeamMatchsCnfg
-									<< endLine);
+	return new UCHPhase();
 }
 
-RWCString CHPhase::mslDescription(const char *language) const
+MSLPack& CHPhase::pack(MSLPack& aPack) const
 {
-	return THSPPhase::mslDescription(language);
-}
-
-CPack& CHPhase::pack(CPack& aPack)
-{
-	THSPPhase::pack(aPack);
+	GTHPhase::pack(aPack);
 		
-	aPack << typePhase;
-	aPack << idTeamMatchsCnfg;
+	aPack << m_typePhase;
+	aPack << m_idTeamMatchsCnfg;
 	
 	return aPack;
 }
 
-CPack& CHPhase::unpack(CPack& aPack)
+MSLPack& CHPhase::unpack(MSLPack& aPack)
 {
-	THSPPhase::unpack(aPack);
+	GTHPhase::unpack(aPack);
 	
-	aPack >> typePhase;
-	aPack >> idTeamMatchsCnfg;
+	aPack >> m_typePhase;
+	aPack >> m_idTeamMatchsCnfg;
 
 	return aPack;
 }
@@ -135,11 +117,11 @@ CPack& CHPhase::unpack(CPack& aPack)
 //////////////////////////////////////////////////////////////////////
 void CHPhase::setTypePhase(const short value)
 {
-	typePhase=value;
+	m_typePhase=value;
 }
 void CHPhase::setIdTeamMatchsCnfg(const short value)
 {
-	idTeamMatchsCnfg=value;
+	m_idTeamMatchsCnfg=value;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -147,44 +129,42 @@ void CHPhase::setIdTeamMatchsCnfg(const short value)
 //////////////////////////////////////////////////////////////////////
 short CHPhase::getTypePhase() const
 {
-	return typePhase;
+	return m_typePhase;
 }
 short CHPhase::getIdTeamMatchsCnfg() const
 {
-	return idTeamMatchsCnfg;
+	return m_idTeamMatchsCnfg;
 }
 
 //////////////////////////////////////////////////////////////////////
 //Help Methods
 //////////////////////////////////////////////////////////////////////
-short CHPhase::getNumRounds()
-{
-	CHPool * pPool=(CHPool*)getPool(0);
-	if(pPool)
-		return pPool->getNumRounds();
 
-	return 0;
-
-}
-
-RWBoolean CHPhase::hasCompetitors()
+bool CHPhase::hasCompetitors()
 {
 	if (getStatus()>=CHMemoryDataBase::eStartList)
 		return true;
 
 	CHPool* pPool = 0;
 	CHMatch* pMatch = 0;
-	for (size_t i=0;i<getPoolsVector().entries();i++)
+
+	MSLSortedVector vPools;
+	getPoolesVector(vPools);
+
+	for (short i=0;i<vPools.entries();i++)
 	{
-		pPool = (CHPool*)getPoolsVector()[i]->getElement();
+		pPool = (CHPool*)vPools[i];
 		if (pPool->hasCompetitors())
 			return true;
 
-		for (size_t j=0;j<pPool->getMatchsVector().entries();j++)
+		MSLSortedVector vMatches;
+		pPool->getMatchesVector(vMatches);
+		
+		for (short j=0;j<vMatches.entries();j++)
 		{
-			pMatch = (CHMatch*)pPool->getMatchsVector()[j]->getElement();
+			pMatch = (CHMatch*)vMatches[j];
 			if (pMatch->hasCompetitors(true) || 
-				pMatch->isBye())
+				pMatch->hasByes())
 				return true;
 		}
 	}

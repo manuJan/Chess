@@ -20,98 +20,76 @@
 *                                                                                      
 **************************************************************************************///
 
-#if !defined(AFX_CHMATCHRESULT_H__BD7CBAA8_FB44_40E4_9EF6_38FCBC1519E4__INCLUDED_)
-#define AFX_CHMATCHRESULT_H__BD7CBAA8_FB44_40E4_9EF6_38FCBC1519E4__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-
-#ifndef _CHMNGTMODELDLL_H
-#   include "CHMngtModelDll.h" 
-#endif // _CH_MNGTMODELDLL_H
-
-
+#include "CHMemoryDataBaseDefs.h"
+#include <Ovr/Core/TH/GTHMatchResult.h>
 
 class CHMatch;
-class CHMatchMember;
 
-class CHModelExport CHMatchResult : public GTHMatchResult  
+class CHMngtModelExport CHMatchResult : public GTHMatchResult  
 {
-	RWDECLARE_COLLECTABLE(CHMatchResult)
+	MSLDECLARE_ITEM(CHMatchResult)
+
 public:
 	enum side {eNone=-1, eWhite=0, eBlack=1};
-	enum colorPreference {eDraw=0,eWhiteAbsolut=1,eWhiteStrong=2,eWhiteModerate=3,eBlackAbsolut=4,eBlackStrong=5,eBlackModerate=6};
+	enum colorPreference {eDraw=0, eWhiteAbsolut=1, eWhiteStrong=2, eWhiteModerate=3, eBlackAbsolut=4, eBlackStrong=5, eBlackModerate=6};
 
 
 	CHMatchResult();
 	CHMatchResult(CHMatch * match,short pos);
-	CHMatchResult(const CHMatchResult& copy);
-	CHMatchResult(CPack& aPack);
+	CHMatchResult(const CHMatchResult& copy);	
 	virtual ~CHMatchResult();
-	//Operator
-	CHMatchResult & operator = (const CHMatchResult & copy);
-	RWBoolean operator == (const CHMatchResult & copy);
-	RWBoolean operator != (const CHMatchResult & copy);
 
-	RWBoolean uSQL(RWDBConnection& pConnect,RWBoolean remove=false);
-	RWCString msl() const;
-	RWCString mslDescription(const char *language) const;
-	CPack& pack(CPack& aPack);
-	CPack& unpack(CPack& aPack);
+	//Operators
+	GData& operator= (const GData & copy);
+	bool   operator==(const GData & copy);
+	bool   operator!=(const GData & copy);
+
+	/**** Virtual methods inherited from MSLItem ********************/
+	virtual MSLPack& pack  (MSLPack& pck) const;
+	virtual MSLPack& unpack(MSLPack& pck);
+
+	//Virtual methods inherited from GData
+	QBase*			onQ() const;
+	UBase*			onU() const;
 
 	// SETS
 	void setPoints(const float value);
-	void setUpFloater(const RWBoolean value);
-	void setDownFloater(const RWBoolean value);
+	void setUpFloater(const bool value);
+	void setDownFloater(const bool value);
 	void setColor(const short value);
 
 	// GETS
-	float getPoints() const;
-	RWCString getPointsAsString() const;
-	RWBoolean getUpFloater() const;
-	RWBoolean getDownFloater() const;
-
-	short getSubMatch() const;
-	
 	short getColor() const;
-	RWCString getColorSDesc() const;
-	RWCString getColorLDesc() const;
+	float getPoints() const;
+	MSLString getPointsAsString() const;
+	bool getUpFloater() const;
+	bool getDownFloater() const;
+		
+	MSLString getColorSDesc() const;
+	MSLString getColorLDesc() const;
 
-	short getMatchNumber() const;
-	unsigned char getMatchStatus() const;
+	bool isQualitative() const;
 	int getTeamMembers() const;
-	GSortedVector getSubMatches();
 	CHMatchResult*	getMatchResultVersus();
-	RWBoolean isHome() const;
-	RWBoolean isQualitative() const;
-	GSortedVector &getInscriptionMembersVector() const;
-	RWBoolean areTeams() const;
+	bool areTeams() const;
 	short getTeamMatchesWon();
 	short getSeed();
-	RWCString getSeedAsString();
+	MSLString getSeedAsString();
 	float getPointsSO();
 
 	int  getColorRGB();
 	
 	short getColorVersus();
-	RWCString getColorVersusSDesc() const;
-	RWCString getColorVersusLDesc() const;
+	MSLString getColorVersusSDesc() const;
+	MSLString getColorVersusLDesc() const;
 
-	// From CHMatchMember
-	CHMatchMember *getMatchMember();
-	RWWString		getMatchMemberLDescription();
-	RWWString		getMatchMemberSDescription();
-
-	RWCString		getPreviousMatchesAsString(CHMatch* pMatch);
-	void			getPreviousMatchesVector(GSortedVector &vMatchResults,CHMatch* _pMatch);
+	MSLString		getPreviousMatchesAsString(CHMatch* pMatch);
+	void			getPreviousMatchesVector(MSLSortedVector &vMatchResults, CHMatch* _pMatch);
 
 private:
-	float	  points;				// Numero de puntos ganados
-	short	  color;				// color de fichas
-
-	RWBoolean upFloater;
-	RWBoolean downFloater;
+	float	  m_points;				// Numero de puntos ganados
+	bool	  m_upFloater;
+	bool	  m_downFloater;
+	short	  m_color;				// color de fichas
 };
-
-#endif // !defined(AFX_CHMATCHRESULT_H__BD7CBAA8_FB44_40E4_9EF6_38FCBC1519E4__INCLUDED_)

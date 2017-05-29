@@ -24,31 +24,21 @@
 #include "CHEvent.h"
 #include "CHMemoryDataBase.h"
 #include "CHTeamMatchsCnfg.h"
-#include <Core/G/DBApplication.h>
+#include <ovr/core/G/DBApplication.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-QCHTeamMatchsCnfg::QCHTeamMatchsCnfg(RWDBConnection *pNewConnection)
-:QBase(pNewConnection)
+size_t QCHTeamMatchsCnfg::selectCollection(MSLCollection& target)
 {
-}
+	MSLString table=CHT_TEAM_MATCH_CNFG;
+	MSLString tableName=CHT_TEAM_MATCH_CNFGL;
 
-QCHTeamMatchsCnfg::~QCHTeamMatchsCnfg()
-{
-}
-
-
-size_t QCHTeamMatchsCnfg::selectCollection(RWDBConnection& aConnection,RWCollection& target)
-{
-	RWCString table="CHT068_TEAM_MATCH_CNFG";
-	RWCString tableName="CHT568_TEAM_MATCH_CNFG";
-
-	RWDBTable teamMatchCnfg	= DBApplication::getTable(table);
-	RWDBTable teamMatchCnfgName	= DBApplication::getTable(tableName);
-	RWDBTable languages			= DBApplication::getTable("ZZT000_LANGUAGE");
-	RWDBSelector select	= DBApplication::getSelector();
+	MSLDBTable teamMatchCnfg	 = getTable(table);
+	MSLDBTable teamMatchCnfgName = getTable(tableName);
+	MSLDBTable languages	     = getTable("ZZT000_LANGUAGE");
+	MSLDBSelector select		 = getSelector();
 
 	select << teamMatchCnfg["TEAMCFG"]
 		   << teamMatchCnfg["NCOMPETITORS"]
@@ -65,20 +55,21 @@ size_t QCHTeamMatchsCnfg::selectCollection(RWDBConnection& aConnection,RWCollect
 				&& teamMatchCnfgName["IDLANGUAGE"]  == languages["IDLANGUAGE"] 
 				&& languages["FACTIVE"]      == "Y");
 	
-	RWCString fSex, fEvent, fRound, fPhase, fCompMatchesDistribution,
+	MSLString fSex, fEvent, fRound, fPhase, fCompMatchesDistribution,
 		fMatchesType, fFAwayC;
 	short fId, fnMatches, fnComp;
-	RWDBNullIndicator nullRound, nullPhase, nullnComp, nullMatchesType,
+	MSLDBNullIndicator nullRound, nullPhase, nullnComp, nullMatchesType,
 		nullCompMatchesDistribution, nullnMatches, nullId, nullFAwayC;
 
-	RWCString flanguage;
-	RWWString fsDescription,flDescription;
-	RWDBNullIndicator nullSDescription,nullLDescription;
+	MSLString flanguage;
+	MSLWString fsDescription,flDescription;
+	MSLDBNullIndicator nullSDescription,nullLDescription;
 
-	CHTeamMatchsCnfg *pTeamMatCnfg=0,aTeamMatCnfg;
-	GNames aNames;
+	CHTeamMatchsCnfg aTeamMatCnfg, *pTeamMatCnfg=0;
+	
+	GDescription desc;
 
-	RWDBReader reader = select.reader(aConnection);
+	MSLDBReader reader = select.reader();
 
 	while (reader())
 	{	
@@ -94,16 +85,17 @@ size_t QCHTeamMatchsCnfg::selectCollection(RWDBConnection& aConnection,RWCollect
 			   ;
 
 		if( nullSDescription ) 
-			fsDescription=NULLRWWSTRING;
+			fsDescription=NULLWSTRING;
 		if( nullLDescription ) 
-			flDescription=NULLRWWSTRING;
+			flDescription=NULLWSTRING;
 		
-		aNames.setCode(flanguage);
-		aNames.setSName(fsDescription);
-		aNames.setLName(flDescription);
+		desc.set(flanguage);
+		desc.set(_LNAME,flDescription);
+		desc.set(_SNAME,fsDescription);
 
 		aTeamMatCnfg.setId(fId);
-		pTeamMatCnfg=(CHTeamMatchsCnfg *)CHMemoryDataBase::findTeamMatchsCnfg(aTeamMatCnfg);
+		pTeamMatCnfg=(CHTeamMatchsCnfg*) target.find(&aTeamMatCnfg);
+
 		if (!pTeamMatCnfg)
 		{
 			pTeamMatCnfg=new CHTeamMatchsCnfg();
@@ -115,7 +107,8 @@ size_t QCHTeamMatchsCnfg::selectCollection(RWDBConnection& aConnection,RWCollect
 			pTeamMatCnfg->setFAwayC(fFAwayC);
 			target.insert(pTeamMatCnfg);
 		}
-		pTeamMatCnfg->setDescription(aNames);
+
+		pTeamMatCnfg->setDescriptions(desc);	
 	}
 	return target.entries();
 }

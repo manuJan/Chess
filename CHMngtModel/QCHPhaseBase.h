@@ -20,34 +20,23 @@
 *                                                                                      
 **************************************************************************************///
 
-#if !defined(AFX_QCHPHASEBASE_H__DD01EE36_BA4E_406B_A423_1C888719D597__INCLUDED_)
-#define AFX_QCHPHASEBASE_H__DD01EE36_BA4E_406B_A423_1C888719D597__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#include <OVR/CORE/TH/QGTHPhaseBase.h>
 
-#include <core/TH/QGTHPhaseGeneric.h>
-
-class CHPhaseBase;
-
-class QCHPhaseBase : public QGTHPhaseGeneric  
+class QCHPhaseBase : public QGTHPhaseBase
 {
 public:
-	QCHPhaseBase(RWDBConnection *pNewConnection)
-	:QGTHPhaseGeneric(pNewConnection)
-	{;}
 
+	QCHPhaseBase()
+		:QGTHPhaseBase()
+	{;}
 	virtual ~QCHPhaseBase() {;}
 
-private:
-	void OnSelect(RWDBSelector& aSelect,RWDBTable& z012phase,RWDBTable& z512phase);
-	void OnReader(RWDBReader& aReader,GNamesEx& aDescription,GPhaseBase *pPhaseGeneric);
-    
-	
-private:
-	GPhaseBase *OnNewPhaseBase();
+protected:
+
+	void OnSelect(MSLDBSelector& aSelect,MSLDBTable& z012phaseBase,MSLDBTable& z512phaseBase);
+	void OnReader(MSLDBReader& aReader,GDescription& aDescription,GPhaseBase *pPhaseBase);
 
 };
 
-#endif // !defined(AFX_QCHPHASEBASE_H__DD01EE36_BA4E_406B_A423_1C888719D597__INCLUDED_)
+

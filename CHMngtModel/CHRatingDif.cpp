@@ -22,11 +22,11 @@
 
 #include "stdCHMngt.h"
 #include "CHRatingDif.h"
+#include "QCHRatingDif.h"
 #include "UCHRatingDif.h"
-#include "CHClassIDs.h"
-#include <core/G/GScore.h>
+#include <ovr/core/G/GScore.h>
 
-RWDEFINE_COLLECTABLE(CHRatingDif,__CHRATINGDIF)
+MSLDEFINE_ITEM(CHRatingDif,__CHRATINGDIF)
 
 /////////////////////////////////////////////////////////////////////
 // Constructors & Destructor
@@ -34,106 +34,80 @@ RWDEFINE_COLLECTABLE(CHRatingDif,__CHRATINGDIF)
 
 CHRatingDif::CHRatingDif()
 :GData()
-,code(0)
-,difference(0)
-,probability(0)
+,m_code(0)
+,m_difference(0)
+,m_probability(0)
 {
 
 }
 CHRatingDif::CHRatingDif(const short id)
 :GData()
-,code(id)
-,difference()
-,probability(0)
+,m_code(id)
+,m_difference()
+,m_probability(0)
 {
 	setKey();
 }
 
 CHRatingDif::CHRatingDif(const CHRatingDif & copy)
-{
-	copyRatingDif(copy);
-	setKey();
+{	
+	operator=(copy);
 }
 
-CHRatingDif::CHRatingDif(CPack & aPack)
-{
-	unpack(aPack);
-	setKey();
-}
 
 CHRatingDif::~CHRatingDif()
-{
-	
+{	
 }
 
 //////////////////////////////////////////////////////////////////////
 // Overloaded Operators
 //////////////////////////////////////////////////////////////////////
 
-CHRatingDif & CHRatingDif::operator = (const CHRatingDif & copy)
-{
-	copyRatingDif(copy);
+GData & CHRatingDif::operator = (const GData & copy)
+{		
+	if (this != &copy)
+	{
+		const CHRatingDif & aRatingDif=(const CHRatingDif&) copy;
+
+		m_code			= aRatingDif.m_code;
+		m_difference    = aRatingDif.m_difference;
+		m_probability	= aRatingDif.m_probability;
+	}
 	return *this;
 }
 
-RWBoolean CHRatingDif::operator == (const CHRatingDif & copy)
+bool CHRatingDif::operator == (const GData & copy)
 {
-	return compareRatingDif(copy);
-}
-
-RWBoolean CHRatingDif::operator != (const CHRatingDif & copy)
-{
-	return !compareRatingDif(copy);
-}
-void CHRatingDif::copyRatingDif(const CHRatingDif & copy)
-{
-	if( this == &copy )
-		return;
-
-	difference	= copy.difference;
-	probability = copy.probability;
-	
-}
-
-RWBoolean CHRatingDif::compareRatingDif(const CHRatingDif & copy)
-{
-	if( this == &copy )
+	if (this == &copy)
 		return true;
 
-	if( code		!= copy.code		   ||
-		difference	!= copy.difference     ||
-		probability != copy.probability )
-		return false;
+	const CHRatingDif & aRatingDif=(const CHRatingDif&) copy;
 
-	return true;
+	return ( m_code			== aRatingDif.m_code		&&
+			 m_difference	== aRatingDif.m_difference	&&
+			 m_probability	== aRatingDif.m_probability);
 }
+
+bool CHRatingDif::operator != (const GData & copy)
+{
+	return !operator==(copy);
+}
+
 //////////////////////////////////////////////////////////////////////
 // SQL Method
 //////////////////////////////////////////////////////////////////////
 
-RWBoolean CHRatingDif::uSQL(RWDBConnection & pConnect,RWBoolean remove/*=false*/)
-{
-	UCHRatingDif upd(&pConnect);
-	return remove ? upd.remove(*this) : upd.set(*this);
-}
-//////////////////////////////////////////////////////////////////////
-// Outputs Methods
-//////////////////////////////////////////////////////////////////////
 
-RWCString CHRatingDif::msl() const
+QBase* CHRatingDif::onQ() const
 {
-	GBuffer aBuffer;
-	
-	char strCode[4];
-	sprintf(strCode,"%.3d",code);
-
-	return aBuffer << isA()
-				   << getKey()
-				   << strCode
-				   << difference
-				   << probability
-				   << endLine;
+	return new QCHRatingDif();
 }
+
+UBase* CHRatingDif::onU() const
+{
+	return new UCHRatingDif();
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // Key Method
@@ -142,7 +116,7 @@ RWCString CHRatingDif::msl() const
 void CHRatingDif::setKey()
 {
 	char tmp[4];
-	sprintf(tmp,"%.3d",code);
+	sprintf_s(tmp,"%.3d",m_code);
 	key=tmp;
 }
 
@@ -152,17 +126,18 @@ void CHRatingDif::setKey()
 
 void CHRatingDif::setCode(const short value)
 {
-	code = value;
+	m_code = value;
 	setKey();
 }
 
 void CHRatingDif::setDifference(const short value)
 {
-	difference = value;
+	m_difference = value;
 }
+
 void CHRatingDif::setProbability(const short value)
 {
-	probability = value;
+	m_probability = value;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -170,34 +145,34 @@ void CHRatingDif::setProbability(const short value)
 //////////////////////////////////////////////////////////////////////
 short CHRatingDif::getCode() const
 { 
-	return code; 
+	return m_code; 
 }
 
 short CHRatingDif::getDifference() const
 {
-	return difference;
+	return m_difference;
 }
 
 short CHRatingDif::getProbability() const
 {
-	return probability;
+	return m_probability;
 }
 //////////////////////////////////////////////////////////////////////
 // Help Methods
 //////////////////////////////////////////////////////////////////////
-float CHRatingDif::getProbabilityCode(RWBoolean positive/*=true*/)
+float CHRatingDif::getProbabilityCode(bool positive/*=true*/)
 {
 	if(positive) 
 		 return float(float(getProbability())/float(100));
 	else return float(float(100-getProbability())/float(100));
 
 }
-RWCString CHRatingDif::getProbabilityCodeStr()
+MSLString CHRatingDif::getProbabilityCodeStr()
 {
 	GScore pointsSPos = GScore(getProbabilityCode(true));
 	GScore pointsSNeg = GScore(getProbabilityCode(false));
 	
-	RWCString a=pointsSPos.asString("#.##")+" / "+pointsSNeg.asString("#.##");
+	MSLString a=pointsSPos.asString("#.##")+" / "+pointsSNeg.asString("#.##");
 	return a;
 }
 
@@ -205,22 +180,21 @@ RWCString CHRatingDif::getProbabilityCodeStr()
 // Packing Methods
 //////////////////////////////////////////////////////////////////////
 
-CPack & CHRatingDif::pack(CPack & aPack)
-{
-	
-	aPack << code;
-	aPack << difference;
-	aPack << probability;
+MSLPack & CHRatingDif::pack(MSLPack & aPack) const
+{	
+	aPack << m_code;
+	aPack << m_difference;
+	aPack << m_probability;
 
 	return aPack;
 }
 
-CPack & CHRatingDif::unpack(CPack & aPack)
+MSLPack & CHRatingDif::unpack(MSLPack & aPack)
 {
 		
-	aPack >> code;
-	aPack >> difference;
-	aPack >> probability;
+	aPack >> m_code;
+	aPack >> m_difference;
+	aPack >> m_probability;
 
 	return aPack;
 }
