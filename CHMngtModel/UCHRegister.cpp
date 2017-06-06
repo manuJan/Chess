@@ -32,7 +32,7 @@ void UCHRegister::OnAssignAttributes(GRegister& aRegister)
 {
 	CHRegister & aCHRegister = (CHRegister&)aRegister;
 
-	masterType		= aCHRegister.getMasterType();
+	masterType		= aCHRegister.getMasterTypeCode();
 	nullMasterType	= (masterType==0);
 }
 

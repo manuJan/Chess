@@ -192,13 +192,19 @@ GRegister::TypeRegister CHInscription::getType() const
 short CHInscription::getRegMasterType() const
 {
 	CHRegister* pRegister = (CHRegister*)getRegister();
-	return pRegister?pRegister->getMasterType():0;
+	return pRegister?pRegister->getMasterTypeCode():0;
 }	
 
-MSLString CHInscription::getRegMasterTypeAsString(bool longer/*=true*/) const
+MSLWString CHInscription::getRegMasterTypeSDescription() const
 {
 	CHRegister* pRegister = (CHRegister*)getRegister();
-	return pRegister?pRegister->getMasterTypeAsString(longer):NULLSTRING;
+	return pRegister ? pRegister->getMasterTypeSDescription() : NULLWSTRING;
+}
+
+MSLWString CHInscription::getRegMasterTypeLDescription() const
+{
+	CHRegister* pRegister = (CHRegister*)getRegister();
+	return pRegister ? pRegister->getMasterTypeLDescription() : NULLWSTRING;
 }
 
 short CHInscription::getRegMasterTypeOrder() const
@@ -257,4 +263,14 @@ MSLWString CHInscription::getTeamScbLName(const bool bFMember, const bool bSMemb
 short CHInscription::getTypeEvent() const
 {
 	return ((CHEvent *)getEvent())->getTypeEvent();
+}
+
+MSLWString CHInscription::getGroupLDescription(const char *lang/*=0*/)
+{
+	return getRegister()?getRegister()->getGroupLDescription(lang):L"";
+}
+	
+MSLWString CHInscription::getGroupSDescription(const char *lang/*=0*/)
+{
+	return getRegister()?getRegister()->getGroupSDescription(lang):L"";
 }

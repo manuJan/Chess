@@ -112,23 +112,37 @@ MSLPack& CHRegister::unpack(MSLPack &aPack)
 	return aPack;
 }
 // set
-void CHRegister::setMasterType(const short value)
+void CHRegister::setMasterTypeCode(const short value)
 {
 	m_masterType = value;
 }
 // get
-short CHRegister::getMasterType() const
+short CHRegister::getMasterTypeCode() const
 {
 	return m_masterType;
 }
 
-MSLString CHRegister::getMasterTypeAsString(bool longer/*=true*/) const
+CHMasterType * CHRegister::getMasterType()
+{
+	return (CHMasterType *)CHMemoryDataBase::findMasterType(m_masterType);
+}
+
+MSLWString CHRegister::getMasterTypeLDescription() const
 {
 	CHMasterType *pMast=(CHMasterType *)CHMemoryDataBase::findMasterType(m_masterType);
 	if (pMast && pMast->getMasterType()>0)
-		return longer ? pMast->getLDescription().toAscii() : pMast->getSDescription().toAscii();
+		return pMast->getLDescription();
 
-	return NULLSTRING;
+	return NULLWSTRING;
+}
+
+MSLWString CHRegister::getMasterTypeSDescription() const
+{
+	CHMasterType *pMast=(CHMasterType *)CHMemoryDataBase::findMasterType(m_masterType);
+	if (pMast && pMast->getMasterType()>0)
+		return pMast->getSDescription();
+
+	return NULLWSTRING;
 }
 
 short CHRegister::getMasterTypeOrder() const

@@ -53,10 +53,9 @@ public:
 		
 	//get
 	short getTypePhase()			const;
-	short getIdTeamMatchsCnfg()			const;
+	short getIdTeamMatchsCnfg()		const;
 
-	// From CHPool
-	short getNumRounds();
+	MSLWString getTypePhaseDescription();
 
 	bool hasCompetitors();
 	

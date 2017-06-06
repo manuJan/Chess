@@ -170,3 +170,20 @@ bool CHPhase::hasCompetitors()
 	}
 	return false;
 }
+
+MSLWString CHPhase::getTypePhaseDescription()
+{
+	switch (m_typePhase)
+	{
+	case CHPhaseBase::eElim:
+		return "Eliminatory";
+	case CHPhaseBase::ePool:
+		return "Pool";
+	case CHPhaseBase::eSwiss:
+		return "Swiss Round";
+	case CHPhaseBase::eRepechage:
+		return "Repechage";
+	}
+
+	return NULLWSTRING;
+}

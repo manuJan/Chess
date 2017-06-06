@@ -46,6 +46,9 @@ private:
 	MSLString reqRankOrd;
 	MSLDBNullIndicator nullReqRankOrd;
 	
+	MSLString codeReports;
+	MSLDBNullIndicator nullCodeReports;
+
 	float	fConstRating;
 	float	fPointsBye;		
 };

@@ -36,11 +36,13 @@ void UCHEvent::OnAssignAttributes(const GEvent& aEvent)
 	fTypeEvent		= pEvent->getTypeEvent();
 	
 	reqRankOrd		= pEvent->getReqRankOrder();
-	nullReqRankOrd	= (reqRankOrd != "");
+	nullReqRankOrd	= (reqRankOrd == "");
 
 	fConstRating	= pEvent->getConstRating();
 	fPointsBye		= pEvent->getPointsBye();
-			
+
+	codeReports		= pEvent->getCodeReports();
+	nullCodeReports = (codeReports == "");
 }
 
 void UCHEvent::OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GEvent& aEvent)
@@ -51,10 +53,11 @@ void UCHEvent::OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GEvent&
 
 	aInserter << table["TWO_BRONCES"]	.assign(fTwoBronces);
 	aInserter << table["TYPE_EVENT"]	.assign(fTypeEvent);
-	aInserter << table["REQRANKORDER"]	.assign(reqRankOrd);
+	aInserter << table["REQRANKORDER"]	.assign(reqRankOrd,&nullReqRankOrd);
 	aInserter << table["TEAMCFG"]		.assign(pEvent->getIdTeamMatchsCnfg());
 	aInserter << table["CONST_RATING"]	.assign(fConstRating);
 	aInserter << table["POINTS_BYE"]	.assign(fPointsBye);
+	aInserter << table["CODE_REPORTS"]	.assign(codeReports,&nullCodeReports);
 	
 }
 
@@ -66,9 +69,10 @@ void UCHEvent::OnUpdate(MSLDBUpdater& aUpdater,MSLDBTable& table,const GEvent& a
 		
 	aUpdater << table["TWO_BRONCES"]	.assign(fTwoBronces);
 	aUpdater << table["TYPE_EVENT"]		.assign(fTypeEvent);
-	aUpdater << table["REQRANKORDER"]	.assign(reqRankOrd);
+	aUpdater << table["REQRANKORDER"]	.assign(reqRankOrd,&nullReqRankOrd);
 	aUpdater << table["TEAMCFG"]		.assign(pEvent->getIdTeamMatchsCnfg());
 	aUpdater << table["CONST_RATING"]	.assign(fConstRating);
 	aUpdater << table["POINTS_BYE"]		.assign(fPointsBye);
+	aUpdater << table["CODE_REPORTS"]	.assign(codeReports,&nullCodeReports);
 }
 

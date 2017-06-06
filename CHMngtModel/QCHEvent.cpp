@@ -36,6 +36,7 @@ void QCHEvent::OnSelect(MSLDBSelector& aSelect,MSLDBTable& tEvent)
 			<< tEvent["TEAMCFG"]
 			<< tEvent["CONST_RATING"]
 			<< tEvent["POINTS_BYE"]
+			<< tEvent["CODE_REPORTS"]
 			;
 }
 
@@ -48,22 +49,31 @@ void QCHEvent::OnReader(MSLDBReader& aReader,GEvent* pEvent)
 	float constRating=0.0;
 	float pointsBye=0.0;
 	
-	MSLString reqRankOrd(NULLSTRING);
+	MSLDBNullIndicator nullCodeRep,nullReqRankOrd;
+
+	MSLWString reqRankOrd(NULLWSTRING);
+	MSLString codeReports(NULLSTRING);
 	
 	aReader	>> fTwoBronces
 			>> fTypeEvent
-			>> reqRankOrd
+			>> nullReqRankOrd >> reqRankOrd
 			>> fidTeamMatCnfg
 			>> constRating
-			>> pointsBye;
+			>> pointsBye
+			>> nullCodeRep >> codeReports;
 	
 	CHEvent * pNewEvent = (CHEvent *)pEvent;
 
+	if (nullReqRankOrd)
+		reqRankOrd=NULLWSTRING;
+	if (nullCodeRep)
+		codeReports=NULLSTRING;
+
 	pNewEvent->setTwoBronces(fTwoBronces);
 	pNewEvent->setTypeEvent(fTypeEvent);
-	pNewEvent->setReqRankOrder(reqRankOrd);
+	pNewEvent->setReqRankOrder(reqRankOrd.toAscii());
 	pNewEvent->setIdTeamMatchsCnfg(fidTeamMatCnfg);
 	pNewEvent->setConstRating(constRating);
 	pNewEvent->setPointsBye(pointsBye);
-
+	pNewEvent->setCodeReports(codeReports);
 }

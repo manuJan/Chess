@@ -45,6 +45,6 @@ void QCHRegister::OnReader(MSLDBReader& aReader,GRegister *pRegister)
 	if( nullMasterType)
 		masterType=0;
 
-	pCHRegister->setMasterType(masterType);
+	pCHRegister->setMasterTypeCode(masterType);
 }
 

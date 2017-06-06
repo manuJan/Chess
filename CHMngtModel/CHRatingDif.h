@@ -62,6 +62,7 @@ public:
 	// Help Methods
 	float getProbabilityCode(bool positive=true);
 	MSLString getProbabilityCodeStr();
+	MSLString getDifferenceStr();
 
 
 private:

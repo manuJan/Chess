@@ -55,8 +55,9 @@ public:
 	void setTwoBronces		(const short value);	
 	void setReqRankOrder	(const MSLString value);
 	void setIdTeamMatchsCnfg(const short value);
-	void setConstRating		(const float value);
-	void setPointsBye		(const float value);
+	void setConstRating		(const double value);
+	void setPointsBye		(const double value);
+	void setCodeReports		(const MSLString value);
 	
 	
 	//Get´s
@@ -66,15 +67,17 @@ public:
 	short		getInscriptions		() const;
 	int			getTeamMembers		() const;
 	short		getIdTeamMatchsCnfg	() const;	
-	float		getConstRating		() const;	
+	MSLString	getCodeReports		() const;
+	
+	double		getConstRating		() const;	
 	MSLString	getConstRatingStr	() const;
 	short		getTeamMatchsCnfgMembers() const;
 	short		getTeamMatches		() const;
-	float		getPointsBye		() const;
+	double		getPointsBye		() const;
 	MSLString	getPointsByeStr		() const;
-	
-
-	
+	MSLWString	getTypeEventAsString() const;
+	MSLWString	getRegTypeAsString	() const;
+		
 	bool isTeam    () const;
 
 	
@@ -82,7 +85,8 @@ public:
 	CHEvent::TypeRank   getRankOrder(short index) const;
 	short				getNumRankOrder() const;
 	bool				findRankOrder(CHEvent::TypeRank rankType) const;
-	
+	int					getRankPosition(CHEvent::TypeRank rankType);
+
 private:
 	
 	//Atributos
@@ -92,7 +96,8 @@ private:
 			
 	MSLString m_reqRankOrder; //tipo de ordenacion para los ranking
 	short m_idTeamMatchsCnfg;
-	float m_constRating;
-	float m_pointsBye;
+	double m_constRating;
+	double m_pointsBye;
+	MSLString m_codeReports;
 	
 };

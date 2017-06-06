@@ -48,12 +48,15 @@ public:
 	UBase*			onU() const;
 
 	// set
-	void setMasterType(const short value);
+	void setMasterTypeCode(const short value);
 
 	// get
-	short getMasterType() const;
-	MSLString getMasterTypeAsString(bool longer=true) const;
+	short getMasterTypeCode() const;
+
+	MSLWString getMasterTypeLDescription() const;
+	MSLWString getMasterTypeSDescription() const;
 	short getMasterTypeOrder() const;
+	CHMasterType * getMasterType();
 
 private:	
 	short m_masterType;

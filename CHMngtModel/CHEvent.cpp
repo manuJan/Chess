@@ -52,6 +52,7 @@ CHEvent::CHEvent()
 ,m_idTeamMatchsCnfg(0)
 ,m_constRating(0.0)
 ,m_pointsBye(0.0)
+,m_codeReports(NULLSTRING)
 {
 }
 
@@ -80,6 +81,7 @@ GData & CHEvent::operator =(const GData & copy)
 		m_idTeamMatchsCnfg	= aEvent.m_idTeamMatchsCnfg;
 		m_constRating		= aEvent.m_constRating;
 		m_pointsBye			= aEvent.m_pointsBye;		
+		m_codeReports		= aEvent.m_codeReports;
 	}
 	return * this;
 }
@@ -96,7 +98,8 @@ bool CHEvent::operator==(const GData & copy)
 			m_reqRankOrder		== aEvent.m_reqRankOrder		&&
 			m_idTeamMatchsCnfg	== aEvent.m_idTeamMatchsCnfg	&&
 			m_constRating		== aEvent.m_constRating			&&
-			m_pointsBye			== aEvent.m_pointsBye			);
+			m_pointsBye			== aEvent.m_pointsBye			&&
+			m_codeReports		== aEvent.m_codeReports			);
 }
 
 bool CHEvent::operator!=(const GData & copy)
@@ -114,6 +117,7 @@ MSLPack& CHEvent::pack(MSLPack& aPack) const
 	aPack << m_idTeamMatchsCnfg;
 	aPack << m_constRating;
 	aPack << m_pointsBye;
+	aPack << m_codeReports;
 	
 	return aPack;
 }
@@ -128,6 +132,7 @@ MSLPack& CHEvent::unpack(MSLPack& aPack)
 	aPack >> m_idTeamMatchsCnfg;
 	aPack >> m_constRating;
 	aPack >> m_pointsBye;
+	aPack >> m_codeReports;
 	
 	return aPack;
 }
@@ -163,13 +168,18 @@ void CHEvent::setIdTeamMatchsCnfg(const short value)
 { 
 	m_idTeamMatchsCnfg=value;
 }
-void CHEvent::setConstRating(const float value)
+void CHEvent::setConstRating(const double value)
 { 
 	m_constRating=value;
 }
-void CHEvent::setPointsBye(const float value)
+void CHEvent::setPointsBye(const double value)
 { 
 	m_pointsBye=value;
+}
+
+void CHEvent::setCodeReports(const MSLString value)
+{
+	m_codeReports = value;
 }
 
 //Get´s
@@ -193,26 +203,28 @@ short CHEvent::getIdTeamMatchsCnfg() const
 { 
 	return m_idTeamMatchsCnfg;
 }
-float CHEvent::getConstRating() const
+double CHEvent::getConstRating() const
 { 
 	return m_constRating;
 }
-float CHEvent::getPointsBye() const
+double CHEvent::getPointsBye() const
 { 
 	return m_pointsBye;
+}
+
+MSLString CHEvent::getCodeReports() const
+{
+	return m_codeReports;		
 }
 
 MSLString CHEvent::getConstRatingStr() const
 {
 	MSLString format="##";
-	float auxRating=getConstRating();
+	double auxRating=getConstRating();
 
 	if((auxRating-int(auxRating))>0)
-	{
-		format="###.#"; // Decimales
-		
-	}
-
+		format="###.#"; // Decimales		
+	
 	GScore ratingF = GScore(auxRating);
 	MSLString p=ratingF.asString(format);
 	
@@ -223,7 +235,7 @@ MSLString CHEvent::getConstRatingStr() const
 MSLString CHEvent::getPointsByeStr() const
 {
 	MSLString format="##";
-	float aux=getPointsBye();
+	double aux=getPointsBye();
 
 	if((aux-int(aux))>0)
 		format="###.#"; // Decimales		
@@ -233,6 +245,29 @@ MSLString CHEvent::getPointsByeStr() const
 	
 	p=p.strip(MSLString::leading,' ');
 	return p;
+}
+
+MSLWString CHEvent::getTypeEventAsString() const
+{
+	switch (getTypeEvent())
+	{
+		case eNone:
+			return "";
+		case eClassic:
+			return "Classical";
+		case eRapid:
+			return "Rapid";
+		case eBlitz:
+			return "Blitz";
+	}
+
+	return NULLWSTRING;
+}
+
+MSLWString CHEvent::getRegTypeAsString	() const
+{
+	GRegType * pRegType = CHMemoryDataBase::findRegType( GRegister::TypeRegister( getRegType()));
+	return  (pRegType) ? pRegType->getLDescription() : NULLWSTRING;
 }
 
 short CHEvent::getInscriptions() const
@@ -313,3 +348,14 @@ bool CHEvent::findRankOrder(CHEvent::TypeRank rankType) const
 	return false;
 }
 
+int CHEvent::getRankPosition(CHEvent::TypeRank rankType)
+{
+	short nRanks=getNumRankOrder();
+	for(short i=0 ; i<nRanks ; i++)
+	{
+		CHEvent::TypeRank rankOrder=getRankOrder(i);
+		if(rankOrder==rankType)
+			return i;
+	}
+	return 0;
+}

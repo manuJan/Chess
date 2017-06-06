@@ -73,9 +73,13 @@ public:
 
 	// From CHRegister
 	short getRegMasterType() const;
-	MSLString getRegMasterTypeAsString(bool longer=true) const;
+	MSLWString getRegMasterTypeSDescription() const;
+	MSLWString getRegMasterTypeLDescription() const;
 	short getRegMasterTypeOrder() const;
 	
+	MSLWString			getGroupLDescription(const char *lang=0);
+	MSLWString			getGroupSDescription(const char *lang=0);
+
 private:
 	short	m_seed;	// cabeza de serie
 	short	m_rating;	// Puntuacion acumulada	

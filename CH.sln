@@ -5,6 +5,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CHMngtModel", "CHMngtModel\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CHManager", "CHManager\CHManager.vcxproj", "{08E70EFE-6164-4E01-BAF7-809E5F85841B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CHVMngtModel", "CHVMngtModel\CHVMngtModel.vcxproj", "{8771DED8-83EC-4C43-8245-D481D420C4C9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VMngtModel", "..\..\ovr-general\general\reports\V\VMngtModel.vcxproj", "{ED009612-7FF4-4ADF-8F28-D0DB00D5C66F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +23,14 @@ Global
 		{08E70EFE-6164-4E01-BAF7-809E5F85841B}.Debug|Win32.Build.0 = Debug|Win32
 		{08E70EFE-6164-4E01-BAF7-809E5F85841B}.Release|Win32.ActiveCfg = Release|Win32
 		{08E70EFE-6164-4E01-BAF7-809E5F85841B}.Release|Win32.Build.0 = Release|Win32
+		{8771DED8-83EC-4C43-8245-D481D420C4C9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8771DED8-83EC-4C43-8245-D481D420C4C9}.Debug|Win32.Build.0 = Debug|Win32
+		{8771DED8-83EC-4C43-8245-D481D420C4C9}.Release|Win32.ActiveCfg = Release|Win32
+		{8771DED8-83EC-4C43-8245-D481D420C4C9}.Release|Win32.Build.0 = Release|Win32
+		{ED009612-7FF4-4ADF-8F28-D0DB00D5C66F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{ED009612-7FF4-4ADF-8F28-D0DB00D5C66F}.Debug|Win32.Build.0 = Debug|Win32
+		{ED009612-7FF4-4ADF-8F28-D0DB00D5C66F}.Release|Win32.ActiveCfg = Release|Win32
+		{ED009612-7FF4-4ADF-8F28-D0DB00D5C66F}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
