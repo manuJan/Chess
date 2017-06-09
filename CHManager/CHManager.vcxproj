@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{08E70EFE-6164-4E01-BAF7-809E5F85841B}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>CHManager</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>Debug\</OutDir>
+    <IntDir>Debug\</IntDir>
+    <TargetName>$(ProjectName)d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <AdditionalDependencies>MSLAppd.lib;CHMngtmodeld.lib;CHVMngtmodeld.lib;GTHMngtModeld.lib;GMngtmodeld.lib;msltoolsd.lib;msldbtoolsd.lib;MSLFlagsd.lib;MSLGuid.lib;GUIManagerd.lib;GUITHManagerd.lib;MSLPrintOutd.lib;VMngtModeld.lib;THVMngtModeld.lib;MSLIPCDataTransferd.lib;MSLIPCTHDataTransferd.lib;XMLModeld.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>MSLApp.lib;CHMngtmodel.lib;CHVMngtmodel.lib;GTHMngtModel.lib;GMngtmodeldlib;msltools.lib;msldbtools.lib;MSLFlags.lib;MSLGui.lib;GUIManager.lib;GUITHManager.lib;MSLPrintOut.lib;VMngtModel.lib;THVMngtModel.lib;MSLIPCDataTransfer.lib;MSLIPCTHDataTransfer.lib;XMLModel.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="CHManager.ico" />
+    <None Include="ReadMe.txt" />
+    <None Include="res\balls.bmp" />
+    <None Include="res\draw.bmp" />
+    <None Include="res\load.bmp" />
+    <None Include="res\matchConfig.bmp" />
+    <None Include="res\white_line_black.bmp" />
+    <None Include="res\white_line_white.bmp" />
+    <None Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CHAvailableMatchGUIEx.h" />
+    <ClInclude Include="CHEnableEventGUIEx.h" />
+    <ClInclude Include="CHEntriesEventGUIEx.h" />
+    <ClInclude Include="CHEntriesGUI.h" />
+    <ClInclude Include="CHEntriesMemberGUIEx.h" />
+    <ClInclude Include="CHEntriesToolBar.h" />
+    <ClInclude Include="CHEventCriteriaGUIEx.h" />
+    <ClInclude Include="CHEventGUI.h" />
+    <ClInclude Include="CHInitialLoadGUI.h" />
+    <ClInclude Include="CHManager.h" />
+    <ClInclude Include="CHManagerApp.h" />
+    <ClInclude Include="CHManagerDefs.h" />
+    <ClInclude Include="CHManagerPhaseGUI.h" />
+    <ClInclude Include="CHManagerPoolGUI.h" />
+    <ClInclude Include="CHMatchConfigToolBar.h" />
+    <ClInclude Include="CHMatchConfigurationGUI.h" />
+    <ClInclude Include="CHMatchGUIEx.h" />
+    <ClInclude Include="CHMatchToolBar.h" />
+    <ClInclude Include="CHModalityData.h" />
+    <ClInclude Include="CHPhaseGUIEx.h" />
+    <ClInclude Include="CHPoolResultGUIEx.h" />
+    <ClInclude Include="CHPoolResultToolBar.h" />
+    <ClInclude Include="CHProgression.h" />
+    <ClInclude Include="CHProgressionData.h" />
+    <ClInclude Include="CHProgressionGUI.h" />
+    <ClInclude Include="CHRatingDiffGUIEx.h" />
+    <ClInclude Include="CHScheduleData.h" />
+    <ClInclude Include="CHScheduleGUI.h" />
+    <ClInclude Include="CHScheduleMatchGUIEx.h" />
+    <ClInclude Include="CHSendingControl.h" />
+    <ClInclude Include="CHSportGUI.h" />
+    <ClInclude Include="CHStatusManager.h" />
+    <ClInclude Include="CHSubMatchConfigurationGUIEx.h" />
+    <ClInclude Include="CHTreeGUIEx.h" />
+    <ClInclude Include="CHUmpireGUIEx.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CHAvailableMatchGUIEx.cpp" />
+    <ClCompile Include="CHEnableEventGUIEx.cpp" />
+    <ClCompile Include="CHEntriesEventGUIEx.cpp" />
+    <ClCompile Include="CHEntriesGUI.cpp" />
+    <ClCompile Include="CHEntriesMemberGUIEx.cpp" />
+    <ClCompile Include="CHEntriesToolBar.cpp" />
+    <ClCompile Include="CHEventCriteriaGUIEx.cpp" />
+    <ClCompile Include="CHEventGUI.cpp" />
+    <ClCompile Include="CHInitialLoadGUI.cpp" />
+    <ClCompile Include="CHManager.cpp" />
+    <ClCompile Include="CHManagerApp.cpp" />
+    <ClCompile Include="CHManagerPhaseGUI.cpp" />
+    <ClCompile Include="CHManagerPoolGUI.cpp" />
+    <ClCompile Include="CHMatchConfigToolBar.cpp" />
+    <ClCompile Include="CHMatchConfigurationGUI.cpp" />
+    <ClCompile Include="CHMatchGUIEx.cpp" />
+    <ClCompile Include="CHMatchToolBar.cpp" />
+    <ClCompile Include="CHModalityData.cpp" />
+    <ClCompile Include="CHPhaseGUIEx.cpp" />
+    <ClCompile Include="CHPoolResultGUIEx.cpp" />
+    <ClCompile Include="CHPoolResultToolBar.cpp" />
+    <ClCompile Include="CHProgression.cpp" />
+    <ClCompile Include="CHProgressionData.cpp" />
+    <ClCompile Include="CHProgressionGUI.cpp" />
+    <ClCompile Include="CHRatingDiffGUIEx.cpp" />
+    <ClCompile Include="CHScheduleData.cpp" />
+    <ClCompile Include="CHScheduleGUI.cpp" />
+    <ClCompile Include="CHScheduleMatchGUIEx.cpp" />
+    <ClCompile Include="CHSendingControl.cpp" />
+    <ClCompile Include="CHSportGUI.cpp" />
+    <ClCompile Include="CHStatusManager.cpp" />
+    <ClCompile Include="CHSubMatchConfigurationGUIEx.cpp" />
+    <ClCompile Include="CHTreeGUIEx.cpp" />
+    <ClCompile Include="CHUmpireGUIEx.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CHManager.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
