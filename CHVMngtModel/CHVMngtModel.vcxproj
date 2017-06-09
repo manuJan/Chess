@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8771DED8-83EC-4C43-8245-D481D420C4C9}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>CHVMngtModel</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>Debug\</OutDir>
+    <IntDir>Debug\</IntDir>
+    <TargetName>$(ProjectName)d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_MBCS;_USRDLL;CHVMNGTMODEL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderOutputFile>.\Debug/CHVMngtModel.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>NotSet</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <AdditionalDependencies>MSLToolsd.lib;MSLDBToolsd.lib;gmngtmodeld.lib;GTHMngtModeld.lib;MSLPrintOutd.lib;VMngtModeld.lib;THVMngtModeld.lib;CHMngtModeld.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ProgramDatabaseFile>.\Debug\CHVMngtModeld.pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImportLibrary>.\Debug/CHVMngtModeld.lib</ImportLibrary>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /D /Y $(OutDir)$(TargetFileName) C:\WorkingDll\Lib
+xcopy /D /Y $(OutDir)*.lib C:\WorkingDll\Lib
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;CHVMNGTMODEL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="..\ReportsFiles\CH.C08.lis" />
+    <None Include="..\ReportsFiles\CH.C30.lis" />
+    <None Include="..\ReportsFiles\CH.C32A.lis" />
+    <None Include="..\ReportsFiles\CH.C32C.lis" />
+    <None Include="..\ReportsFiles\CH.C38.lis" />
+    <None Include="..\ReportsFiles\CH.C51.lis" />
+    <None Include="..\ReportsFiles\CH.C58.lis" />
+    <None Include="..\ReportsFiles\CH.Labels.ENG.lis" />
+    <None Include="..\ReportsFiles\CHRLegends.ENG.lis" />
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CHChange.h" />
+    <ClInclude Include="CHCompetitorDraw.h" />
+    <ClInclude Include="CHGCheckList.h" />
+    <ClInclude Include="CHGroupDraw.h" />
+    <ClInclude Include="CHPairDraw.h" />
+    <ClInclude Include="CHPermutationNumber.h" />
+    <ClInclude Include="CHRC08.h" />
+    <ClInclude Include="CHRC30.h" />
+    <ClInclude Include="CHRC32A.h" />
+    <ClInclude Include="CHRC32C.h" />
+    <ClInclude Include="CHRC38.h" />
+    <ClInclude Include="CHRC51.h" />
+    <ClInclude Include="CHRC58.h" />
+    <ClInclude Include="CHReportTemplate.h" />
+    <ClInclude Include="CHRLegends.h" />
+    <ClInclude Include="CHRoundDraw.h" />
+    <ClInclude Include="CHSessionPoolRound.h" />
+    <ClInclude Include="CHVCheckList.h" />
+    <ClInclude Include="CHVMngtModelDefs.h" />
+    <ClInclude Include="RCHSchedule.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="VCHSchedule.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CHChange.cpp" />
+    <ClCompile Include="CHCompetitorDraw.cpp" />
+    <ClCompile Include="CHGCheckList.cpp" />
+    <ClCompile Include="CHGroupDraw.cpp" />
+    <ClCompile Include="CHPairDraw.cpp" />
+    <ClCompile Include="CHPermutationNumber.cpp" />
+    <ClCompile Include="CHRC08.cpp" />
+    <ClCompile Include="CHRC30.cpp" />
+    <ClCompile Include="CHRC32A.cpp" />
+    <ClCompile Include="CHRC32C.cpp" />
+    <ClCompile Include="CHRC38.cpp" />
+    <ClCompile Include="CHRC51.cpp" />
+    <ClCompile Include="CHRC58.cpp" />
+    <ClCompile Include="CHReportTemplate.cpp" />
+    <ClCompile Include="CHRLegends.cpp" />
+    <ClCompile Include="CHRoundDraw.cpp" />
+    <ClCompile Include="CHSessionPoolRound.cpp" />
+    <ClCompile Include="CHVCheckList.cpp" />
+    <ClCompile Include="RCHSchedule.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="VCHSchedule.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

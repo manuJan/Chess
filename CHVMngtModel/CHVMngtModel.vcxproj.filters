@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ReportFiles">
+      <UniqueIdentifier>{6f4e8b8d-ebe1-4219-adef-c9c64976bcfb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="..\ReportsFiles\CH.C30.lis">
+      <Filter>ReportFiles</Filter>
+    </None>
+    <None Include="..\ReportsFiles\CH.Labels.ENG.lis">
+      <Filter>ReportFiles</Filter>
+    </None>
+    <None Include="..\ReportsFiles\CHRLegends.ENG.lis">
+      <Filter>ReportFiles</Filter>
+    </None>
+    <None Include="..\ReportsFiles\CH.C32A.lis">
+      <Filter>ReportFiles</Filter>
+    </None>
+    <None Include="..\ReportsFiles\CH.C32C.lis">
+      <Filter>ReportFiles</Filter>
+    </None>
+    <None Include="..\ReportsFiles\CH.C38.lis">
+      <Filter>ReportFiles</Filter>
+    </None>
+    <None Include="..\ReportsFiles\CH.C08.lis">
+      <Filter>ReportFiles</Filter>
+    </None>
+    <None Include="..\ReportsFiles\CH.C58.lis">
+      <Filter>ReportFiles</Filter>
+    </None>
+    <None Include="..\ReportsFiles\CH.C51.lis">
+      <Filter>ReportFiles</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHReportTemplate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHVMngtModelDefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHRC30.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHRLegends.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHRC32A.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHRC32C.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHRC38.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHGCheckList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHVCheckList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHRoundDraw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHCompetitorDraw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHGroupDraw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHPairDraw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHPermutationNumber.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHChange.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VCHSchedule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHSessionPoolRound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCHSchedule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHRC08.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHRC58.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHRC51.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHReportTemplate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHRC30.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHRLegends.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHRC32A.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHRC32C.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHRC38.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHGCheckList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHVCheckList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHRoundDraw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHCompetitorDraw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHGroupDraw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHPairDraw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHPermutationNumber.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHChange.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VCHSchedule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHSessionPoolRound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RCHSchedule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHRC08.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHRC58.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHRC51.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
