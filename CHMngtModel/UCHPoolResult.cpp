@@ -26,6 +26,8 @@
 
 void UCHPoolResult::OnAssignAttributes(GTHPoolResult& aPoolResult)
 {	
+	UGTHPoolResult::OnAssignAttributes(aPoolResult);
+
 	CHPoolResult* pPoolResult=(CHPoolResult*)&aPoolResult;
 
 	matchesPlayed=pPoolResult->getMPlayed();
@@ -52,6 +54,8 @@ void UCHPoolResult::OnAssignAttributes(GTHPoolResult& aPoolResult)
 
 void UCHPoolResult::OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,GTHPoolResult& aPoolResult)
 {
+	UGTHPoolResult::OnInsert(aInserter,table,aPoolResult);
+
 	aInserter << table["MATCHES_PLAYED"]	.assign(matchesPlayed,&nullmatchesPlayed);
 	aInserter << table["WON_GAMES"]			.assign(wonGames,&nullwonGames);
 	aInserter << table["LOST_GAMES"]		.assign(lostGames,&nulllostGames);
@@ -67,6 +71,8 @@ void UCHPoolResult::OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,GTHPoolR
 
 void UCHPoolResult::OnUpdate(MSLDBUpdater& aUpdater,MSLDBTable& table,GTHPoolResult& aPoolResult)
 {
+	UGTHPoolResult::OnUpdate(aUpdater,table,aPoolResult);
+
 	aUpdater << table["MATCHES_PLAYED"]		.assign(matchesPlayed,&nullmatchesPlayed);
 	aUpdater << table["WON_GAMES"]			.assign(wonGames,&nullwonGames);
 	aUpdater << table["LOST_GAMES"]			.assign(lostGames,&nulllostGames);

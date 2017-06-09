@@ -514,9 +514,14 @@ MSLString CHMatch::getRoundAsString(bool lDesc/*=true*/,bool date/*=true*/)
 	if(date && getStartDate()!=INVALID_DATE)
 		m_roundDesc+=", "+getStartDateAsString("%a %d %b %Y").toAscii();
 
-	return m_roundDesc;
-	
+	return m_roundDesc;	
 }
+
+MSLString CHMatch::getEventCodeReports()
+{
+	return getEvent() ? ((CHEvent*)getEvent())->getCodeReports() : NULLSTRING;
+}
+
 // From CHEvent
 bool CHMatch::isTeam()
 {

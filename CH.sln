@@ -7,7 +7,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CHManager", "CHManager\CHMa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CHVMngtModel", "CHVMngtModel\CHVMngtModel.vcxproj", "{8771DED8-83EC-4C43-8245-D481D420C4C9}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VMngtModel", "..\..\ovr-general\general\reports\V\VMngtModel.vcxproj", "{ED009612-7FF4-4ADF-8F28-D0DB00D5C66F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GUITHManager", "..\..\ovr-general\general\gui\GUITHManager\GUITHManager2.vcxproj", "{3EB31230-77D0-4511-B537-1B94A1F68EA1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GTHMngtModel", "..\..\ovr-general\general\core\TH\GTHMngtModel.vcxproj", "{BEB0F98A-7132-4DD5-823F-DCDA70599170}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GUIManager", "..\..\ovr-general\general\gui\GUIManager\GUIManager2.vcxproj", "{A9687E8D-CC80-4250-8781-406FED535876}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +31,18 @@ Global
 		{8771DED8-83EC-4C43-8245-D481D420C4C9}.Debug|Win32.Build.0 = Debug|Win32
 		{8771DED8-83EC-4C43-8245-D481D420C4C9}.Release|Win32.ActiveCfg = Release|Win32
 		{8771DED8-83EC-4C43-8245-D481D420C4C9}.Release|Win32.Build.0 = Release|Win32
-		{ED009612-7FF4-4ADF-8F28-D0DB00D5C66F}.Debug|Win32.ActiveCfg = Debug|Win32
-		{ED009612-7FF4-4ADF-8F28-D0DB00D5C66F}.Debug|Win32.Build.0 = Debug|Win32
-		{ED009612-7FF4-4ADF-8F28-D0DB00D5C66F}.Release|Win32.ActiveCfg = Release|Win32
-		{ED009612-7FF4-4ADF-8F28-D0DB00D5C66F}.Release|Win32.Build.0 = Release|Win32
+		{3EB31230-77D0-4511-B537-1B94A1F68EA1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3EB31230-77D0-4511-B537-1B94A1F68EA1}.Debug|Win32.Build.0 = Debug|Win32
+		{3EB31230-77D0-4511-B537-1B94A1F68EA1}.Release|Win32.ActiveCfg = Release|Win32
+		{3EB31230-77D0-4511-B537-1B94A1F68EA1}.Release|Win32.Build.0 = Release|Win32
+		{BEB0F98A-7132-4DD5-823F-DCDA70599170}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BEB0F98A-7132-4DD5-823F-DCDA70599170}.Debug|Win32.Build.0 = Debug|Win32
+		{BEB0F98A-7132-4DD5-823F-DCDA70599170}.Release|Win32.ActiveCfg = Release|Win32
+		{BEB0F98A-7132-4DD5-823F-DCDA70599170}.Release|Win32.Build.0 = Release|Win32
+		{A9687E8D-CC80-4250-8781-406FED535876}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A9687E8D-CC80-4250-8781-406FED535876}.Debug|Win32.Build.0 = Debug|Win32
+		{A9687E8D-CC80-4250-8781-406FED535876}.Release|Win32.ActiveCfg = Release|Win32
+		{A9687E8D-CC80-4250-8781-406FED535876}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

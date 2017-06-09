@@ -107,7 +107,7 @@ public:
 	
 	//Reports Descriptions (ResultCode)
 	//static MSLString	getRSC(const GData *pData);
-	//static MSLString getRSC			(GData * pData,bool withoutDiscipline=false,bool extraRSC=true,RWDate date=INVALID_RWDATE);
+	//static MSLString getRSC			(GData * pData,bool withoutDiscipline=false,bool extraRSC=true,MSLDate date=INVALID_MSLDate);
 	//static MSLString traslateCode	(MSLString sex);
 	//static MSLString traslateCode	(GTHEvent *pEvent);
 	//static MSLString traslateCode	(GTHPhase * pPhase);
@@ -117,55 +117,55 @@ public:
 /*protected:
     //queries
 	GDiscipline * queryDiscipline   (RWDBConnection& aConnection);
-	size_t queryColEvents           (RWSet& target);
-	size_t queryColMembers			(RWSet& target);
-	size_t queryColInscriptions     (RWSet& target);
-	size_t queryColEventUnits       (RWSet& target);
-	size_t queryColEUnitNames		(RWSet& target);
-	size_t queryColJudges	        (RWSet& target);
-	size_t queryColPhases           (RWSet& target);
-	size_t queryColPools            (RWSet& target);
-	size_t queryColPoolResults      (RWSet& target);
-	size_t queryColMatchs           (RWSet& target);
-	size_t queryColMatchResults     (RWSet& target);
-	size_t queryColSplitMatchResults(RWSet& target);
-	size_t queryColSplitMatches		(RWSet& target);
-	size_t queryColEventResults		(RWSet& target);
-	size_t queryColMatchJudge		(RWSet& target);
-	size_t queryColSessions			(RWSet& target);
-	size_t queryColMatchMember		(RWSet& target);
-	size_t queryColPhaseNames		(RWSet& target);
-	size_t queryColCourts			(RWSet& target);
-	size_t queryColMasterTypes      (RWSet& target);
-	size_t queryColTeamMatchsCnfg	(RWSet& target);
-	size_t queryColRegisters		(RWSet& target);
-	size_t queryColRatingDifs       (RWSet& target);
+	size_t queryColEvents           (MSLSet& target);
+	size_t queryColMembers			(MSLSet& target);
+	size_t queryColInscriptions     (MSLSet& target);
+	size_t queryColEventUnits       (MSLSet& target);
+	size_t queryColEUnitNames		(MSLSet& target);
+	size_t queryColJudges	        (MSLSet& target);
+	size_t queryColPhases           (MSLSet& target);
+	size_t queryColPools            (MSLSet& target);
+	size_t queryColPoolResults      (MSLSet& target);
+	size_t queryColMatchs           (MSLSet& target);
+	size_t queryColMatchResults     (MSLSet& target);
+	size_t queryColSplitMatchResults(MSLSet& target);
+	size_t queryColSplitMatches		(MSLSet& target);
+	size_t queryColEventResults		(MSLSet& target);
+	size_t queryColMatchJudge		(MSLSet& target);
+	size_t queryColSessions			(MSLSet& target);
+	size_t queryColMatchMember		(MSLSet& target);
+	size_t queryColPhaseNames		(MSLSet& target);
+	size_t queryColCourts			(MSLSet& target);
+	size_t queryColMasterTypes      (MSLSet& target);
+	size_t queryColTeamMatchsCnfg	(MSLSet& target);
+	size_t queryColRegisters		(MSLSet& target);
+	size_t queryColRatingDifs       (MSLSet& target);
 
 	// desempaquetado de las colecciones hijas...
 	void unpackChildCollections		(MSLPack& aPack);
 	GDiscipline * unpackDiscipline	(MSLPack& aPack);
-	void unpackColEvents			(MSLPack& aPack,RWSet& target);
-	void unpackColInscriptions		(MSLPack& aPack,RWSet& target);
-	void unpackColEventUnits		(MSLPack& aPack,RWSet& target);
-	void unpackColJudges			(MSLPack& aPack,RWSet& target);
-	void unpackColPhases			(MSLPack& aPack,RWSet& target);
-	void unpackColPools				(MSLPack& aPack,RWSet& target);
-	void unpackColPoolResults		(MSLPack& aPack,RWSet& target);
-	void unpackColMatchs			(MSLPack& aPack,RWSet& target);
-	void unpackColMatchResults		(MSLPack& aPack,RWSet& target);
-	void unpackColSplitMatchResults	(MSLPack& aPack,RWSet& target);
-	void unpackColEventResults		(MSLPack& aPack,RWSet& target);
-	void unpackColMatchJudge		(MSLPack& aPack,RWSet& target);
-	void unpackSplitMatches			(MSLPack& aPack,RWSet& target);
-	void unpackColSessions			(MSLPack& aPack,RWSet& target);
-	void unpackColMembers			(MSLPack& aPack,RWSet& target);
-	void unpackColMatchMember		(MSLPack& aPack,RWSet& target);
-	void unpackColPhaseNames		(MSLPack& aPack,RWSet& target);
-	void unpackColCourts			(MSLPack& aPack,RWSet& target);
-	void unpackColMasterTypes		(MSLPack& aPack,RWSet& target);
-	void unpackColTeamMatchsCnfg	(MSLPack& aPack,RWSet& target);
-	void unpackColRegisters			(MSLPack& aPack,RWSet& target);
-	void unpackColRatingDifs		(MSLPack& aPack,RWSet& target);
+	void unpackColEvents			(MSLPack& aPack,MSLSet& target);
+	void unpackColInscriptions		(MSLPack& aPack,MSLSet& target);
+	void unpackColEventUnits		(MSLPack& aPack,MSLSet& target);
+	void unpackColJudges			(MSLPack& aPack,MSLSet& target);
+	void unpackColPhases			(MSLPack& aPack,MSLSet& target);
+	void unpackColPools				(MSLPack& aPack,MSLSet& target);
+	void unpackColPoolResults		(MSLPack& aPack,MSLSet& target);
+	void unpackColMatchs			(MSLPack& aPack,MSLSet& target);
+	void unpackColMatchResults		(MSLPack& aPack,MSLSet& target);
+	void unpackColSplitMatchResults	(MSLPack& aPack,MSLSet& target);
+	void unpackColEventResults		(MSLPack& aPack,MSLSet& target);
+	void unpackColMatchJudge		(MSLPack& aPack,MSLSet& target);
+	void unpackSplitMatches			(MSLPack& aPack,MSLSet& target);
+	void unpackColSessions			(MSLPack& aPack,MSLSet& target);
+	void unpackColMembers			(MSLPack& aPack,MSLSet& target);
+	void unpackColMatchMember		(MSLPack& aPack,MSLSet& target);
+	void unpackColPhaseNames		(MSLPack& aPack,MSLSet& target);
+	void unpackColCourts			(MSLPack& aPack,MSLSet& target);
+	void unpackColMasterTypes		(MSLPack& aPack,MSLSet& target);
+	void unpackColTeamMatchsCnfg	(MSLPack& aPack,MSLSet& target);
+	void unpackColRegisters			(MSLPack& aPack,MSLSet& target);
+	void unpackColRatingDifs		(MSLPack& aPack,MSLSet& target);
 
 protected:
 	//reset de las colecciones
@@ -177,9 +177,9 @@ protected:
 	void unionChildCollections		(RWHashTable	& sSource		);
 
 private:
-	static RWSet colTeamMatchsCnfg;		// CHTeamMatchsCnfg's collection
-	static RWSet colJudges;				// CHJudge
-	static RWSet colMasterTypes;		// CHMasterType
-	static RWSet colRatingDifs;			// CHRatingDif*/
+	static MSLSet colTeamMatchsCnfg;		// CHTeamMatchsCnfg's collection
+	static MSLSet colJudges;				// CHJudge
+	static MSLSet colMasterTypes;		// CHMasterType
+	static MSLSet colRatingDifs;			// CHRatingDif*/
 };
 

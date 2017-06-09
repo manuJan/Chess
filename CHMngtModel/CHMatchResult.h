@@ -87,6 +87,11 @@ public:
 	MSLString		getPreviousMatchesAsString(CHMatch* pMatch);
 	void			getPreviousMatchesVector(MSLSortedVector &vMatchResults, CHMatch* _pMatch);
 
+	MSLWString		getSName(const char *lang=0) const;
+	MSLWString		getLName(const char *lang=0) const;
+
+	MSLWString		getMatchMemberLDescription() const;
+	MSLWString		getMatchMemberSDescription() const;
 private:
 	float	  m_points;				// Numero de puntos ganados
 	bool	  m_upFloater;

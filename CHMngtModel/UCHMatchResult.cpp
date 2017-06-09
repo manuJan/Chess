@@ -29,6 +29,8 @@
 //////////////////////////////////////////////////////////////////////
 void UCHMatchResult::OnAssignAttributes(GTHMatchResult& aMatchResult)
 {
+	UGTHMatchResult::OnAssignAttributes(aMatchResult);
+
 	CHMatchResult *pMatchResult=(CHMatchResult *)&aMatchResult;
 			
 	fPoints	= pMatchResult->getPoints();
@@ -36,6 +38,8 @@ void UCHMatchResult::OnAssignAttributes(GTHMatchResult& aMatchResult)
 
 void UCHMatchResult::OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GTHMatchResult& aMatchResult)
 {
+	UGTHMatchResult::OnInsert(aInserter,table,aMatchResult);
+
 	CHMatchResult *pMatchResult=(CHMatchResult *)&aMatchResult;
 
 	aInserter << table["POINTS_F"]			.assign(fPoints);	
@@ -46,6 +50,8 @@ void UCHMatchResult::OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const G
 
 void UCHMatchResult::OnUpdate(MSLDBUpdater & aUpdater ,MSLDBTable& table,const GTHMatchResult& aMatchResult)
 {
+	UGTHMatchResult::OnUpdate(aUpdater,table,aMatchResult);
+
 	CHMatchResult *pMatchResult=(CHMatchResult *)&aMatchResult;
 
 	aUpdater << table["POINTS_F"]		.assign(fPoints);	

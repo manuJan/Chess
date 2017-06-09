@@ -30,6 +30,8 @@
 
 void UCHMatch::OnAssignAttributes(GTHMatch& aMatch)
 {
+	UGTHMatch::OnAssignAttributes(aMatch);
+
 	CHMatch *pMatch=((CHMatch *)&aMatch);
 			
 	fMatchType=pMatch->getMatchType();
@@ -40,6 +42,8 @@ void UCHMatch::OnAssignAttributes(GTHMatch& aMatch)
 
 void UCHMatch::OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GTHMatch& aMatch)
 {
+	UGTHMatch::OnInsert(aInserter,table,aMatch);
+
 	aInserter << table["IDTYPE"]	.assign(fMatchType);
 	aInserter << table["ROUND"]		.assign(fRound,&nullRound);
 	
@@ -48,6 +52,8 @@ void UCHMatch::OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GTHMatc
 
 void UCHMatch::OnUpdate(MSLDBUpdater & aUpdater ,MSLDBTable& table,const GTHMatch& aMatch)
 {
+	UGTHMatch::OnUpdate(aUpdater,table,aMatch);
+
 	aUpdater << table["IDTYPE"]		.assign(fMatchType);
 	aUpdater << table["ROUND"]		.assign(fRound,&nullRound);
 	

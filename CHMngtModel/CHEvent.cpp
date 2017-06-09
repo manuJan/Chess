@@ -312,6 +312,12 @@ bool CHEvent::isTeam() const
 {
 	return getRegType()==GRegister::team;
 }
+
+bool CHEvent::getSubMatches() const
+{
+	return isTeam();
+}
+
 //////////////////////////////////////////////////////////////////////
 // Help Methods
 //////////////////////////////////////////////////////////////////////
@@ -358,4 +364,31 @@ int CHEvent::getRankPosition(CHEvent::TypeRank rankType)
 			return i;
 	}
 	return 0;
+}
+
+MSLWString CHEvent::getTeamCfgSDescription(const char * language)
+{
+	CHTeamMatchsCnfg *pTeamMatchsCnfg=(CHTeamMatchsCnfg *)CHMemoryDataBase::findTeamMatchsCnfg(m_idTeamMatchsCnfg);
+	if (pTeamMatchsCnfg)
+		return pTeamMatchsCnfg->getSDescription(language);
+
+	return NULLWSTRING;
+}
+
+MSLWString CHEvent::getTeamCfgLDescription(const char * language)
+{
+	CHTeamMatchsCnfg *pTeamMatchsCnfg=(CHTeamMatchsCnfg *)CHMemoryDataBase::findTeamMatchsCnfg(m_idTeamMatchsCnfg);
+	if (pTeamMatchsCnfg)
+		return pTeamMatchsCnfg->getLDescription(language);
+
+	return NULLWSTRING;
+}
+
+MSLString CHEvent::getCfgTeamMembers() const
+{
+	CHTeamMatchsCnfg *pTeamMatchsCnfg=(CHTeamMatchsCnfg *)CHMemoryDataBase::findTeamMatchsCnfg(m_idTeamMatchsCnfg);
+	if (pTeamMatchsCnfg)
+		return pTeamMatchsCnfg->getMatchesType();
+
+	return NULLSTRING;
 }

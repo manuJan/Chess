@@ -30,6 +30,8 @@
 
 void UCHPhase::OnAssignAttributes(const GPhase& aPhase)
 {
+	UGTHPhase::OnAssignAttributes(aPhase);
+
 	typePhase		= ((CHPhase&)aPhase).getTypePhase();
 	idTeamMatchsCnfg= ((CHPhase&)aPhase).getIdTeamMatchsCnfg();
 	
@@ -37,6 +39,8 @@ void UCHPhase::OnAssignAttributes(const GPhase& aPhase)
 
 void UCHPhase::OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GPhase& aPhase)
 {
+	UGTHPhase::OnInsert(aInserter, table,aPhase);
+
 	aInserter << table["TYPEPHASE"]			.assign(typePhase);
 	aInserter << table["TEAM_MATCH_CNFG"]	.assign(idTeamMatchsCnfg);
 
@@ -45,6 +49,8 @@ void UCHPhase::OnInsert(MSLDBInserter& aInserter,MSLDBTable& table,const GPhase&
 
 void UCHPhase::OnUpdate(MSLDBUpdater & aUpdater ,MSLDBTable& table,const GPhase& aPhase)
 {
+	UGTHPhase::OnUpdate(aUpdater, table, aPhase);
+
 	aUpdater << table["TYPEPHASE"]			.assign( typePhase );
 	aUpdater << table["TEAM_MATCH_CNFG"]	.assign( idTeamMatchsCnfg );
 

@@ -77,7 +77,7 @@ public:
 	MSLString	getPointsByeStr		() const;
 	MSLWString	getTypeEventAsString() const;
 	MSLWString	getRegTypeAsString	() const;
-		
+	MSLString	getCfgTeamMembers	() const;
 	bool isTeam    () const;
 
 	
@@ -86,6 +86,10 @@ public:
 	short				getNumRankOrder() const;
 	bool				findRankOrder(CHEvent::TypeRank rankType) const;
 	int					getRankPosition(CHEvent::TypeRank rankType);
+	bool				getSubMatches() const;
+
+	MSLWString			getTeamCfgSDescription(const char * language=0);
+	MSLWString			getTeamCfgLDescription(const char * language=0);
 
 private:
 	

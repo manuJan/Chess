@@ -398,3 +398,78 @@ MSLString CHMatchResult::getPreviousMatchesAsString(CHMatch* pMatch)
 
 	return matches;
 }
+
+MSLWString CHMatchResult::getSName(const char *lang/*=0*/) const
+{
+	CHEvent * pEvent=(CHEvent *)getEvent();
+	if(!pEvent->getSubMatches())
+		return getPrnSName();
+	else
+	{
+		CHMatch * pMatch=(CHMatch *)getMatch();
+		if(!pMatch->getSubCode())
+			return getPrnSName(lang);
+		else
+		{
+			return getMatchMemberSDescription();
+		}
+	}
+	return getPrnSName(lang);
+}
+
+MSLWString CHMatchResult::getLName(const char *lang/*=0*/) const
+{
+	CHEvent * pEvent=(CHEvent *)getEvent();
+	if(!pEvent->getSubMatches())
+		return getPrnLName();
+	else
+	{
+		CHMatch * pMatch=(CHMatch *)getMatch();
+		if(!pMatch->getSubCode())
+			return getPrnLName(lang);
+		else
+		{
+			return getMatchMemberLDescription();
+		}
+	}
+	return getPrnLName(lang);
+}
+
+MSLWString CHMatchResult::getMatchMemberLDescription() const
+{
+	MSLSortedVector vMatchMembers;
+	getMatchMembersVector(vMatchMembers);
+	MSLWString txt = NULLWSTRING;
+	GTHMatchMember *pMatchMember=0;
+	for(short i=0;i<vMatchMembers.entries();i++)
+	{
+		pMatchMember = (GTHMatchMember*)vMatchMembers[i];
+		if(pMatchMember && pMatchMember->getRegister())
+		{
+			if(i!=0)
+				 txt+="-"+pMatchMember->getPrnLName();
+			else txt+=pMatchMember->getPrnLName();
+		}
+	}
+			
+	return txt;
+}
+MSLWString CHMatchResult::getMatchMemberSDescription() const
+{
+	MSLSortedVector vMatchMembers;
+	getMatchMembersVector(vMatchMembers);
+	MSLWString txt = NULLWSTRING;
+	GTHMatchMember *pMatchMember=0;
+	for(short i=0;i<vMatchMembers.entries();i++)
+	{
+		pMatchMember = (GTHMatchMember*)vMatchMembers[i];
+		if(pMatchMember && pMatchMember->getRegister())
+		{
+			if(i!=0)
+				 txt+="-"+pMatchMember->getPrnSName();
+			else txt+=pMatchMember->getPrnSName();
+		}
+	}
+			
+	return txt;
+}

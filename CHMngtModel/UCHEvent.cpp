@@ -30,6 +30,8 @@
 
 void UCHEvent::OnAssignAttributes(const GEvent& aEvent)
 {
+	UGTHEvent::OnAssignAttributes(aEvent);
+
 	CHEvent *pEvent = (CHEvent*)&aEvent;
 
 	fTwoBronces		= pEvent->getTwoBronces();

@@ -85,9 +85,7 @@ public:
 	//methods for matchResults
 	CHMatchResult * getWhite() const;
 	CHMatchResult * getBlack() const;
-
-	int getEventMode() const;
-
+	
 	bool	isEmpty();
 	bool	isConfigured();
 	short	getTurn() const;
@@ -101,6 +99,7 @@ public:
 	MSLSortedVector	getRoundMatches();
 	bool			getFinishedRound();	
 	MSLString		getRoundAsString(bool lDesc=true,bool date=true);
+	MSLString		getEventCodeReports();
 
 	// From CHEvent
 	bool isTeam();
