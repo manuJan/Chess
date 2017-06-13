@@ -8,8 +8,8 @@
 #include "CHEntriesGUI.h"
 #include "CHProgressionGUI.h"
 #include "CHScheduleGUI.h"
+#include "CHSummaryGUI.h"
 /*#include "AREventControlGUI.h"
-#include "ARSummaryGUI.h"
 #include "ARRecordsGUI.h"
 #include "ARMsgGnralGUI.h"
 #include "ARMSLODFDataTransfer.h"*/
@@ -43,7 +43,7 @@ void CHManagerApp::onInit()
 	addModule(GOFFICIALSGUI_ID		,L"Officials"			,0	,L"Officials & Team Officials"		,APP_USER_ADMINISTRATOR);
 	addModule(GTHPROGRESSIONGUI_ID	,L"Progressions"		,0	,L"Tournament Event Format"			,APP_USER_ADMINISTRATOR);	
 	addModule(GTHSCHEDULEGUI_ID		,L"Schedule"			,0	,L"Tournament Schedule"				,APP_USER_ADMINISTRATOR);
-	addModule(GTHEVENTCONTROLGUI_ID	,L"Data Entry"			,0	,L"Data Entry"						,ALL_USERS);
+	//addModule(GTHEVENTCONTROLGUI_ID	,L"Data Entry"			,0	,L"Data Entry"						,ALL_USERS);
 	addModule(GSUMMARYGUI_ID		,L"Medals"				,0	,L"Summary & Medallists"			,APP_USER_ADMINISTRATOR);
 	addModule(GMSGGNRALGUIEX_ID		,L"Gerenal Msgs"		,0	,L"General Messages"				,APP_USER_ADMINISTRATOR);
 	addModule(GDESCRIPTIONGUI_ID	,L"Descriptions"		,0	,L"Descriptions"					,APP_USER_ADMINISTRATOR);
@@ -86,6 +86,9 @@ MSLAppModule *CHManagerApp::onGetModule(long id) const
 		case GDESCRIPTIONGUI_ID		: return new GDescriptionGUI(GDESCRIPTIONGUI_ID);		
 		case GTHPROGRESSIONGUI_ID	: return new CHProgressionGUI(GTHPROGRESSIONGUI_ID);
 		case GTHSCHEDULEGUI_ID		: return new CHScheduleGUI(GTHSCHEDULEGUI_ID);
+		case GSUMMARYGUI_ID			: return new CHSummaryGUI(GSUMMARYGUI_ID);		
+		//case GMSGGNRALGUIEX_ID		: return new BKMsgGnralGUI(GMSGGNRALGUIEX_ID);		
+		//case DATATRANSFER_GUI		: return new BKMSLODFDataTransfer(DATATRANSFER_GUI);
 	}
 	
 	return GUITHManagerApp::onGetModule(id);

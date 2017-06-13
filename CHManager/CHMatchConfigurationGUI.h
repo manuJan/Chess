@@ -58,6 +58,7 @@ protected:
 	virtual LRESULT onFillControl				(WPARAM wParam=0, LPARAM lParam=0);
 	virtual LRESULT onRedrawControl				(WPARAM wParam=0, LPARAM lParam=0);
 	   	    LRESULT onChangeUmpire				(WPARAM wParam=0, LPARAM lParam=0);
+			LRESULT onGotoNextMatch				(WPARAM wParam=0, LPARAM lParam=0);
 
 	virtual LRESULT onCommsPackTransaction		(WPARAM wParam,LPARAM lParam);
 	virtual LRESULT onComms						(WPARAM wParam,LPARAM lParam);
@@ -98,14 +99,7 @@ private:
 	bool paintGridMatchMembers					(gui_grid_cell* cell);
 	void dblClickGridMatchMembers				(long x,long y);
 	bool handGridMatchMembers					(int x,int y);
-
-	void createGridSubmatches					();
-	void fillGridSubmatches						();
-	bool paintGridSubmatches					(gui_grid_cell* cell);
-	void dblClickGridSubmatches					(long x,long y);
-	bool handGridSubmatches						(int x,int y);
-	CHMatch *getSubmatchSelected				();
-
+		
 	void paintFlagCompetitor					(CHRegister *pRegister, gui_grid_cell* cell);
 	void painSexRegister						(CHRegister * pRegister);
 	void editMatchMember						(CHMatch * pMatch, int col,int y);
@@ -113,11 +107,11 @@ private:
 	void editSubMatchSide						(CHMatch * pMatch, int col,int y);
 	void fillComboMembers						(GTHMatchMember * pMatchMember);
 
-	void subMatchesAutoSet						();
-	void subMatchesRemoveSet					();
-	void changeSide								(CHMatch *pMatch);	 
 	CHMatch* getPrevMatch						();
 	CHMatch* getNextMatch						();
+
+	bool goToNextMatch							();
+	bool goToPrevMatch							();
 
 	void getMatchesVectorSel					(MSLSortedVector &vMatches);
 

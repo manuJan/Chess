@@ -40,6 +40,15 @@
     <None Include="res\white_line_white.bmp">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="res\autoset.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\changeside.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\removeset.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -156,6 +165,15 @@
     <ClInclude Include="CHSubMatchConfigurationGUIEx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CHEventControlOperations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHRanking.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHSummaryGUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -261,6 +279,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CHSubMatchConfigurationGUIEx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHEventControlOperations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHRanking.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHSummaryGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

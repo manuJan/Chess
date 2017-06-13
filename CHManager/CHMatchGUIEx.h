@@ -59,6 +59,8 @@ protected:
 	void initialDraw					();
 	void matchConfigurationDlg			();
 
+	bool validComboPoolResult			(GTHPoolResult *pPoolResult, GTHMatchResult* pMatchResult);
+
 private:
 
 	CHMatchConfigurationGUI * m_pDlgMatchConfig;

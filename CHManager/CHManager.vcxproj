@@ -80,10 +80,13 @@
   <ItemGroup>
     <None Include="CHManager.ico" />
     <None Include="ReadMe.txt" />
+    <None Include="res\autoset.bmp" />
     <None Include="res\balls.bmp" />
+    <None Include="res\changeside.bmp" />
     <None Include="res\draw.bmp" />
     <None Include="res\load.bmp" />
     <None Include="res\matchConfig.bmp" />
+    <None Include="res\removeset.bmp" />
     <None Include="res\white_line_black.bmp" />
     <None Include="res\white_line_white.bmp" />
     <None Include="small.ico" />
@@ -95,6 +98,7 @@
     <ClInclude Include="CHEntriesGUI.h" />
     <ClInclude Include="CHEntriesMemberGUIEx.h" />
     <ClInclude Include="CHEntriesToolBar.h" />
+    <ClInclude Include="CHEventControlOperations.h" />
     <ClInclude Include="CHEventCriteriaGUIEx.h" />
     <ClInclude Include="CHEventGUI.h" />
     <ClInclude Include="CHInitialLoadGUI.h" />
@@ -114,6 +118,7 @@
     <ClInclude Include="CHProgression.h" />
     <ClInclude Include="CHProgressionData.h" />
     <ClInclude Include="CHProgressionGUI.h" />
+    <ClInclude Include="CHRanking.h" />
     <ClInclude Include="CHRatingDiffGUIEx.h" />
     <ClInclude Include="CHScheduleData.h" />
     <ClInclude Include="CHScheduleGUI.h" />
@@ -122,6 +127,7 @@
     <ClInclude Include="CHSportGUI.h" />
     <ClInclude Include="CHStatusManager.h" />
     <ClInclude Include="CHSubMatchConfigurationGUIEx.h" />
+    <ClInclude Include="CHSummaryGUI.h" />
     <ClInclude Include="CHTreeGUIEx.h" />
     <ClInclude Include="CHUmpireGUIEx.h" />
     <ClInclude Include="Resource.h" />
@@ -135,6 +141,7 @@
     <ClCompile Include="CHEntriesGUI.cpp" />
     <ClCompile Include="CHEntriesMemberGUIEx.cpp" />
     <ClCompile Include="CHEntriesToolBar.cpp" />
+    <ClCompile Include="CHEventControlOperations.cpp" />
     <ClCompile Include="CHEventCriteriaGUIEx.cpp" />
     <ClCompile Include="CHEventGUI.cpp" />
     <ClCompile Include="CHInitialLoadGUI.cpp" />
@@ -153,6 +160,7 @@
     <ClCompile Include="CHProgression.cpp" />
     <ClCompile Include="CHProgressionData.cpp" />
     <ClCompile Include="CHProgressionGUI.cpp" />
+    <ClCompile Include="CHRanking.cpp" />
     <ClCompile Include="CHRatingDiffGUIEx.cpp" />
     <ClCompile Include="CHScheduleData.cpp" />
     <ClCompile Include="CHScheduleGUI.cpp" />
@@ -161,6 +169,7 @@
     <ClCompile Include="CHSportGUI.cpp" />
     <ClCompile Include="CHStatusManager.cpp" />
     <ClCompile Include="CHSubMatchConfigurationGUIEx.cpp" />
+    <ClCompile Include="CHSummaryGUI.cpp" />
     <ClCompile Include="CHTreeGUIEx.cpp" />
     <ClCompile Include="CHUmpireGUIEx.cpp" />
     <ClCompile Include="stdafx.cpp">

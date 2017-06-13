@@ -337,3 +337,59 @@ void CHMatchGUIEx::matchConfigurationDlg()
 		m_gui.redraw(GR_MATCHES);
 	}
 }
+
+bool CHMatchGUIEx::validComboPoolResult(GTHPoolResult *pPoolResult, GTHMatchResult* pMatchResult)
+{
+	// Si ese pool result ya esta en la ronda o ha jugado contra ese match result devuelvo false
+	CHMatch * pMatch = (CHMatch*)pMatchResult->getMatch();
+	if (!pMatch)
+		return false;
+
+	CHPool * pPool = (CHPool * ) pMatch->getPool();
+	MSLSortedVector vRoundMatches;
+	pPool->getRoundMatchesVector(vRoundMatches,pMatch->getRound());
+	for (short i=0;i<vRoundMatches.entries();i++)
+	{
+		CHMatch* pMatchF = (CHMatch*)vRoundMatches[i];
+		if (pMatchF->getKey()==pMatch->getKey())
+			continue;
+
+		CHMatchResult * pHome = (CHMatchResult *)pMatchF->getHome();
+		CHMatchResult * pAway = (CHMatchResult *)pMatchF->getAway();
+
+		if (pHome->getInscriptionKey()==pPoolResult->getInscriptionKey())
+			return false;
+
+		if (pAway->getInscriptionKey()==pPoolResult->getInscriptionKey())
+			return false;
+	}
+
+	CHMatchResult * pOpponent = (CHMatchResult * ) pMatchResult->getOpponent();
+	if (pOpponent->getInscription())
+	{
+		MSLSortedVector vPoolMatches;
+		pPool->getMatchesVector(vPoolMatches);
+		for (short i=0;i<vPoolMatches.entries();i++)
+		{
+			CHMatch * pMatchF = (CHMatch*) vPoolMatches[i];
+			if (pMatchF->getSubCode())
+				continue;
+			
+			CHMatchResult * pHome = (CHMatchResult *)pMatchF->getHome();
+			CHMatchResult * pAway = (CHMatchResult *)pMatchF->getAway();
+			
+			if (pHome->getInscriptionKey() == pOpponent->getInscriptionKey() &&
+				pAway->getInscriptionKey() == pPoolResult->getInscriptionKey())
+				return false;
+
+			if (pAway->getInscriptionKey() == pOpponent->getInscriptionKey() &&
+				pHome->getInscriptionKey() == pPoolResult->getInscriptionKey())
+				return false;
+		}
+	}
+
+	if (pOpponent->getInscription() && pOpponent->getInscriptionKey() == pPoolResult->getInscriptionKey())
+		return false;
+
+	return true;
+}

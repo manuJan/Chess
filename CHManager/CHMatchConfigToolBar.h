@@ -5,16 +5,15 @@
 class CHMatchConfigToolBar  : public GToolBar
 {
 public:
-	CHMatchConfigToolBar(long id);
+	CHMatchConfigToolBar(long id, CHMatch* pMatch, bool autoFinish);
 	virtual ~CHMatchConfigToolBar();
-		
-
+	
 protected:
 	/***** Virtual from MSLGUIEX ****/
 	LRESULT wndProc							(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-	bool onInit								();
-	void onLButDown							(long id,long x,long y);
+	bool onInit								();	
+	void onClick							(long id,LPARAM lParam);
 
 	virtual LRESULT onRedrawControl			(WPARAM wParam=0, LPARAM lParam=0);
 	//Comms
@@ -25,4 +24,8 @@ protected:
 	/***** Virtual From GToolBar  *****/
 	virtual HINSTANCE getHInstance			(int idCtrl,UINT idRes);
 	
+private:
+
+	bool m_autoFinish;
+	CHMatch* m_pMatch;
 };

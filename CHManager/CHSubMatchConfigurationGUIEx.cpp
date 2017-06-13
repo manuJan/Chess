@@ -28,6 +28,8 @@
 #include "CHUmpireGUIEx.h"
 #include "CHStatusManager.h"
 #include "CHProgression.h"
+#include "CHMatchConfigToolBar.h"
+#include "CHEventControlOperations.h"
 
 #include "..\CHMngtModel\CHPhase.h"
 #include "..\CHMngtModel\CHPool.h"
@@ -36,10 +38,13 @@
 #include "..\CHMngtModel\CHRegister.h"
 #include "..\CHMngtModel\CHMember.h"
 #include "..\CHMngtModel\CHInscription.h"
+#include "..\CHMngtModel\CHStatisticDefines.h"
 
 CHSubMatchConfigurationGUIEx::CHSubMatchConfigurationGUIEx(long id, CHMatch * pMatch)
 :GTHManagerGUI(id)
 ,m_pMatch(pMatch)
+,m_pMatchConfigToolBar(0)
+,m_autoFinish(true)
 {
 }
 
@@ -55,6 +60,14 @@ CHMemoryDataBase * CHSubMatchConfigurationGUIEx::getMem() const
 void CHSubMatchConfigurationGUIEx::setMatch(CHMatch * pMatch)
 {
 	m_pMatch = pMatch;
+
+	if (m_pMatchConfigToolBar)
+	{
+		delete m_pMatchConfigToolBar;
+		m_pMatchConfigToolBar=0;
+	}
+	
+	onCreateControl(CHMATCHCONFIGURATION_TB);
 }
 
 bool CHSubMatchConfigurationGUIEx::onInit()
@@ -81,19 +94,6 @@ void CHSubMatchConfigurationGUIEx::onLButDblClick(long id,long x,long y)
 
 void CHSubMatchConfigurationGUIEx::onClick(long id,LPARAM lParam)
 {
-	if(id==BT_AUTO_SET && m_pMatch)
-	{
-		subMatchesAutoSet();
-	}
-	if(id==BT_REMOVE_SET && m_pMatch)
-	{
-		subMatchesRemoveSet();
-	}
-	if(id==BT_CHANGE_SIDE)
-	{
-		CHMatch* pMatch = getSubmatchSelected();
-		changeSide(pMatch);
-	}	
 
 	GTHManagerGUI::onClick(id,lParam);
 }
@@ -103,10 +103,100 @@ bool CHSubMatchConfigurationGUIEx::onGridHand(long id,long x,long y)
 	return false;
 }
 
+void CHSubMatchConfigurationGUIEx::onLButDown(long id,long x,long y)
+{
+	gui_grid_cell * pCell=m_gui.grid_getCell(GR_SUBMATCHES_CNF,x,y);
+	if(!pCell)
+		return;
+
+	CHMatch* pMatch = (CHMatch*)pCell->lParamLine;
+	if (m_pMatchConfigToolBar)
+	{
+		delete m_pMatchConfigToolBar;
+		m_pMatchConfigToolBar=0;
+	}
+
+	onCreateControl(CHMATCHCONFIGURATION_TB);
+}
+
 /***** Virtual from MSLGUIEX ****/
 LRESULT CHSubMatchConfigurationGUIEx::wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	switch (message)
+	{
+		case UM_LBUTDOWN_TOOLBAR: return onLButDownToolBar(wParam, lParam);
+	}
+
 	return GTHManagerGUI::wndProc(hWnd,message,wParam,lParam);
+}
+
+LRESULT CHSubMatchConfigurationGUIEx::onLButDownToolBar(WPARAM wParam/*=0*/, LPARAM lParam/*=0*/)
+{
+	switch(wParam)
+	{
+		case BT_AUTO_SET:
+			subMatchesAutoSet();
+			break;
+
+		case BT_REMOVE_SET:
+			subMatchesRemoveSet();
+			break;
+
+		case BT_CHANGE_SIDE:
+		{
+			CHMatch* pMatch = getSubmatchSelected();
+			changeSide(pMatch);
+			break;
+		}
+		case BT_PRESS_WINNER_WHITE:
+		case BT_PRESS_TIED:			
+		case BT_PRESS_WINNER_BLACK:
+		case BT_PRESS_WINNER_WHITE_F:
+		case BT_PRESS_TIED_F:
+		case BT_PRESS_WINNER_BLACK_F:
+		case BT_PRESS_EMPTY:
+			setResults ( getResultCode(wParam));
+			break;
+		case BT_CHECK_AUTO_FINISH:
+			m_autoFinish=!m_autoFinish;
+			break;
+		case BT_FINISH:
+			CHMatch* pMatch = getSubmatchSelected();
+			finishMatch(pMatch);
+			break;
+
+	}
+
+	return 0;
+	UNREFERENCED_PARAMETER(lParam);
+}
+
+long CHSubMatchConfigurationGUIEx::getResultCode(long idCtrl)
+{
+	switch (idCtrl)
+	{
+		case BT_PRESS_WINNER_WHITE:
+			return EV_WHITE_WINNER;
+
+		case BT_PRESS_TIED:			
+			return EV_DRAW;
+
+		case BT_PRESS_WINNER_BLACK:
+			return EV_BLACK_WINNER;
+
+		case BT_PRESS_WINNER_WHITE_F:
+			return EV_WHITE_WINNER_F;
+
+		case BT_PRESS_TIED_F:
+			return EV_DRAW_F;
+
+		case BT_PRESS_WINNER_BLACK_F:
+			return EV_BLACK_WINNER_F;
+
+		case BT_PRESS_EMPTY:
+			return EV_EMPTY;
+	}
+	return EV_EMPTY;
 }
 
 LRESULT CHSubMatchConfigurationGUIEx::onCreateControl (WPARAM wParam/*=0*/, LPARAM lParam/*=0*/)
@@ -115,6 +205,17 @@ LRESULT CHSubMatchConfigurationGUIEx::onCreateControl (WPARAM wParam/*=0*/, LPAR
 
 	if(!wParam || wParam==GR_SUBMATCHES_CNF)
 		createGridSubmatches();
+
+	if(!wParam || wParam==CHMATCHCONFIGURATION_TB)
+	{
+		if (m_pMatchConfigToolBar)
+		{
+			delete m_pMatchConfigToolBar;
+			m_pMatchConfigToolBar=0;
+		}
+
+		m_pMatchConfigToolBar = (CHMatchConfigToolBar*) onNewGUIEx(CHMATCHCONFIGURATION_TB);
+	}
 
 	return 1;
 }
@@ -144,13 +245,16 @@ MSLGUIEx * CHSubMatchConfigurationGUIEx::onNewGUIEx(long id)
 {
 	switch(id)
 	{
-		/*case TESETSCONFIGGUIEX_ID:
+		case CHMATCHCONFIGURATION_TB:
 		{
-			TESetsConfigGUIEx * pSetsConfigGUIEx= new TESetsConfigGUIEx(TESETSCONFIGGUIEX_ID,false);
-			pSetsConfigGUIEx->init(m_gui.getHWnd(0),m_hWnd,RC(290,70,580,180));
-			pSetsConfigGUIEx->setData(m_pMatch);
-			return pSetsConfigGUIEx;
-		}*/
+			RECT rect = getRect();
+
+			CHMatch* pMatch = getSubmatchSelected();
+
+			CHMatchConfigToolBar * pMatchConfigToolBar= new CHMatchConfigToolBar(CHMATCHCONFIGURATION_TB, pMatch, m_autoFinish);
+			pMatchConfigToolBar->initToolBar(m_gui.getHWnd(0),m_hWnd,GToolBar::eTop,34,0,0,rect.right-rect.left-16);
+			return pMatchConfigToolBar;	
+		}		
 	}
 	return 0;
 }
@@ -166,18 +270,12 @@ void CHSubMatchConfigurationGUIEx::editStatus(CHMatch *pMatch, long idGrid)
 		return;
 	}
 
-	if(pMatch->getStatus() > CHMemoryDataBase::eStartList )
-	{
-		MSLMsgBox(m_hWnd, L"You can't change the status here.\nThe Match is started",GUI_ICO_WARNING,GUI_MB_OK,_T("Match Status"));
-		return;
-	}
-
 	fillComboStatus(pMatch);
 
 	unsigned char nOld=pMatch->getStatus();
 	m_gui.combo_selL(idGrid,(LPARAM)nOld);	
 
-	int nNew=m_gui.grid_showCombo(idGrid,CB_MATCH_CNF);
+	int nNew=m_gui.grid_showCombo(idGrid,CB_SUBMATCH_CNF);
 	if(nNew!=-1)
 	{
 		CHStatusManager aStManager;
@@ -191,19 +289,31 @@ void CHSubMatchConfigurationGUIEx::editStatus(CHMatch *pMatch, long idGrid)
 
 void CHSubMatchConfigurationGUIEx::fillComboStatus(CHMatch * pMatch)
 {
-	m_gui.combo_reset(CB_MATCH_CNF);
+	m_gui.combo_reset(CB_SUBMATCH_CNF);
 
 	if(pMatch->getStatus()==CHMemoryDataBase::eSchedulled)
 	{
 		GStatus * pStatus=CHMemoryDataBase::findStatus(CHMemoryDataBase::eStartList);
 		if(pStatus)
-			m_gui.combo_add(CB_MATCH_CNF,pStatus->getLDescription(),CHMemoryDataBase::eStartList);
+			m_gui.combo_add(CB_SUBMATCH_CNF,pStatus->getLDescription(),CHMemoryDataBase::eStartList);
 	}
 	else if(pMatch->getStatus()==CHMemoryDataBase::eStartList)
 	{
 		GStatus * pStatus=CHMemoryDataBase::findStatus(CHMemoryDataBase::eSchedulled);
 		if(pStatus)
-			m_gui.combo_add(CB_MATCH_CNF,pStatus->getLDescription(),CHMemoryDataBase::eSchedulled);
+			m_gui.combo_add(CB_SUBMATCH_CNF,pStatus->getLDescription(),CHMemoryDataBase::eSchedulled);
+	}
+	else if(pMatch->getStatus()==CHMemoryDataBase::eFinished)
+	{
+		GStatus * pStatus=CHMemoryDataBase::findStatus(CHMemoryDataBase::eStartList);
+		if(pStatus)
+			m_gui.combo_add(CB_SUBMATCH_CNF,pStatus->getLDescription(),CHMemoryDataBase::eStartList);
+	}
+	else if(pMatch->getStatus()==CHMemoryDataBase::eUnofficial)
+	{
+		GStatus * pStatus=CHMemoryDataBase::findStatus(CHMemoryDataBase::eFinished);
+		if(pStatus)
+			m_gui.combo_add(CB_SUBMATCH_CNF,pStatus->getLDescription(),CHMemoryDataBase::eFinished);
 	}
 }
 
@@ -256,12 +366,12 @@ void CHSubMatchConfigurationGUIEx::painSexRegister(CHRegister * pRegister)
 /***** Grid Sub Match *****/
 void CHSubMatchConfigurationGUIEx::createGridSubmatches()
 {
-	if (m_pMatch && m_pMatch->getSubCode())
+	if (!m_pMatch)
 		return;
 
 	RECT aRc=getRect();
 
-	int Y=aRc.top;
+	int Y=aRc.top+35;
 	m_gui.doLbl(LB_SUBMATCHES_TITLE,RC(aRc.left,Y,aRc.right-16,Y+16),"Sub-matches",GUIM_ID_STY_TITLE);
 
 	Y+=18;
@@ -277,14 +387,10 @@ void CHSubMatchConfigurationGUIEx::createGridSubmatches()
 	m_gui.grid_addColumn(GR_SUBMATCHES_CNF,"C.H"	  ,GUI_JUST_CENTER,35 ,C_HOME_COL_SUBMATCH_CNF);
 	m_gui.grid_addColumn(GR_SUBMATCHES_CNF,"Away"	  ,GUI_JUST_CENTER,125,C_AWAY_SUBMATCH_CNF);
 	m_gui.grid_addColumn(GR_SUBMATCHES_CNF,"C.A"	  ,GUI_JUST_CENTER,35 ,C_AWAY_COL_SUBMATCH_CNF);
+	m_gui.grid_addColumn(GR_SUBMATCHES_CNF,"Res"	  ,GUI_JUST_CENTER,30 ,C_AWAY_COL_RESULT_CNF);	
 
 	m_gui.grid_setLineColor(GR_SUBMATCHES_CNF,GUI_RGB_OFF,GUI_RGB_OFF); 	
-
-	Y+=90;
-
-	m_gui.doBut(BT_AUTO_SET,RC(aRc.left+10,Y,aRc.left+160,Y+18),"Auto set");	
-	m_gui.doBut(BT_REMOVE_SET,RC(aRc.left+165,Y,aRc.left+315,Y+18),"Remove auto set");	
-	m_gui.doBut(BT_CHANGE_SIDE,RC(aRc.left+320,Y,aRc.left+470,Y+18),"Change side");	
+	m_gui.doCombo(CB_SUBMATCH_CNF,RC(0,0,0,0));
 }
 
 void CHSubMatchConfigurationGUIEx::fillGridSubmatches()
@@ -292,8 +398,21 @@ void CHSubMatchConfigurationGUIEx::fillGridSubmatches()
 	m_gui.grid_reset(GR_SUBMATCHES_CNF);
 	if(m_pMatch)
 	{
+		CHEvent * pEvent = (CHEvent * )m_pMatch->getEvent();
+
 		MSLSortedVector vSubmatches;
-		m_pMatch->getSubMatchesVector(vSubmatches);
+		if (pEvent && pEvent->getSubMatches())
+		{
+			if (!m_pMatch->getSubCode())
+				m_pMatch->getSubMatchesVector(vSubmatches);
+			else
+				vSubmatches.insert(m_pMatch);
+		}
+		else
+		{
+			vSubmatches.insert(m_pMatch);
+		}
+		
 		for (short i=0;i<vSubmatches.entries();i++)
 		{
 			CHMatch* pMatch = (CHMatch*)vSubmatches[i];
@@ -304,6 +423,8 @@ void CHSubMatchConfigurationGUIEx::fillGridSubmatches()
 			m_gui.grid_setCellSym(GR_SUBMATCHES_CNF,m_gui.grid_findCol(GR_SUBMATCHES_CNF,C_AWAY_SUBMATCH_CNF),i);
 		}
 	}
+
+	selectFirstAvailableSubMatch();
 }
 
 bool CHSubMatchConfigurationGUIEx::paintGridSubmatches(gui_grid_cell* cell)
@@ -333,22 +454,36 @@ bool CHSubMatchConfigurationGUIEx::paintGridSubmatches(gui_grid_cell* cell)
 		break;	
 	case C_HOME_SUBMATCH_CNF:
 		{
-			CHMatchResult * pHome = (CHMatchResult *) pMatch->getHome();
-			GTHMatchMember *pMM = pHome ? pHome->getMatchMember(0) : 0;
-			if (pMM && pMM->getRegister())
+			CHMatchResult * pWhite = (CHMatchResult *) pMatch->getWhite();
+			if (pMatch->getSubCode())
 			{
-				paintFlagCompetitor((CHRegister*)pMM->getRegister(),cell);
-				painSexRegister((CHRegister*)pMM->getRegister());
-				m_gui.paint_textAt(pMM->getPrnSName(),40,4,GUI_ID_FNT);
+				GTHMatchMember *pMM = pWhite ? pWhite->getMatchMember(0) : 0;
+				if (pMM && 
+					pMM->getRegister())
+				{
+					paintFlagCompetitor((CHRegister*)pMM->getRegister(),cell);
+					painSexRegister((CHRegister*)pMM->getRegister());
+					m_gui.paint_textAt(pMM->getPrnSName(),40,4,GUI_ID_FNT);
+				}
+			}
+			else
+			{
+				if (pWhite && 
+					pWhite->getRegister())
+				{
+					paintFlagCompetitor((CHRegister*)pWhite->getRegister(),cell);
+					painSexRegister((CHRegister*)pWhite->getRegister());
+					m_gui.paint_textAt(pWhite->getPrnSName(),40,4,GUI_ID_FNT);
+				}			
 			}
 			break;
 		}
 	case C_HOME_COL_SUBMATCH_CNF:
 		{
-			CHMatchResult * pHome = (CHMatchResult *) pMatch->getHome();
-			if (pHome)			
+			CHMatchResult * pWhite = (CHMatchResult *) pMatch->getWhite();
+			if (pWhite)			
 			{
-				CHMatchResult::side color = CHMatchResult::side(pHome->getColor());
+				CHMatchResult::side color = CHMatchResult::side(pWhite->getColor());
 				HBITMAP hBmp=((CHManagerApp*)MSLAPP)->getBmpColor(CHManagerApp::m_hCHMyModule,color);
 				if (hBmp)
 				{
@@ -360,22 +495,34 @@ bool CHSubMatchConfigurationGUIEx::paintGridSubmatches(gui_grid_cell* cell)
 		}
 	case C_AWAY_SUBMATCH_CNF:
 		{
-			CHMatchResult * pAway = (CHMatchResult *) pMatch->getAway();
-			GTHMatchMember *pMM = pAway ? pAway->getMatchMember(0) : 0;
-			if (pMM && pMM->getRegister())
+			CHMatchResult * pBlack = (CHMatchResult *) pMatch->getBlack();
+			if (pMatch->getSubCode())
 			{
-				paintFlagCompetitor((CHRegister*)pMM->getRegister(),cell);
-				painSexRegister((CHRegister*)pMM->getRegister());
-				m_gui.paint_textAt(pMM->getPrnSName(),40,4,GUI_ID_FNT);
+				GTHMatchMember *pMM = pBlack ? pBlack->getMatchMember(0) : 0;
+				if (pMM && pMM->getRegister())
+				{
+					paintFlagCompetitor((CHRegister*)pMM->getRegister(),cell);
+					painSexRegister((CHRegister*)pMM->getRegister());
+					m_gui.paint_textAt(pMM->getPrnSName(),40,4,GUI_ID_FNT);
+				}
+			}
+			else
+			{
+				if (pBlack && pBlack->getRegister())
+				{
+					paintFlagCompetitor((CHRegister*)pBlack->getRegister(),cell);
+					painSexRegister((CHRegister*)pBlack->getRegister());
+					m_gui.paint_textAt(pBlack->getPrnSName(),40,4,GUI_ID_FNT);
+				}
 			}
 			break;
 		}
 	case C_AWAY_COL_SUBMATCH_CNF:
 		{
-			CHMatchResult * pAway = (CHMatchResult *) pMatch->getAway();
-			if (pAway)			
+			CHMatchResult * pBlack = (CHMatchResult *) pMatch->getBlack();
+			if (pBlack)			
 			{
-				CHMatchResult::side color = CHMatchResult::side(pAway->getColor());
+				CHMatchResult::side color = CHMatchResult::side(pBlack->getColor());
 				HBITMAP hBmp=((CHManagerApp*)MSLAPP)->getBmpColor(CHManagerApp::m_hCHMyModule,color);
 				if (hBmp)
 				{
@@ -385,7 +532,13 @@ bool CHSubMatchConfigurationGUIEx::paintGridSubmatches(gui_grid_cell* cell)
 			}
 			break;
 		}
+		case C_AWAY_COL_RESULT_CNF:
+		{
+			cell->txt=pMatch->getResultAsString().toUnicode();
+			break;
+		}
 	}
+	
 	
 	return false;
 }
@@ -574,3 +727,72 @@ void CHSubMatchConfigurationGUIEx::changeSide(CHMatch *pMatch)
 	m_gui.redraw(GR_SUBMATCHES_CNF);
 }
 
+void CHSubMatchConfigurationGUIEx::finishMatch(CHMatch* pMatch)
+{
+	if (!pMatch)
+	{
+		MSLMsgBox(m_hWnd, L"Please select a match",GUI_ICO_STOP,GUI_MB_OK,L"CHManager");
+		return;
+	}
+
+	CHEventControlOperations eventControlOp(this);
+	eventControlOp.finishMatch(pMatch,true);
+}
+
+void CHSubMatchConfigurationGUIEx::setResults(long resultCode)
+{
+	CHMatch* pMatch = getSubmatchSelected();
+	if (!pMatch)
+		selectFirstAvailableSubMatch();
+	
+	pMatch = getSubmatchSelected();
+	if (!pMatch)
+	{
+		sendMsg(UM_GOTO_NEXT_MATCH,0);	
+		pMatch = getSubmatchSelected();
+	}
+	if (!pMatch)
+	{
+		MSLMsgBox(m_hWnd, L"No more available matches",GUI_ICO_STOP,GUI_MB_OK,L"CHManager");
+		return;
+	}
+	
+	CHEventControlOperations eventControlOp(this);
+	eventControlOp.setScore( resultCode, pMatch);
+
+	if( m_autoFinish )
+		finishMatch(pMatch);
+
+	m_gui.redraw(GR_SUBMATCHES_CNF);
+				
+	if( m_autoFinish )
+	{
+		pMatch = selectFirstAvailableSubMatch();
+		if (!pMatch)
+			sendMsg(UM_GOTO_NEXT_MATCH,0);
+	}
+}
+
+CHMatch* CHSubMatchConfigurationGUIEx::selectFirstAvailableSubMatch()
+{
+	long nLines = m_gui.grid_getNLines(GR_SUBMATCHES_CNF);
+	for (long i=0;i<nLines;i++)
+	{
+		CHMatch* pMatch = (CHMatch* ) m_gui.grid_getLParam(GR_SUBMATCHES_CNF,i);
+		if (pMatch && pMatch->getStatus()!=CHMemoryDataBase::eFinished)
+		{
+			m_gui.grid_selLParam(GR_SUBMATCHES_CNF,LPARAM(pMatch),true,true,false);
+
+			if (m_pMatchConfigToolBar)
+			{
+				delete m_pMatchConfigToolBar;
+				m_pMatchConfigToolBar=0;
+			}
+
+			onCreateControl(CHMATCHCONFIGURATION_TB);			
+			return pMatch;
+		}
+	}
+	
+	return 0;
+}

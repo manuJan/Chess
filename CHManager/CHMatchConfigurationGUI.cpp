@@ -107,8 +107,6 @@ bool CHMatchConfigurationGUI::onGridPaint(long id,gui_grid_cell* cell)
 		return paintGridMatchMembers(cell);
 	else if(id==GR_MATCHJUDGE_CNF)
 		return paintGridMatchJudge(cell);
-	else if(id==GR_SUBMATCHES_CNF)
-		return paintGridSubmatches(cell);
 
 	return false;
 }
@@ -121,8 +119,6 @@ void CHMatchConfigurationGUI::onLButDblClick(long id,long x,long y)
 		dblClickGridMatchResults(x,y);
 	 else if(id==GR_MATCHMEMBERS_CNF)
 		 dblClickGridMatchMembers(x,y);
-	 else if(id==GR_SUBMATCHES_CNF)
-		dblClickGridSubmatches(x,y);
 }
 
 void CHMatchConfigurationGUI::onClick(long id,LPARAM lParam)
@@ -134,36 +130,15 @@ void CHMatchConfigurationGUI::onClick(long id,LPARAM lParam)
 		delete m_pDlgUmpire;
 		m_pDlgUmpire=0;
 	}
-	if(id==BT_AUTO_SET && m_pMatch)
-	{
-		subMatchesAutoSet();
-	}
-	if(id==BT_REMOVE_SET && m_pMatch)
-	{
-		subMatchesRemoveSet();
-	}
-	if(id==BT_CHANGE_SIDE)
-	{
-		CHMatch* pMatch = getSubmatchSelected();
-		changeSide(pMatch);
-	}
 	if (id==BT_GO_PREV)
 	{
-		CHMatch * pMatch = (CHMatch *)getPrevMatch();
-		if (pMatch)
-		{
-			setMatch(pMatch);			
-			onFillControl();
-		}
+		bool ok = goToPrevMatch();
+
+		
 	}
 	if (id==BT_GO_NEXT)
 	{
-		CHMatch * pMatch = (CHMatch *)getNextMatch();
-		if (pMatch)
-		{
-			setMatch(pMatch);
-			onFillControl();
-		}
+		bool ok = goToNextMatch();		
 	}
 
 	GTHManagerGUI::onClick(id,lParam);
@@ -184,7 +159,8 @@ LRESULT CHMatchConfigurationGUI::wndProc(HWND hWnd, UINT message, WPARAM wParam,
 {
 	switch (message)
 	{
-	case UM_CHANGE_UMPIRE: return onChangeUmpire		(wParam, lParam);
+		case UM_GOTO_NEXT_MATCH: return onGotoNextMatch		(wParam, lParam);
+		case UM_CHANGE_UMPIRE: return onChangeUmpire		(wParam, lParam);
 	}
 
 	return GTHManagerGUI::wndProc(hWnd,message,wParam,lParam);
@@ -202,8 +178,6 @@ LRESULT CHMatchConfigurationGUI::onCreateControl (WPARAM wParam/*=0*/, LPARAM lP
 		createGridMatchResults();
 	if(!wParam || wParam==GR_MATCHMEMBERS_CNF)
 		createGridMatchMembers();
-	/*if(!wParam || wParam==GR_SUBMATCHES_CNF)
-		createGridSubmatches();*/
 	if(!wParam || wParam==CHSUBMATCHCONFIGGUIEX_ID)
 	{
 		if(m_pSubMatchConfigurationGUIEx)
@@ -227,9 +201,13 @@ LRESULT CHMatchConfigurationGUI::onFillControl(WPARAM wParam/*=0*/, LPARAM lPara
 		fillGridMatchMembers();
 	if(!wParam || wParam==GR_MATCHJUDGE_CNF)
 		fillGridMatchJudge();
-	if(!wParam || wParam==GR_SUBMATCHES_CNF)
-		fillGridSubmatches();
+	if(!wParam || wParam==CHSUBMATCHCONFIGGUIEX_ID)
+	{
+		if (m_pSubMatchConfigurationGUIEx)
+			SendMessage(m_pSubMatchConfigurationGUIEx->getHWnd(),UM_FILL_CONTROL,wParam,lParam);	
+	}
 
+	
 	return 0;
 }
 
@@ -245,8 +223,11 @@ LRESULT CHMatchConfigurationGUI::onRedrawControl(WPARAM wParam/*=0*/, LPARAM lPa
 		redrawGrid(GR_MATCHMEMBERS_CNF);
 	if(!wParam || wParam==GR_MATCHJUDGE_CNF)
 		redrawGrid(GR_MATCHJUDGE_CNF);
-	if(!wParam || wParam==GR_SUBMATCHES_CNF)
-		redrawGrid(GR_SUBMATCHES_CNF);
+	if(!wParam || wParam==CHSUBMATCHCONFIGGUIEX_ID)
+	{
+		if (m_pSubMatchConfigurationGUIEx)
+			SendMessage(m_pSubMatchConfigurationGUIEx->getHWnd(),UM_REDRAW_CONTROL,wParam,lParam);	
+	}
 	return 0;
 }
 
@@ -257,6 +238,12 @@ LRESULT CHMatchConfigurationGUI::onChangeUmpire(WPARAM wParam/*=0*/, LPARAM lPar
 	fillGridMatchJudge();
 	SendMessage(getHWndMsgs(),UM_CHANGE_MATCH,0,0);
 	return 1;
+}
+
+LRESULT CHMatchConfigurationGUI::onGotoNextMatch(WPARAM wParam/*=0*/, LPARAM lParam/*=0*/)
+{
+	bool ok = goToNextMatch();
+	return ok?0:1;
 }
 
 
@@ -273,14 +260,6 @@ MSLGUIEx * CHMatchConfigurationGUI::onNewGUIEx(long id)
 			pSubMatchConfigGUIEx->init(m_gui.getHWnd(0),m_hWnd,RC(aRc.left+10,240,aRc.right,400));			
 			return pSubMatchConfigGUIEx;
 		}
-
-		/*case TESETSCONFIGGUIEX_ID:
-		{
-			TESetsConfigGUIEx * pSetsConfigGUIEx= new TESetsConfigGUIEx(TESETSCONFIGGUIEX_ID,false);
-			pSetsConfigGUIEx->init(m_gui.getHWnd(0),m_hWnd,RC(290,70,580,180));
-			pSetsConfigGUIEx->setData(m_pMatch);
-			return pSetsConfigGUIEx;
-		}*/
 	}
 	return 0;
 }
@@ -299,8 +278,8 @@ void CHMatchConfigurationGUI::createGridMatch()
 
 	m_gui.grid_addColumn(GR_MATCH_CNF,"Date"	  ,GUI_JUST_CENTER,80 ,C_DATE_MATCH_CNF);
 	m_gui.grid_addColumn(GR_MATCH_CNF,"Session"   ,GUI_JUST_CENTER,50 ,C_SESSI_MATCH_CNF);	
-	m_gui.grid_addColumn(GR_MATCH_CNF,"Round"	  ,GUI_JUST_CENTER,70 ,C_COURT_MATCH_CNF);
-	m_gui.grid_addColumn(GR_MATCH_CNF,"Game"	  ,GUI_JUST_CENTER,150 ,C_GAME_MATCH_CNF);
+	m_gui.grid_addColumn(GR_MATCH_CNF,"Round"	  ,GUI_JUST_CENTER,60 ,C_COURT_MATCH_CNF);
+	m_gui.grid_addColumn(GR_MATCH_CNF,"Game"	  ,GUI_JUST_CENTER,160 ,C_GAME_MATCH_CNF);
 	m_gui.grid_addColumn(GR_MATCH_CNF,"Status"	  ,GUI_JUST_CENTER,100 ,C_STATU_MATCH_CNF);	
 
 	m_gui.grid_setLineColor(GR_MATCH_CNF,GUI_RGB_OFF,GUI_RGB_OFF); 
@@ -388,12 +367,6 @@ void CHMatchConfigurationGUI::editStatus(CHMatch *pMatch, long idGrid)
 	if(pMatch->getStatus() < CHMemoryDataBase::eSchedulled)
 	{
 		MSLMsgBox(m_hWnd, L"You can't change the status here.\nThe match is not in Schedule",GUI_ICO_WARNING,GUI_MB_OK,_T("Match Status"));
-		return;
-	}
-
-	if(pMatch->getStatus() > CHMemoryDataBase::eStartList )
-	{
-		MSLMsgBox(m_hWnd, L"You can't change the status here.\nThe Match is started",GUI_ICO_WARNING,GUI_MB_OK,_T("Match Status"));
 		return;
 	}
 
@@ -750,176 +723,6 @@ bool CHMatchConfigurationGUI::handGridMatchMembers(int x,int y)
 	return true;
 }
 
-/***** Grid Sub Match *****/
-void CHMatchConfigurationGUI::createGridSubmatches()
-{
-	if (m_pMatch && m_pMatch->getSubCode())
-		return;
-
-	RECT aRc=getRect();
-
-	int Y=aRc.top+255;
-	m_gui.doLbl(LB_SUBMATCHES_TITLE,RC(aRc.left+10,Y,aRc.right-16,Y+16),"Sub-matches",GUIM_ID_STY_TITLE);
-
-	Y+=18;
-
-	m_gui.doGrid(GR_SUBMATCHES_CNF,RC(aRc.left+10,Y,aRc.right-16,Y+80),GUI_ID_STY_BOR,GUI_ID_STY_SEL,25);
-
-	m_gui.grid_addColumn(GR_SUBMATCHES_CNF,"Date"	  ,GUI_JUST_CENTER,80 ,C_DATE_SUBMATCH_CNF);
-	m_gui.grid_addColumn(GR_SUBMATCHES_CNF,"Time"	  ,GUI_JUST_CENTER,50 ,C_SESSI_SUBMATCH_CNF);
-	m_gui.grid_addColumn(GR_SUBMATCHES_CNF,"Submatch" ,GUI_JUST_CENTER,50 ,C_SUBMC_SUBMATCH_CNF);
-	m_gui.grid_addColumn(GR_SUBMATCHES_CNF,"Table"	  ,GUI_JUST_CENTER,50 ,C_COURT_SUBMATCH_CNF);
-	m_gui.grid_addColumn(GR_SUBMATCHES_CNF,"Status"	  ,GUI_JUST_CENTER,90 ,C_STATU_SUBMATCH_CNF);	
-	m_gui.grid_addColumn(GR_SUBMATCHES_CNF,"Home"	  ,GUI_JUST_CENTER,125,C_HOME_SUBMATCH_CNF);
-	m_gui.grid_addColumn(GR_SUBMATCHES_CNF,"C.H"	  ,GUI_JUST_CENTER,35 ,C_HOME_COL_SUBMATCH_CNF);
-	m_gui.grid_addColumn(GR_SUBMATCHES_CNF,"Away"	  ,GUI_JUST_CENTER,125,C_AWAY_SUBMATCH_CNF);
-	m_gui.grid_addColumn(GR_SUBMATCHES_CNF,"C.A"	  ,GUI_JUST_CENTER,35 ,C_AWAY_COL_SUBMATCH_CNF);
-
-	m_gui.grid_setLineColor(GR_SUBMATCHES_CNF,GUI_RGB_OFF,GUI_RGB_OFF); 	
-
-	Y+=90;
-
-	m_gui.doBut(BT_AUTO_SET,RC(aRc.left+10,Y,aRc.left+160,Y+18),"Auto set");	
-	m_gui.doBut(BT_REMOVE_SET,RC(aRc.left+165,Y,aRc.left+315,Y+18),"Remove auto set");	
-	m_gui.doBut(BT_CHANGE_SIDE,RC(aRc.left+320,Y,aRc.left+470,Y+18),"Change side");	
-}
-
-void CHMatchConfigurationGUI::fillGridSubmatches()
-{
-	m_gui.grid_reset(GR_SUBMATCHES_CNF);
-	if(m_pMatch)
-	{
-		MSLSortedVector vSubmatches;
-		m_pMatch->getSubMatchesVector(vSubmatches);
-		for (short i=0;i<vSubmatches.entries();i++)
-		{
-			CHMatch* pMatch = (CHMatch*)vSubmatches[i];
-			m_gui.grid_add(GR_SUBMATCHES_CNF,(LPARAM)pMatch);			
-
-			m_gui.grid_setCellSym(GR_SUBMATCHES_CNF,m_gui.grid_findCol(GR_SUBMATCHES_CNF,C_STATU_SUBMATCH_CNF),i);
-			m_gui.grid_setCellSym(GR_SUBMATCHES_CNF,m_gui.grid_findCol(GR_SUBMATCHES_CNF,C_HOME_SUBMATCH_CNF),i);
-			m_gui.grid_setCellSym(GR_SUBMATCHES_CNF,m_gui.grid_findCol(GR_SUBMATCHES_CNF,C_AWAY_SUBMATCH_CNF),i);
-		}
-	}
-}
-
-bool CHMatchConfigurationGUI::paintGridSubmatches(gui_grid_cell* cell)
-{
-	if(cell->y==-1 || !cell->lParamLine)
-		return false;
-	
-
-	CHMatch * pMatch=(CHMatch*)cell->lParamLine;
-	
-	switch (cell->lParamColumn)
-	{
-	case C_DATE_SUBMATCH_CNF:
-		cell->txt=pMatch->getStartDateAsString("%d/%m/%Y");
-		break;
-	case C_SESSI_SUBMATCH_CNF:
-		cell->txt=MSLWString(pMatch->getStartTimeAsString("%H:%M"));
-		break;	
-	case C_SUBMC_SUBMATCH_CNF:
-		cell->txt=TOWSTRING(pMatch->getSubCode());
-		break;
-	case C_COURT_SUBMATCH_CNF:
-		cell->txt=pMatch->getCourtLDescription();
-		break;
-	case C_STATU_SUBMATCH_CNF:
-		cell->txt=pMatch->getStatusLDescription();
-		break;	
-	case C_HOME_SUBMATCH_CNF:
-		{
-			CHMatchResult * pHome = (CHMatchResult *) pMatch->getHome();
-			GTHMatchMember *pMM = pHome ? pHome->getMatchMember(0) : 0;
-			if (pMM && pMM->getRegister())
-			{
-				paintFlagCompetitor((CHRegister*)pMM->getRegister(),cell);
-				painSexRegister((CHRegister*)pMM->getRegister());
-				m_gui.paint_textAt(pMM->getPrnSName(),40,4,GUI_ID_FNT);
-			}
-			break;
-		}
-	case C_HOME_COL_SUBMATCH_CNF:
-		{
-			CHMatchResult * pHome = (CHMatchResult *) pMatch->getHome();
-			if (pHome)			
-			{
-				CHMatchResult::side color = CHMatchResult::side(pHome->getColor());
-				HBITMAP hBmp=((CHManagerApp*)MSLAPP)->getBmpColor(CHManagerApp::m_hCHMyModule,color);
-				if (hBmp)
-				{
-					m_gui.paint_userBmp(hBmp,10,3,true);
-					::DeleteObject(hBmp);				
-				}
-			}
-			break;
-		}
-	case C_AWAY_SUBMATCH_CNF:
-		{
-			CHMatchResult * pAway = (CHMatchResult *) pMatch->getAway();
-			GTHMatchMember *pMM = pAway ? pAway->getMatchMember(0) : 0;
-			if (pMM && pMM->getRegister())
-			{
-				paintFlagCompetitor((CHRegister*)pMM->getRegister(),cell);
-				painSexRegister((CHRegister*)pMM->getRegister());
-				m_gui.paint_textAt(pMM->getPrnSName(),40,4,GUI_ID_FNT);
-			}
-			break;
-		}
-	case C_AWAY_COL_SUBMATCH_CNF:
-		{
-			CHMatchResult * pAway = (CHMatchResult *) pMatch->getAway();
-			if (pAway)			
-			{
-				CHMatchResult::side color = CHMatchResult::side(pAway->getColor());
-				HBITMAP hBmp=((CHManagerApp*)MSLAPP)->getBmpColor(CHManagerApp::m_hCHMyModule,color);
-				if (hBmp)
-				{
-					m_gui.paint_userBmp(hBmp,10,3,true);
-					::DeleteObject(hBmp);				
-				}
-			}
-			break;
-		}
-	}
-	
-	return false;
-}
-
-void CHMatchConfigurationGUI::dblClickGridSubmatches(long x,long y)
-{
-	gui_grid_cell * pCell=m_gui.grid_getCell(GR_SUBMATCHES_CNF,x,y);
-	if(!pCell)
-		return;
-
-	int col=pCell->lParamColumn;
-
-	CHMatch* pMatch = (CHMatch*) pCell->lParamLine;
-
-	if(col==C_STATU_SUBMATCH_CNF)
-		editStatus(pMatch, GR_SUBMATCHES_CNF );
-	else if(col==C_HOME_SUBMATCH_CNF)
-		editSubMatchMember(pMatch, C_HOME_SUBMATCH_CNF,y);
-	else if(col==C_AWAY_SUBMATCH_CNF)
-		editSubMatchMember(pMatch, C_AWAY_SUBMATCH_CNF,y);
-	else if(col==C_HOME_COL_SUBMATCH_CNF ||
-			col==C_AWAY_COL_SUBMATCH_CNF)
-		editSubMatchSide(pMatch, C_HOME_COL_SUBMATCH_CNF,y);
-
-}
-
-bool CHMatchConfigurationGUI::handGridSubmatches(int x,int y)
-{
-	gui_grid_cell * pCell=m_gui.grid_getCell(GR_SUBMATCHES_CNF,x,y);
-	if(!pCell)
-		return false;
-
-	if(pCell->lParamColumn==C_STATU_SUBMATCH_CNF)
-		return true;
-
-	return false;
-}
 
 void CHMatchConfigurationGUI::editMatchMember(CHMatch * pMatch, int col,int y)
 {
@@ -1009,17 +812,6 @@ void CHMatchConfigurationGUI::editSubMatchMember(CHMatch *pMatch, int col, int y
 	}
 }
 
-void CHMatchConfigurationGUI::editSubMatchSide(CHMatch * pMatch, int col,int y)
-{
-	changeSide(pMatch);
-}
-
-CHMatch *CHMatchConfigurationGUI::getSubmatchSelected()
-{
-	return (CHMatch *) m_gui.grid_selGetLParam(GR_SUBMATCHES_CNF);
-}
-
-
 void CHMatchConfigurationGUI::fillComboMembers(GTHMatchMember * pMatchMember)
 {
 	m_gui.combo_reset(CB_MATCHMEMBERS_CNF);
@@ -1097,36 +889,44 @@ LRESULT CHMatchConfigurationGUI::onComms(WPARAM wParam, LPARAM lParam)
 	return 1;
 }
 
-void CHMatchConfigurationGUI::subMatchesAutoSet()
+bool CHMatchConfigurationGUI::goToNextMatch()
 {
-	CHProgression aProgression(this);
-	aProgression.setAutoSubMatchesAssign(m_pMatch);
-
-	redrawGrid(GR_SUBMATCHES_CNF);
+	CHMatch * pMatch = (CHMatch *)getNextMatch();
+	if (pMatch)
+	{
+		setMatch(pMatch);
+		if (m_pSubMatchConfigurationGUIEx)
+			m_pSubMatchConfigurationGUIEx->setMatch(pMatch);
+		
+		onFillControl();
+		
+		return true;
+	}
+	return false;
 }
 
-void CHMatchConfigurationGUI::subMatchesRemoveSet()
+bool CHMatchConfigurationGUI::goToPrevMatch()
 {
-	CHProgression aProgression(this);
-	aProgression.removeAutoSubMatchesAssign(m_pMatch);
+	CHMatch * pMatch = (CHMatch *)getPrevMatch();
+	if (pMatch)
+	{
+		setMatch(pMatch);			
+		if (m_pSubMatchConfigurationGUIEx)
+			m_pSubMatchConfigurationGUIEx->setMatch(pMatch);
+		onFillControl();
+		return true;
+	}
 
-	redrawGrid(GR_SUBMATCHES_CNF);
+	return false;
 }
 
-void CHMatchConfigurationGUI::changeSide(CHMatch *pMatch)
-{
-	CHProgression aProgression(this);
-	aProgression.changeSide(pMatch);
-
-	redrawGrid(GR_SUBMATCHES_CNF);
-}
 
 CHMatch* CHMatchConfigurationGUI::getPrevMatch()
 {
 	MSLSortedVector vMatches;
 	getMatchesVectorSel(vMatches);
 
-	short indexCurrent = vMatches.index(m_pMatch);
+	long indexCurrent = vMatches.index(m_pMatch);
 	if (indexCurrent>0)
 		return (CHMatch*)vMatches[indexCurrent-1];
 
@@ -1138,7 +938,7 @@ CHMatch* CHMatchConfigurationGUI::getNextMatch()
 	MSLSortedVector vMatches;
 	getMatchesVectorSel(vMatches);
 
-	short indexCurrent = vMatches.index(m_pMatch);
+	long indexCurrent = vMatches.index(m_pMatch);
 	if (indexCurrent<vMatches.entries())
 		return (CHMatch*)vMatches[indexCurrent+1];
 

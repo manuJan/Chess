@@ -44,6 +44,7 @@ public:
 	void onLButDblClick							(long id,long x,long y);
 	void onClick								(long id,LPARAM lParam);
 	bool onGridHand								(long id,long x,long y);
+	void onLButDown								(long id,long x,long y);
 
 	MSLGUIEx * onNewGUIEx						(long id);
 
@@ -51,6 +52,7 @@ protected:
 
 	/***** Virtual from MSLGUIEX ****/
 	LRESULT wndProc								(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	LRESULT onLButDownToolBar					(WPARAM wParam=0, LPARAM lParam=0);
 
 	/***** Controls *****/
 	virtual LRESULT onCreateControl				(WPARAM wParam=0, LPARAM lParam=0);
@@ -75,6 +77,7 @@ private:
 	void dblClickGridSubmatches					(long x,long y);
 	bool handGridSubmatches						(int x,int y);
 	CHMatch *getSubmatchSelected				();
+	CHMatch *selectFirstAvailableSubMatch		();
 
 	void paintFlagCompetitor					(CHRegister *pRegister, gui_grid_cell* cell);
 	void painSexRegister						(CHRegister * pRegister);
@@ -86,9 +89,12 @@ private:
 	void subMatchesAutoSet						();
 	void subMatchesRemoveSet					();
 	void changeSide								(CHMatch *pMatch);	 		
-
+	long getResultCode							(long idCtrl);
+	void setResults								(long resultCode);
+	void finishMatch							(CHMatch* pMatch);
 private:
 	
 	CHMatch * m_pMatch;
 	CHMatchConfigToolBar* m_pMatchConfigToolBar;
+	bool m_autoFinish;
 };
