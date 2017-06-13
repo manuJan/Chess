@@ -119,6 +119,9 @@ public:
 	bool			canPlayInColor(CHMatchResult::side color, short round);
 	float			getAveragePointsAllCompetitors(CHMatch *pMatch=0);
 	bool			isTeamEvent();
+
+	void			clearData();
+
 private:
 	short		m_mPlayed,
 				m_mWon,

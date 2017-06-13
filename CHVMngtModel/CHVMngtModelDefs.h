@@ -53,4 +53,28 @@
 #define CH51			2008
 #define CH51_NAME		L"Startlist (C51)"
 
+#define CH74			2009
+#define CH74_NAME		L"Results by Round (C74)"
+
+#define CH75			2010
+#define CH75_NAME		L"Ranking by Round (C75)"
+
+// Medallists
+#define CH92A			2011
+#define CH92A_NAME		L"Medallists (C92A)"
+
+// Medallist
+#define CH92B			2012
+#define CH92B_NAME		L"Medallists (C92B)"
+
+// Medallist by Event
+#define CH93			2013
+#define CH93_NAME		L"Medallists By Event (C93)"
+
+// Medals Standings
+#define CH95			2014
+#define CH95_NAME		L"Medals Standings (C95)"
+
+#define ALL_ROUNDS 100
+
 #endif _CHVMNGTMODELDEFS_H__

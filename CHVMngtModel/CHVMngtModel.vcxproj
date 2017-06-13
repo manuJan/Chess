@@ -98,6 +98,8 @@ xcopy /D /Y $(OutDir)*.lib C:\WorkingDll\Lib
     <None Include="..\ReportsFiles\CH.C38.lis" />
     <None Include="..\ReportsFiles\CH.C51.lis" />
     <None Include="..\ReportsFiles\CH.C58.lis" />
+    <None Include="..\ReportsFiles\CH.C74.lis" />
+    <None Include="..\ReportsFiles\CH.C75.lis" />
     <None Include="..\ReportsFiles\CH.Labels.ENG.lis" />
     <None Include="..\ReportsFiles\CHRLegends.ENG.lis" />
     <None Include="ReadMe.txt" />
@@ -116,6 +118,8 @@ xcopy /D /Y $(OutDir)*.lib C:\WorkingDll\Lib
     <ClInclude Include="CHRC38.h" />
     <ClInclude Include="CHRC51.h" />
     <ClInclude Include="CHRC58.h" />
+    <ClInclude Include="CHRC74.h" />
+    <ClInclude Include="CHRC75.h" />
     <ClInclude Include="CHReportTemplate.h" />
     <ClInclude Include="CHRLegends.h" />
     <ClInclude Include="CHRoundDraw.h" />
@@ -140,6 +144,8 @@ xcopy /D /Y $(OutDir)*.lib C:\WorkingDll\Lib
     <ClCompile Include="CHRC38.cpp" />
     <ClCompile Include="CHRC51.cpp" />
     <ClCompile Include="CHRC58.cpp" />
+    <ClCompile Include="CHRC74.cpp" />
+    <ClCompile Include="CHRC75.cpp" />
     <ClCompile Include="CHReportTemplate.cpp" />
     <ClCompile Include="CHRLegends.cpp" />
     <ClCompile Include="CHRoundDraw.cpp" />

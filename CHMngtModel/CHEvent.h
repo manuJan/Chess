@@ -91,6 +91,8 @@ public:
 	MSLWString			getTeamCfgSDescription(const char * language=0);
 	MSLWString			getTeamCfgLDescription(const char * language=0);
 
+	void				getEventResults(MSLSet &colEventResults);
+
 private:
 	
 	//Atributos

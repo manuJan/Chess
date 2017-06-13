@@ -99,6 +99,9 @@ void CHRLegends::loadData()
 	case CH51:
 		printLegend	(600,3);
 		break;
+	case CH74:
+		printLegend	(700,3);
+		break;
 	}
 }
 

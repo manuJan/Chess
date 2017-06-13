@@ -23,6 +23,7 @@
 #include "stdCHMngt.h"
 #include "CHEvent.h"
 #include "CHInscription.h"
+#include "CHEventResult.h"
 #include "CHMemoryDataBase.h"
 #include "QCHEvent.h"
 #include "UCHEvent.h"
@@ -37,6 +38,18 @@ bool inscriptionsEvent(const MSLItem *col, const void *param)
 	if(pInscription->getEvent()->getKey() == pEvent->getKey())
 		return true;
 	return false;	
+}
+
+static
+bool eventResultsOfEvent(const MSLItem* p, const void *n)
+{
+	CHEvent* pEvent = (CHEvent *)n;
+	CHEventResult* pEventResult = (CHEventResult *)p;	
+
+	if ( pEventResult->getEventKey() == pEvent->getKey() )
+		 return true;
+
+	return false;
 }
 
 MSLDEFINE_ITEM(CHEvent,__CHEVENT)
@@ -391,4 +404,9 @@ MSLString CHEvent::getCfgTeamMembers() const
 		return pTeamMatchsCnfg->getMatchesType();
 
 	return NULLSTRING;
+}
+
+void CHEvent::getEventResults(MSLSet &colEventResults)
+{
+	colEventResults = (CHMemoryDataBase::getCol(__GEVENTRESULT)).select(eventResultsOfEvent, this);
 }

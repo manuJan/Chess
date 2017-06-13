@@ -50,6 +50,7 @@ public:
 
 	unsigned char getRoundStatus(short nRound);
 	short getRoundMatches(short nRound);
+	void getRoundMatchesVector(MSLSortedVector &vRoundMatches, short nRound);
 	short getNumRoundsPlayed();
 
 	bool	hasCompatibleColors(CHPoolResult* pPR1,CHPoolResult* pPR2, short round);

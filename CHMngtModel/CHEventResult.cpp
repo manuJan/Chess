@@ -24,12 +24,45 @@
 #include "stdCHMngt.h"
 #include "CHEventResult.h"
 #include "CHPoolResult.h"
+#include "CHPhase.h"
 #include "CHSportDefines.h"
 #include "QCHEventResult.h"
 #include "UCHEventResult.h"
 #include <ovr/core/G/GBuffer.h>
 
 MSLDEFINE_ITEM(CHEventResult, __CHEVENTRESULT)
+
+static
+int orderPoolResultsByPhaseOrder(const MSLItem** a,const MSLItem** b)
+{
+	CHPoolResult * pA=((CHPoolResult *)(*a));
+	CHPoolResult * pB=((CHPoolResult *)(*b));
+
+	CHPhase* pPhaseA=(CHPhase*)pA->getPhase();
+	CHPhase* pPhaseB=(CHPhase*)pB->getPhase();
+
+	if (pPhaseA && pPhaseB)
+	{
+		int order = pPhaseA->getOrder()-pPhaseB->getOrder();
+		if (order)
+			return order;
+	}
+
+	return strcmp(pA->getKey() , pB->getKey());
+}
+
+static
+bool poolResultsOfEventResult(const MSLItem* p,const void *n)
+{
+	CHEventResult* pEventResult = (CHEventResult *)n;
+	CHPoolResult* pPoolResult = (CHPoolResult *)p;	
+	
+	if (pPoolResult->getEventKey()		==pEventResult->getEventKey() && 
+		pPoolResult->getRegisterKey()	==pEventResult->getRegisterKey())
+		return true;
+
+	return false;
+}
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -144,18 +177,15 @@ MSLString CHEventResult::getRatingAsString() const
 
 CHPoolResult * CHEventResult::getPoolResult()
 {
-	MSLSetIterator iter(CHMemoryDataBase::getCol(__CHPOOLRESULT));
+	MSLSet colPoolResults=CHMemoryDataBase::getCol(__CHPOOLRESULT).select(poolResultsOfEventResult,this);
+	MSLSortedVector vPoolResults(colPoolResults,orderPoolResultsByPhaseOrder);
+
+	if (vPoolResults.entries())
+		return (CHPoolResult*)vPoolResults[vPoolResults.entries()-1];
 	
-	CHPoolResult *pPoolResult = 0;
-
-	while ((pPoolResult = (CHPoolResult*) iter())!=0 )
-	{
-		if (pPoolResult->getInscription() == getInscription())
-			return pPoolResult;
-	}
-
-	return NULL;
+	return 0;
 }
+
 float CHEventResult::getPointsPoolResult()
 {
 	CHPoolResult *pPoolResult=getPoolResult();

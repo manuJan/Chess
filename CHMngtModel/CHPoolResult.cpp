@@ -1465,3 +1465,13 @@ bool CHPoolResult::isTeamEvent()
 {
 	return ((CHEvent*)getEvent()) ? ((CHEvent*)getEvent())->isTeam() : false;
 }
+
+void CHPoolResult::clearData()
+{
+	setPoints(0);
+	setPointsF(0.0);
+	setMPlayed(0);
+	setMWon(0);
+	setMLost(0);
+	setMDrawn(0);
+}

@@ -46,6 +46,12 @@
     <None Include="..\ReportsFiles\CH.C51.lis">
       <Filter>ReportFiles</Filter>
     </None>
+    <None Include="..\ReportsFiles\CH.C74.lis">
+      <Filter>ReportFiles</Filter>
+    </None>
+    <None Include="..\ReportsFiles\CH.C75.lis">
+      <Filter>ReportFiles</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -114,6 +120,12 @@
     <ClInclude Include="CHRC51.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CHRC74.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHRC75.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -177,6 +189,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CHRC51.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHRC74.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHRC75.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

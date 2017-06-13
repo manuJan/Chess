@@ -187,3 +187,21 @@ MSLWString CHPhase::getTypePhaseDescription()
 
 	return NULLWSTRING;
 }
+
+bool CHPhase::isTeamEvent()
+{
+	CHEvent * pEvent = (CHEvent * )getEvent();
+	return pEvent ? pEvent->isTeam() : false;
+}
+
+short CHPhase::getNumRounds()
+{
+	MSLSortedVector vPools;
+	getPoolesVector(vPools);
+
+	CHPool * pPool=(CHPool*)vPools[0];
+	if(pPool)
+		return pPool->getNumRounds();
+
+	return 0;
+}

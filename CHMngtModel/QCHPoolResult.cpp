@@ -52,11 +52,11 @@ void QCHPoolResult::OnReader(MSLDBReader& aReader,GTHPoolResult *pValue)
 	short wonGames;
 	short lostGames;
 	short tieGames;
-	float pointsF;
-	float solkoff;
-	float mediansolkoff;
-	float sonneBerger;
-	float progressiveScore;
+	double pointsF;
+	double solkoff;
+	double mediansolkoff;
+	double sonneBerger;
+	double progressiveScore;
 
 	MSLDBNullIndicator nullmatchesPlayed;
 	MSLDBNullIndicator nullwonGames;

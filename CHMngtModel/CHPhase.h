@@ -58,7 +58,10 @@ public:
 	MSLWString getTypePhaseDescription();
 
 	bool hasCompetitors();
+	bool isTeamEvent();
 	
+	// From GTHPool
+	short getNumRounds();
 
 private:
 	short	m_typePhase;			//se utiliza para saber el tipo de fase

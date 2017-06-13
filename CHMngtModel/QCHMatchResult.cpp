@@ -39,7 +39,7 @@ void QCHMatchResult::OnSelect(MSLDBSelector& aSelect,MSLDBTable& tMatchResult)
 
 void QCHMatchResult::OnReader(MSLDBReader& aReader,GTHMatchResult *pMatchResult)
 {
-	float fPoints;
+	double fPoints;
 	short upFloater;
 	short downFloater;
 	short fColor;

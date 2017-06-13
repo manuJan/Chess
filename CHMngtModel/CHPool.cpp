@@ -140,7 +140,7 @@ unsigned char CHPool::getRoundStatus(short nRound)
 	for (short i=0;i<vMatches.entries();i++)
 	{
 		pMatch = (CHMatch*) vMatches[i];
-		if (pMatch->areTeamIndividual())
+		if (pMatch->getSubCode())
 			continue;
 		if (pMatch->getRound()==nRound)
 		{
@@ -229,6 +229,20 @@ short CHPool::getRoundMatches(short nRound)
 			count++;
 	}
 	return count;
+}
+
+void CHPool::getRoundMatchesVector(MSLSortedVector &vRoundMatches, short nRound)
+{
+	short count=0;
+	CHMatch* pMatch=0;
+	MSLSortedVector vMatches;
+	getMatchesVector(vMatches);
+	for (short i=0;i<vMatches.entries();i++)
+	{
+		pMatch = (CHMatch*) vMatches[i];
+		if (pMatch->getRound()==nRound && pMatch->getSubMatch()==0)
+			vRoundMatches.insert(pMatch);
+	}
 }
 
 bool CHPool::hasCompatibleColors(CHPoolResult* pPR1,CHPoolResult* pPR2, short round)

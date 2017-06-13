@@ -248,8 +248,7 @@ MSLString CHMatch::getResultWhiteBlackAsString() const
 }
 
 MSLString CHMatch::getResultAsString() const
-{
-	
+{	
 	if( getStatus() < CHMemoryDataBase::eRunning )
 		return NULLSTRING;
 
@@ -257,22 +256,19 @@ MSLString CHMatch::getResultAsString() const
 	CHMatchResult * pMatchResult2= 0;
 	
 
-	pMatchResult1 = (CHMatchResult *) getHome();
-	pMatchResult2 = (CHMatchResult *) getAway();
+	pMatchResult1 = (CHMatchResult *) getWhite();
+	pMatchResult2 = (CHMatchResult *) getBlack();
 
-	MSLString result=NULLSTRING;
-	char sResult[200];
+	MSLString result=NULLSTRING;	
 	MSLString qualita="";
 	if(thereAreQualitative())
 	{
 		qualita=getResultIncidence();
 		return qualita;
 	}
-	memset(sResult,0,200);	
 	
-	// No hay qualitatives
-	sprintf_s(sResult,"%s-%s",pMatchResult1->getPointsAsString(),pMatchResult2->getPointsAsString());
-	return MSLString(sResult);
+	result = pMatchResult1->getPointsAsString() + "-" + pMatchResult2->getPointsAsString();	
+	return result;
 		
 }
 bool CHMatch::thereAreQualitative() const
@@ -478,27 +474,29 @@ MSLString CHMatch::getTotalResult(bool onlyRound)
 
 	if(pPoolResultHome->isQualitative() && pPoolResultAway->isQualitative())
 	{
-		char qualitative[30];
-		sprintf_s(qualitative,"%s-%s",pPoolResultHome->getQualitativeSDescription().toAscii(),pPoolResultAway->getQualitative()->getSDescription());
-		return MSLString(qualitative);
+		MSLString result1=pPoolResultAway->getQualitativeSDescription().toAscii();
+		MSLString result2=pPoolResultHome->getQualitativeSDescription().toAscii();
+		return result1+"-"+result2;
 	}
 
 	if(pPoolResultHome->isQualitative())
 	{
-		char qualitative[30];
-		sprintf_s(qualitative,"%s-%s",pPoolResultHome->getQualitativeSDescription().toAscii(),pPoolResultAway->getPoolPointsFStr(getRound()));
-		return MSLString(qualitative);
+		MSLString result1=pPoolResultAway->getQualitativeSDescription().toAscii();				
+		MSLString result2=pPoolResultHome->getPoolPointsFStr(getRound());		
+		return result1+"-"+result2;
 	}
 
 	if(pPoolResultAway->isQualitative())
 	{
-		char qualitative[30];
-		sprintf_s(qualitative,"%s-%s",pPoolResultHome->getPoolPointsFStr(getRound()),pPoolResultAway->getQualitativeSDescription().toAscii());
-		return MSLString(qualitative);
+		MSLString result1=pPoolResultHome->getPoolPointsFStr(getRound());
+		MSLString result2=pPoolResultAway->getQualitativeSDescription().toAscii();				
+		return result1+"-"+result2;
 	}
 
-	sprintf_s(result,"%s-%s",pPoolResultHome->getPoolPointsFStr(getRound(),onlyRound),pPoolResultAway->getPoolPointsFStr(getRound(),onlyRound));
-	return MSLString(result);
+	MSLString result1 = pPoolResultHome->getPoolPointsFStr(getRound(),onlyRound);
+	MSLString result2 = pPoolResultAway->getPoolPointsFStr(getRound(),onlyRound);
+		
+	return result1+"-"+result2;
 }
 
 MSLString CHMatch::getRoundAsString(bool lDesc/*=true*/,bool date/*=true*/)
