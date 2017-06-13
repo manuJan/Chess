@@ -1,0 +1,201 @@
+/* Fuentes usadas en este lis ----------------------------------- */
+/* -- ZONA DE DECLARACION DE VARIABLES DE FUENTES NO CAMBIAR--- */
+Vari[500]=6060
+Vari[501]=6061
+Vari[502]=6070
+Vari[503]=6071
+Vari[504]=6090
+Vari[505]=6091
+Vari[506]=6100
+Vari[507]=6101
+Vari[508]=6100
+Vari[509]=6101
+Vari[510]=6110
+Vari[511]=6111
+Vari[512]=6120
+Vari[513]=6121
+Vari[514]=6130
+Vari[515]=6131
+Vari[516]=6140
+Vari[517]=6141
+Vari[518]=6150
+Vari[519]=6151
+Vari[520]=6160
+Vari[521]=6161
+Vari[522]      
+Vari[523]     
+Vari[524]     
+Vari[525]  
+
+
+data[6699] lcpy="9000..9006"
+
+Vari[9000]=4070
+Vari[9001]=4071
+Vari[9002]=4080
+Vari[9003]=4081
+Vari[9004]=4090 
+Vari[9005]=4091 
+Vari[9006]=4101
+
+/* Variables de control */
+	Vari[700]= 150	/* Alto en pixel de la linea de cabecera   */
+	Vari[800]= 200	/* Alto en pixel de la linea de datos(120) */
+	Vari[900]= 500	/* La leyenda, y el comentario (40) */
+	Vari[901]= 0	/* Note, Coordenada en y. Se asigna por programa. */
+
+/*  Carteles para el nombre del report y datos de la cabecera, Se pintan en la linea 1000. */		
+	Vari[1000]=0	/* Posicion central del papel, se asigna internamente. */
+
+
+	data[1010], d_al=1, font=&Vari[507]
+	data[1011], d_al=1, font=&Vari[507]
+	data[1012], d_al=0, font=&Vari[507] 
+	data[1013], d_al=1, font=&Vari[507] 
+	data[1014], d_al=1, font=&Vari[507] 
+	data[1015], d_al=1, font=&Vari[507]
+
+
+	data[2010], d_al=1, 			font=&Vari[505]
+	data[2011], d_al=2, 			font=&Vari[505]
+	data[2012], d_al=0, 			font=&Vari[504] 
+	data[2013], d_al=0, 			font=&Vari[504] 
+	data[2014], d_al=2, 			font=&Vari[504] 
+	data[2015], d_al=2, 			font=&Vari[504]
+
+
+Vari[2023]=200						/* coordenada y de partida	*/
+Vari[2022]=200						/* coordenada y calculada	*/
+
+
+Vari[4] /* se pinta cabecera */
+Vari[10] /* veces que se pintan datos */
+Vari[5]=1
+Vari[6]=1
+Vari[7]=1
+Vari[8]=1
+Vari[9]=5  /* posicion de tabla 102 */
+Vari[11]=0 /* pintamos session */
+Vari[12]=0 /* pintamos num matches */
+
+Table 102 /* -- TABLA DE REGISTROS -- */
+
+	T_cx = &Vari[9]
+
+	template[99] { call=&Vari[4], height=150  }
+
+	/*---------------Template para la cabecera------------------------*/
+	template[1] { call=&Vari[4], height=150  }
+
+		/* Day */
+		Vari[1101] = 210 /*ancho de la celda*/
+		cell[10] { call=1, height=&Vari[700], width=&Vari[1101] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ outline_left =1 }
+			{ data=1010, Offset_dx=55, Offset_dy=70 }
+
+		/* Date */
+		Vari[1201] = 310 /*ancho de la celda*/
+		cell[20] { call=1, height=&Vari[700], width=&Vari[1201] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ outline_left =1 }
+			{ data=1011, Offset_dx=55, Offset_dy=70 }
+
+		/* Event phase/pool */
+		Vari[1301] = 900 /*ancho de la celda*/
+		cell[30] { call=1, height=&Vari[700], width=&Vari[1301] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ outline_left =1 }
+			{ data=1012, Offset_dx=10, Offset_dy=70 }
+
+		/* Session */
+		Vari[1401] = 300 /*ancho de la celda*/
+		cell[40] { call=&Vari[11], height=&Vari[700], width=&Vari[1401] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ outline_left =1 }
+			{ data=1013, Offset_dx=90, Offset_dy=70 }
+
+		/* start Time */
+		Vari[1501] = 310 /*ancho de la celda*/
+		cell[50] { call=1, height=&Vari[700], width=&Vari[1501] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ outline_left =1 }
+			{ data=1014, Offset_dx=155, Offset_dy=70 }
+
+		/* number of matches */
+		Vari[1601] = 510 /*ancho de la celda*/
+		cell[60] { call=&Vari[12], height=&Vari[700], width=&Vari[1601] }
+			{ outline_upper=1 }
+			{ outline_lower=1 }
+			{ outline_right=1 }
+			{ outline_left =1 }
+			{ data=1015, Offset_dx=205, Offset_dy=70 }
+
+	/*---------------Template para la datos------------------------*/
+	template[0] { call=&Vari[10], height=60  }
+
+		/* Day */
+		cell[1] { call=1, height=60, width=&Vari[1101] }
+			{ outline_upper=&Vari[5] }
+			{ outline_lower=&Vari[6] }
+			{ outline_right=0 }
+			{ outline_left =0 }
+			{ data=2010, Offset_dx=55, Offset_dy=50 }
+
+		/* Date */
+		cell[2] { call=1, height=60, width=&Vari[1201] }
+			{ outline_upper=&Vari[5] }
+			{ outline_lower=&Vari[6] }
+			{ outline_right=0 }
+			{ outline_left =0 }
+			{ data=2011, Offset_dx=200, Offset_dy=50 }
+
+		/* Event phase/pool */
+		cell[3] { call=1, height=60, width=&Vari[1301] }
+			{ outline_upper=&Vari[7] }
+			{ outline_lower=&Vari[8] }
+			{ outline_right=0 }
+			{ outline_left =0 }
+			{ data=2012, Offset_dx=10, Offset_dy=50 }
+
+		/* Session */
+		cell[4] { call=&Vari[11], height=60, width=&Vari[1401] }
+			{ outline_upper=&Vari[7] }
+			{ outline_lower=&Vari[8] }
+			{ outline_right=0 }
+			{ outline_left =0 }
+			{ data=2013, Offset_dx=20, Offset_dy=50 }
+
+		/* start Time */
+		cell[5] { call=1, height=60, width=&Vari[1501] }
+			{ outline_upper=&Vari[7] }
+			{ outline_lower=&Vari[8] }
+			{ outline_right=0 }
+			{ outline_left =0 }
+			{ data=2014, Offset_dx=180, Offset_dy=50 }
+
+		/* number of matches */
+		cell[6] { call=&Vari[12], height=60, width=&Vari[1601] }
+			{ outline_upper=&Vari[7] }
+			{ outline_lower=&Vari[8] }
+			{ outline_right=0 }
+			{ outline_left =0 }
+			{ data=2015, Offset_dx=200, Offset_dy=50 }
+
+
+Line 1010 /* Tabla de registros */
+    	{ font   = &Vari[509] }
+    	{ Table  =  102,cory=&Vari[2023] }
+
+Line 10
+   { jump_d = 50 }

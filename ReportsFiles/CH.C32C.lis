@@ -1,0 +1,148 @@
+/* --- VARIABLES GENERALES ---*/
+Vari[1]=   0	/* Coor x (calculada) */
+Vari[2]=  50	/* Coor y */
+Vari[3]=   0	/* Coor x title */
+Vari[5]=6090	/* Fuente Normal */
+Vari[6]=6091	/* Fuente Bold   */
+
+
+/* Identificadores */
+/* [Ttc] T:Table, t:template, c:cell */
+/* si t ó c es cero, el dato general a ese template o esa celda */
+
+/* --- HEADER --- */
+
+/* GENERAL */
+/* datos */
+Data[100]						 font=&Vari[6]	,d_al=0
+
+/* anchos */
+Vari[100]=   0	/* Título (calculado) */
+
+/* TEMPLATE 1 */
+/* datos estáticos */
+Data[111]	,font=&Vari[6]	,d_al=0 /* NOC/NPC/CNO/... (calculado) */
+Data[112] 	,font=&Vari[6]	,d_al=0
+Data[113] 	,font=&Vari[6]	,d_al=0
+Data[114] 	,font=&Vari[6]	,d_al=2
+Data[117] 	,font=&Vari[6]	,d_al=0
+
+
+/* anchos */
+/* template 1 */
+Vari[111]= 175 /* NOC Code */
+Vari[112]= 650 /* Country */
+Vari[113]= 700 /* Name */
+Vari[114]= 300 /* Date of birth */
+
+
+Table 1 
+		Vari[10]=  1 /* Nº veces que se pinta el template */
+		Vari[11]=100 /* Altura de la celda */
+		Vari[12]     /* Offset x (calculado) */
+		Vari[13]     /* Offset y (calculado) */
+
+        template[1] { call=&Vari[10], height=&Vari[11] }
+				
+				cell[1] { call=1, height=&Vari[11], width=&Vari[111] }	/* NOC */
+                        { outline_upper=1 }
+                        { outline_lower=1 }
+                        { outline_left =1 }
+                        { outline_right=0 }
+						{ run_line=111, Offset_lx=&Vari[12], Offset_ly=&Vari[13]  }
+						
+                cell[2] { call=1, height=&Vari[11], width=&Vari[112] } /* Country */
+                        { outline_upper=1 }
+                        { outline_lower=1 }
+                        { outline_left =0 }
+                        { outline_right=0 }
+						{ data=112, Offset_dx=&Vari[12], Offset_dy=&Vari[13]}                        
+
+                cell[3] { call=1, height=&Vari[11], width=&Vari[113] } /* Name */
+                        { outline_upper=1 }
+                        { outline_lower=1 }
+                        { outline_left =0 }
+                        { outline_right=0 }
+						{ data=113, Offset_dx=&Vari[12],  Offset_dy=&Vari[13]  }
+
+				 cell[4] { call=1, height=&Vari[11], width=&Vari[114] } /* Date of birth */
+                        { outline_upper=1 }
+                        { outline_lower=1 }
+                        { outline_left =0 }
+                        { outline_right=1 }
+						{ data=114, Offset_dx=&Vari[12],  Offset_dy=&Vari[13]  }
+			
+
+Line 111 /* NOC | Code */
+		{ jump_u=20 }
+		{ data=112 }
+		{ jump_d=40 }
+		{ data=117 }
+
+
+Line 1
+	{ jump_d = 50 }
+	{ data=100, corx=&Vari[3] }
+	{ jump_d = 50 }
+	{ table=1, corx=&Vari[1] }
+	{ jump_d=30 }
+
+
+
+/* TEMPLATE 2 */
+/* datos */
+Data[211] font=&Vari[5]	,d_al=0 /* NOC/NPC/CNO/... */ 
+Data[212] font=&Vari[5]	,d_al=0 /* Country */
+Data[213] font=&Vari[5]	,d_al=0 /* Name */
+Data[214] font=&Vari[5]	,d_al=2 /* Date of Birth*/
+
+/* anchos */
+/* template 1 */
+Vari[211]= 175 /* NOC */
+Vari[212]= 650 /* Country */
+Vari[213]= 700 /* Name */
+Vari[214]= 300 /* Date of birth */
+
+
+Table 2 
+		Vari[20]=  1 /* Nº veces que se pinta el template */
+		Vari[21]= 50 /* Altura de la celda */
+		Vari[22]     /* Offset x (calculado) */
+		Vari[23]     /* Offset y (calculado) */
+
+        template[1] { call=&Vari[20], height=&Vari[21] }
+				
+				cell[1] { call=1, height=&Vari[21], width=&Vari[211] }	/* NOC */
+                        { outline_upper=0 }
+                        { outline_lower=0 }
+                        { outline_left =0 }
+                        { outline_right=0 }
+						{ data=211, Offset_dx=&Vari[22],  Offset_dy=&Vari[23]  }
+						
+                cell[2] { call=1, height=&Vari[21], width=&Vari[212] } /* Country */
+                        { outline_upper=0 }
+                        { outline_lower=0 }
+                        { outline_left =0 }
+                        { outline_right=0 }
+                        { data=212, Offset_dx=&Vari[22],  Offset_dy=&Vari[23]  }
+
+                cell[3] { call=1, height=&Vari[21], width=&Vari[213] } /* Name */
+                        { outline_upper=0 }
+                        { outline_lower=0 }
+                        { outline_left =0 }
+                        { outline_right=0 }
+                        { data=213, Offset_dx=&Vari[22],  Offset_dy=&Vari[23]  }
+
+				 cell[4] { call=1, height=&Vari[21], width=&Vari[214] } /* Name */
+                        { outline_upper=0 }
+                        { outline_lower=0 }
+                        { outline_left =0 }
+                        { outline_right=0 }
+                        { data=214, Offset_dx=&Vari[22],  Offset_dy=&Vari[23]  }
+
+				
+Line 2
+	{ table=2, corx=&Vari[1] }
+
+Line 3  /* Salto Entre Paises */		
+    { jump_d=40   }

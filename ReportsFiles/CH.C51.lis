@@ -1,0 +1,183 @@
+
+/* ---------------- Start List C51 ---------------- */
+
+/******************************************/
+/* -- ZONA DE DECLARACION DE VARIABLES -- */
+/******************************************/
+
+/* Variables generales */
+Vari[   0] =    0 /* Variable vacia para asignar por defecto								*/
+Vari[   1] =    0 /* corx central															*/
+Vari[   2] =    0 /* corx maxima (A4 = 2157) (LETTER=2219)									*/
+Vari[   3] =    0 /* corx centrado de la Tabla												*/
+Vari[   4] =    5 /* Numero de celdas a pintar 												*/
+Vari[   5] =   80 /* Height Header															*/
+Vari[   6] =   70 /* Height Body															*/
+
+
+
+/* Numero de ejecuciones de las celdas				*/
+Vari[ 100] =	1   /* Start Number               	*/
+Vari[ 101] =	1   /* Master Type               	*/
+Vari[ 102] =	1   /* Name			               	*/
+Vari[ 103] =	1   /* Initial Rating              	*/
+Vari[ 104] =	1   /* Group Code               	*/
+
+/* Ancho de cada una de las celdas */
+Vari[ 200] =	280 /* Ancho de Start Number		*/
+Vari[ 201] =	200 /* Ancho de Master Type			*/
+Vari[ 202] =	650 /* Ancho de Name-Team			*/
+Vari[ 203] =	280 /* Ancho de Initial Rating		*/
+Vari[ 204] =	200 /* Ancho de Group Code		    */
+
+
+/* Offset x de cada una de las celdas */
+Vari[ 300] =	10 /* Offset de Start Number		*/
+Vari[ 301] =	10 /* Offset de Master Type		*/
+Vari[ 302] = 	10 /* Offset de Name-Team			*/
+Vari[ 303] =	10 /* Offset de Initial Rating		*/
+Vari[ 304] =	10 /* Offset de Group Code			*/
+
+
+/* -- ZONA DE DECLARACION DE VARIABLES DE FUENTES NO CAMBIAR--- */
+Vari[500]=6060
+Vari[501]=6061
+Vari[502]=6070
+Vari[503]=6071
+Vari[504]=6080
+Vari[505]=6081
+Vari[506]=6090
+Vari[507]=6091
+Vari[508]=6100
+Vari[509]=6101
+Vari[510]=6110
+Vari[511]=6111
+Vari[512]=6120
+Vari[513]=6121
+Vari[514]=6130
+Vari[515]=6131
+Vari[516]=6140
+Vari[517]=6141
+Vari[518]=6150
+Vari[519]=6151
+Vari[520]=6160
+Vari[521]=6161
+Vari[522]=6082
+Vari[523]=6083
+Vari[524]=6073     
+Vari[525]     
+/* Saltos de pagina */
+Vari[800] =  250 /* Salto de pagina														*/
+
+
+/**************************************/
+/* -- ZONA DE DECLARACION DE DATOS -- */
+/**************************************/
+
+/* Datos Cabecera */
+data[1000], d_al=0,									font=&Vari[507] 
+data[1001], d_al=0,									font=&Vari[507] 
+data[1002], d_al=0,									font=&Vari[507] 
+data[1003], d_al=0,									font=&Vari[507] 
+data[1004], d_al=0,									font=&Vari[507] 
+
+data[1500], d_al=1, lcpy= "Legend"				,	font=&Vari[507]
+
+/* Datos Cuerpo */
+data[2000], d_al=0,									font=&Vari[506] /* Start Number		*/
+data[2001], d_al=0,									font=&Vari[506] /* Master Type		*/
+data[2002], d_al=0,									font=&Vari[506] /* Name				*/
+data[2003], d_al=0,									font=&Vari[506] /* Initial Rating	*/
+data[2004], d_al=0,									font=&Vari[506] /* Group			*/
+
+
+/***************************************/
+/* -- ZONA DE DECLARACION DE TABLAS -- */
+/***************************************/
+
+/*----------------------------------------------------------------------------*/
+
+Table 1 /* Cabecera Tabla Start List */
+
+	template[1] { call=1, height=&Vari[5] fill=10} /* Cabeceras */
+
+		/* Cartel Start Number */
+		cell[10] { call=&Vari[100], height= &Vari[5], width=&Vari[200] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=1000, Offset_dx=&Vari[300], Offset_dy=55 }
+
+		/* Cartel Master Type */
+		cell[11] { call=&Vari[101], height= &Vari[5], width=&Vari[201] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=1001, Offset_dx=&Vari[301], Offset_dy=55 }
+		
+		/* Cartel Name */
+		cell[12] { call=&Vari[102], height=&Vari[5], width=&Vari[202] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=1002, Offset_dx=&Vari[302], Offset_dy=55 }
+
+		/* Cartel Initial Rating */
+		cell[13] { call=&Vari[103], height=&Vari[5], width=&Vari[203] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=1003, Offset_dx=&Vari[303], Offset_dy=55 }
+
+		/* Cartel Group Code */
+		cell[14] { call=&Vari[104], height=&Vari[5], width=&Vari[204] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=1 }{ outline_left =1 }
+			{ data=1004, Offset_dx=&Vari[304], Offset_dy=55 }
+
+Table 2 /* Cuerpo Tabla Start List */		
+	template[2] { call=1, height=&Vari[6] } /* Cuerpo Individual */
+
+		/* Start Number */
+		cell[10] { call=&Vari[100], height= &Vari[6], width=&Vari[200] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=2000, Offset_dx=&Vari[300], Offset_dy=45 }
+
+		/* Master Type */
+		cell[11] { call=&Vari[101], height=&Vari[6], width=&Vari[201] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=2001, Offset_dx=&Vari[301], Offset_dy=45 }
+
+		/* Cartel Name */
+		cell[12] { call=&Vari[102], height=&Vari[6], width=&Vari[202] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=2002, Offset_dx=&Vari[302], Offset_dy=45 }
+
+		/* Initial Rating */
+		cell[13] { call=&Vari[103], height=&Vari[6], width=&Vari[203] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=2003, Offset_dx=&Vari[303], Offset_dy=45 }
+
+		/* Cartel Group */
+		cell[14] { call=&Vari[104], height=&Vari[6], width=&Vari[204] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=1 }{ outline_left =1 }
+			{ data=2004, Offset_dx=&Vari[304], Offset_dy=45 }
+
+							
+
+/*----------------------------------------------------------------------------*/
+
+/**************************************************/
+/* -- ZONA DE DECLARACION DE LINEAS (RUNLINES) -- */
+/**************************************************/
+
+Line   1	/* Tabla Cabecera Start List */
+	{ Table =  1, corx=&Vari[3] }
+
+Line   2	/* Tabla Cuerpo Start List */
+	{ Table =  2, corx=&Vari[3] }
+
+Line   10	/* Bajar Un poco */
+	{ jump_d =  110 }
+

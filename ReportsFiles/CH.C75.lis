@@ -1,0 +1,331 @@
+
+/* ---------------- Ranking by Round C75 ---------------- */
+
+/******************************************/
+/* -- ZONA DE DECLARACION DE VARIABLES -- */
+/******************************************/
+/* -- ZONA DE DECLARACION DE VARIABLES DE FUENTES NO CAMBIAR--- */
+Vari[500]=6060
+Vari[501]=6061
+Vari[502]=6070
+Vari[503]=6071
+Vari[504]=6080
+Vari[505]=6081
+Vari[506]=6090
+Vari[507]=6091
+Vari[508]=6100
+Vari[509]=6101
+Vari[510]=6110
+Vari[511]=6111
+Vari[512]=6120
+Vari[513]=6121
+Vari[514]=6130
+Vari[515]=6131
+Vari[516]=6140
+Vari[517]=6141
+Vari[518]=6150
+Vari[519]=6151
+Vari[520]=6160
+Vari[521]=6161
+Vari[522]      
+Vari[523]     
+Vari[524]     
+Vari[525] 
+
+/* Variables generales */
+Vari[   0] =    0 /* Variable vacia para asignar por defecto								*/
+Vari[   1] =    0 /* corx central															*/
+Vari[   2] =    0 /* corx maxima (A4 = 2157) (LETTER=2219)									*/
+Vari[   3] =    0 /* corx centrado de la Tabla												*/
+Vari[   4] =   11 /* Numero de celdas a pintar 												*/
+Vari[   5] =   80 /* Height Header															*/
+Vari[   6] =   70 /* Height Body															*/
+Vari[   7] =   60 /* Height Body Members													*/
+
+
+
+/* Numero de ejecuciones de las celdas				*/
+Vari[ 100] =	1   /* Rank			               	*/
+Vari[ 101] =	1   /* NOC Code		             	*/
+Vari[ 102] =	1   /* Name			             	*/
+Vari[ 103] =	1   /* Games		               	*/
+Vari[ 104] =	1   /* Wins				           	*/
+Vari[ 105] =	1   /* Drawn		              	*/
+Vari[ 106] =	1   /* Lost			               	*/
+Vari[ 107] =	1   /* Wins by Members             	*/
+Vari[ 108] =	1   /* Points		             	*/
+Vari[ 109] =	1   /* Solkoff Points		     	*/
+Vari[ 110] =	1   /* Sonneberger Points	     	*/
+Vari[ 111] =	0   /* Salto Points			     	*/
+Vari[ 112] =	35  /* Salto Points			     	*/
+Vari[ 113] =	20  /* Salto Points			     	*/
+
+
+/* Ancho de cada una de las celdas */
+Vari[ 200] =	120 /* Ancho de Rank				*/
+Vari[ 201] =	110 /* Ancho de NOC Code			*/
+Vari[ 202] =	600 /* Ancho de Name				*/
+Vari[ 203] =	160 /* Ancho de Games				*/
+Vari[ 204] =	130 /* Ancho de Wins				*/
+Vari[ 205] =	130 /* Ancho de Drawn				*/
+Vari[ 206] =	130 /* Ancho de Lost			    */
+Vari[ 207] =	220 /* Ancho de Wins by Members		*/
+Vari[ 208] =	200 /* Ancho de Points				*/
+Vari[ 209] =	150 /* Ancho de Solkoff				*/
+Vari[ 210] =	150 /* Ancho de SonneBerger			*/
+
+
+/* Offset x de cada una de las celdas  Cabecera */
+Vari[ 300] =	60  /* Offset de Rank        		*/
+Vari[ 301] =	55  /* Offset de NOC Code			*/
+Vari[ 302] = 	10  /* Offset de Name				*/
+Vari[ 303] =	80  /* Offset de Games				*/
+Vari[ 304] =	65  /* Offset de Wins				*/
+Vari[ 305] =	65  /* Offset de Drawn				*/
+Vari[ 306] =	65  /* Offset de Lost				*/
+Vari[ 307] =	110 /* Offset de Wins by Members	*/
+Vari[ 308] =	100 /* Offset de Points				*/
+Vari[ 309] =	75  /* Offset de Solkoff			*/
+Vari[ 310] =	75  /* Offset de Sonneberger		*/
+
+
+/* Offset x de cada una de las celdas  Cuerpo */
+Vari[ 400] =	105 /* Offset de Rank        		*/
+Vari[ 401] =	55  /* Offset de NOC Code			*/
+Vari[ 402] = 	10  /* Offset de Name				*/
+Vari[ 403] =	70  /* Offset de Games				*/
+Vari[ 404] =	65  /* Offset de Wins				*/
+Vari[ 405] =	65  /* Offset de Drawn				*/
+Vari[ 406] =	65  /* Offset de Lost				*/
+Vari[ 407] =	110 /* Offset de Win by Members		*/
+Vari[ 408] = 	100 /* Offset de Points				*/
+Vari[ 409] = 	10  /* Offset de Solkoff			*/
+Vari[ 410] = 	10  /* Offset de Sonneberger		*/
+
+ 
+/* Saltos de pagina */
+Vari[800] =  300 /* Salto de pagina														*/
+
+
+/**************************************/
+/* -- ZONA DE DECLARACION DE DATOS -- */
+/**************************************/
+
+/* Datos Cabecera */
+data[1000], d_al=1, font=&Vari[507] 
+data[1001], d_al=0, font=&Vari[507] 
+data[1002], d_al=1,	font=&Vari[507] 
+data[1003], d_al=1,	font=&Vari[507] 
+data[1004], d_al=1,	font=&Vari[507] 
+data[1005], d_al=1,	font=&Vari[507] 
+data[1006], d_al=1,	font=&Vari[507] 
+data[1007], d_al=1,	font=&Vari[507] 
+data[1008], d_al=1,	font=&Vari[507] 
+data[1009], d_al=1,	font=&Vari[507] 
+data[1010], d_al=1,	font=&Vari[507] 
+data[1011], d_al=1,	font=&Vari[507] 
+data[1012], d_al=1,	font=&Vari[507] 
+data[1013], d_al=1,	font=&Vari[507] 
+data[1014], d_al=1	font=&Vari[507] 
+data[1015], d_al=1	font=&Vari[507] 
+
+data[1500], d_al=1, font=&Vari[507]
+
+/* Datos Cuerpo */
+data[2000], d_al=2,									                /* Rank			*/
+data[2001], d_al=1,									                /* NOC Code		*/
+data[2002], d_al=0,									                /* Name			*/
+data[2003], d_al=1,									                /* Games		*/
+data[2004], d_al=1,									                /* Win			*/
+data[2005], d_al=1,									                /* Drawn		*/
+data[2006], d_al=1,									                /* Lost			*/
+data[2007], d_al=1,									                /* Total Winned	*/
+data[2008], d_al=1,									                /* Points 		*/
+data[2009], d_al=0,									                /* Solkoff		*/
+data[2010], d_al=0,									                /* Sonneberger 	*/
+
+
+
+data[2100], d_al=1,									font=&Vari[511] /* Round x, Fecha */
+
+
+/***************************************/
+/* -- ZONA DE DECLARACION DE TABLAS -- */
+/***************************************/
+
+/*----------------------------------------------------------------------------*/
+
+Table 1 /* Cabecera Tabla Ranking */
+
+	template[1] { call=1, height=&Vari[5] fill=10} /* Cabeceras */
+
+		/* Cartel Rank */
+		cell[10] { call=&Vari[100], height= &Vari[5], width=&Vari[200] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=1000, Offset_dx=&Vari[300], Offset_dy=55 }
+
+		/* Cartel Noc Code */
+		cell[11] { call=&Vari[101], height= &Vari[5], width=&Vari[201] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ Run_line=100, Offset_lx=&Vari[301], Offset_ly=35 }
+
+		/* Cartel Name */
+		cell[12] { call=&Vari[102], height=&Vari[5], width=&Vari[202] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=1001, Offset_dx=&Vari[302], Offset_dy=55 }
+				
+		/* Cartel Games */
+		cell[13] { call=&Vari[103], height=&Vari[5], width=&Vari[203] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=1002, Offset_dx=&Vari[303], Offset_dy=55 }
+
+		/* Cartel Win */
+		cell[14] { call=&Vari[104], height=&Vari[5], width=&Vari[204] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=1003, Offset_dx=&Vari[304], Offset_dy=55 }
+
+		/* Cartel Drawn */
+		cell[15] { call=&Vari[105], height=&Vari[5], width=&Vari[205] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=1004, Offset_dx=&Vari[305], Offset_dy=55 }
+
+		/* Cartel Lost */
+		cell[16] { call=&Vari[106], height= &Vari[5], width=&Vari[206] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=1005, Offset_dx=&Vari[306], Offset_dy=55 }
+
+		/* Cartel Win by Members */
+		cell[17] { call=&Vari[107], height= &Vari[5], width=&Vari[207] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ Run_line=101, Offset_lx=&Vari[307], Offset_ly=35 }
+			
+		/* Cartel Points */
+		cell[18] { call=&Vari[108], height=&Vari[5], width=&Vari[208] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=1 }{ outline_left =1 }
+			{ Run_line=102, Offset_lx=&Vari[308], Offset_ly=35 }
+			/*{ data=1007, Offset_dx=&Vari[308], Offset_dy=55 }*/
+
+		/* Cartel Solkoff */
+		cell[19] { call=&Vari[109], height=&Vari[5], width=&Vari[209] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=1011, Offset_dx=&Vari[309], Offset_dy=55 }
+
+		/* Cartel Sonneberger */
+		cell[20] { call=&Vari[110], height=&Vari[5], width=&Vari[210] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=1 }{ outline_left =1 }
+			{ data=1012, Offset_dx=&Vari[310], Offset_dy=55 }					
+
+Table 2 /* Cuerpo Tabla Ranking */		
+	template[2] { call=1, height=&Vari[6] } /* Cuerpo Results */
+
+		/* Rank */
+		cell[10] { call=&Vari[100], height= &Vari[6], width=&Vari[200] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=1 }{ outline_left =1 }
+			{ data=2000, Offset_dx=&Vari[400], Offset_dy=55 }
+
+		/* NOC Code */
+		cell[11] { call=&Vari[101], height=&Vari[6], width=&Vari[201] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=2001, Offset_dx=&Vari[401], Offset_dy=55 }
+
+		/* Name  */
+		cell[12] { call=&Vari[102], height=&Vari[6], width=&Vari[202] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=2002, Offset_dx=&Vari[402], Offset_dy=55 }
+
+		/* Games */
+		cell[13] { call=&Vari[103], height=&Vari[6], width=&Vari[203] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=2003, Offset_dx=&Vari[403], Offset_dy=55 }
+
+		/* Win */
+		cell[14] { call=&Vari[104], height=&Vari[6], width=&Vari[204] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=2004, Offset_dx=&Vari[404], Offset_dy=55 }
+
+		/* Drawn */
+		cell[15] { call=&Vari[105], height=&Vari[6], width=&Vari[205] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=2005, Offset_dx=&Vari[405], Offset_dy=55 }
+
+		/* Lost */
+		cell[16] { call=&Vari[106], height=&Vari[6], width=&Vari[206] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=2006, Offset_dx=&Vari[406], Offset_dy=55 }
+							
+		/* Win by Members */
+		cell[17] { call=&Vari[107], height=&Vari[6], width=&Vari[207] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=2007, Offset_dx=&Vari[407], Offset_dy=55 }
+
+		/* Points */
+		cell[18] { call=&Vari[108], height=&Vari[6], width=&Vari[208] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=1 }{ outline_left =1 }
+			{ data=2008, Offset_dx=&Vari[408], Offset_dy=55 }
+
+		/* Solkoff */
+		cell[19] { call=&Vari[109], height=&Vari[6], width=&Vari[209] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=2009, Offset_dx=&Vari[409], Offset_dy=55 }
+
+		/* Sonneberger */
+		cell[20] { call=&Vari[110], height=&Vari[6], width=&Vari[210] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=1 }{ outline_left =1 }
+			{ data=2010, Offset_dx=&Vari[410], Offset_dy=55 }
+/*----------------------------------------------------------------------------*/
+
+/**************************************************/
+/* -- ZONA DE DECLARACION DE LINEAS (RUNLINES) -- */
+/**************************************************/
+
+Line   1	/* Tabla Cabecera Results */
+	{ Table =  1, corx=&Vari[3] }
+	{ jump_d =  40 }
+
+Line   2	/* Tabla Cuerpo Results */
+	{ Table =  2, corx=&Vari[3] }
+
+
+Line   5	/* Line de Round, con Fecha */
+	{ Data =  2100, corx=&Vari[1] }
+	{ jump_d =  60 }
+
+Line   10	/* Bajar Un poco */
+	{ jump_d =  110 }
+
+Line 100  /* **** Linea de NOC Code ******************************** */
+	{ Data=1008 }	/* NOC , Coge del .lis general */
+	{ jump_d=35 }
+	{ Data=1009 }   /* Code */
+
+Line 101  /* **** Linea de Winned by Members *********************** */
+	{ Data=1006 }	/* Winned by */
+	{ jump_d=35 }
+	{ Data=1010 }   /* Members */
+
+Line 102  /* **** Linea de Game Points ***************************** */
+	{ Data=1014 }	/* Game   */
+	{ jump_d=&Vari[111] }
+	{ Data=1007 }   /* Points */

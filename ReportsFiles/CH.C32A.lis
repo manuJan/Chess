@@ -1,0 +1,193 @@
+/* --- VARIABLES GENERALES ---*/
+Vari[1]=   0	/* Coor x (calculada) */
+Vari[2]=  50	/* Coor y */
+Vari[3]=   0	/* Coor x title */
+Vari[5]=6080	/* Fuente Normal */
+Vari[6]=6081	/* Fuente Bold   */
+Vari[7]=6061	/* Fuente Bold   */
+
+/* Identificadores */
+/* [Ttc] T:Table, t:template, c:cell */
+/* si t ó c es cero, el dato general a ese template o esa celda */
+
+/* --- HEADER --- */
+
+/* GENERAL */
+/* datos */
+Data[100]						 font=&Vari[6]	,d_al=0
+
+/* anchos */
+Vari[100]=   0	/* Título (calculado) */
+
+/* TEMPLATE 1 */
+/* datos estáticos */
+Data[111]	,font=&Vari[6]	,d_al=0 /* NOC/NPC/CNO/... (calculado) */
+Data[113]	,font=&Vari[6]	,d_al=0 /* Name	*/
+Data[114]	,font=&Vari[6]	,d_al=1 /* Gender */
+Data[115]	,font=&Vari[6]	,d_al=1 /* Event Partici	*/
+Data[116]	,font=&Vari[6]	,d_al=0 /* Date of Birth	*/
+
+Data[125]	,font=&Vari[7]	,d_al=1
+
+/* anchos */
+/* template 1 */
+Vari[111]= 625 /* NOC Code		*/
+Vari[113]= 500 /* Name			*/
+Vari[114]= 75  /* Back No		*/
+Vari[116]= 250 /* Date of Birth	*/
+Vari[115]	   /* Event Partici	*/
+
+Vari[125] =90   /* Event		*/
+
+Table 1 
+		Vari[10]=  1 /* Nº veces que se pinta el template */
+		Vari[11]=60  /* Altura de la celda */
+		Vari[12]     /* Offset x (calculado) */
+		Vari[13]     /* Offset y (calculado) */
+
+        template[1] { call=&Vari[10], height=&Vari[11] }
+				
+				cell[1] { call=1, height=&Vari[11], width=&Vari[111] }	/* NOC - Country */
+                        { outline_upper=2 }
+                        { outline_lower=0 }
+                        { outline_left =2 }
+                        { outline_right=0 }
+						{ data=111, Offset_dx=&Vari[12], Offset_dy=70  }
+						
+                cell[4] { call=1, height=&Vari[11], width=&Vari[114] }	/* Gender */
+                        { outline_upper=2 }
+                        { outline_lower=0 }
+                        { outline_left =0 }
+                        { outline_right=0 }
+						{ data=114, Offset_dx=&Vari[12], Offset_dy=70  }
+
+                cell[3] { call=1, height=&Vari[11], width=&Vari[113] } /* Name */
+                        { outline_upper=2 }
+                        { outline_lower=0 }
+                        { outline_left =0 }
+                        { outline_right=0 }
+						{ data=113, Offset_dx=&Vari[12],  Offset_dy=70  }
+				
+				cell[6] { call=1, height=&Vari[11], width=&Vari[116] } /* Date of Birth */
+                        { outline_upper=2 }
+                        { outline_lower=0 }
+                        { outline_left =0 }
+                        { outline_right=2 }
+						{ data=116, Offset_dx=&Vari[12],  Offset_dy=&70  }
+
+				cell[5] { call=1, height=&Vari[11], width=&Vari[115] } /* Event Participacion */
+                        { outline_upper=2 }
+                        { outline_lower=2 }
+                        { outline_left =0 }
+                        { outline_right=2 }
+						{ data=115, Offset_dx=&Vari[12],  Offset_dy=&Vari[13]  }
+		
+		Vari[15]		/* Nº eventos */
+		
+        template[2] { call=&Vari[10], height=&Vari[11] }
+				
+				cell[1] { call=1, height=&Vari[11], width=&Vari[111] }	/* NOC */
+                        { outline_upper=0 }
+                        { outline_lower=2 }
+                        { outline_left =2 }
+                        { outline_right=0 }
+												
+                cell[4] { call=1, height=&Vari[11], width=&Vari[114] }	/* Gender */
+                        { outline_upper=0 }
+                        { outline_lower=2 }
+                        { outline_left =0 }
+                        { outline_right=0 }						
+
+                cell[3] { call=1, height=&Vari[11], width=&Vari[113] } /* Name */
+                        { outline_upper=0 }
+                        { outline_lower=2 }
+                        { outline_left =0 }
+                        { outline_right=0 }						
+				
+				cell[6] { call=1, height=&Vari[11], width=&Vari[116] } /* Date of Birth */
+                        { outline_upper=0 }
+                        { outline_lower=2 }
+                        { outline_left =0 }
+                        { outline_right=2 }
+						
+				cell[5] { call=&Vari[15], height=&Vari[11], width=&Vari[125] } /* Event */
+                        { outline_upper=0 }
+                        { outline_lower=2 }
+                        { outline_left =0 }
+                        { outline_right=2 }
+						{ data=125, Offset_dx=&Vari[12],  Offset_dy=&Vari[13]  }               
+			
+Line 1
+	{ jump_d = 50 }
+	{ data=100, corx=&Vari[3] }
+	{ jump_d = 50 }
+	{ table=1, corx=&Vari[1] }
+	{ jump_d=30 }
+
+
+
+/* TEMPLATE 2 */
+/* datos */
+Data[211] font=&Vari[5]	,d_al=0 /* NOC/NPC/CNO/...	*/ 
+Data[213] font=&Vari[5]	,d_al=0 /* Name				*/
+Data[214] font=&Vari[5]	,d_al=1 /* Gender			*/
+Data[215] font=&Vari[5]	,d_al=1 /* Discipline		*/
+Data[216] font=&Vari[5]	,d_al=0 /* Date of birth	*/
+
+/* anchos */
+/* template 1 */
+Vari[211]= 625 /* NOC */
+Vari[213]= 500 /* Name */
+Vari[214]=  75 /* Gender	*/
+Vari[215]=  90 /* Discipline*/
+Vari[216]= 250 /* Date of birth*/
+
+Table 2 
+		Vari[20]=  1 /* Nº veces que se pinta el template */
+		Vari[21]= 50 /* Altura de la celda */
+		Vari[22]     /* Offset x (calculado) */
+		Vari[23]     /* Offset y (calculado) */
+
+        template[1] { call=&Vari[20], height=&Vari[21] }
+				
+				cell[1] { call=1, height=&Vari[21], width=&Vari[211] }	/* NOC */
+                        { outline_upper=0 }
+                        { outline_lower=0 }
+                        { outline_left =0 }
+                        { outline_right=0 }
+						{ data=211, Offset_dx=&Vari[22],  Offset_dy=&Vari[23]  }
+				
+				cell[4] { call=1, height=&Vari[11], width=&Vari[214] }	/* Gender */
+                        { outline_upper=0 }
+                        { outline_lower=0 }
+                        { outline_left =0 }
+                        { outline_right=0 }					
+						{ data=214, Offset_dx=&Vari[22],  Offset_dy=&Vari[23]  }
+
+                cell[3] { call=1, height=&Vari[21], width=&Vari[213] } /* Name */
+                        { outline_upper=0 }
+                        { outline_lower=0 }
+                        { outline_left =0 }
+                        { outline_right=0 }
+                        { data=213, Offset_dx=&Vari[22],  Offset_dy=&Vari[23]  }
+
+				cell[6] { call=1, height=&Vari[21], width=&Vari[216] } /* date of birth */
+                        { outline_upper=0 }
+                        { outline_lower=0 }
+                        { outline_left =0 }
+                        { outline_right=0 }
+                        { data=216, Offset_dx=&Vari[22],  Offset_dy=&Vari[23]  }
+
+				cell[5] { call=&Vari[15], height=&Vari[21], width=&Vari[215] } /* Event */
+                        { outline_upper=0 }
+                        { outline_lower=0 }
+                        { outline_left =0 }
+                        { outline_right=0 }
+                        { data=215, Offset_dx=&Vari[22],  Offset_dy=&Vari[23]  }
+
+				
+Line 2
+	{ table=2, corx=&Vari[1] }
+
+Line 3  /* Salto Entre Paises */		
+    { jump_d=40   }

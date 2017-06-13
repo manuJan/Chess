@@ -1,0 +1,256 @@
+/* --- VARIABLES GENERALES ---*/
+Vari[1]= 0	/* Coor x (calculada) */
+Vari[2]=50	/* Coor y */
+
+Vari[5]=6080	/* Fuente Normal */
+Vari[6]=6081	/* Fuente Bold   */
+
+Vari[50]		
+Vari[51]
+
+/* Identificadores */
+/* [Ttc] T:Table, t:template, c:cell */
+/* si t ó c es cero, el dato general a ese template o esa celda */
+
+
+/* --- HEADER --- */
+
+/* GENERAL */
+/* datos */
+Data[100]						 font=&Vari[6]	,d_al=0 /* NOC/NPC/CNO/... */
+
+/* TEMPLATE 1 */
+/* datos estáticos */
+Data[111]	,font=&Vari[6]	,d_al=0
+Data[112] 	,font=&Vari[6]	,d_al=1
+Data[113] 	,font=&Vari[6]	,d_al=2
+Data[114] 	,font=&Vari[6]	,d_al=1
+Data[115]	,font=&Vari[6]	,d_al=1
+
+/* TEMPLATE 2 */
+/* datos estáticos */
+Data[121]	,font=&Vari[6]	,d_al=0
+Data[122] 	,font=&Vari[6]	,d_al=1
+Data[123] 	,font=&Vari[6]	,d_al=1
+Data[124] 	,font=&Vari[6]	,d_al=1
+Data[125]	,font=&Vari[6]	,d_al=1
+
+/* anchos */
+/* template 1 */
+Vari[111]= 600 /* Ancho NOC */
+Vari[112]= 540 /* Ancho Men */
+Vari[114]	   /* Ancho Division */
+
+/* template 1 */
+Vari[121]= 600 /* Ancho NOC */
+Vari[122]= 180 /* Ancho Men */
+Vari[123]= 180 /* Ancho Women */
+Vari[124]= 120 /* Ancho Division */
+Vari[125]= 180 /* Ancho Total Competitors */
+
+Table 1 
+		Vari[10]=  1 /* Nº veces que se pinta el template */
+		Vari[11]= 60 /* Altura de la celda */
+		Vari[12]     /* Offset x (calculado) */
+		Vari[13]     /* Offset y (calculado) */
+
+        template[1] { call=&Vari[10], height=&Vari[11] }
+				
+				cell[1] { call=1, height=&Vari[11], width=&Vari[111] }	
+                        { outline_upper=2 }
+                        { outline_lower=0 }
+                        { outline_left =2 }
+                        { outline_right=0 }
+						{ data=111, Offset_dx=&Vari[12],  Offset_dy=80  }
+
+				cell[4] { call=1, height=&Vari[11], width=&Vari[114] } 
+                        { outline_upper=2 }
+                        { outline_lower=0 }
+                        { outline_left =2 }
+                        { outline_right=0 }
+						{ data=112, Offset_dx=&Vari[12],  Offset_dy=&Vari[13]  }
+                        
+				cell[2] { call=&Vari[50], height=&Vari[11], width=&Vari[112] } /* Players */
+                        { outline_upper=2 }
+                        { outline_lower=0 }
+                        { outline_left =2 }
+                        { outline_right=2 }
+						{ data=114, Offset_dx=&Vari[12],  Offset_dy=&Vari[13]  }
+
+		template[2] { call=&Vari[10], height=&Vari[11] }
+				
+				cell[1] { call=1, height=&Vari[11], width=&Vari[121] }	/* NOC */
+                        { outline_upper=0 }
+                        { outline_lower=2 }
+                        { outline_left =2 }
+                        { outline_right=0 }
+										
+				cell[4] { call=&Vari[51], height=&Vari[11], width=&Vari[124] } /* Division */
+                        { outline_upper=2 }
+                        { outline_lower=2 }
+                        { outline_left =2 }
+                        { outline_right=0 }
+                        { data=124, Offset_dx=&Vari[12],  Offset_dy=&Vari[13]  }
+
+				cell[2] { call=&Vari[50], height=&Vari[11], width=&Vari[122] } /* Men */
+                        { outline_upper=2 }
+                        { outline_lower=2 }
+                        { outline_left =2 }
+                        { outline_right=0 }
+                        { data=122, Offset_dx=&Vari[12],  Offset_dy=&Vari[13]  }
+
+                cell[3] { call=&Vari[50], height=&Vari[11], width=&Vari[123] } /* Women */
+                        { outline_upper=2 }
+                        { outline_lower=2 }
+                        { outline_left =2 }
+                        { outline_right=0 }
+                        { data=123, Offset_dx=&Vari[12], Offset_dy=&Vari[13]  }
+
+				cell[5] { call=1, height=&Vari[11], width=&Vari[125] } /* Total Competitors */
+                        { outline_upper=2 }
+                        { outline_lower=2 }
+                        { outline_left =2 }
+                        { outline_right=2 }
+                        { data=125, Offset_dx=&Vari[12], Offset_dy=&Vari[13] }
+
+
+Line 125
+		{ jump_u=20 }
+		{ data=125 }
+		{ jump_d=40 }
+		{ data=126 }
+
+Line 1
+	{ jump_d=50 }
+	{ table=1, corx=&Vari[1] }
+
+
+/* --- Body --- */
+/* TEMPLATE 2 */
+/* datos */
+Data[211] font=&Vari[5], d_al=0
+Data[212] font=&Vari[5], d_al=2
+Data[213] font=&Vari[5], d_al=2
+Data[214] font=&Vari[5], d_al=2
+Data[215] font=&Vari[6], d_al=2
+
+/* anchos */
+/* template 2 */
+Vari[211]= 600 /* Ancho NOC */
+Vari[212]= 180 /* Ancho Men */
+Vari[213]= 180 /* Ancho Women */
+Vari[214]= 120  /* Ancho Division */
+Vari[215]= 180 /* Ancho Total Competitors */
+
+Table 2
+		Vari[20]=  1 /* Nº veces que se pinta el template */
+		Vari[21]= 50 /* Altura de la celda */
+		Vari[22]     /* Offset x (calculado) */
+		Vari[23]     /* Offset y (calculado) */
+
+        template[1] { call=&Vari[20], height=&Vari[21] }
+				
+				cell[1] { call=1, height=&Vari[21], width=&Vari[211] }	/* NOC */
+                        { outline_upper=0 }
+                        { outline_lower=2 }
+                        { outline_left =2 }
+                        { outline_right=0 }
+						{ data=211, Offset_dx=&Vari[22],  Offset_dy=&Vari[23]  }
+                
+				cell[4] { call=&Vari[51], height=&Vari[21], width=&Vari[214] } /* Women */
+                        { outline_upper=0 }
+                        { outline_lower=2 }
+                        { outline_left =2 }
+                        { outline_right=0 }
+						{ data=214, Offset_dx=&Vari[22],  Offset_dy=&Vari[23]  }
+
+				cell[2] { call=&Vari[50], height=&Vari[21], width=&Vari[212] } /* Men */
+                        { outline_upper=0 }
+                        { outline_lower=2 }
+                        { outline_left =2 }
+                        { outline_right=0 }
+						{ data=212, Offset_dx=&Vari[22],  Offset_dy=&Vari[23]  }
+
+                cell[3] { call=&Vari[50], height=&Vari[21], width=&Vari[213] } /* Women */
+                        { outline_upper=0 }
+                        { outline_lower=2 }
+                        { outline_left =2 }
+                        { outline_right=0 }
+						{ data=213, Offset_dx=&Vari[22],  Offset_dy=&Vari[23]  }
+
+				cell[5] { call=1, height=&Vari[21], width=&Vari[215] } /* Total Competitors */
+                        { outline_upper=0 }
+                        { outline_lower=2 }
+                        { outline_left =2 }
+                        { outline_right=2 }
+						{ data=215, Offset_dx=&Vari[22],  Offset_dy=&Vari[23]  }
+
+Line 2
+	{ table=2, corx=&Vari[1] }
+
+
+/* --- TOTALS --- */
+
+/* TEMPLATE 3 */
+/* datos */
+Data[311] font=&Vari[6], d_al=0
+Data[312] font=&Vari[6], d_al=2
+Data[313] font=&Vari[6], d_al=2
+Data[314] font=&Vari[6], d_al=2
+Data[315] font=&Vari[6], d_al=2
+Data[316] font=&Vari[6], d_al=2
+
+/* anchos */
+/* template 2 */
+Vari[311]= 600 /* Ancho NOC */
+Vari[312]= 180 /* Ancho Men */
+Vari[313]= 180 /* Ancho Women */
+Vari[314]= 120  /* Ancho Division */
+Vari[315]= 180 /* Ancho Total Competitors */
+
+Table 3
+		Vari[30]=  1 /* Nº veces que se pinta el template */
+		Vari[31]= 50 /* Altura de la celda */
+		Vari[32]     /* Offset x (calculado) */
+		Vari[33]     /* Offset y (calculado) */
+
+        template[1] { call=&Vari[30], height=&Vari[31] }
+				
+				cell[1] { call=1, height=&Vari[31], width=&Vari[311] }	/* NOC */
+                        { outline_upper=0 }
+                        { outline_lower=2 }
+                        { outline_left =2 }
+                        { outline_right=0 }
+						{ data=311, Offset_dx=&Vari[32],  Offset_dy=&Vari[33]  }
+                				
+				cell[4] { call=&Vari[51], height=&Vari[31], width=&Vari[314] } /* Women */
+                        { outline_upper=0 }
+                        { outline_lower=2 }
+                        { outline_left =2 }
+                        { outline_right=0 }
+						{ data=314, Offset_dx=&Vari[32],  Offset_dy=&Vari[33]  }
+
+				cell[2] { call=&Vari[50], height=&Vari[31], width=&Vari[312] } /* Men */
+                        { outline_upper=0 }
+                        { outline_lower=2 }
+                        { outline_left =2 }
+                        { outline_right=0 }
+						{ data=312, Offset_dx=&Vari[32],  Offset_dy=&Vari[33]  }
+
+                cell[3] { call=&Vari[50], height=&Vari[31], width=&Vari[313] } /* Women */
+                        { outline_upper=0 }
+                        { outline_lower=2 }
+                        { outline_left =2 }
+                        { outline_right=0 }
+						{ data=313, Offset_dx=&Vari[32],  Offset_dy=&Vari[33]  }
+
+
+				cell[5] { call=1, height=&Vari[31], width=&Vari[315] } /* Total Competitors */
+                        { outline_upper=0 }
+                        { outline_lower=2 }
+                        { outline_left =2 }
+                        { outline_right=2 }
+						{ data=315, Offset_dx=&Vari[32],  Offset_dy=&Vari[33]  }
+
+Line 3
+	{ table=3, corx=&Vari[1] }

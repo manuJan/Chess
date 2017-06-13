@@ -1,0 +1,80 @@
+/* ------------------------------------------------------------------ */
+/* ------------------------------ C08 ------------------------------- */
+/* ------------------------------------------------------------------ */
+Data[100],lcpy= "Schedule is subject to change"
+Data[101],lcpy= "end"
+
+/* ------------------------------------------------------------------ */
+/* ------------------------------ C30 ------------------------------- */
+/* ------------------------------------------------------------------ */
+Data[200],lcpy= "1|MC|Men's Classical"
+Data[201],lcpy= "2|WC|Women's Classical"
+Data[202],lcpy= "3|RMT|Rapid Men's Team"
+Data[203],lcpy= "4|RWT|Rapid Women's Team"
+Data[204],lcpy= "5|U-RMT|Under 23 Rapid Men's Team"
+Data[205],lcpy= "6|U-RWT|Under 23 Rapid Women's Team"
+Data[206],lcpy= "7|BMT|Blitz Men's Team"
+Data[207],lcpy= "8|BWT|Blitz Women's Team"
+Data[208],lcpy= "9|U-BMT|Under 23 Blitz Men's Team"
+Data[209],lcpy= "10|U-BWT|Under 23 Blitz Women's Team"
+Data[210],lcpy= "end"
+
+/* ------------------------------------------------------------------ */
+/* ------------------------------ C32A ------------------------------ */
+/* ------------------------------------------------------------------ */
+Data[300],lcpy= "1|M|Men"
+Data[301],lcpy= "2|W|Women"
+Data[302],lcpy= "3|MC|Men's Classical"
+Data[303],lcpy= "1|WC|Women's Classical"
+Data[304],lcpy= "2|RMT|Rapid Men's Team"
+Data[305],lcpy= "3|RWT|Rapid Women's Team"
+Data[306],lcpy= "1|U-RMT|Under 23 Rapid Men's Team"
+Data[307],lcpy= "2|U-RWT|Under 23 Rapid Women's Team"
+Data[308],lcpy= "3|BMT|Blitz Men's Team"
+Data[309],lcpy= "1|BWT|Blitz Women's Team"
+Data[310],lcpy= "2|U-BMT|Under 23 Blitz Men's Team"
+Data[311],lcpy= "3|U-BWT|Under 23 Blitz Women's Team"
+Data[312],lcpy= "end"
+
+/* ------------------------------------------------------------------ */
+/* ------------------------------ C38  ------------------------------ */
+/* ------------------------------------------------------------------ */
+/* ------------------------------------------------------------------ */
+Data[400],lcpy= "1|M|Men"
+Data[401],lcpy= "2|W|Women"
+Data[402],lcpy= "The maximum number of characters for long scoreboard name is thirteen (13) and short scoreboard name is eight (8)"
+Data[403],lcpy= "end"
+
+
+/* ------------------------------------------------------------------ */
+/* ------------------------------ C58 ------------------------------- */
+/* ------------------------------------------------------------------ */
+Data[500],lcpy= "1|M|Men"
+Data[501],lcpy= "2|W|Women"
+Data[502],lcpy= "3|MC|Men's Classical"
+Data[503],lcpy= "1|WC|Women's Classical"
+Data[504],lcpy= "2|RMT|Rapid Men's Team"
+Data[505],lcpy= "3|RWT|Rapid Women's Team"
+Data[506],lcpy= "1|U-RMT|Under 23 Rapid Men's Team"
+Data[507],lcpy= "2|U-RWT|Under 23 Rapid Women's Team"
+Data[508],lcpy= "3|BMT|Blitz Men's Team"
+Data[509],lcpy= "1|BWT|Blitz Women's Team"
+Data[510],lcpy= "2|U-BMT|Under 23 Blitz Men's Team"
+Data[511],lcpy= "3|U-BWT|Under 23 Blitz Women's Team"
+Data[512],lcpy= "end"
+
+/* ------------------------------------------------------------------ */
+/* ------------------------------ C51 ------------------------------- */
+/* ------------------------------------------------------------------ */
+Data[600],lcpy= "FM|Fide Master"
+Data[601],lcpy= "GM|Grand Master"
+Data[602],lcpy= "IM|International Master"
+Data[603],lcpy= "end"
+
+/* ------------------------------------------------------------------ */
+/* ------------------------------ C74 ------------------------------- */
+/* ------------------------------------------------------------------ */
+Data[700],lcpy= "FM|Fide Master"
+Data[701],lcpy= "GM|Grand Master"
+Data[702],lcpy= "IM|International Master"
+Data[703],lcpy= "end"

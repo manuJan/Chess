@@ -1,0 +1,67 @@
+Vari[1]=4071		/* Fuente */
+Vari[6]=4070		/* Fuente */
+
+Vari[2]			/* Coor x */
+Vari[3]			/* Offset_x */
+Vari[4]			/* Width small */
+Vari[5]			/* Centrado small */
+Vari[14]		/* Width big */
+			
+
+Data[1]  , d_al=1,	font=&Vari[1]
+Data[10] , d_al=1,	font=&Vari[1]
+Data[11] , d_al=1,	font=&Vari[6]
+Data[12] , d_al=0,	font=&Vari[1]
+Data[13] , d_al=0,	font=&Vari[6]
+
+Data[20]	  lcpy ="NOC of Citizenship"	d_al=0	font=&Vari[1]  // Team Officials
+
+Data[100]	  d_al=1	font=&Vari[6]
+Data[101]	  d_al=1	font=&Vari[6]
+Data[102]	  d_al=0	font=&Vari[6]
+Data[103]	  d_al=0	font=&Vari[6]
+
+Data[120]	  d_al=0	font=&Vari[6] // Team Officials
+
+
+Table 1
+
+	Vari[10]= 50		/* Altura */
+	Vari[11]= 40		/* Offset_dy */
+	Vari[12]= 10		/* Offser_dx */
+	
+	template[1]	{ call=1,height=&Vari[10] }
+				{ Offset_x = &Vari[3]  }	
+
+		cell[1] { call=1, height=&Vari[10], width=&Vari[4] }
+			{ outline_upper=0 }
+			{ outline_lower=1 }
+			{ outline_left =1 }
+			{ outline_right=1 }
+			{ data=10,Offset_dx=&Vari[5],Offset_dy=&Vari[11] }
+
+		cell[2] { call=1, height=&Vari[10], width=&Vari[4] }
+			{ outline_upper=0 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ data=11,Offset_dx=&Vari[5],Offset_dy=&Vari[11] }
+
+		cell[3] { call=1, height=&Vari[10], width=&Vari[4] }
+			{ outline_upper=0 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ data=12,Offset_dx=10,Offset_dy=&Vari[11] }
+
+		cell[4] { call=1, height=&Vari[10], width=&Vari[14] }
+			{ outline_upper=0 }
+			{ outline_lower=1 }
+			{ outline_left =0 }
+			{ outline_right=1 }
+			{ data=13,Offset_dx=10,Offset_dy=&Vari[11] }
+
+			
+Line  1	/* -- Table for players --- */
+		{ table = 1, corx=&Vari[2] }
+		
