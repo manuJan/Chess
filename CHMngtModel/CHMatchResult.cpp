@@ -404,7 +404,7 @@ MSLWString CHMatchResult::getSName(const char *lang/*=0*/) const
 	CHEvent * pEvent=(CHEvent *)getEvent();
 	if(!pEvent->getSubMatches())
 		return getPrnSName();
-	else
+	else if(pEvent->getSubMatches())
 	{
 		CHMatch * pMatch=(CHMatch *)getMatch();
 		if(!pMatch->getSubCode())

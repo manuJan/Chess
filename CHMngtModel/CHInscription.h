@@ -28,6 +28,7 @@ class GRegister;
 class GTHEvent;
 class CHRegister;
 class CHMember;
+class CHMatchResult;
 
 class CHMngtModelExport CHInscription : public GTHInscription  
 {
@@ -79,6 +80,8 @@ public:
 	
 	MSLWString			getGroupLDescription(const char *lang=0);
 	MSLWString			getGroupSDescription(const char *lang=0);
+
+	CHMatchResult* getLastMatchResult();
 
 private:
 	short	m_seed;	// cabeza de serie

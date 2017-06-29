@@ -22,6 +22,9 @@
 
 #include "StdAfx.h"
 #include "CHAvailableMatchGUIEx.h"
+#include "..\CHMngtModel\CHMatch.h"
+#include "..\CHMngtModel\CHMatchResult.h"
+#include "..\CHMngtModel\CHInscription.h"
 
 CHAvailableMatchGUIEx::CHAvailableMatchGUIEx(GTHScheduleData* pScheduleData, GTHProgressionData * pProgressionData, long id)
 :GTHAvailableMatchGUIEx(pScheduleData, pProgressionData, id)
@@ -32,4 +35,72 @@ CHAvailableMatchGUIEx::~CHAvailableMatchGUIEx(void)
 {
 }
 
+bool CHAvailableMatchGUIEx::paintGridAvailableMatches(gui_grid_cell* cell)
+{
+	if(cell->y==-1 || !cell->lParamLine)
+		return paintHeaderGrid(cell);		
+	
+	CHMatch * pMatch=(CHMatch*)cell->lParamLine;
+	if (!pMatch)
+		return false;
+
+	paintAvailableMatchSolid(cell, pMatch);
+
+	/*bool isSubMatch = ( ( (CHMatch*)pMatch)->isTeam() && !pMatch->getSubMatch());
+
+	switch (cell->lParamColumn)
+	{
+		case C_AV_HOME:
+		{
+			if (isSubMatch)
+			{
+				return false;
+			}
+			break;
+		}
+		case C_AV_AWAY:
+		{
+			if (isSubMatch)
+			{
+				return false;
+			}
+			break;
+		}
+	}*/
+
+	return GTHAvailableMatchGUIEx::paintGridAvailableMatches(cell);
+}
+
+MSLWString CHAvailableMatchGUIEx::getCompetitorDescription (GTHMatchResult *pMatchResult)
+{
+	if (!pMatchResult)
+		return NULLWSTRING;
+
+	MSLWString idCompetitor;
+	if(pMatchResult->getRegister())
+		idCompetitor=((CHMatchResult*)pMatchResult)->getSName();
+	else
+		idCompetitor=pMatchResult->getIDCompetitor(false);
+
+	CHInscription * pInsc=(CHInscription *)pMatchResult->getInscription();
+	if(pInsc && pInsc->getSeed()!=0 )
+		idCompetitor+= MSLWString(L" (" + TOWSTRING(pInsc->getSeed()) + L")");
+
+	if (pMatchResult->getBye())
+		idCompetitor+=_T("(BYE)");
+
+	return idCompetitor;
+}
+
+
+bool CHAvailableMatchGUIEx::canInsertAvailableMatch(GTHMatch *pMatch)
+{
+	if (!pMatch)
+		return false;
+
+	if ( ( (CHMatch*)pMatch)->isTeam() && !pMatch->getSubMatch())
+		return false;
+
+	return GTHAvailableMatchGUIEx::canInsertAvailableMatch(pMatch);
+}
 

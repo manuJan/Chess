@@ -436,13 +436,19 @@ short CHPoolResult::getMatchesPlayed(short nRound/*=0*/) const
 	if( !pPool )
 		return 0;
 
-	short maxRound=!nRound?pPool->getNumRounds():nRound;
+	short maxRound=0;
+	MSLSortedVector vMatches;
+	pPool->getMatchesVector(vMatches);
+
+	if (getPhaseCode()!=SWISS_ROUND)
+		maxRound=short(vMatches.entries());
+	else
+		maxRound=!nRound?pPool->getNumRounds():nRound;
+
 	short matchesPlayed = 0;
 	CHMatch * pMatch = 0;
 	CHMatchResult * pHome = 0;
-	CHMatchResult * pAway = 0;
-	MSLSortedVector vMatches;
-	pPool->getMatchesVector(vMatches);
+	CHMatchResult * pAway = 0;	
 	for(short i=0 ; i<vMatches.entries() ; i++)
 	{
 		pMatch = (CHMatch *)vMatches[i];

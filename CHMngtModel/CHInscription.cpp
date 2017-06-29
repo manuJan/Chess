@@ -28,6 +28,37 @@
 #include "CHEvent.h"
 #include "CHRegister.h"
 #include "CHMemoryDataBase.h"
+#include "CHPhase.h"
+#include "CHMatchResult.h"
+
+static
+int orderMatchResultByPhaseOrder(const MSLItem** a, const MSLItem** b)
+{
+	CHMatchResult * pA=((CHMatchResult *)(*a));
+	CHMatchResult * pB=((CHMatchResult *)(*b));
+
+	CHPhase* pPhaseA=(CHPhase*)pA->getPhase();
+	CHPhase* pPhaseB=(CHPhase*)pB->getPhase();
+
+	int order = pPhaseA->getOrder()-pPhaseB->getOrder();
+	if (order)
+		return order;
+
+	return strcmp(pA->getKey() , pB->getKey());
+}
+
+static
+bool matchResultsOfInscription(const MSLItem* p,const void *n)
+{
+	CHInscription * pInscription = (CHInscription*) n;
+	CHMatchResult * pMatchResult = (CHMatchResult*) p;
+	
+	if (pMatchResult->getEventKey()==pInscription->getEventKey() && 
+		pMatchResult->getInscription()==pInscription)
+		return true;
+
+	return false;
+}
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -273,4 +304,15 @@ MSLWString CHInscription::getGroupLDescription(const char *lang/*=0*/)
 MSLWString CHInscription::getGroupSDescription(const char *lang/*=0*/)
 {
 	return getRegister()?getRegister()->getGroupSDescription(lang):L"";
+}
+
+CHMatchResult* CHInscription::getLastMatchResult()
+{
+	MSLSet colMatchResultsOfInscription=CHMemoryDataBase::getCol(__CHMATCHRESULT).select(matchResultsOfInscription,this);
+	MSLSortedVector vMatchResults(colMatchResultsOfInscription,orderMatchResultByPhaseOrder);
+
+	if (vMatchResults.entries())
+		return (CHMatchResult*)vMatchResults[vMatchResults.entries()-1];
+		
+	return 0;
 }

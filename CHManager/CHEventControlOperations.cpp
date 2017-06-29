@@ -331,7 +331,9 @@ void CHEventControlOperations::finishMatch(CHMatch *pMatch,bool status)
 	CHPhase * pPhase = (CHPhase *) pMatch->getPhase();
 	CHEvent * pEvent = (CHEvent *) pPhase->getEvent();
 
-	if(pMatch->getFinishedRound())
+	if(pMatch->getFinishedRound() || 
+	   (pPool->getStatus()==CHMemoryDataBase::eUnofficial ||
+		pPool->getStatus()==CHMemoryDataBase::eFinished ) )
 	{
 		// Recalculamos Special Points			
 		//aRanking.reCalculateSpecialPointsPool(pMatch);	
@@ -344,6 +346,22 @@ void CHEventControlOperations::finishMatch(CHMatch *pMatch,bool status)
 
 		// Ranking de evento
 		aRanking.calculateRankings(pEvent);
+	}
+
+	CHProgression aProgression((MSLGUIEx*)m_pGUIEx);
+
+	if (pPool->getStatus()==CHMemoryDataBase::eUnofficial ||
+		pPool->getStatus()==CHMemoryDataBase::eFinished )
+	{
+		// Pool Progression
+		aProgression.doProgression(pPool);
+	}
+
+	if (pPhase->getStatus()==CHMemoryDataBase::eUnofficial || 
+		pPhase->getStatus()==CHMemoryDataBase::eFinished )
+	{
+		// Phase Progression
+		aProgression.doProgression(pPhase);
 	}
 
 	// Calculamos medallas

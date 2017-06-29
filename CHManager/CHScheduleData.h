@@ -32,4 +32,7 @@ public:
 
 	void onMatchScheduled		(GTHMatch* pMatch);
 	void onMatchUndoScheduled	(GTHMatch* pMatch);
+
+	bool onScheduleChangeSubMatch(CHMatch * pMatch);
+
 };

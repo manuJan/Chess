@@ -28,6 +28,7 @@
 #include "..\CHMngtModel\CHEventResult.h"
 #include "..\CHMngtModel\CHPhase.h"
 #include "..\CHMngtModel\CHMatch.h"
+#include "..\CHMngtModel\CHInscription.h"
 
 #include <ovr\core\th\gthmsgdefines.h>
 #include <OVR\core\G\GScore.h>
@@ -1061,7 +1062,7 @@ void CHRanking::onMedallistCreated(GMedallist * pMedallist)
 	if (!pInscription)
 		return;
 
-	/*CHMatchResult* pMatchResult = pInscription->getLastMatchResult();
+	CHMatchResult* pMatchResult = pInscription->getLastMatchResult();
 	if (!pMatchResult)
 	{
 		// Pongo la fecha de Hoy
@@ -1070,10 +1071,8 @@ void CHRanking::onMedallistCreated(GMedallist * pMedallist)
 		return;
 	}
 
-	ARMatch *pMatch = (ARMatch*) pMatchResult->getMatch();
+	CHMatch *pMatch = (CHMatch*) pMatchResult->getMatch();
 	if (pMatch)
 		pMedallist->setDate(pMatch->getStartDate());
-
-	pMedallist->setMark(pMatchResult->getScoreAsStringForReports());*/
 }
 

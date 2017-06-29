@@ -26,13 +26,11 @@
 #include "CHManagerApp.h"
 #include "..\CHMngtModel\CHEvent.h"
 #include "..\CHVMngtModel\CHVMngtModelDefs.h"
-
-/*#include "CHEventResultGUIEx.h"
 #include "..\CHVMngtModel\CHRC92.h"
 #include "..\CHVMngtModel\CHRC93.h"
 #include "..\CHVMngtModel\CHRC95.h"
-#include "..\CHVMngtModel\CHRC97.h"*/
 
+/*#include "CHEventResultGUIEx.h"*/
 
 static
 int orderDataByKey(const MSLItem** a, const MSLItem** b)
@@ -147,7 +145,7 @@ bool CHSummaryGUI::onReportGeneration(CReportManager *pReportMngr, CReportConfig
 
 	switch (pReport->getNReport())
 	{
-		/*case CH92A:
+		case CH92A:
 		case CH92B:
 		{
 			CHEvent *pEvent = (CHEvent *)pReport->getLParam1();
@@ -168,7 +166,7 @@ bool CHSummaryGUI::onReportGeneration(CReportManager *pReportMngr, CReportConfig
 			CHRC95 aReport(*pReportMngr,*pReportCfg);
 			return aReport.Run();							
 		}
-		case CH97:
+		/*case CH97:
 		{
 			CHRC97 aReport(*pReportMngr,*pReportCfg);
 			return aReport.Run();							

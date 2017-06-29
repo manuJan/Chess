@@ -126,6 +126,15 @@
     <ClInclude Include="CHRC75.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CHRC92.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHRC93.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHRC95.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -195,6 +204,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CHRC75.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHRC92.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHRC93.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHRC95.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
