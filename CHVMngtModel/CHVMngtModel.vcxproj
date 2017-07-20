@@ -88,7 +88,13 @@ xcopy /D /Y $(OutDir)*.lib C:\WorkingDll\Lib
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>MSLTools.lib;MSLDBTools.lib;gmngtmodel.lib;gthmngtmodel.lib;MSLPrintOut.lib;VMngtModel.lib;thvmngtmodel.lib;CHMngtModel.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /D /Y $(OutDir)$(TargetFileName) C:\WorkingDll\Lib
+xcopy /D /Y $(OutDir)*.lib C:\WorkingDll\Lib
+</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\ReportsFiles\CH.C08.lis" />

@@ -382,7 +382,7 @@ void CHRC75::assignDataIndividual(CHPoolResult *pPoolResult)
 
 	// Puntos de Encuentro, Points for Won Matches
 	if (paintPoolResults)
-		m_pLis->setData(2007,pPoolResult->getAllRoundsPointsForWon());
+		m_pLis->setData(2007,pPoolResult->getMatchPointsStr());
 	else
 		m_pLis->setData(2007,pPoolResult->getPointsForWon(m_round));
 
@@ -394,19 +394,19 @@ void CHRC75::assignDataIndividual(CHPoolResult *pPoolResult)
 
 	// Median SO
 	if (paintPoolResults)
-		m_pLis->setData(2011,pPoolResult->getMMedianSolkOffStr());
+		m_pLis->setData(2011,pPoolResult->getMedianSolkOffFStr());
 	else
 		m_pLis->setData(2011,pPoolResult->getMedianSolkOffFStr(m_round));
 
 	// SolkOff
 	if (paintPoolResults)
-		m_pLis->setData(2009,pPoolResult->getMSolkOffStr());
+		m_pLis->setData(2009,pPoolResult->getSolkOffFStr());
 	else
 		m_pLis->setData(2009,pPoolResult->getSolkOffFStr(m_round));
 	
 	// SonneBerger
 	if (paintPoolResults)
-		m_pLis->setData(2010,pPoolResult->getMSonneBergerStr());
+		m_pLis->setData(2010,pPoolResult->getSonneBergerFStr());
 	else
 		m_pLis->setData(2010,pPoolResult->getSonneBergerFStr(m_round));
 
@@ -426,7 +426,7 @@ void CHRC75::buildVector()
 	CHPoolResult *pPoolResult = 0;
 	while ((pPoolResult = (CHPoolResult*) iter())!=0 )
 	{
-		if (pPoolResult->getPhase() == m_pPhase)
+		if (pPoolResult->getPhase() == m_pPhase && !pPoolResult->getBye())
 			m_vPoolResults.insert(pPoolResult);
 	}
 

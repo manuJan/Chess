@@ -209,10 +209,7 @@ void CHRC38::setDynamicLegends(CHRegister *pRegister)
 	if (!pRegister )
 		return;
 
-	/*MSLWString pos = pRegister->getSDescFunction();
-	if(pRegister->getFunction())
-		m_pLegendBK->setDynamic(pos);
-	if(pRegister->getPosition())
-		m_pLegendBK->setDynamic(L"(" + pRegister->getSDescPosition() +L")");*/
-
+	MSLWString cat = pRegister->getMasterTypeSDescription();
+	if(pRegister->getMasterType())
+		m_pLegends->setDynamic(cat);
 }

@@ -501,6 +501,9 @@ bool CHRC74::changeRound(CHMatch *pMatch)
 	if(!pMatchAux)
 		return false;
 
+	if (pMatch->getPhaseCode()!=SWISS_ROUND)
+		return false;
+
 	if(pMatchAux->getRound()!=pMatch->getRound())
 		return true;
 	
