@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{055F8CFC-330F-4F16-B922-11F8A5D63115}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>CHODF</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>Debug\</OutDir>
+    <IntDir>Debug\</IntDir>
+    <TargetName>$(ProjectName)d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>Release\</OutDir>
+    <IntDir>Release\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <AdditionalDependencies>MSLToolsd.lib;MSLDBToolsd.lib;MSLGUId.lib;GMngtModeld.lib;MSLAppd.lib;XMLModeld.lib;ODF2Based.lib;ODFManager2d.lib;ODF2THBased.lib;ODFTHManager2d.lib;GTHMngtModeld.lib;CHMngtModeld.lib;CHVMngtModeld.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <AdditionalDependencies>MSLTools.lib;MSLDBTools.lib;MSLGUI.lib;GMngtModel.lib;MSLApp.lib;XMLModel.lib;ODF2Base.lib;ODFManager2.lib;ODF2THBase.lib;ODFTHManager2.lib;GTHMngtModel.lib;CHMngtModel.lib;CHVMngtModel.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="CHODF.ico" />
+    <None Include="ReadMe.txt" />
+    <None Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CHODF.h" />
+    <ClInclude Include="CHODF2Brackets.h" />
+    <ClInclude Include="CHODF2Defines.h" />
+    <ClInclude Include="CHODF2Participant.h" />
+    <ClInclude Include="CHODF2PoolStandings.h" />
+    <ClInclude Include="CHODF2Ranking.h" />
+    <ClInclude Include="CHODF2Results.h" />
+    <ClInclude Include="CHODF2Team.h" />
+    <ClInclude Include="CHODF2ZZSchedule.h" />
+    <ClInclude Include="CHODFApp.h" />
+    <ClInclude Include="CHODFBuildMessage.h" />
+    <ClInclude Include="CHODFGUI.h" />
+    <ClInclude Include="CHODFModel.h" />
+    <ClInclude Include="CHODFOrderExt.h" />
+    <ClInclude Include="CHODFParamsExt.h" />
+    <ClInclude Include="CHODFZZEventDescription.h" />
+    <ClInclude Include="CHODFZZScheduleDescription.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CHODF.cpp" />
+    <ClCompile Include="CHODF2Brackets.cpp" />
+    <ClCompile Include="CHODF2Participant.cpp" />
+    <ClCompile Include="CHODF2PoolStandings.cpp" />
+    <ClCompile Include="CHODF2Ranking.cpp" />
+    <ClCompile Include="CHODF2Results.cpp" />
+    <ClCompile Include="CHODF2Team.cpp" />
+    <ClCompile Include="CHODF2ZZSchedule.cpp" />
+    <ClCompile Include="CHODFApp.cpp" />
+    <ClCompile Include="CHODFBuildMessage.cpp" />
+    <ClCompile Include="CHODFGUI.cpp" />
+    <ClCompile Include="CHODFModel.cpp" />
+    <ClCompile Include="CHODFOrderExt.cpp" />
+    <ClCompile Include="CHODFParamsExt.cpp" />
+    <ClCompile Include="CHODFZZEventDescription.cpp" />
+    <ClCompile Include="CHODFZZScheduleDescription.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CHODF.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

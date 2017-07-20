@@ -1,0 +1,38 @@
+/*************************************************************************************
+*			© Copyright MSL Software, S.L., 2014
+*	This document is the property of MSL Software and its content is confidential. 
+*   This work must not be reproduced or	disclosed to others or used for purposes 
+*   other than that for which it is supplied without MSL's prior written permission.
+*	MSL must not be considered liable for any mistake or omission in the edition of 
+*   this document. "MSL" is a registered trademark.	
+*
+*	File name	: CHODF2Participant.h
+*	Description	:
+*
+*	Author		: 
+*	Date created: 
+* 	Project		: AR ODF
+*	
+* 	Modification history
+*	By		:
+*	Date	:
+*	Changes	:
+*
+***************************************************************************************/
+
+#pragma once
+#include <OVR/GUI/ODF2/ODF2Base/ODF2ZZParticipant.h>
+
+class CHODF2Participant : public ODF2ZZParticipant
+{
+public:
+	CHODF2Participant(ODF2BuildBase * pBuild,XMLElement * pElement,ODF2FileBase * pFile,GRegister * pRegister);
+	virtual ~CHODF2Participant();
+
+protected:
+	void fillSportRegister		(XMLElement * pEl_Reg, GRegister * pRegister);
+	void fillSportInscription	(XMLElement * pEl_RegEvent, GInscription * pInscription);
+	void fillSportMember		(XMLElement * pEl_RegEvent,GMember * pMember);
+
+};
+

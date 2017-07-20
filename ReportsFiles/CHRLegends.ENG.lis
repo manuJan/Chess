@@ -42,8 +42,11 @@ Data[312],lcpy= "end"
 /* ------------------------------------------------------------------ */
 Data[400],lcpy= "1|M|Men"
 Data[401],lcpy= "2|W|Women"
-Data[402],lcpy= "The maximum number of characters for long scoreboard name is thirteen (13) and short scoreboard name is eight (8)"
-Data[403],lcpy= "end"
+Data[402],lcpy= "FM|Fide Master"
+Data[403],lcpy= "GM|Grand Master"
+Data[404],lcpy= "IM|International Master"
+Data[405],lcpy= "The maximum number of characters for long scoreboard name is thirteen (13) and short scoreboard name is eight (8)"
+Data[406],lcpy= "end"
 
 
 /* ------------------------------------------------------------------ */

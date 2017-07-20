@@ -143,6 +143,7 @@ data[2007], d_al=1,									                /* Total Winned	*/
 data[2008], d_al=1,									                /* Points 		*/
 data[2009], d_al=0,									                /* Solkoff		*/
 data[2010], d_al=0,									                /* Sonneberger 	*/
+data[2011], d_al=0,									                /* MSolkoff 	*/
 
 
 
@@ -215,16 +216,22 @@ Table 1 /* Cabecera Tabla Ranking */
 			/*{ data=1007, Offset_dx=&Vari[308], Offset_dy=55 }*/
 
 		/* Cartel Solkoff */
-		cell[19] { call=&Vari[109], height=&Vari[5], width=&Vari[209] }
+		cell[19] { call=1, height=&Vari[5], width=&Vari[209] }
 			{ outline_upper=1 }{ outline_lower=1 }
 			{ outline_right=0 }{ outline_left =1 }
 			{ data=1011, Offset_dx=&Vari[309], Offset_dy=55 }
 
 		/* Cartel Sonneberger */
-		cell[20] { call=&Vari[110], height=&Vari[5], width=&Vari[210] }
+		cell[20] { call=0, height=&Vari[5], width=&Vari[210] }
 			{ outline_upper=1 }{ outline_lower=1 }
 			{ outline_right=1 }{ outline_left =1 }
-			{ data=1012, Offset_dx=&Vari[310], Offset_dy=55 }					
+			{ data=1012, Offset_dx=&Vari[310], Offset_dy=55 }		
+			
+		/* Cartel Solkoff */
+		cell[21] { call=0, height=&Vari[5], width=&Vari[209] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=1011, Offset_dx=&Vari[309], Offset_dy=55 }			
 
 Table 2 /* Cuerpo Tabla Ranking */		
 	template[2] { call=1, height=&Vari[6] } /* Cuerpo Results */
@@ -284,16 +291,23 @@ Table 2 /* Cuerpo Tabla Ranking */
 			{ data=2008, Offset_dx=&Vari[408], Offset_dy=55 }
 
 		/* Solkoff */
-		cell[19] { call=&Vari[109], height=&Vari[6], width=&Vari[209] }
+		cell[19] { call=1, height=&Vari[6], width=&Vari[209] }
 			{ outline_upper=1 }{ outline_lower=1 }
 			{ outline_right=0 }{ outline_left =1 }
 			{ data=2009, Offset_dx=&Vari[409], Offset_dy=55 }
 
 		/* Sonneberger */
-		cell[20] { call=&Vari[110], height=&Vari[6], width=&Vari[210] }
+		cell[20] { call=0, height=&Vari[6], width=&Vari[210] }
 			{ outline_upper=1 }{ outline_lower=1 }
 			{ outline_right=1 }{ outline_left =1 }
 			{ data=2010, Offset_dx=&Vari[410], Offset_dy=55 }
+
+		/* MSolkoff */
+		cell[21] { call=0, height=&Vari[6], width=&Vari[210] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=1 }{ outline_left =1 }
+			{ data=2011, Offset_dx=&Vari[410], Offset_dy=55 }
+
 /*----------------------------------------------------------------------------*/
 
 /**************************************************/
