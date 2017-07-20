@@ -24,14 +24,15 @@
 #include "CHMemoryDataBaseDefs.h"
 #include <OVR/CORE/TH/GTHEvent.h>
 
+class CHPhase;
+
 class CHMngtModelExport CHEvent : public GTHEvent  
 {
 	MSLDECLARE_ITEM(CHEvent)
 
 	enum TypeEvent {eNone=0, eClassic=1, eRapid=2, eBlitz=3};	
-	enum TypeRank  {eEmpty=0, eQualitative=1, ePoints=2,eSolkoff=3, eSonneBerger=4, eMedianSolkoff=5, eProgressiveScore=6, eRating=7, eTeamMatchesWon=8, eMatchesWon=9, eMatchesDrawm=10,eTeamPointsWon=11  };
-
-
+	enum TypeRank  {eEmpty=0, eQualitative=1, ePoints=2, eMatchPoints=3, eDirectEncounter=4, eKoyaTieBreak=5, eSolkoff=6, eSonneBerger=7, eSolkoffCutLowest=8, eSolkoffCutLowestAndHighest=9, eProgressiveScore=10, eRating=11, eTeamMatchesWon=12, eMatchesWon=13, eMatchesDrawm=14,eTeamPointsWon=15  };
+	
 public:
 	// Constructors/Destructor
 	CHEvent();
@@ -73,11 +74,13 @@ public:
 	MSLString	getConstRatingStr	() const;
 	short		getTeamMatchsCnfgMembers() const;
 	short		getTeamMatches		() const;
+	short		getTeamMatchesElim	() const;
 	double		getPointsBye		() const;
 	MSLString	getPointsByeStr		() const;
 	MSLWString	getTypeEventAsString() const;
 	MSLWString	getRegTypeAsString	() const;
 	MSLString	getCfgTeamMembers	() const;
+	MSLString	getCfgTeamMembersElim() const;
 	bool isTeam    () const;
 
 	
@@ -92,6 +95,8 @@ public:
 	MSLWString			getTeamCfgLDescription(const char * language=0);
 
 	void				getEventResults(MSLSet &colEventResults);
+	CHPhase*			getSwissRound();
+	CHTeamMatchsCnfg *	getTeamMatchCfg();
 
 private:
 	

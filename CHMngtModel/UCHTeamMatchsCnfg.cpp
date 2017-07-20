@@ -33,6 +33,13 @@ void UCHTeamMatchsCnfg::assignAtributes(CHTeamMatchsCnfg & aTeamMatCnfg)
 	if (fCompMatchesDistribution!=NULLSTRING)
 		nullCompMatchesDistribution=false;
 
+
+	fMatchesTypeElim = aTeamMatCnfg.getMatchesTypeElim();
+	nullMatchesTypeElim=true;
+	if (fMatchesTypeElim!=NULLSTRING)
+		nullMatchesTypeElim=false;
+
+
 	fMatchesType = aTeamMatCnfg.getMatchesType();
 	nullMatchesType=true;
 	if (fMatchesType!=NULLSTRING)
@@ -47,6 +54,11 @@ void UCHTeamMatchsCnfg::assignAtributes(CHTeamMatchsCnfg & aTeamMatCnfg)
 	nullnMatches=true;
 	if (fnMatches!=0)
 		nullnMatches=false;
+
+	fnMatchesElim = aTeamMatCnfg.getMatchesElim();
+	nullnMatchesElim=true;
+	if (fnMatchesElim!=0)
+		nullnMatchesElim=false;
 
 	fnComp = aTeamMatCnfg.getCompetitors();
 	nullnComp=true;
@@ -84,8 +96,10 @@ bool UCHTeamMatchsCnfg::insert(GData& aData)
 	inserter << table["TEAMCFG"]		.assign(fId);
 	inserter << table["NCOMPETITORS"]	.assign(fnComp,&nullnComp);
 	inserter << table["NMATCHES"]		.assign(fnMatches,&nullnMatches);
+	inserter << table["NMATCHES_ELIM"]		.assign(fnMatchesElim,&nullnMatchesElim);
 	inserter << table["NMATCHESTYPE"]	.assign(fMatchesType,&nullMatchesType);
-	inserter << table["COMPMATCHESDISTRIBUTION"]	.assign(fCompMatchesDistribution,&nullCompMatchesDistribution);
+	inserter << table["NMATCHESTYPE_ELIM"]	.assign(fMatchesTypeElim,&nullMatchesTypeElim);
+	inserter << table["COMPMATCHESDISTRIBUTION"]	.assign(fCompMatchesDistribution,&nullCompMatchesDistribution);	
 	inserter << table["FAWAYC"]			.assign(fFAwayC,&nullFAwayC);
 
 	long count=inserter.execute();
@@ -138,8 +152,10 @@ bool UCHTeamMatchsCnfg::update(GData& aData)
 
 	updater << table["NCOMPETITORS"]			.assign(fnComp,&nullnComp);
 	updater << table["NMATCHES"]				.assign(fnMatches,&nullnMatches);
+	updater << table["NMATCHES_ELIM"]				.assign(fnMatchesElim,&nullnMatchesElim);
 	updater << table["NMATCHESTYPE"]			.assign(fMatchesType,&nullMatchesType);
-	updater << table["COMPMATCHESDISTRIBUTION"]	.assign(fCompMatchesDistribution,&nullCompMatchesDistribution);
+	updater << table["NMATCHESTYPE_ELIM"]	.assign(fMatchesTypeElim,&nullMatchesTypeElim);
+	updater << table["COMPMATCHESDISTRIBUTION"]	.assign(fCompMatchesDistribution,&nullCompMatchesDistribution);	
 	updater << table["FAWAYC"]					.assign(fFAwayC,&nullFAwayC);
 
 	long count=updater.execute();

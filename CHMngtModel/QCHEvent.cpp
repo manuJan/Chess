@@ -46,8 +46,8 @@ void QCHEvent::OnReader(MSLDBReader& aReader,GEvent* pEvent)
 		  fTypeEvent=-1,
 		  fidTeamMatCnfg;
 
-	float constRating=0.0;
-	float pointsBye=0.0;
+	double constRating=0.0;
+	double pointsBye=0.0;
 	
 	MSLDBNullIndicator nullCodeRep,nullReqRankOrd;
 

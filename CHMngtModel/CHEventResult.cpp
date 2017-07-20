@@ -24,6 +24,7 @@
 #include "stdCHMngt.h"
 #include "CHEventResult.h"
 #include "CHPoolResult.h"
+#include "CHEvent.h"
 #include "CHPhase.h"
 #include "CHSportDefines.h"
 #include "QCHEventResult.h"
@@ -60,6 +61,19 @@ bool poolResultsOfEventResult(const MSLItem* p,const void *n)
 	if (pPoolResult->getEventKey()		==pEventResult->getEventKey() && 
 		pPoolResult->getRegisterKey()	==pEventResult->getRegisterKey())
 		return true;
+
+	return false;
+}
+
+static
+bool eventResultEvent(const MSLItem* p,const void *n)
+{
+	// event results by event
+	CHEventResult * pEventResult= (CHEventResult*)p;
+	CHEvent* pEvent= (CHEvent*)n;	
+	
+	if ( pEvent->getKey() == pEventResult->getEventKey() )
+		 return true;
 
 	return false;
 }
@@ -202,4 +216,16 @@ MSLString CHEventResult::getPointsPoolResultStr()
 		return pPoolResult->getPointsFStr();
 	
 	return NULLSTRING;
+}
+
+// select function
+mslToolsFcSelect CHEventResult::getSelectFn(const GData *pData)
+{
+	if( !pData )
+		return 0;
+	switch( pData->isA() )
+	{
+	case __CHEVENT:			return eventResultEvent;
+	}
+	return 0;
 }

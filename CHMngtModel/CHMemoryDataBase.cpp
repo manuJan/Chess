@@ -123,21 +123,56 @@ CHRatingDif * CHMemoryDataBase::findRatingDif(short ratingCode)
 
 
 //////////////////////////////////////////////////////////////////////
-// other find functions 
+// collections(vectors)
 //////////////////////////////////////////////////////////////////////
 
+void CHMemoryDataBase::filterCol(MSLSet &colData, GData *pFilterData)
+{
+	if( !colData.entries() || !pFilterData )
+		return;
 
+	mslToolsFcSelect pFn=0;
 
-//////////////////////////////////////////////////////////////////////
-// Notifications
-//////////////////////////////////////////////////////////////////////
+	MSLSetIterator it(colData);
+	GData * pData = (GData*)it(); // el primero
+	switch( pData->isA() )
+	{
+	case __CHPHASE:			pFn = ((CHPhase*)pData)->getSelectFn(pFilterData); break;
+	case __CHMATCH:			pFn = ((CHMatch*)pData)->getSelectFn(pFilterData); break;
+	case __CHINSCRIPTION:	pFn = ((CHInscription*)pData)->getSelectFn(pFilterData); break;
+	case __CHMATCHRESULT:	pFn = ((CHMatchResult*)pData)->getSelectFn(pFilterData); break;
+	case __CHEVENTRESULT:	pFn = ((CHEventResult*)pData)->getSelectFn(pFilterData); break;
+	case __CHPOOLRESULT:	pFn = ((CHPoolResult*)pData)->getSelectFn(pFilterData); break;
+	}
+	
+	// select
+	if( pFn )
+		colData = colData.select(pFn, (void*)pFilterData);
+}
 
+void CHMemoryDataBase::getVector(MSLSet colData, MSLSortedVector &vector, GData *pFilterData/*=0*/)
+{
+	filterCol(colData,pFilterData);
+	vector = colData.asSortedVector();
+}
+
+void CHMemoryDataBase::getVector(long isA, MSLSortedVector &vector, GData *pFilterData/*=0*/)
+{
+	MSLSet colData = getCol(isA);
+	getVector(colData, vector, pFilterData);
+}
 
 
 
 MSLString CHMemoryDataBase::getRSC(const GData *pData)
 {
-	// RSC format: DDSEEEPUUUUU
+	MSLString rsc = getRSCCH(pData);
+	return rsc;
+}
+
+MSLString CHMemoryDataBase::getRSCCH(const GData * pData)
+{
+		// RSC format: DDSEEEPUUUUU
 
 	MSLString sRsc		 = getDefinition().getCode();
 	MSLString strGender  = "0"		;
@@ -145,7 +180,6 @@ MSLString CHMemoryDataBase::getRSC(const GData *pData)
 	MSLString strPhase   = "0"		;
 	MSLString strPool	 = "00"		;
 	MSLString strUnit	 = "00000"	;
-	MSLString strTypeRec = ""	;
 	char aux[10]={0};
 
 	if( pData )
@@ -196,20 +230,104 @@ MSLString CHMemoryDataBase::getRSC(const GData *pData)
 			case __CHMATCH:
 			{
 				CHMatch *pMatch = (CHMatch *)pData;
-				if( pMatch )
-				{
-					strGender = pMatch->getEventSexCode();
-					strEvent  = pMatch->getEventCode()+pMatch->getEventCode();
-					strPhase  = pMatch->getPhaseCode();
-					sprintf_s(aux,"%05d",pMatch->getCode());
-					strUnit   = aux;
-					sprintf_s(aux,"%02d",pMatch->getPoolCode());
-					strPool	  = aux;
-				}
+
+				MSLString poolCode;
+				poolCode.format("%.2d",pMatch->getPoolCode());
+
+				MSLString matchCode;
+				if((pMatch->isTeam()))
+					matchCode.format("%.3d%.2d",pMatch->getCode(),pMatch->getSubCode());
+				else
+					matchCode.format("%.3d%.2d",pMatch->getCode(),pMatch->getSubCode());
+
+				strGender=pMatch->getEventSexCode();
+				strEvent=pMatch->getEventCode()+pMatch->getEventParentCode();
+				strPhase=pMatch->getPhaseCode();
+				strPool=poolCode;
+				strUnit=matchCode;				
 				break;
 			}			
 		}
 	}
 
-	return sRsc+strGender+strEvent+strPhase+strPool+strUnit+strTypeRec;
+	return sRsc+strGender+strEvent+strPhase+strPool+strUnit;
+}
+
+MSLString CHMemoryDataBase::getRSC_Unit(const CHMatch *pMatch)
+{
+	MSLString rsc = "00";
+	if( !pMatch )
+		return rsc;
+
+	/* Solo para generar RSCs con Atos como cliente.
+	short eu = pMatch->getCode(false); // si hay byes previos fijos, los descuenta
+	*/
+	short eu = pMatch->getCode(); // si hay byes previos fijos, NO los descuenta
+	char euCode[3];
+	sprintf_s(euCode,3,"%.2d",eu);
+	rsc = euCode;
+
+	return rsc;
+}
+
+MSLString CHMemoryDataBase::getRSC_Client(HMODULE hModule, const GData * pData, int typeClient/*=0*/)
+{
+	MSLString value = CHMemoryDataBase::getRSCCH(pData); // MSL code
+
+	if( !hModule )
+		return value;
+
+	MSLString params="";
+	int typeTraslate=RSC_ALL;
+	if( pData )
+	{
+		if( pData->isA()==__GSESSION )
+		{
+			GSession *pSession = (GSession *)pData;
+			params="D_"+pSession->getDateAsString("%Y%m%d").toAscii()+"_S_"+TOSTRING(pSession->getAcumulated(),"0");
+		}
+		else if( pData->isA()==__GEVENT )
+			typeTraslate=RSC_EVENT;
+		else if( pData->isA()==__GPHASE )
+			typeTraslate=RSC_PHASE;
+		else if( pData->isA()==__CHMATCH )
+			typeTraslate=RSC_UNIT;
+	}
+	
+	PFN_RSC m_pProcedureRSC = (PFN_RSC)::GetProcAddress(hModule,"getRSC");
+	if( m_pProcedureRSC )
+		((*m_pProcedureRSC)(value,params,"",typeTraslate,typeClient));
+	return value;
+}
+
+MSLString CHMemoryDataBase::getRSCField_Client(HMODULE hModule, MSLString rsc, int typeTraslate)
+{
+	if( !rsc.length() )
+		return "";
+	MSLString value="",g="",ev="",ph="",unit="";
+	
+	// El rsc pasado es el de msl
+	if( rsc.length()==17 )
+	{
+		g	= rsc(2,1);
+		ev	= rsc(6,3);		// Nos saltamos el event parent
+		ph	= rsc(9,1);
+		unit= rsc(15,2);	// dos ultimos
+	}
+	switch( typeTraslate )
+	{
+	case RSC_ALL:		value = rsc;	break;
+	case RSC_GENDER:	value = g;		break;
+	case RSC_EVENT:		value = ev;		break;
+	case RSC_PHASE:		value = ph;		break;
+	case RSC_UNIT:		value = unit;		break;
+	}
+	
+	if( !hModule )
+		return value;
+	
+	PFN_RSC_FIELD m_pProcedureRSC = (PFN_RSC_FIELD)::GetProcAddress(hModule,"getRSC_Field");
+	if( m_pProcedureRSC )
+		value = ((*m_pProcedureRSC)(rsc,typeTraslate));
+	return value;
 }

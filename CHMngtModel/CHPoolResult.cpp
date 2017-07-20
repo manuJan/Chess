@@ -24,6 +24,7 @@
 #include "stdCHMngt.h"
 #include "CHPoolResult.h"
 #include "CHEvent.h"
+#include "CHEventResult.h"
 #include "CHPhase.h"
 #include "CHPool.h"
 #include "CHMatch.h"
@@ -35,6 +36,132 @@
 #include "QCHPoolResult.h"
 #include <ovr/core/G/GBuffer.h>
 #include <ovr/core/G/GScore.h>
+
+
+static
+bool poolResultEvent(const MSLItem* p,const void *n)
+{
+	// match results by event
+	CHPoolResult * pPoolResult = (CHPoolResult*)p;
+	CHEvent* pEvent= (CHEvent*)n;	
+	
+	if ( pEvent->getKey() == pPoolResult->getEventKey() )
+		 return true;
+
+	return false;
+}
+
+static
+bool poolResultPhase(const MSLItem* p,const void *n)
+{
+	// match results by phase
+	CHPoolResult * pPoolResult = (CHPoolResult*)p;
+	CHPhase* pPhase = (CHPhase*)n;	
+	
+	if ( pPhase->getKey() == pPoolResult->getPhaseKey() )
+		 return true;
+
+	return false;
+}
+
+static
+bool poolResultMatch(const MSLItem* p,const void *n)
+{
+	// match results by match
+	CHPoolResult * pPoolResult = (CHPoolResult*)p;
+	CHMatch* pMatch = (CHMatch*)n;	
+	
+	if ( pMatch->getPoolKey() == pPoolResult->getPoolKey() )
+		 return true;
+
+	return false;
+}
+
+static
+bool poolResultInscription(const MSLItem* p,const void *n)
+{
+	// match results by inscription
+	CHPoolResult * pPoolResult = (CHPoolResult*)p;
+	CHInscription * pInscription= (CHInscription*)n;	
+	
+	if ( pInscription->getKey() == pPoolResult->getInscriptionKey() )
+		 return true;
+
+	return false;
+}
+
+static
+bool poolResultEventResult(const MSLItem* p,const void *n)
+{
+	// match results by inscription
+	CHPoolResult * pPoolResult = (CHPoolResult*)p;
+	CHEventResult * pEventResult= (CHEventResult*)n;	
+	
+	if ( pEventResult->getInscription() &&
+		 pEventResult->getInscription()->getKey() == pPoolResult->getInscriptionKey() )
+		 return true;
+
+	return false;
+}
+
+
+static
+int orderPoolResultsByRating(const MSLItem** a, const MSLItem** b)
+{	
+	CHPoolResult *pA = (CHPoolResult *)(*a);
+	CHPoolResult *pB = (CHPoolResult *)(*b);
+
+	int order =pB->getInscriptionRating() - pA->getInscriptionRating();
+	if(order)
+		return order;
+	
+	return strcmp(pA->getKey(),pB->getKey());
+}
+
+
+static int orderPoints(GScore a, GScore b)
+{
+	float gA = float(a);
+	float gB = float(b);
+
+	float diff = gB-gA;
+	if (diff<0)
+		return -1;
+	if (diff>0)
+		return 1;
+
+	return 0;	
+}
+
+static
+int orderPoolResultsByMatchPoints(const MSLItem** a, const MSLItem** b)
+{	
+	CHPoolResult *pA = (CHPoolResult *)(*a);
+	CHPoolResult *pB = (CHPoolResult *)(*b);
+
+	GScore pointsA=pA->getMatchPoints();
+	GScore pointsB=pB->getMatchPoints();
+	
+	int order = orderPoints(pointsA,pointsB);
+	if (order)
+		return order;
+	
+	return strcmp(pA->getKey(),pB->getKey());
+}
+
+
+
+int orderPhasesByOrder(const MSLItem** a, const MSLItem** b)
+{
+	CHPhase* pA=(CHPhase*)(*a);
+	CHPhase* pB=(CHPhase*)(*b);
+
+	int order=pA->getOrder()-pB->getOrder();
+	if (order)
+		return order;
+	
+	return strcmp(pA->getKey(),pB->getKey());
+}
 
 int orderPoolResultSO(const MSLItem** a, const MSLItem** b)
 {
@@ -49,7 +176,7 @@ int orderPoolResultSO(const MSLItem** a, const MSLItem** b)
 	if( order )
 		return order;
 
-	float ord = pPoolResultA->getPointsF() - pPoolResultB->getPointsF();
+	GScore ord = pPoolResultA->getPointsF() - pPoolResultB->getPointsF();
 	if (ord<0.0)
 		return 1;
 	if (ord>0.0)
@@ -99,6 +226,20 @@ int orderMatchesByRoundMatch(const MSLItem** a, const MSLItem** b)
 	return pA->getCode() - pB->getCode();
 }
 
+int orderScores(const MSLItem** a, const MSLItem** b)
+{
+	GScore * pA=(GScore *)(*a);
+	GScore * pB=(GScore *)(*b);
+
+	double diff = pB->getScore()-pA->getScore();
+	if (diff<0)
+		return -1;
+	if (diff>0)
+		return 1;
+
+	return 0;	
+}
+
 bool matchResultsOfPoolResult(const MSLItem * col, const void * param)
 {
 	CHPoolResult * pPoolResult = (CHPoolResult *) param;
@@ -112,6 +253,21 @@ bool matchResultsOfPoolResult(const MSLItem * col, const void * param)
 		return true;
 
 	return false;
+}
+
+int orderMatchResultsByRound(const MSLItem** a, const MSLItem** b)
+{
+	CHMatchResult * pA = (CHMatchResult*)(*a);
+	CHMatchResult * pB = (CHMatchResult *)(*b);
+	
+	CHMatch * pMatchA=(CHMatch *)pA->getMatch();
+	CHMatch * pMatchB=(CHMatch *)pB->getMatch();
+	
+	int order=pMatchA->getRound() - pMatchB->getRound();
+	if(order)
+		return order;
+			
+	return strcmp(pA->getKey(),pB->getKey());
 }
 
 MSLDEFINE_ITEM(CHPoolResult, __CHPOOLRESULT)
@@ -674,218 +830,208 @@ MSLString CHPoolResult::getPoolPointsFStr(short nRound/*=0*/,bool onlyRound) con
 	
 }
 
-float CHPoolResult::getPointsSO(short nRound/*=0*/,bool onlyRound/*=false*/) const
+GScore CHPoolResult::getPointsSO(short nRound/*=0*/,bool onlyRound/*=false*/) 
 {	
 	CHPool * pPool = (CHPool *) getPool();
 	if( !pPool )
-		return 0;
+		return 0.0;
+
+	CHEvent *pEvent = (CHEvent *) pPool->getEvent();
+	if (!pEvent)
+		return 0.0;
 
 	short maxRound=!nRound?pPool->getNumRounds():nRound;
-	float points = 0.0;
-	CHMatch * pMatch = 0;
-	CHMatchResult * pHome = 0;
-	CHMatchResult * pAway = 0;
-	MSLSortedVector vMatches;
-	pPool->getMatchesVector(vMatches);
+	short nRoundsPlayed = pPool->getNumRoundsPlayed(); 	
+	short nTotalRounds=pPool->getNumRounds();
 
-	mslToolsFcCompare oldCompare = vMatches.getFcCompare();
-	vMatches.setFcCompare(orderMatchesByRoundMatch);
-	vMatches.sort();
-		
-	for(short i=0 ; i<vMatches.entries() ; i++)
+	GScore points = 0.0;
+	CHMatch * pMatch = 0;
+	CHMatchResult * pMatchResult = 0;
+	MSLSortedVector vMatchResults;
+	getMatchResultsVector(vMatchResults);	
+			
+	for(short i=0 ; i<vMatchResults.entries() ; i++)
 	{
-		pMatch = (CHMatch *)vMatches[i];
-		if ((pMatch->getRound()>maxRound && !onlyRound) || (onlyRound && nRound && pMatch->getRound()!=nRound))
+		pMatchResult = (CHMatchResult*)vMatchResults[i];
+				
+		if ((pMatchResult->getMatchRound()>maxRound && !onlyRound) || (onlyRound && nRound && pMatchResult->getMatchRound()!=nRound))
 			continue;
 		
+		pMatch = (CHMatch*) pMatchResult->getMatch();
+		if (!pMatch)
+			continue;
+
 		if(pMatch->isTeam() && !pMatch->getSubMatch())
 			continue;
 
-		if( pMatch && pMatch->getStatus() >= CHMemoryDataBase::eUnofficial )
+		if( pMatch && 
+			pMatch->getStatus() >= CHMemoryDataBase::eUnofficial )
 		{
-			pHome = (CHMatchResult*)pMatch->getHome();
-			if( pHome && pHome->getInscription() == getInscription() )
-				points += pHome->getPointsSO();
 
-			pAway = (CHMatchResult*)pMatch->getAway();
-			if( pAway && pAway->getInscription() == getInscription() )
-				points += pAway->getPointsSO();
-		}
-	}
-	vMatches.setFcCompare(oldCompare);
-	vMatches.sort();
-	return points;
-}
-
-
-float CHPoolResult::getSolkOffF(short nRound/*=0*/) const
-{//se hace el acumulado a maxRound
-	//todos los posibles oponentes
-	CHPool * pPool = (CHPool *) getPool();
-	if( !pPool )
-		return 0;
-
-	CHPhase *pPhase = (CHPhase *) pPool->getPhase();
-	if (!pPhase)
-		return 0;
-
-	CHEvent *pEvent = (CHEvent *) pPhase->getEvent();
-	if (!pEvent)
-		return 0;
-
-	short nRoundsPlayed = pPool->getNumRoundsPlayed(); 
-
-	int count=0;
-	short maxRound=!nRound?pPool->getNumRoundsPlayed():nRound;
-	float points = 0.0;
-	CHMatch * pMatch = 0;
-	CHMatchResult * pMatRes = 0;
-	CHMatchResult * pMatResOp = 0;
-	CHPoolResult * pPRes = 0;
-	CHPoolResult * pPResOp = 0;
-	MSLSortedVector vMatches;
-	pPool->getMatchesVector(vMatches);
-	for(short i=0 ; i<vMatches.entries() ; i++)
-	{
-		pMatch = (CHMatch *)vMatches[i];
-		if (pMatch->getRound()>maxRound)
-			continue;
-		
-		if(pMatch->isTeam() && pMatch->getSubMatch())
-			continue;
-
-		if( pMatch && pMatch->getStatus() >= CHMemoryDataBase::eUnofficial )
-		{//buscamos los puntos del oponente
-			count++;
-			pMatRes=(CHMatchResult *)(pMatch->getMatchResult(0));
-			pPRes=(CHPoolResult *)(pMatRes->getPoolResult());
-			pMatResOp=(CHMatchResult *)(pMatch->getMatchResult(1));
-			pPResOp=(CHPoolResult *)(pMatResOp->getPoolResult());
-			
-			if ((pMatRes->getBye() && pMatResOp->getInscriptionKey()==getInscriptionKey()) ||
-				(pMatResOp->getBye() && pMatRes->getInscriptionKey()==getInscriptionKey()))
+			CHMatchResult * pMatchResOpp=(CHMatchResult *)pMatchResult->getOpponent();
+			if ( pMatchResOpp && pMatchResOpp->getBye() )
+			{				
+				points += 0.5;
+			}
+			else if (pMatchResOpp && !pMatchResOpp->getInscription() ) 
+			{				
+				points += 0.5;
+			}			
+			else if (pMatchResOpp && pMatchResOpp->getQualitativeCode()==FO)
 			{
-				//points+=((CHPoolResult*)this)->getAveragePointsAllCompetitors();
-				points += 0.5*nRoundsPlayed*pEvent->getTeamMatches();
-				continue;
+				points += 0.5;
 			}
-			if (pMatRes->getInscriptionKey()==getInscriptionKey())
-				points += float(pPResOp->getPointsSO(maxRound));
-			else if (pMatResOp->getInscriptionKey()==getInscriptionKey())
-				points += float(pPRes->getPointsSO(maxRound));
-		}
-	}
-	return points;
-}
-
-
-MSLString CHPoolResult::getSolkOffFStr(short nRound/*=0*/) const
-{
-	MSLString format="###";
-	float points=getSolkOffF(nRound);
-
-	if((points-int(points))>0)
-		format="###.#"; // Decimales
-
-	GScore m_pointsF = GScore(points);
-	MSLString p=m_pointsF.asString(format);
-
-	p=p.strip(MSLString::leading,' ');
-	return p;
-}
-
-float CHPoolResult::getMedianSolkOffF(short nRound/*=0*/) const
-{//se hace el acumulado a maxRound
-	//todos los posibles oponentes
-	CHPool * pPool = (CHPool *) getPool();
-	if( !pPool )
-		return 0;
-
-	CHPhase *pPhase = (CHPhase *) pPool->getPhase();
-	if (!pPhase)
-		return 0;
-
-	CHEvent *pEvent = (CHEvent *) pPhase->getEvent();
-	if (!pEvent)
-		return 0;
-
-	short nRoundsPlayed = pPool->getNumRoundsPlayed(); 
-
-	int count=0;
-	short maxRound=!nRound?pPool->getNumRounds():nRound;
-	float points = 0.0;
-	CHMatch * pMatch = 0;
-	CHMatchResult * pMatRes = 0;
-	CHMatchResult * pMatResOp = 0;
-	CHPoolResult * pPRes = 0;
-	CHPoolResult * pPResOp = 0;
-	MSLSortedVector vMatches;
-	pPool->getMatchesVector(vMatches);
-
-	MSLSortedVector vCompetitors;
-	bool hasBye=false;
-	for(short i=0 ; i<vMatches.entries() ; i++)
-	{
-		pMatch = (CHMatch *)vMatches[i];
-		if (pMatch->getRound()>maxRound)
-			continue;
-		
-		if(pMatch->isTeam() && pMatch->getSubMatch())
-			continue;
-
-		if( pMatch && pMatch->getStatus() >= CHMemoryDataBase::eUnofficial )
-		{//buscamos los puntos del oponente
-			count++;
-			pMatRes=(CHMatchResult *)(pMatch->getMatchResult(0));
-			pPRes=(CHPoolResult *)(pMatRes->getPoolResult());
-			
-			pMatResOp=(CHMatchResult *)(pMatch->getMatchResult(1));
-			pPResOp=(CHPoolResult *)(pMatResOp->getPoolResult());
-			
-			if (pMatRes->getBye() && pMatResOp->getInscriptionKey()==getInscriptionKey())
-			{	
-				hasBye=true;
-				continue;
-			}
-
-			if (pMatResOp->getBye() && pMatRes->getInscriptionKey()==getInscriptionKey())
+			else if (pMatchResult && pMatchResult->getQualitativeCode()==FO)
 			{
-				hasBye=true;
-				continue;
+				points += 0.5;
 			}
-			
-			if (pMatRes->getInscriptionKey()==getInscriptionKey())
-				vCompetitors.insert(pPResOp);
-			else if (pMatResOp->getInscriptionKey()==getInscriptionKey())
-				vCompetitors.insert(pPRes);
+			else			
+				points += pMatchResult->getPointsSO();					
 		}
 	}
-
-	if (vCompetitors.entries()>1)
-	{
-		vCompetitors.setFcCompare(orderPoolResultSO);
-		vCompetitors.sort();
 	
-		for (short i=1;i<vCompetitors.entries()-1;i++)
-		{
-			CHPoolResult* pPoolResult = (CHPoolResult*)vCompetitors[i];
-			points += float(pPoolResult->getPointsSO(maxRound));
-		}
+	return points;
+}
 
-		if (hasBye)
-			points+=0.5*nRoundsPlayed;
+
+GScore CHPoolResult::getSolkOffF(short nRound) 
+{
+	//se hace el acumulado a maxRound
+	//todos los posibles oponentes
+	CHPool * pPool = (CHPool *) getPool();
+	if( !pPool )
+		return 0.0;
+
+	CHPhase *pPhase = (CHPhase *) pPool->getPhase();
+	if (!pPhase)
+		return 0.0;
+
+	CHEvent *pEvent = (CHEvent *) pPhase->getEvent();
+	if (!pEvent)
+		return 0.0;
+
+	short nRoundsPlayed = pPool->getNumRoundsPlayed(); 
+	short maxRound=!nRound?pPool->getNumRoundsPlayed():nRound;
+	short nTotalRounds=pPool->getNumRounds();
+
+	GScore points = 0.0;
+	GScore progressivePoints = 0.0;
+	CHMatch * pMatch = 0;
+	CHMatchResult * pMatchRes = 0;
+	CHMatchResult * pMatchResOpp = 0;
+	CHPoolResult * pPResOp = 0;
+	
+	MSLSortedVector vMatchResults;
+	getMatchResultsVector(vMatchResults, orderMatchResultsByRound);		
+	for(short i=0 ; i<vMatchResults.entries() ; i++)
+	{
+		pMatchRes = (CHMatchResult *)vMatchResults[i];
+		if (pMatchRes->getMatchRound()>maxRound)
+			continue;
+		
+		pMatch =(CHMatch*) pMatchRes->getMatch();
+		if (!pMatch)
+			continue;
+
+		if(pMatch->isTeam() && pMatch->getSubMatch())
+			continue;
+
+		if( pMatch && pMatch->getStatus() >= CHMemoryDataBase::eUnofficial )
+		{
+			//buscamos los puntos del oponente
+			
+			pMatchResOpp=(CHMatchResult *)pMatchRes->getOpponent();
+			if (pMatchResOpp)
+				pPResOp=(CHPoolResult *)(pMatchResOpp->getPoolResult());
+
+			// Oponente bye
+			/*if ( pMatchResOpp && 
+				 pMatchResOpp->getBye() )
+			{
+				// calculo oponente virtual
+				// points += 0.5*nRoundsPlayed*pEvent->getTeamMatches();
+				// points += 0.5;
+				points += 0.5;
+				continue;
+			}
+			else if (!pMatchResOpp || !pPResOp || !pMatchResOpp->getInscription())
+			{
+				// calculo oponente virtual
+				// Svon = SPR + (1 - SfPR) + 0.5 * (n-R)
+				// points += 0.5*nRoundsPlayed*pEvent->getTeamMatches();
+				points += 0.5 * ( pMatch->getRound() );				
+				continue;
+			}
+			// ganador por forfeit
+			else if ( pMatchResOpp->getQualitativeCode()==FO )
+			{
+				points += 0.5;
+				continue;
+			}
+			else if ( pMatchRes->getQualitativeCode()==FO )
+			{
+				points += 0.0;
+				continue;
+			}*/
+
+			if (!pMatchResOpp || 
+				 pMatchResOpp->getBye() || 
+				 pMatchResOpp->getQualitativeCode()==FO ||
+				 !pMatchResOpp->getInscription() )
+			{
+				// Calculo de oponente virtual
+				//Svon = SPR + (1 - SfPR) + 0.5 * (n-R)
+				GScore pointsFO = 0.0;
+				GScore pointsW = 1.0;
+				if (pMatchResOpp->getQualitativeCode()==FO)
+				{
+					if (pMatch->isTeam())
+					{
+						pointsW = 2.0;
+						pointsFO = 1.0;
+					}
+					else
+					{
+						pointsW = 1.0;
+						pointsFO = 1.0;
+					}
+				}
+				else if (pMatchResOpp->getBye())
+				{
+					if (pMatch->isTeam())
+					{
+						pointsW = 2.0;
+						pointsFO = 1.0;
+					}
+					else
+					{
+						pointsW = 1.0;
+						pointsFO = 1.0;
+					}
+				}
+
+				points += progressivePoints + ( pointsW - pointsFO) + 0.5 * ( nTotalRounds - pMatch->getRound());
+				progressivePoints+=pMatchRes->getPoints();
+				continue;
+			}
+
+
+			if (pPResOp)
+				points += float(pPResOp->getPointsSO(maxRound));			
+
+			progressivePoints+=pMatchRes->getPoints();
+		}		
 	}
 
 	return points;
 }
 
-
-MSLString CHPoolResult::getMedianSolkOffFStr(short nRound/*=0*/) const
+MSLString CHPoolResult::getSolkOffFStr(short nRound/*=0*/) 
 {
 	MSLString format="###";
-	float points=getMedianSolkOffF(nRound);
+	GScore points=getSolkOffF(nRound);
 
-	if((points-int(points))>0)
+	if( ( points.getScore() - int(points) ) > 0)
 		format="###.#"; // Decimales
 
 	GScore m_pointsF = GScore(points);
@@ -895,72 +1041,243 @@ MSLString CHPoolResult::getMedianSolkOffFStr(short nRound/*=0*/) const
 	return p;
 }
 
-float CHPoolResult::getSonneBergerF(short nRound/*=0*/) const
+GScore CHPoolResult::getMedianSolkOffF(short nRound/*=0*/, short cutHighest/*=0*/, short cutLowest/*=1*/) 
+{
+	//se hace el acumulado a maxRound
+	//todos los posibles oponentes
+	CHPool * pPool = (CHPool *) getPool();
+	if( !pPool )
+		return 0.0;
+
+	CHPhase *pPhase = (CHPhase *) pPool->getPhase();
+	if (!pPhase)
+		return 0.0;
+
+	CHEvent *pEvent = (CHEvent *) pPhase->getEvent();
+	if (!pEvent)
+		return 0.0;
+
+	MSLSortedVector vScores;
+
+	short nRoundsPlayed = pPool->getNumRoundsPlayed(); 
+	short maxRound=!nRound?pPool->getNumRoundsPlayed():nRound;
+	short nTotalRounds=pPool->getNumRounds();
+
+	GScore points = 0.0;
+	GScore progressivePoints = 0.0;
+	CHMatch * pMatch = 0;
+	CHMatchResult * pMatchRes = 0;
+	CHMatchResult * pMatchResOpp = 0;
+	CHPoolResult * pPResOp = 0;
+	
+	MSLSortedVector vMatchResults;
+	getMatchResultsVector(vMatchResults, orderMatchResultsByRound);		
+	for(short i=0 ; i<vMatchResults.entries() ; i++)
+	{
+		pMatchRes = (CHMatchResult *)vMatchResults[i];
+		if (pMatchRes->getMatchRound()>maxRound)
+			continue;
+		
+		pMatch =(CHMatch*) pMatchRes->getMatch();
+		if (!pMatch)
+			continue;
+
+		if(pMatch->isTeam() && pMatch->getSubMatch())
+			continue;
+
+		if( pMatch && pMatch->getStatus() >= CHMemoryDataBase::eUnofficial )
+		{
+			//buscamos los puntos del oponente
+			
+			pMatchResOpp=(CHMatchResult *)pMatchRes->getOpponent();
+			if (pMatchResOpp)
+				pPResOp=(CHPoolResult *)(pMatchResOpp->getPoolResult());
+
+			if (!pMatchResOpp || 
+				 pMatchResOpp->getBye() || 
+				 pMatchResOpp->getQualitativeCode()==FO ||
+				 !pMatchResOpp->getInscription() )
+			{
+				// Calculo de oponente virtual
+				//Svon = SPR + (1 - SfPR) + 0.5 * (n-R)
+				GScore pointsFO = 0.0;
+				if (pMatchResOpp->getQualitativeCode()==FO)
+					pointsFO = 1.0;
+				else if (pMatchResOpp->getBye())
+					pointsFO = 1.0;
+
+				GScore pts = progressivePoints + ( 1 - pointsFO) + 0.5 * ( nTotalRounds - pMatch->getRound());
+				//points += pts;
+				progressivePoints+=pMatchRes->getPoints();
+				vScores.insert(new GScore(pts));
+				continue;
+			}
+
+
+			if (pPResOp)
+			{
+				GScore pts = pPResOp->getPointsSO(maxRound);			
+				//points += pts;			
+				vScores.insert(new GScore(pts));
+			}
+
+			progressivePoints+=pMatchRes->getPoints();
+		}		
+	}
+
+	vScores.setFcCompare(orderScores);
+	vScores.sort();
+	for (short i=0+cutHighest;i<vScores.entries()-cutLowest;i++)
+	{
+		points+= ((GScore*)vScores[i])->getScore();
+	}
+
+	return points;
+}
+
+
+MSLString CHPoolResult::getMedianSolkOffFStr(short nRound/*=0*/, short cutHighest/*=0*/, short cutLowest/*=1*/) 
+{
+	MSLString format="###";
+	GScore points=getMedianSolkOffF(nRound,cutHighest,cutLowest);
+
+	if( ( points.getScore() - int(points) ) > 0)
+		format="###.#"; // Decimales
+
+	GScore m_pointsF = GScore(points);
+	MSLString p=m_pointsF.asString(format);
+
+	p=p.strip(MSLString::leading,' ');
+	return p;
+}
+
+GScore CHPoolResult::getSonneBergerF(short nRound/*=0*/) 
 {//se hace el acumulado a maxRound
 	//solo contra los opnentes que ha jugado
 	CHPool * pPool = (CHPool *) getPool();
 	if( !pPool )
-		return 0;
+		return 0.0;
 
 	short maxRound=!nRound?pPool->getNumRounds():nRound;
-	float points = 0.0;
+	GScore points = 0.0;
 	CHMatch * pMatch = 0;
-	CHMatchResult * pMatRes = 0;
-	CHMatchResult * pMatResOp = 0;
-	CHPoolResult * pPRes = 0;
+	CHMatchResult * pMatchResult = 0;
+	CHMatchResult * pOpponent = 0;	
 	CHPoolResult * pPResOp = 0;
-	MSLSortedVector vMatches;
-	pPool->getMatchesVector(vMatches);
-	for(short i=0 ; i<vMatches.entries() ; i++)
+	
+	MSLSortedVector vMatchResults;
+	getMatchResultsVector(vMatchResults, orderMatchResultsByRound);	
+
+	MSLSortedVector vPoolResults;
+
+	// PASO 1.- Creo vector con todos los competidores.
+	for(short i=0 ; i<vMatchResults.entries() ; i++)
 	{
-		pMatch = (CHMatch *)vMatches[i];
-		if (pMatch->getRound()>maxRound)
+		pMatchResult = (CHMatchResult *)vMatchResults[i];
+		if (pMatchResult->getMatchRound()>maxRound)
 			continue;
 		
-		if(pMatch->isTeam() && !pMatch->getSubMatch())
+		pMatch = (CHMatch* )pMatchResult->getMatch();
+		if (!pMatch)
 			continue;
 
-		if( pMatch && pMatch->getStatus() >= CHMemoryDataBase::eUnofficial )
+		if(pMatch->isTeam() && pMatch->getSubMatch())
+			continue;
+
+		if( pMatch && 
+			pMatch->getStatus() >= CHMemoryDataBase::eUnofficial )
 		{
-			short winner=pMatch->getWinner();
-			if (winner>=CHMatch::eWinnerWhite && winner<=CHMatch::eDraw)//ganadores
+			pOpponent = (CHMatchResult * )pMatchResult->getOpponent();
+			if (!pOpponent)
+				continue;
+
+			pPResOp = (CHPoolResult*)pOpponent->getPoolResult();
+			vPoolResults.insert(pPResOp);
+
+			/*if (pMatch->isTeam())
 			{
-				//si es distinto es el oponente
-				pMatRes=(CHMatchResult *)pMatch->getMatchResult(winner<CHMatch::eDraw?winner-1:0);
-				pPRes=(CHPoolResult *)(pMatRes->getPoolResult());
-				pMatResOp=(CHMatchResult *)pMatch->getMatchResult(!(winner<CHMatch::eDraw?winner-1:0));
-				pPResOp=(CHPoolResult *)(pMatResOp->getPoolResult());
-				//si soy ganador los puntos del contrario
-				//si empato la mitad de los puntos del contrario
-				//si pierdo no cuenta
-				if (pMatRes->getInscriptionKey()==getInscriptionKey() && winner<CHMatch::eDraw)
+				pPResOp = pOpponent ? (CHPoolResult*)pOpponent->getPoolResult() : 0;
+				if (pMatchResult->getMatchPoints()!=pOpponent->getMatchPoints())
 				{
 					if (pPResOp)
 						points+=float(pPResOp->getPointsFR(maxRound));
 				}
-				else if (winner==CHMatch::eDraw &&
-					(pMatRes->getInscriptionKey()==getInscriptionKey() ||
-					pMatResOp->getInscriptionKey()==getInscriptionKey()))//empate
+				
+				else 
 				{
-					if (pMatRes->getInscriptionKey()==getInscriptionKey() && pPResOp)
-					points+=float(pPResOp->getPointsFR(maxRound)/float(2.0));
-					else if (pMatResOp->getInscriptionKey()==getInscriptionKey() && pPRes)
-						points+=float(pPRes->getPointsFR(maxRound)/float(2.0));
+					if (pPResOp)
+						points+=float(pPResOp->getPointsFR(maxRound)/float(2.0));			
 				}
+
 			}
+			else
+			{
+				pPResOp = pOpponent ? (CHPoolResult*)pOpponent->getPoolResult() : 0;
+				if (pMatchResult->getPoints()!=pOpponent->getPoints())
+				{
+					if (pPResOp)
+						points+=float(pPResOp->getPointsFR(maxRound));
+				}
+				
+				else 
+				{
+					if (pPResOp)
+						points+=float(pPResOp->getPointsFR(maxRound)/float(2.0));			
+				}
+			}*/
 		}
 	}
+	
+	vPoolResults.setFcCompare(orderPoolResultsByMatchPoints);
+	vPoolResults.sort();
+	
+	if (vPoolResults.entries())
+	{
+		// PASO 1.- Excluimos al oponente de menor score Match Point.
 
+		CHPoolResult * pPoolResultRemove = (CHPoolResult *)vPoolResults[vPoolResults.entries()-1];
+						
+		// PASO 2.- Procedemos a multiplicar los MP  realizados por cada oponente por el GP obtenido contra esos oponentes.
+		for(short i=0 ; i<vMatchResults.entries() ; i++)
+		{
+			pMatchResult = (CHMatchResult *)vMatchResults[i];
+			if (pMatchResult->getMatchRound()>maxRound)
+				continue;
+		
+			pMatch = (CHMatch* )pMatchResult->getMatch();
+			if (!pMatch)
+				continue;
+
+			if(pMatch->isTeam() && pMatch->getSubMatch())
+				continue;
+
+			if( pMatch && 
+				pMatch->getStatus() >= CHMemoryDataBase::eUnofficial )
+			{
+				pOpponent = (CHMatchResult * )pMatchResult->getOpponent();
+				if (!pOpponent)
+					continue;
+
+				pPResOp = (CHPoolResult*) pOpponent->getPoolResult();
+				if (pPResOp &&
+					pPResOp == pPoolResultRemove)
+					continue;
+				
+				// PASO 3.- Realizamos la suma.
+				points+= pPResOp->getMatchPoints() * GScore(pMatchResult->getPoints());
+			}				
+		}
+	}
 	return points;
 }
 
-MSLString CHPoolResult::getSonneBergerFStr(short nRound/*=0*/) const
+MSLString CHPoolResult::getSonneBergerFStr(short nRound/*=0*/) 
 {
 	MSLString format="###";
-	float points=getSonneBergerF(nRound);
+	GScore points=getSonneBergerF(nRound);
 
-	if((points-int(points))>0)
-		format="###.##"; // Decimales
+	if((points.getScore()-int(points))>0)
+		format="###.#"; // Decimales
 
 	GScore m_pointsF = GScore(points);
 	MSLString p=m_pointsF.asString(format);
@@ -1119,7 +1436,7 @@ float CHPoolResult::getPointsFR(short nRound/*=0*/) const
 			if( pHome && pHome->getInscriptionKey() == getInscriptionKey())
 				PointsFR+=float(pHome->getPoints());
 
-			pHome = (CHMatchResult*)pMatch->getAway();
+			pAway = (CHMatchResult*)pMatch->getAway();
 			if( pAway && pAway->getInscriptionKey() == getInscriptionKey())
 				PointsFR+=float(pAway->getPoints());
 		}
@@ -1206,6 +1523,57 @@ MSLWString CHPoolResult::getDescription(bool longDescription/*=true*/) const
 	return txt;
 
 }
+
+
+GScore CHPoolResult::getMatchPoints(short nRound/*=0*/,bool onlyRound) 
+{//se hace el acumulado a maxRound
+	CHPool * pPool = (CHPool *) getPool();
+	if( !pPool )
+		return 0.0;
+
+	short maxRound=!nRound?pPool->getNumRounds():nRound;
+	GScore points = 0.0;
+	CHMatch * pMatch = 0;
+	CHMatchResult * pMatchResult = 0;
+	MSLSortedVector vMatchResults;
+	getMatchResultsVector(vMatchResults);	
+		
+	for(short i=0 ; i<vMatchResults.entries() ; i++)
+	{
+		pMatchResult = (CHMatchResult *)vMatchResults[i];
+
+		if ((pMatchResult->getMatchRound()>maxRound && !onlyRound) || (onlyRound && nRound && pMatchResult->getMatchRound()!=nRound))
+			continue;
+		
+		CHMatch* pMatch = (CHMatch*)pMatchResult->getMatch();
+
+		if(pMatch && pMatch->isTeam() && pMatch->getSubMatch())
+			continue;
+
+		if( pMatch && pMatch->getStatus() >= CHMemoryDataBase::eUnofficial )
+			points += pMatchResult->getMatchPoints();
+	}
+	return points;
+}
+
+MSLString CHPoolResult::getMatchPointsStr(short nRound/*=0*/,bool onlyRound) 
+{
+	MSLString format="###";
+	GScore points=getMatchPoints(nRound,onlyRound);
+
+	if(( points.getScore() - int(points))>0)
+	{
+		format="###.#"; // Decimales		
+	}
+
+	GScore m_pointsF = GScore(points);
+	MSLString p=m_pointsF.asString(format);
+	
+	p=p.strip(MSLString::leading,' ');
+	return p;
+	
+}
+
 
 MSLWString CHPoolResult::getSourceCompetitor()
 {
@@ -1467,6 +1835,47 @@ float CHPoolResult::getAveragePointsAllCompetitors(CHMatch *pMatch)
 	return totalPoints;
 }
 
+GScore CHPoolResult::getOppAverageRating(short discountHigh, short discountLower)
+{
+	MSLSortedVector vPoolResults;
+
+	MSLSortedVector vMatchResults;
+	getMatchResultsVector(vMatchResults);
+	for (short i=0;i<vMatchResults.entries();i++)
+	{
+		CHMatchResult * pMatchResult = (CHMatchResult * )vMatchResults[i];
+		if (pMatchResult)
+		{
+			CHMatchResult * pOpp = (CHMatchResult * ) pMatchResult->getOpponent();
+			if (pOpp)
+			{
+				CHPoolResult * pPoolResult = (CHPoolResult * ) pOpp->getPoolResult();
+				vPoolResults.insert(pPoolResult);
+			}
+		}
+	}
+	vPoolResults.setFcCompare(orderPoolResultsByRating);
+	vPoolResults.sort();
+
+	for (short i=0;i<discountLower;i++)
+		vPoolResults.remove( vPoolResults[vPoolResults.entries()-1] );
+	for (short i=0;i<discountHigh;i++)
+		vPoolResults.remove( vPoolResults[0] );
+
+	GScore avgRating=0.0;
+	int totalRating=0;
+	for (short i=0;i<vPoolResults.entries();i++)
+	{
+		CHPoolResult * pPoolResult = (CHPoolResult * )vPoolResults[i];
+		totalRating += pPoolResult->getInscriptionRating();
+	}
+
+	if (vPoolResults.entries())
+		avgRating = totalRating/vPoolResults.entries();
+
+	return avgRating;
+}
+
 bool CHPoolResult::isTeamEvent()
 {
 	return ((CHEvent*)getEvent()) ? ((CHEvent*)getEvent())->isTeam() : false;
@@ -1480,4 +1889,32 @@ void CHPoolResult::clearData()
 	setMWon(0);
 	setMLost(0);
 	setMDrawn(0);
+}
+
+CHPhase* CHPoolResult::getPrevPhase()
+{
+	CHPhase *pPhase = (CHPhase *) getPhase();
+	MSLSortedVector vPhases;
+	getEvent()->getPhasesVector(vPhases,orderPhasesByOrder);
+	long indexPhase = vPhases.index(pPhase);
+	if (indexPhase>0)
+		return (CHPhase*)vPhases[indexPhase-1];
+
+	return 0;
+}
+
+// matchResult function
+mslToolsFcSelect CHPoolResult::getSelectFn(const GData *pData)
+{
+	if( !pData )
+		return 0;
+	switch( pData->isA() )
+	{
+	case __CHEVENT:			return poolResultEvent;
+	case __CHPHASE:			return poolResultPhase;
+	case __CHMATCH:			return poolResultMatch;
+	case __CHINSCRIPTION:	return poolResultInscription;
+	case __CHEVENTRESULT:	return poolResultEventResult;
+	}
+	return 0;
 }

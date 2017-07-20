@@ -27,6 +27,8 @@
 #include <OVR/CORE/TH/GTHPhase.h>
 
 class CHPoolResult;
+class CHInscription;
+class CHMatch;
 
 class CHMngtModelExport CHPool : public GTHPool
 {
@@ -55,4 +57,8 @@ public:
 
 	bool	hasCompatibleColors(CHPoolResult* pPR1,CHPoolResult* pPR2, short round);
 	bool	hasCompetitors();
+	bool	isTeam();
+
+
+	CHMatch * findMatch(CHPoolResult * pPR1, CHPoolResult * pPR2);
 };

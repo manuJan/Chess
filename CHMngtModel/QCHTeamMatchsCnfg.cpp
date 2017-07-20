@@ -43,8 +43,10 @@ size_t QCHTeamMatchsCnfg::selectCollection(MSLCollection& target)
 	select << teamMatchCnfg["TEAMCFG"]
 		   << teamMatchCnfg["NCOMPETITORS"]
 		   << teamMatchCnfg["NMATCHES"]
+		   << teamMatchCnfg["NMATCHES_ELIM"]
 		   << teamMatchCnfg["NMATCHESTYPE"]
-		   << teamMatchCnfg["COMPMATCHESDISTRIBUTION"]
+		   << teamMatchCnfg["NMATCHESTYPE_ELIM"]
+		   << teamMatchCnfg["COMPMATCHESDISTRIBUTION"]		   
 		   << teamMatchCnfgName["IDLANGUAGE"]
 		   << teamMatchCnfgName["SDESCRIPTION"]
 		   << teamMatchCnfgName["LDESCRIPTION"]
@@ -55,11 +57,11 @@ size_t QCHTeamMatchsCnfg::selectCollection(MSLCollection& target)
 				&& teamMatchCnfgName["IDLANGUAGE"]  == languages["IDLANGUAGE"] 
 				&& languages["FACTIVE"]      == "Y");
 	
-	MSLString fSex, fEvent, fRound, fPhase, fCompMatchesDistribution,
+	MSLString fSex, fEvent, fRound, fPhase, fCompMatchesDistribution, fMatchesTypeElim,
 		fMatchesType, fFAwayC;
-	short fId, fnMatches, fnComp;
+	short fId, fnMatches,fnMatchesElim,fnComp;
 	MSLDBNullIndicator nullRound, nullPhase, nullnComp, nullMatchesType,
-		nullCompMatchesDistribution, nullnMatches, nullId, nullFAwayC;
+		nullCompMatchesDistribution,nullMatchesTypeElim, nullnMatches,nullnMatchesElim, nullId, nullFAwayC;
 
 	MSLString flanguage;
 	MSLWString fsDescription,flDescription;
@@ -76,8 +78,10 @@ size_t QCHTeamMatchsCnfg::selectCollection(MSLCollection& target)
 		reader >> fId	
 			   >> nullnComp	>> fnComp
 			   >> nullnMatches	>> fnMatches
+			   >> nullnMatchesElim >> fnMatchesElim
 			   >> nullMatchesType	>> fMatchesType
-			   >> nullCompMatchesDistribution	>> fCompMatchesDistribution
+			   >> nullMatchesTypeElim	>> fMatchesTypeElim
+			   >> nullCompMatchesDistribution	>> fCompMatchesDistribution			   
 			   >> flanguage
 			   >> nullSDescription >> fsDescription
 			   >> nullLDescription >> flDescription
@@ -102,8 +106,10 @@ size_t QCHTeamMatchsCnfg::selectCollection(MSLCollection& target)
 			pTeamMatCnfg->setId(fId);
 			pTeamMatCnfg->setCompetitors(fnComp);
 			pTeamMatCnfg->setMatches(fnMatches);
+			pTeamMatCnfg->setMatchesElim(fnMatchesElim);
 			pTeamMatCnfg->setMatchesType(fMatchesType);
-			pTeamMatCnfg->setCompMatchesDistribution(fCompMatchesDistribution);
+			pTeamMatCnfg->setMatchesTypeElim(fMatchesTypeElim);
+			pTeamMatCnfg->setCompMatchesDistribution(fCompMatchesDistribution);			
 			pTeamMatCnfg->setFAwayC(fFAwayC);
 			target.insert(pTeamMatCnfg);
 		}

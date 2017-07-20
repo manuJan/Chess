@@ -83,12 +83,13 @@
 ////////////////////////////////////////////////////////////
 //lo pasare al memoryDB?????
 //del RSC traducido la parte que se quiere
-#define RSC_ALL			  0	
-#define RSC_SEX			100	
-#define RSC_EVENT		200	
-#define RSC_PHASE		300
-#define RSC_POOL		400
-#define RSC_MATCH		500
-#define RSC_TYPEREC		600
+#define RSC_ALL				0	
+#define	RSC_GENDER			1
+#define RSC_SEX				2	
+#define RSC_EVENT			3	
+#define RSC_PHASE			4
+#define RSC_POOL			5
+#define RSC_UNIT			6
+
 
 #endif

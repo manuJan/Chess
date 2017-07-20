@@ -32,6 +32,32 @@
 #include "CHMatchResult.h"
 
 static
+bool inscriptionEvent(const MSLItem* p,const void *n)
+{
+	// inscriptions by event
+	CHInscription* pInscription = (CHInscription *)p;	
+	CHEvent* pEvent = (CHEvent *)n;
+
+	if ( pInscription->getEventKey() == pEvent->getKey() )
+		 return true;
+
+	return false;
+}
+
+static
+bool inscriptionSex(const MSLItem* p,const void *n)
+{
+	// inscriptions by event
+	CHInscription* pInscription = (CHInscription *)p;	
+	GSex* pSex= (GSex *)n;
+
+	if ( pInscription->getSex() == pSex->getSex() )
+		 return true;
+
+	return false;
+}
+
+static
 int orderMatchResultByPhaseOrder(const MSLItem** a, const MSLItem** b)
 {
 	CHMatchResult * pA=((CHMatchResult *)(*a));
@@ -314,5 +340,18 @@ CHMatchResult* CHInscription::getLastMatchResult()
 	if (vMatchResults.entries())
 		return (CHMatchResult*)vMatchResults[vMatchResults.entries()-1];
 		
+	return 0;
+}
+
+// select function
+mslToolsFcSelect CHInscription::getSelectFn(const GData *pData)
+{
+	if( !pData )
+		return 0;
+	switch( pData->isA() )
+	{
+	case __CHEVENT:			return inscriptionEvent;
+	case __GSEX:			return inscriptionSex;
+	}
 	return 0;
 }

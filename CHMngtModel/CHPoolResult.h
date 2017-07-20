@@ -25,6 +25,9 @@
 #include "CHMemoryDataBaseDefs.h"
 #include <ovr/Core/TH/GTHPoolResult.h>
 #include "CHMatchResult.h"
+#include <ovr/core/G/GScore.h>
+
+class CHPhase;
 
 class CHMngtModelExport CHPoolResult : public GTHPoolResult
 {
@@ -87,19 +90,21 @@ public:
 	short			getAllRoundsPointsForWon() const;
 	float			getPoolPointsF(short nRound=0,bool onlyRound=false) const;
 	MSLString		getPoolPointsFStr(short nRound=0,bool onlyRound=false) const;
-	float			getSolkOffF(short nRound=0) const;
-	MSLString		getSolkOffFStr(short nRound=0) const;
-	float			getMedianSolkOffF(short nRound=0) const;
-	MSLString		getMedianSolkOffFStr(short nRound=0) const;
-	float			getSonneBergerF(short nRound=0) const;
-	MSLString		getSonneBergerFStr(short nRound=0) const;
+	GScore			getSolkOffF(short nRound=0);
+	MSLString		getSolkOffFStr(short nRound=0);
+	GScore			getMedianSolkOffF(short nRound=0, short cutHighest=0, short cutLowest=1);
+	MSLString		getMedianSolkOffFStr(short nRound=0, short cutHighest=0, short cutLowest=1);
+	GScore			getSonneBergerF(short nRound=0);
+	MSLString		getSonneBergerFStr(short nRound=0);
 	float			getProgresiveF(short nRound=0) const;
 	MSLString		getProgressiveFStr(short nRound=0) const;
 	bool			isQualitative() const;
 	short			getTeamMatchesWon(short nRound=0) const;
 	MSLString		getTeamMatchesWonStr(short nRound=0) const;
 	float			getPointsFR(short nRound=0) const;
-	float			getPointsSO(short nRound=0,bool onlyRound=false) const;
+	GScore			getPointsSO(short nRound=0,bool onlyRound=false);
+	GScore			getMatchPoints(short nRound=0,bool onlyRound=false);
+	MSLString		getMatchPointsStr(short nRound=0,bool onlyRound=false);
 	
 	MSLWString		getDescription(bool longDescription=true) const;
 	MSLWString		getSourceCompetitor();
@@ -118,9 +123,15 @@ public:
 	bool			isPlayingRound(CHMatch* _pMatch, short round);
 	bool			canPlayInColor(CHMatchResult::side color, short round);
 	float			getAveragePointsAllCompetitors(CHMatch *pMatch=0);
+	GScore			getOppAverageRating(short discountHigh=1, short discountLower=1);
 	bool			isTeamEvent();
 
 	void			clearData();
+
+	CHPhase*		getPrevPhase();
+
+	// select function
+	mslToolsFcSelect getSelectFn(const GData *pData);
 
 private:
 	short		m_mPlayed,

@@ -52,18 +52,22 @@ public:
 	//Set
 	void setId(const short value);
 	void setMatches(const short value);
+	void setMatchesElim(const short value);
 	void setCompetitors(const short value);
 	void setMatchesType(const char *value);
-	void setCompMatchesDistribution(const char *value);
+	void setMatchesTypeElim(const char *value);
+	void setCompMatchesDistribution(const char *value);	
 	void setDescriptions(GDescription& desc);
 	void setFAwayC(const char *value);
 
 	//Get
 	short getId() const;
 	short getMatches() const;
+	short getMatchesElim() const;
 	short getCompetitors() const;
 	MSLString getMatchesType() const;
-	MSLString getCompMatchesDistribution() const;
+	MSLString getMatchesTypeElim() const;
+	MSLString getCompMatchesDistribution() const;	
 	GDescriptions&  getDescriptions () const;
 	short getMatchType(short value) const;
 	short getCompOrder(short value,short homeAway,short firstSecond=0) const;
@@ -79,9 +83,11 @@ private:
 
 	short m_id;
 	short m_nMatches;
+	short m_nMatchesEliminatory;
 	short m_nCompetitors;
 	MSLString m_matchesType;
-	MSLString m_compMatchesDistribution;
+	MSLString m_matchesTypeElim;
+	MSLString m_compMatchesDistribution;	
 	GDescriptions m_desc;
 	MSLString m_fAwayChar;
 };

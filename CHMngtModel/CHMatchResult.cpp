@@ -26,6 +26,7 @@
 #include "UCHMatchResult.h"
 #include "QCHMatchResult.h"
 #include "CHEvent.h"
+#include "CHEventResult.h"
 #include "CHPhase.h"
 #include "CHInscription.h"
 #include "CHRegister.h"
@@ -48,6 +49,72 @@ bool matchResultsOfPoolResult(const MSLItem * col, const void * param)
 		pPoolResult->getRegister() &&
 		pPoolResult->getRegister() == pMatchResult->getRegister())
 		return true;
+
+	return false;
+}
+
+static
+bool matchResultEvent(const MSLItem* p,const void *n)
+{
+	// match results by event
+	CHMatchResult * pMatchResult = (CHMatchResult*)p;
+	CHEvent* pEvent= (CHEvent*)n;	
+	
+	if ( pEvent->getKey() == pMatchResult->getEventKey() )
+		 return true;
+
+	return false;
+}
+
+static
+bool matchResultPhase(const MSLItem* p,const void *n)
+{
+	// match results by phase
+	CHMatchResult * pMatchResult = (CHMatchResult*)p;
+	CHPhase* pPhase = (CHPhase*)n;	
+	
+	if ( pPhase->getKey() == pMatchResult->getPhaseKey() )
+		 return true;
+
+	return false;
+}
+
+static
+bool matchResultMatch(const MSLItem* p,const void *n)
+{
+	// match results by match
+	CHMatchResult * pMatchResult = (CHMatchResult*)p;
+	CHMatch* pMatch = (CHMatch*)n;	
+	
+	if ( pMatch->getKey() == pMatchResult->getMatchKey() )
+		 return true;
+
+	return false;
+}
+
+static
+bool matchResultInscription(const MSLItem* p,const void *n)
+{
+	// match results by inscription
+	CHMatchResult * pMatchResult = (CHMatchResult*)p;
+	CHInscription * pInscription= (CHInscription*)n;	
+	
+	if ( pInscription->getKey() == pMatchResult->getInscriptionKey() )
+		 return true;
+
+	return false;
+}
+
+static
+bool matchResultEventResult(const MSLItem* p,const void *n)
+{
+	// match results by inscription
+	CHMatchResult * pMatchResult = (CHMatchResult*)p;
+	CHEventResult * pEventResult= (CHEventResult*)n;	
+	
+	if ( pEventResult->getInscription() &&
+		 pEventResult->getInscription()->getKey() == pMatchResult->getInscriptionKey() )
+		 return true;
 
 	return false;
 }
@@ -277,7 +344,7 @@ short CHMatchResult::getColorVersus()
 
 }
 
-short CHMatchResult::getTeamMatchesWon()
+short CHMatchResult::getTeamMatchesWon() const
 {
 	CHMatch *pTeamMatch=(CHMatch*)getMatch();
 	MSLSet colSubMatches;
@@ -296,6 +363,42 @@ short CHMatchResult::getTeamMatchesWon()
 			matchesWon++;
 	}
 	return matchesWon;
+}
+
+double CHMatchResult::getMatchPoints() const
+{
+	if (!getOpponent() || !getOpponent()->getInscription() || getOpponent()->getBye())
+	{
+		CHEvent * pEvent = (CHEvent * )getEvent();
+		return pEvent ? pEvent->getPointsBye() : 0.0;
+	}
+
+	short gamesWon = getTeamMatchesWon();
+	short gamesWonOpp = getOpponent() ? ((CHMatchResult*)getOpponent())->getTeamMatchesWon() : 0;
+
+	if (gamesWon > gamesWonOpp)
+		return 2.0;
+	if (gamesWon < gamesWonOpp)
+		return 0.0;
+
+	return 1.0;
+}
+
+MSLString CHMatchResult::getMatchPointsAsString() const
+{
+	MSLString aux(NULLSTRING);
+	char tmp[10];
+ 
+	double m_points= getMatchPoints();
+	sprintf_s(tmp,"%.1f",m_points); //XXX.Y
+	
+	MSLString format="#";
+	if((getMatchPoints()-int(getMatchPoints()))>0)
+		format="#.#"; // Decimales
+		
+	
+	GScore m_pointsS = GScore(getPoints());
+	return m_pointsS.asString(format);
 }
 
 float CHMatchResult::getPointsSO()
@@ -399,6 +502,26 @@ MSLString CHMatchResult::getPreviousMatchesAsString(CHMatch* pMatch)
 	return matches;
 }
 
+MSLString CHMatchResult::getAcreditation_CH() const
+{
+	CHEvent * pEvent=(CHEvent *)getEvent();
+	if(!pEvent->getSubMatches())
+		return getAcreditation();
+	else if(pEvent->getSubMatches())
+	{
+		CHMatch * pMatch=(CHMatch *)getMatch();
+		if(!pMatch->getSubCode())
+			return getAcreditation();
+		else
+		{
+			return getMatchMemberAcreditation();
+		}
+	}
+
+	return getAcreditation();
+}
+
+
 MSLWString CHMatchResult::getSName(const char *lang/*=0*/) const
 {
 	CHEvent * pEvent=(CHEvent *)getEvent();
@@ -472,4 +595,200 @@ MSLWString CHMatchResult::getMatchMemberSDescription() const
 	}
 			
 	return txt;
+}
+
+MSLString CHMatchResult::getMatchMemberAcreditation() const
+{
+	MSLSortedVector vMatchMembers;
+	getMatchMembersVector(vMatchMembers);
+	if (vMatchMembers.entries())
+	{
+		GTHMatchMember *pMatchMember=(GTHMatchMember*)vMatchMembers[0];
+		if(pMatchMember && 
+		   pMatchMember->getRegister())
+		{
+			return pMatchMember->getAcreditation();
+		}
+	}
+	return NULLSTRING;
+}
+
+bool CHMatchResult::isRankEqual() const
+{
+	CHMatch * pMatch = (CHMatch*) getMatch();
+	MSLSortedVector vMatchResults;
+	pMatch->getMatchResultsVector(vMatchResults);
+
+	for (short i=0;i<vMatchResults.entries();i++)
+	{
+		CHMatchResult *pMatchResult = (CHMatchResult*) vMatchResults[i];
+		if( !pMatchResult )
+			continue;
+
+		if( pMatchResult->getKey() == getKey() )
+			continue;
+
+		if (pMatchResult->getRank() == getRank() )
+			return true;
+	}
+	
+	return false;
+}
+
+CHPoolResult* CHMatchResult::getSwissRoundResult()
+{
+	CHEvent* pEvent = (CHEvent*) getEvent();
+	if (!pEvent)
+		return 0;
+
+	CHPhase* pPhase = pEvent->getSwissRound();
+	return pPhase ? pPhase->findPoolResult((CHInscription*)getInscription()) : 0;
+}
+
+MSLString CHMatchResult::getSwissRoundScore()
+{
+	CHPoolResult * pPoolResult = getSwissRoundResult();
+	return pPoolResult ? pPoolResult->getPointsFStr() : NULLSTRING;
+}
+
+short CHMatchResult::getSwissRoundRank()
+{
+	CHPoolResult * pPoolResult = getSwissRoundResult();
+	return pPoolResult ? pPoolResult->getRank() : 0;
+}
+
+short CHMatchResult::getMatchRound()
+{
+	return getMatch() ? ((CHMatch*) getMatch())->getRound() : 0;
+}
+
+CHPhase *CHMatchResult::getPhaseSource() const
+{
+	GTHPoolResult * pPoolResult = getPoolResult();
+	return pPoolResult ? (CHPhase *)CHMemoryDataBase::findPhase(getEvent(),pPoolResult->getPhaseSource()):0;
+}
+
+CHMatchResult *CHMatchResult::getSourceByInscription()
+{
+	CHPhase * pPhaseSource = getPhaseSource();
+	if( !pPhaseSource )
+		return 0;
+
+	MSLSet colMatchResults = CHMemoryDataBase::getCol(__CHMATCHRESULT);
+	CHMemoryDataBase::filterCol(colMatchResults,pPhaseSource); // filtro por fase
+
+	MSLSortedVector vMatchResults;
+	CHMemoryDataBase::getVector(colMatchResults,vMatchResults,getInscription()); // filtro por insc
+	if( !vMatchResults.entries() )
+		return 0;
+
+	// En vMatchResults tenemos los matchresults de esa inscripcion en esa fase (uno)
+	CHMatchResult * pMatchResult = (CHMatchResult * )vMatchResults[0]; // el primero
+	return pMatchResult;
+}
+
+CHMatchResult *CHMatchResult::getSourceByProgression()
+{
+	CHPhase * pPhaseSource = getPhaseSource();
+	if( !pPhaseSource )
+		return 0;
+
+	MSLSortedVector vMatchResults;
+	CHMemoryDataBase::getVector(__CHMATCHRESULT,vMatchResults,pPhaseSource); // filtro por fase
+	if( !vMatchResults.entries() )
+		return 0;
+	
+	// En vMatchResults tenemos los matchresults de esa fase
+	CHMatchResult * pMatchResult = 0;
+	GTHPoolResult * pPR = getPoolResult(), * pPRSource = 0;
+	for(long i=0;i<vMatchResults.entries();i++)
+	{
+		pMatchResult = (CHMatchResult *)vMatchResults[i];
+		pPRSource = pMatchResult ? pMatchResult->getPoolResult():0;
+		if( pPRSource && 
+			pPR->getPhaseSource() == pPRSource->getPhaseCode() &&
+			pPR->getPoolSource()  == pPRSource->getPoolCode() )
+			return pMatchResult;
+	}
+	
+	return 0;
+}
+
+CHMatchResult *CHMatchResult::getTargetByInscription()
+{
+	CHMatch * pMatch = 0;
+	CHInscription * pInsc = (CHInscription *)getInscription();
+	if( !pInsc )
+		return 0;
+	CHPhase * pPhase = (CHPhase*)getPhase(),
+			* pNextPhase = pPhase->getNextPhase();
+	CHMatchResult * pValue = 0;
+
+	
+	while( pNextPhase )
+	{
+		// buscar el registro del competidor en pNextPhase
+		MSLSortedVector vMatches;
+		CHMemoryDataBase::getVector(__CHMATCH,vMatches,pNextPhase);
+		for(long i=0;i<vMatches.entries();i++)
+		{
+			pMatch = (CHMatch*)vMatches[i];
+			if( pMatch->hasByes() ) // saltamos byes fijos
+				continue;
+			pValue = pMatch->findMatchResult(pInsc);
+			if( pValue )
+				return pValue;
+		}
+		pNextPhase = pNextPhase->getNextPhase();
+	}
+	return 0;
+}
+
+void CHMatchResult::getTargetByProgression(MSLSet &colMatchResults)
+{
+	CHMatch * pMatch = 0;
+	CHPhase * pPhase = (CHPhase*)getPhase();
+	CHMatchResult * pMatchResult = 0;
+	GTHPoolResult * pPR = 0, * pPRSource = getPoolResult();
+
+	// 1. Cogemos los combates siguientes
+	MSLSortedVector vNextMatches;
+	pPhase->getNextMatches(vNextMatches);
+
+	// 2. Seleccionamos sólo aquellos que nos interesan según la progresión
+	for(long i=0;i<vNextMatches.entries();i++)
+	{
+		pMatch = (CHMatch*)vNextMatches[i];
+		MSLSortedVector vMatchResults;
+		pMatch->getMatchResultsVector(vMatchResults);
+		for(long j=0;j<vMatchResults.entries();j++)
+		{
+			pMatchResult = (CHMatchResult*)vMatchResults[j];
+			pPR = pMatchResult ? pMatchResult->getPoolResult():0;
+			if( pPR && 
+				pPR->getPhaseSource() == pPRSource->getPhaseCode() &&
+				pPR->getPoolSource()  == pPRSource->getPoolCode() )
+			{
+				// recursivo
+				pMatchResult->getTargetByProgression(colMatchResults);
+				colMatchResults.insert(pMatchResult);
+			}
+		}
+	}
+}
+
+// matchResult function
+mslToolsFcSelect CHMatchResult::getSelectFn(const GData *pData)
+{
+	if( !pData )
+		return 0;
+	switch( pData->isA() )
+	{
+	case __CHEVENT:			return matchResultEvent;
+	case __CHPHASE:			return matchResultPhase;
+	case __CHMATCH:			return matchResultMatch;
+	case __CHINSCRIPTION:	return matchResultInscription;
+	case __CHEVENTRESULT:	return matchResultEventResult;
+	}
+	return 0;
 }

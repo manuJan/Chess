@@ -64,6 +64,9 @@ public:
 	float			getPointsPoolResult();
 	MSLString		getPointsPoolResultStr();
 
+	// select function
+	mslToolsFcSelect getSelectFn(const GData *pData);
+
 private:	
 		
 	short			m_rating;		// Rating con el que acaba la competicion

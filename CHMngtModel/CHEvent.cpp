@@ -25,6 +25,7 @@
 #include "CHInscription.h"
 #include "CHEventResult.h"
 #include "CHMemoryDataBase.h"
+#include "CHPhase.h"
 #include "QCHEvent.h"
 #include "UCHEvent.h"
 #include <ovr/core/G/GScore.h>
@@ -317,6 +318,14 @@ short CHEvent::getTeamMatches() const
 
 	return 1;
 }
+short CHEvent::getTeamMatchesElim() const
+{
+	CHTeamMatchsCnfg *pTeamMatchsCnfg=(CHTeamMatchsCnfg *)CHMemoryDataBase::findTeamMatchsCnfg(m_idTeamMatchsCnfg);
+	if (pTeamMatchsCnfg)
+		return pTeamMatchsCnfg->getMatchesElim();
+
+	return 1;
+}
 //////////////////////////////////////////////////////////////////////
 //Vector Methods
 //////////////////////////////////////////////////////////////////////
@@ -406,7 +415,28 @@ MSLString CHEvent::getCfgTeamMembers() const
 	return NULLSTRING;
 }
 
+MSLString CHEvent::getCfgTeamMembersElim() const
+{
+	CHTeamMatchsCnfg *pTeamMatchsCnfg=(CHTeamMatchsCnfg *)CHMemoryDataBase::findTeamMatchsCnfg(m_idTeamMatchsCnfg);
+	if (pTeamMatchsCnfg)
+		return pTeamMatchsCnfg->getMatchesTypeElim();
+
+	return NULLSTRING;
+}
+
 void CHEvent::getEventResults(MSLSet &colEventResults)
 {
 	colEventResults = (CHMemoryDataBase::getCol(__GEVENTRESULT)).select(eventResultsOfEvent, this);
+}
+
+CHPhase* CHEvent::getSwissRound()
+{
+	CHPhase* pPhase = (CHPhase* ) CHMemoryDataBase::findPhase(this,SWISS_ROUND);
+	return pPhase;
+}
+
+
+CHTeamMatchsCnfg * CHEvent::getTeamMatchCfg()
+{
+	return (CHTeamMatchsCnfg *)CHMemoryDataBase::findTeamMatchsCnfg(m_idTeamMatchsCnfg);
 }

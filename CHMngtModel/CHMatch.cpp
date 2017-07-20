@@ -27,7 +27,10 @@
 #include "UCHMatch.h"
 #include "QCHMatch.h"
 #include "CHMemoryDataBase.h"
+#include "CHPhase.h"
 #include "CHEvent.h"
+#include "CHEventResult.h"
+#include "CHInscription.h"
 #include "CHStatisticDefines.h"
 #include "CHSportDefines.h"
 
@@ -36,6 +39,59 @@
 //////////////////////////////////////////////////////////////////////
 // Order Functions
 //////////////////////////////////////////////////////////////////////
+
+static
+bool matchEvent(const MSLItem* p,const void *n)
+{
+	// matches by event
+	CHMatch * pMatch= (CHMatch*)p;
+	CHEvent* pEvent= (CHEvent*)n;	
+	
+	if ( pEvent->getKey() == pMatch->getEventKey() )
+		 return true;
+
+	return false;
+}
+
+static
+bool matchPhase(const MSLItem* p,const void *n)
+{
+	// matches by phase
+	CHMatch * pMatch= (CHMatch*)p;
+	CHPhase* pPhase = (CHPhase*)n;	
+	
+	if ( pPhase->getKey() == pMatch->getPhaseKey() )
+		 return true;
+
+	return false;
+}
+
+static
+bool matchInscription(const MSLItem* p,const void *n)
+{
+	// matches by inscription
+	CHMatch* pMatch= (CHMatch*)p;
+	CHInscription* pInscription= (CHInscription*)n;	
+
+	return pMatch->findMatchResult(pInscription)!=0;
+}
+
+static
+bool matchSession(const MSLItem* p,const void *n)
+{
+	// matches by session
+	CHMatch * pMatch= (CHMatch*)p;
+	GSession* pSession = (GSession*)n;	
+
+	if (!pSession && pMatch->getMatchNumber() != 0)
+		return true;
+
+	if ((pMatch->getSessionKey() == pSession->getKey()) && 
+		(pMatch->getMatchNumber() != 0 ))
+		return true;
+
+	return false;
+}
 
 static 
 int orderByMatchNumber(const MSLItem** a, const MSLItem** b)
@@ -296,26 +352,45 @@ MSLString CHMatch::getResultIncidence() const
 	MSLSortedVector vMatchResult;
 	getMatchResultsVector(vMatchResult);
 	CHMatchResult *pMatchResult1=0;
-	CHMatchResult *pMatchResult2=0;
-	char qualitative[30];
+	CHMatchResult *pMatchResult2=0;	
 	pMatchResult1=(CHMatchResult*)vMatchResult[0];
 	pMatchResult2=(CHMatchResult*)vMatchResult[1];
+	MSLString result=NULLSTRING;
 
 	if(pMatchResult1->isQualitative() && pMatchResult2->isQualitative())
 	{
-		sprintf_s(qualitative,"%s%s-%s%s",pMatchResult1->getPointsAsString(),pMatchResult1->getQualitativeSDescription().toAscii(),pMatchResult2->getPointsAsString(),pMatchResult2->getQualitative()->getSDescription());
-		
+		result = pMatchResult1->getPointsAsString();
+		result += pMatchResult1->getQualitativeSDescription().toAscii();
+		result += "-";
+		result += pMatchResult2->getPointsAsString();
+		result += pMatchResult1->getQualitativeSDescription().toAscii();
 	}
 	else if(pMatchResult1->isQualitative())
 	{
-		sprintf_s(qualitative,"%s%s-%s",pMatchResult1->getPointsAsString(),pMatchResult1->getQualitativeSDescription().toAscii(),pMatchResult2->getPointsAsString());
+		result = pMatchResult1->getPointsAsString();
+		result += pMatchResult1->getQualitativeSDescription().toAscii();
+		result += "-";
+		result += pMatchResult2->getPointsAsString();
 	}
 	else if(pMatchResult2->isQualitative())
 	{
-		sprintf_s(qualitative,"%s-%s%s",pMatchResult1->getPointsAsString(),pMatchResult2->getPointsAsString(),pMatchResult2->getQualitativeSDescription().toAscii());
+		result = pMatchResult1->getPointsAsString();		
+		result += "-";
+		result += pMatchResult2->getPointsAsString();
+		result += pMatchResult1->getQualitativeSDescription().toAscii();
 	}
 	
-	return MSLString(qualitative);
+	return result;
+}
+
+CHInscription * CHMatch::getWhiteInscription() const
+{
+	return getWhite() ? (CHInscription*) getWhite()->getInscription() : 0;
+}
+
+CHInscription * CHMatch::getBlackInscription() const
+{
+	return getBlack() ? (CHInscription*) getBlack()->getInscription() : 0;
 }
 
 CHMatchResult * CHMatch::getWhite() const
@@ -613,6 +688,31 @@ bool CHMatch::hasCompetitors(bool any/*=false*/)
 	return (!any);
 }
 
+bool CHMatch::hasTeamCompetitors(bool any/*=false*/)
+{
+	if ( !getSubMatch())
+		return hasCompetitors(any);
+
+	CHMatchResult* pMatchResult=0;
+	MSLSortedVector vMatchResult;
+	getMatchResultsVector(vMatchResult);
+
+	for (short j=0; j<vMatchResult.entries(); j++)
+	{
+		pMatchResult=(CHMatchResult*)vMatchResult[j];
+		if (!pMatchResult->getRegister() && !any)
+			return false;
+		else if (any && pMatchResult->getRegister())
+			return true;
+
+		MSLSortedVector vMatchMembers;
+		pMatchResult->getMatchMembersVector(vMatchMembers);
+		if (!vMatchMembers.entries())
+			return false;
+	}
+	return true;
+}
+
 short CHMatch::getWinner() const
 {
 	CHMatchResult *pMR1 = (CHMatchResult *)getHome();
@@ -643,4 +743,63 @@ short CHMatch::getWinner() const
 		return eDraw; // Tablas
 	
 	return eNoWinner;	// no ganador
+}
+
+CHMatchResult * CHMatch::findMatchResult(GRegister * pRegister) const
+{
+	if( !pRegister )
+		return 0;
+
+	if( getWhiteInscription() && getWhiteInscription()->getRegister() == pRegister )
+		return getWhite();
+
+	if( getBlackInscription() && getBlackInscription()->getRegister() == pRegister )
+		return getBlack();
+		
+	return 0;
+}
+
+CHMatchResult *CHMatch::findMatchResult(CHInscription *pInscription) const
+{
+	if( !pInscription )
+		return 0;
+	
+	if( getWhiteInscription() == pInscription )
+		return getWhite();
+	if( getBlackInscription() == pInscription )
+		return getBlack();
+	
+	return 0;
+}
+
+CHMatchResult *CHMatch::findMatchResultByProgression(CHMatchResult * pMatchResult) const
+{
+	if( !pMatchResult )
+		return 0;
+
+	CHMatchResult * pRed = getWhite(), * pBlack = getBlack();
+					
+	if( pRed->getSourceByProgression() == pMatchResult )
+		return pRed;
+	if( pBlack->getSourceByProgression() == pMatchResult )
+		return pBlack;
+	
+	return 0;
+}
+
+
+
+// select function
+mslToolsFcSelect CHMatch::getSelectFn(const GData *pData)
+{
+	if( !pData )
+		return 0;
+	switch( pData->isA() )
+	{
+	case __CHEVENT:			return matchEvent;
+	case __CHPHASE:			return matchPhase;
+	case __CHINSCRIPTION:	return matchInscription;
+	case __GSESSION:		return matchSession;
+	}
+	return 0;
 }

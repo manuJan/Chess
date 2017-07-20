@@ -25,10 +25,25 @@
 #include "CHPhaseBase.h"
 #include "CHEvent.h"
 #include "CHPool.h"
+#include "CHPoolResult.h"
+#include "CHInscription.h"
 #include "CHMatch.h"
 #include "UCHPhase.h"
 #include "QCHPhase.h"
 #include "CHMemoryDataBase.h"
+
+static
+bool phaseEvent(const MSLItem* p,const void *n)
+{
+	// phases by event
+	CHPhase* pPhase = (CHPhase*)p;
+	CHEvent* pEvent= (CHEvent*)n;	
+
+	if ( pEvent->getKey() == pPhase->getEventKey() )
+		 return true;
+
+	return false;
+}
 
 
 MSLDEFINE_ITEM(CHPhase, __CHPHASE);
@@ -204,4 +219,71 @@ short CHPhase::getNumRounds()
 		return pPool->getNumRounds();
 
 	return 0;
+}
+
+bool CHPhase::isSwissRound()
+{
+	return getPhase()==SWISS_ROUND;
+}
+
+CHPoolResult * CHPhase::findPoolResult(CHInscription * pInscription)
+{
+	if( !pInscription )
+		return 0;
+
+	MSLSet colPoolResults;
+	getPoolResults(colPoolResults);
+	MSLSortedVector vPoolResults(colPoolResults);
+	for (short i=0;i<vPoolResults.entries();i++)
+	{
+		CHPoolResult *pPoolResult = (CHPoolResult*) vPoolResults[i];
+		if( !pPoolResult )
+			continue;
+
+		if( pPoolResult->getInscriptionKey() == pInscription->getKey() )
+			return pPoolResult;
+	}
+
+	return 0;
+}
+
+mslToolsFcSelect CHPhase::getSelectFn(const GData *pData)
+{
+	if( !pData )
+		return 0;
+	switch( pData->isA() )
+	{
+	case __CHEVENT:		return phaseEvent;
+	}
+	return 0;
+}
+
+
+CHPhase *CHPhase::getNextPhase()
+{
+	MSLSet colPhases = CHMemoryDataBase::getCol(__CHPHASE);
+	CHMemoryDataBase::filterCol(colPhases,(CHEvent*)getEvent());
+	MSLSetIterator iter(colPhases);
+	CHPhase * pPhaseToFind = 0;
+	while( (pPhaseToFind=(CHPhase*)iter())!=0 )
+	{
+		if( pPhaseToFind->getOrder() == getOrder()+1 )
+			return pPhaseToFind;
+	}
+	return 0;
+}
+
+void CHPhase::getNextMatches(MSLSortedVector &vMatches)
+{
+	CHEvent * pEvent = (CHEvent *)getEvent();
+
+	MSLSetIterator iter(CHMemoryDataBase::getCol(__CHMATCHRESULT));
+	CHMatchResult * pMatchResult = 0;
+	while( (pMatchResult = (CHMatchResult *)iter())!=0 )
+	{
+		if( pMatchResult->getEvent() == pEvent &&
+			pMatchResult->getPhaseSource() == this &&
+			!vMatches.find(pMatchResult->getMatch()) )
+			vMatches.insert(pMatchResult->getMatch());
+	}
 }

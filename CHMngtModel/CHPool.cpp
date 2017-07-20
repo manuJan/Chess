@@ -25,6 +25,7 @@
 #include "CHPool.h"
 #include "CHPoolResult.h"
 #include "CHMatch.h"
+#include "CHInscription.h"
 #include "CHDefinition.h"
 #include "CHMemoryDataBase.h"
 #include <ovr/core/G/GBuffer.h>
@@ -233,7 +234,6 @@ short CHPool::getRoundMatches(short nRound)
 
 void CHPool::getRoundMatchesVector(MSLSortedVector &vRoundMatches, short nRound)
 {
-	short count=0;
 	CHMatch* pMatch=0;
 	MSLSortedVector vMatches;
 	getMatchesVector(vMatches);
@@ -278,4 +278,37 @@ bool CHPool::hasCompetitors()
 			return false;
 	}
 	return (true);
+}
+
+CHMatch * CHPool::findMatch(CHPoolResult * pPoolResult, CHPoolResult * pPoolResultOpp)
+{
+	MSLSortedVector vMatches;
+	getMatchesVector(vMatches);
+
+	for(int i=0 ; i<vMatches.entries() ; i++)
+	{
+		CHMatch *pMatch        = (CHMatch*)vMatches[i];
+		
+		CHMatchResult *pMatchResult1 = (CHMatchResult *)(pMatch ? pMatch->getHome() : 0);
+		CHMatchResult *pMatchResult2 = (CHMatchResult *)(pMatch ? pMatch->getAway() : 0);
+		
+		CHPoolResult *pPoolResult1  = (CHPoolResult  *)(pMatchResult1 ? pMatchResult1->getPoolResult() : 0);
+		CHPoolResult *pPoolResult2  = (CHPoolResult  *)(pMatchResult2 ? pMatchResult2->getPoolResult() : 0);
+
+		if( ( pPoolResult1 == pPoolResult   && pPoolResult2 == pPoolResultOpp ) ||
+			( pPoolResult1 == pPoolResultOpp && pPoolResult2 == pPoolResult   ) )
+		{
+			return pMatch;
+		}	
+	}
+	return 0;
+}
+
+bool CHPool::isTeam()
+{
+	CHEvent *pEvent=(CHEvent*)getEvent();
+	if(pEvent)
+		return pEvent->isTeam();
+
+	return false;
 }

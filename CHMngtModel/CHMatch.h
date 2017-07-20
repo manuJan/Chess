@@ -35,6 +35,7 @@ static const char *DISQUALIFIED="d";
 static const char *RETIRED="r";
 
 class CHMatchResult;
+class CHInscription;
 
 class CHMngtModelExport CHMatch : public GTHMatch  
 {
@@ -86,6 +87,9 @@ public:
 	CHMatchResult * getWhite() const;
 	CHMatchResult * getBlack() const;
 	
+	CHInscription * getWhiteInscription() const;
+	CHInscription * getBlackInscription() const;
+	
 	bool	isEmpty();
 	bool	isConfigured();
 	short	getTurn() const;
@@ -105,7 +109,17 @@ public:
 	bool isTeam();
 
 	bool hasCompetitors(bool any=false);
+	bool hasTeamCompetitors(bool any=false);
+
 	short getWinner() const;
+
+	CHMatchResult*	findMatchResult(GRegister * pRegister) const;
+	CHMatchResult*	findMatchResult(CHInscription *pInscription) const;
+	CHMatchResult*	findMatchResultByProgression(CHMatchResult * pMatchResult) const;
+
+	// select function
+	mslToolsFcSelect getSelectFn(const GData *pData);
+
 private:
 	
 	short m_matchType;

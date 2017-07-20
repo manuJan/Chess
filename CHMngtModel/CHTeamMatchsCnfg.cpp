@@ -33,9 +33,11 @@ MSLDEFINE_ITEM(CHTeamMatchsCnfg, __CHTEAMMATCHSCNFG)
 CHTeamMatchsCnfg::CHTeamMatchsCnfg()
 :m_id(0)
 ,m_nMatches(0)
+,m_nMatchesEliminatory(0)
 ,m_nCompetitors(0)
 ,m_matchesType("")
 ,m_compMatchesDistribution("")
+,m_matchesTypeElim("")
 ,m_fAwayChar("")
 {
 	setKey();
@@ -44,9 +46,11 @@ CHTeamMatchsCnfg::CHTeamMatchsCnfg()
 CHTeamMatchsCnfg::CHTeamMatchsCnfg(short code)
 :m_id(code)
 ,m_nMatches(0)
+,m_nMatchesEliminatory(0)
 ,m_nCompetitors(0)
 ,m_matchesType("")
 ,m_compMatchesDistribution("")
+,m_matchesTypeElim("")
 ,m_fAwayChar("")
 {
 	setKey();
@@ -75,10 +79,12 @@ bool CHTeamMatchsCnfg::operator ==(const GData & copy)
 	const CHTeamMatchsCnfg & teamMatchsCnfg=(const CHTeamMatchsCnfg &) copy;
 	
 	return ( m_id						== teamMatchsCnfg.m_id						&&
-			 m_nMatches					== teamMatchsCnfg.m_nMatches				&&	
+			 m_nMatches					== teamMatchsCnfg.m_nMatches				&&
+			 m_nMatchesEliminatory		== teamMatchsCnfg.m_nMatchesEliminatory		&&
 			 m_nCompetitors				== teamMatchsCnfg.m_nCompetitors			&&
 			 m_matchesType				== teamMatchsCnfg.m_matchesType				&&
-			 m_compMatchesDistribution	== teamMatchsCnfg.m_compMatchesDistribution	&&
+			 m_matchesTypeElim			== teamMatchsCnfg.m_matchesTypeElim			&&
+			 m_compMatchesDistribution	== teamMatchsCnfg.m_compMatchesDistribution	&&			 
 			 m_desc					    == teamMatchsCnfg.m_desc					&&
 			 m_fAwayChar				== teamMatchsCnfg.m_fAwayChar				 );
 }
@@ -89,13 +95,15 @@ GData & CHTeamMatchsCnfg::operator =(const GData & copy)
 	{
 		const CHTeamMatchsCnfg & teamMatchsCnfg=(const CHTeamMatchsCnfg &) copy;
 
-		m_id			= teamMatchsCnfg.m_id;
-		m_nMatches		= teamMatchsCnfg.m_nMatches;
-		m_nCompetitors	= teamMatchsCnfg.m_nCompetitors;
-		m_matchesType	= teamMatchsCnfg.m_matchesType;
-		m_compMatchesDistribution	= teamMatchsCnfg.m_compMatchesDistribution;
-		m_desc			= teamMatchsCnfg.m_desc;
-		m_fAwayChar		= teamMatchsCnfg.m_fAwayChar;
+		m_id				= teamMatchsCnfg.m_id;
+		m_nMatches			= teamMatchsCnfg.m_nMatches;
+		m_nMatchesEliminatory	= teamMatchsCnfg.m_nMatchesEliminatory;
+		m_nCompetitors		= teamMatchsCnfg.m_nCompetitors;
+		m_matchesType		= teamMatchsCnfg.m_matchesType;
+		m_matchesTypeElim	= teamMatchsCnfg.m_matchesTypeElim;
+		m_compMatchesDistribution	= teamMatchsCnfg.m_compMatchesDistribution;		
+		m_desc				= teamMatchsCnfg.m_desc;
+		m_fAwayChar			= teamMatchsCnfg.m_fAwayChar;
 
 		
 	}
@@ -123,8 +131,10 @@ MSLPack& CHTeamMatchsCnfg::pack(MSLPack& aPack) const
 {
 	aPack << m_id;
 	aPack << m_nMatches	;
+	aPack << m_nMatchesEliminatory;
 	aPack << m_nCompetitors	;
 	aPack << m_matchesType	;
+	aPack << m_matchesTypeElim	;
 	aPack << m_compMatchesDistribution	;
 	aPack << m_desc;
 	aPack << m_fAwayChar;
@@ -136,8 +146,10 @@ MSLPack& CHTeamMatchsCnfg::unpack(MSLPack &aPack)
 {
 	aPack >> m_id	;
 	aPack >> m_nMatches	;
+	aPack >> m_nMatchesEliminatory;
 	aPack >> m_nCompetitors	;
 	aPack >> m_matchesType	;
+	aPack >> m_matchesTypeElim	;
 	aPack >> m_compMatchesDistribution	;
 	aPack >> m_desc;
 	aPack >> m_fAwayChar;
@@ -156,6 +168,11 @@ void CHTeamMatchsCnfg::setMatches(const short value)
 	m_nMatches=value;
 }
 
+void CHTeamMatchsCnfg::setMatchesElim(const short value)
+{
+	m_nMatchesEliminatory = value;
+}
+
 void CHTeamMatchsCnfg::setCompetitors(const short value)
 { 
 	m_nCompetitors=value;
@@ -169,6 +186,11 @@ void CHTeamMatchsCnfg::setMatchesType(const char *value)
 void CHTeamMatchsCnfg::setCompMatchesDistribution(const char *value)
 { 
 	m_compMatchesDistribution=value;
+}
+
+void CHTeamMatchsCnfg::setMatchesTypeElim(const char *value)
+{ 
+	m_matchesTypeElim=value;
 }
 
 void CHTeamMatchsCnfg::setDescriptions(GDescription & desc)
@@ -191,6 +213,11 @@ short CHTeamMatchsCnfg::getMatches() const
 	return m_nMatches;
 }
 
+short CHTeamMatchsCnfg::getMatchesElim() const
+{
+	return m_nMatchesEliminatory;
+}
+
 short CHTeamMatchsCnfg::getCompetitors() const
 { 
 	return m_nCompetitors;
@@ -204,6 +231,11 @@ MSLString CHTeamMatchsCnfg::getMatchesType() const
 MSLString CHTeamMatchsCnfg::getCompMatchesDistribution() const
 { 
 	return m_compMatchesDistribution;
+}
+
+MSLString CHTeamMatchsCnfg::getMatchesTypeElim() const
+{ 
+	return m_matchesTypeElim;
 }
 
 GDescriptions& CHTeamMatchsCnfg::getDescriptions() const

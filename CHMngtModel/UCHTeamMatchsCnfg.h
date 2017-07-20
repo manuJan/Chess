@@ -49,10 +49,10 @@ protected:
 
 protected:
 
-	MSLString fSex, fEvent, fRound, fPhase, fCompMatchesDistribution, fMatchesType, fFAwayC;
-	short fId, fnMatches, fnComp;
+	MSLString fSex, fEvent, fRound, fPhase, fCompMatchesDistribution,fMatchesTypeElim, fMatchesType, fFAwayC;
+	short fId, fnMatches,fnMatchesElim, fnComp;
 	MSLDBNullIndicator nullRound, nullPhase, nullnComp, nullMatchesType,
-		nullCompMatchesDistribution, nullnMatches, nullId, nullFAwayC;
+		nullCompMatchesDistribution,nullMatchesTypeElim, nullnMatches,nullnMatchesElim,nullId, nullFAwayC;
 	MSLString flanguage;
 	MSLWString fsDescription,flDescription;
 	MSLDBNullIndicator nullSDescription,nullLDescription;

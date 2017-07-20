@@ -24,7 +24,11 @@
 #include "CHMemoryDataBaseDefs.h"
 #include <Ovr/Core/TH/GTHMatchResult.h>
 
+class CHPhase;
 class CHMatch;
+class CHInscription;
+class CHPoolResult;
+class CHMatchResult;
 
 class CHMngtModelExport CHMatchResult : public GTHMatchResult  
 {
@@ -73,10 +77,12 @@ public:
 	int getTeamMembers() const;
 	CHMatchResult*	getMatchResultVersus();
 	bool areTeams() const;
-	short getTeamMatchesWon();
+	short getTeamMatchesWon() const;
 	short getSeed();
 	MSLString getSeedAsString();
 	float getPointsSO();
+	double getMatchPoints() const;
+	MSLString getMatchPointsAsString() const;
 
 	int  getColorRGB();
 	
@@ -92,7 +98,33 @@ public:
 
 	MSLWString		getMatchMemberLDescription() const;
 	MSLWString		getMatchMemberSDescription() const;
+	
+	MSLString		getMatchMemberAcreditation() const;
+	MSLString		getAcreditation_CH() const;
+
+	bool			isRankEqual() const;
+		
+	CHPoolResult*	getSwissRoundResult();
+	MSLString		getSwissRoundScore();
+	short			getSwissRoundRank();
+	short			getMatchRound();
+
+	// Progressions
+	CHPhase*		getPhaseSource() const;		// de donde viene en la progresión
+	CHMatchResult*	getSourceByInscription();	// de donde viene en la progresión
+	CHMatchResult*	getSourceByProgression();	// de donde viene en la progresión
+	CHMatchResult*	getTargetByInscription();	// a donde va en la progresión
+	void			getTargetByProgression(MSLSet &colMatchResults);	// a donde va en la progresión
+
+	CHMatchResult*	findMatchResult(GRegister * pRegister) const;
+	CHMatchResult*	findMatchResult(CHInscription *pInscription) const;
+	CHMatchResult*	findMatchResultByProgression(CHMatchResult * pMatchResult) const;
+
+	// select function
+	mslToolsFcSelect getSelectFn(const GData *pData);
+
 private:
+
 	float	  m_points;				// Numero de puntos ganados
 	bool	  m_upFloater;
 	bool	  m_downFloater;

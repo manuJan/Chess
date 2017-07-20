@@ -24,6 +24,9 @@
 #include "CHMemoryDataBaseDefs.h"
 #include <OVR/CORE/TH/GTHPhase.h>
 
+class CHPoolResult;
+class CHInscription;
+
 class CHMngtModelExport CHPhase : public GTHPhase  
 {
 	MSLDECLARE_ITEM(CHPhase)
@@ -62,6 +65,15 @@ public:
 	
 	// From GTHPool
 	short getNumRounds();
+
+	bool isSwissRound();
+
+	CHPoolResult * findPoolResult(CHInscription * pInscription);
+	CHPhase*	getNextPhase();
+	void		getNextMatches(MSLSortedVector &vMatches);
+
+	// select function
+	mslToolsFcSelect getSelectFn(const GData *pData);
 
 private:
 	short	m_typePhase;			//se utiliza para saber el tipo de fase

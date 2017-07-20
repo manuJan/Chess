@@ -83,6 +83,9 @@ public:
 
 	CHMatchResult* getLastMatchResult();
 
+	// select function
+	mslToolsFcSelect getSelectFn(const GData *pData);
+
 private:
 	short	m_seed;	// cabeza de serie
 	short	m_rating;	// Puntuacion acumulada	
