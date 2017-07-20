@@ -44,4 +44,5 @@ public:
 	void setAutoSubMatchesAssign	(CHMatch *pMatch);
 	void removeAutoSubMatchesAssign (CHMatch *pMatch);
 	void changeSide					(CHMatch *pMatch);
+	void startListMatch				(CHMatch *pMatch);
 };

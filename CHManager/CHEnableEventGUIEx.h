@@ -41,13 +41,15 @@ protected:
 	// Grid Event
 	void createGridEvent			();
 	void fillGridEvent				();
+	void fillComboTeamConfig		();
 	bool paintGridEvent				(gui_grid_cell* cell);
 	void dblClickGridEvent			(long x, long y);
 	void editConstRating			(CHEvent *pEvent);
 	void editBronzes				(CHEvent *pEvent);
 	void editByePoints				(CHEvent *pEvent);
 	void editCodeForReports			(CHEvent *pEvent);
-	
+	void editTeamCfg				(CHEvent *pEvent);
+
 	// Other
 	bool canChangeEvent				(CHEvent *pEvent, int col);
 };

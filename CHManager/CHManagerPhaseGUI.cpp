@@ -97,8 +97,24 @@ LRESULT CHManagerPhaseGUI::onPhaseBaseSelected(WPARAM wParam/*=0*/, LPARAM lPara
 	CHPhaseBase* pPhaseBase = (CHPhaseBase*)lParam;
 	if (!pPhaseBase)
 		return GTHManagerPhaseGUI::onPhaseBaseSelected(wParam, lParam);
-		
-	CHEvent* pEvent = (CHEvent*)m_pDataSel;
+	
+	CHEvent * pEvent = (CHEvent*)m_pDataSel;
+	
+	if (pPhaseBase)
+	{
+		if (pPhaseBase->getCode()==SWISS_ROUND)
+		{
+			// No Submatches
+			m_gui.setTxtN(ED_PH_SUBMATCHES_BYMATCH, pEvent->getTeamMatches());	
+			setSubMatchesMembers(pEvent->getCfgTeamMembers());
+		}
+		else
+		{
+			// No Submatches
+			m_gui.setTxtN(ED_PH_SUBMATCHES_BYMATCH, pEvent->getTeamMatchesElim());		
+			setSubMatchesMembers(pEvent->getCfgTeamMembersElim());
+		}
+	}
 
 	return GTHManagerPhaseGUI::onPhaseBaseSelected(wParam, lParam);
 }

@@ -23,6 +23,9 @@
 #include "StdAfx.h"
 #include "CHManagerPoolGUI.h"
 
+#include "..\CHMngtModel\CHPhase.h"
+#include "..\CHMngtModel\CHPool.h"
+
 CHManagerPoolGUI::CHManagerPoolGUI()
 :GTHManagerPoolGUI()
 {
@@ -41,7 +44,16 @@ CHManagerPoolGUI::~CHManagerPoolGUI(void)
 void CHManagerPoolGUI::onInitOtherControls()
 {
 	GTHManagerPoolGUI::onInitOtherControls();
-		
-	m_gui.setTxtN(ED_PL_ROUNDS,7);	
+	
+	short rounds = 9;
+
+	if (m_pDataSel &&
+		m_pDataSel->isA()==__CHPHASE)
+		rounds = ((CHPhase*)m_pDataSel)->getNumRounds();
+	else if (m_pDataSel &&
+			 m_pDataSel->isA()==__CHPOOL)
+		rounds = ((CHPool*)m_pDataSel)->getNumRounds();
+
+	m_gui.setTxtN(ED_PL_ROUNDS,rounds);	
 }
 

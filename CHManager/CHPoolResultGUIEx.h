@@ -44,6 +44,7 @@ protected:
 	void onCreatePoolResult				(GTHPoolResult*	pPoolResult);
 
 	bool canChangePoolResult			(GTHPoolResult* pPoolResult, int col);
+	bool fillComboCompetitors			(GTHPoolResult* pPoolResult);
 
 	PFN_ORDER_FC getGridSortPoolResults () const;
 };

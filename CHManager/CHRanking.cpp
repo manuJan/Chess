@@ -27,6 +27,7 @@
 #include "..\CHMngtModel\CHPoolResult.h"
 #include "..\CHMngtModel\CHEventResult.h"
 #include "..\CHMngtModel\CHPhase.h"
+#include "..\CHMngtModel\CHPool.h"
 #include "..\CHMngtModel\CHMatch.h"
 #include "..\CHMngtModel\CHInscription.h"
 
@@ -74,6 +75,77 @@ bool validEventResults(const MSLItem* p,const void *n)
 
 	return true;
 	UNREFERENCED_PARAMETER(n);
+}
+
+static int orderPoints(GScore a, GScore b)
+{
+	float gA = float(a);
+	float gB = float(b);
+
+	float diff = gB-gA;
+	if (diff<0)
+		return -1;
+	if (diff>0)
+		return 1;
+
+	return 0;	
+}
+
+static
+int orderMatchResultsByPosition(CHMatchResult* pA, CHMatchResult* pB)
+{
+	int order=0;
+	order = pA->getPosition()-pB->getPosition();
+	if (order)
+		return order;
+
+	return strcmp(pA->getKey(),pB->getKey());
+}
+
+static
+int orderMatchResultByPoints(CHMatchResult* pA, CHMatchResult* pB)
+{
+	if (pA->getQualitativeCode()!=OK && 
+		pB->getQualitativeCode()!=OK)
+	{
+		GQualitative * pQA = pA->getQualitative();
+		GQualitative * pQB = pB->getQualitative();
+		if (pQA && pQB)
+			return pQA->getSort() - pQB->getSort();
+	}
+	if (pA->getQualitativeCode()!=OK)
+		return 1;
+	if (pB->getQualitativeCode()!=OK)
+		return -1;		
+
+	if (pA->getRankPo()==0 && 
+		pB->getRankPo()==0)
+		return orderMatchResultsByPosition(pA,pB);
+		
+	if (pA->getRank()==0)
+		return 1;
+
+	if (pB->getRank()==0)
+		return -1;
+
+	int rank=pA->getRank() - pB->getRank();
+	if(rank)
+		return rank;
+
+	if (pA->getRankPo()==0)
+		return 1;
+
+	if (pB->getRankPo()==0)
+		return -1;
+
+	GScore pointsA=pA->getPoints();
+	GScore pointsB=pB->getPoints();
+	
+	int order = orderPoints(pointsA,pointsB);
+	if (order)
+		return order;
+
+	return 0;
 }
 
 static
@@ -186,20 +258,6 @@ if (pA->getQualitativeCode()!=OK &&
 	return 0;
 }
 
-static int orderPoints(GScore a, GScore b)
-{
-	float gA = float(a);
-	float gB = float(b);
-
-	float diff = gB-gA;
-	if (diff<0)
-		return -1;
-	if (diff>0)
-		return 1;
-
-	return 0;	
-}
-
 static
 int orderMatchResultByPoints(const MSLItem** a,const MSLItem** b)
 {
@@ -228,6 +286,73 @@ int orderMatchResultByPoints(const MSLItem** a,const MSLItem** b)
 	int order = orderPoints(pointsA,pointsB);
 	if (order)
 		return order;
+
+	return strcmp(pA->getKey(),pB->getKey());
+}
+
+static
+int orderMatchResultByTeamPointsEliminatory(const MSLItem** a,const MSLItem** b)
+{
+	CHMatchResult * pA=((CHMatchResult *)(*a));
+	CHMatchResult * pB=((CHMatchResult *)(*b));
+	
+	if (pA->getQualitativeCode()==DSQ && 
+		pB->getQualitativeCode()==DSQ)
+		return strcmp(pA->getKey(),pB->getKey());
+
+	if (pA->getQualitativeCode()==FO && 
+		pB->getQualitativeCode()==FO)
+		return strcmp(pA->getKey(),pB->getKey());
+
+	if (pA->getQualitativeCode()==DSQ ||
+		pB->getQualitativeCode()==RET)
+		return 1;
+
+	if (pB->getQualitativeCode()==DSQ ||
+		pA->getQualitativeCode()==RET)
+		return -1;
+	
+	GScore pointsA=pA->getPoints();
+	GScore pointsB=pB->getPoints();
+	
+	int order = orderPoints(pointsA,pointsB);
+	if (order)
+		return order;
+
+	// Miro el primer submatch  
+	CHMatch* pMatch  = (CHMatch*)pA->getMatch();
+	if (pMatch && !pMatch->getSubMatch())
+	{
+		MSLSortedVector vSubMatches;
+		pMatch->getSubMatchesVector(vSubMatches);
+		if (vSubMatches.entries())
+		{
+			CHMatch * pSubMatch = (CHMatch*) vSubMatches[0];
+			if (pSubMatch)
+			{
+				CHMatchResult * pWhite = (CHMatchResult*) pSubMatch->getWhite();
+				CHMatchResult * pBlack = (CHMatchResult*) pSubMatch->getBlack();
+
+				GScore pointsA=pWhite->getPoints();
+				GScore pointsB=pBlack->getPoints();
+
+				if ( pWhite->getInscription() == pA->getInscription() &&
+				     pBlack->getInscription() == pB->getInscription() )
+				{
+					int order = orderPoints(pointsA,pointsB);
+					if (order)
+						 return order;
+				}
+				if (pWhite->getInscription() == pB->getInscription() &&
+				    pBlack->getInscription() == pA->getInscription() )
+				{
+					int order = orderPoints(pointsB,pointsA);
+					if (order)
+						 return order;
+				}
+			}
+		}
+	}
 
 	return strcmp(pA->getKey(),pB->getKey());
 }
@@ -264,10 +389,10 @@ int compMatchResultByPoints(const MSLItem** a,const MSLItem** b)
 }
 
 static
-int orderPoolResults(const MSLItem** a,const MSLItem** b)
+int compMatchResultByTeamPointsEliminatory(const MSLItem** a,const MSLItem** b)
 {
-	CHPoolResult * pA=((CHPoolResult *)(*a));
-	CHPoolResult * pB=((CHPoolResult *)(*b));
+	CHMatchResult * pA=((CHMatchResult *)(*a));
+	CHMatchResult * pB=((CHMatchResult *)(*b));
 	
 	if (pA->getQualitativeCode()==DSQ && 
 		pB->getQualitativeCode()==DSQ)
@@ -285,12 +410,458 @@ int orderPoolResults(const MSLItem** a,const MSLItem** b)
 		pA->getQualitativeCode()==RET)
 		return -1;
 	
+	GScore pointsA=pA->getPoints();
+	GScore pointsB=pB->getPoints();
+	
+	int order = orderPoints(pointsA,pointsB);
+	if (order)
+		return order;
+
+	// Miro el primer submatch  
+	CHMatch* pMatch  = (CHMatch*)pA->getMatch();
+	if (pMatch && !pMatch->getSubMatch())
+	{
+		MSLSortedVector vSubMatches;
+		pMatch->getSubMatchesVector(vSubMatches);
+		if (vSubMatches.entries())
+		{
+			CHMatch * pSubMatch = (CHMatch*) vSubMatches[0];
+			if (pSubMatch)
+			{
+				CHMatchResult * pWhite = (CHMatchResult*) pSubMatch->getWhite();
+				CHMatchResult * pBlack = (CHMatchResult*) pSubMatch->getBlack();
+
+				GScore pointsA=pWhite->getPoints();
+				GScore pointsB=pBlack->getPoints();
+
+				if ( pWhite->getInscription() == pA->getInscription() &&
+				     pBlack->getInscription() == pB->getInscription() )
+				{
+					int order = orderPoints(pointsA,pointsB);
+					if (order)
+						 return order;
+				}
+				if (pWhite->getInscription() == pB->getInscription() &&
+				    pBlack->getInscription() == pA->getInscription() )
+				{
+					int order = orderPoints(pointsB,pointsA);
+					if (order)
+						 return order;
+				}
+			}
+		}
+	}
+
+	return 0;
+}
+
+static
+int orderPoolResults(const MSLItem** a,const MSLItem** b)
+{
+	CHPoolResult * pA=((CHPoolResult *)(*a));
+	CHPoolResult * pB=((CHPoolResult *)(*b));
+	
+	CHEvent *pEvent=(CHEvent*)pA->getEvent();
+
+	for(short i=0;i<pEvent->getNumRankOrder();i++)
+	{
+		CHEvent::TypeRank typeRnk=pEvent->getRankOrder(i);
+		switch(typeRnk)
+		{
+			case CHEvent::eQualitative:
+			{
+				// Qualitative
+				if (pA->getQualitativeCode()!=OK && 
+					pB->getQualitativeCode()!=OK)
+				{
+					GQualitative * pQA = pA->getQualitative();
+					GQualitative * pQB = pB->getQualitative();
+					if (pQA && pQB)
+						return pQA->getSort() - pQB->getSort();
+				}
+				
+				if (pA->getQualitativeCode()==DSQ)
+					return 1;
+				if (pA->getQualitativeCode()==RET)
+					return 1;
+				if (pA->getQualitativeCode()==FO)
+					return 1;
+				if (pB->getQualitativeCode()==DSQ)
+					return -1;		
+				if (pB->getQualitativeCode()==RET)
+					return -1;		
+				if (pB->getQualitativeCode()==FO)
+					return -1;
+				break;
+			}
+			case CHEvent::ePoints:
+			{		
+				GScore pointsA=pA->getPointsF();
+				GScore pointsB=pB->getPointsF();
+	
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;
+			}			
+			case CHEvent::eMatchPoints:
+			{		
+				GScore pointsA=pA->getMatchPoints();
+				GScore pointsB=pB->getMatchPoints();
+	
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;
+			}
+			case CHEvent::eMatchesWon:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				int order = pOrigPoolResA->getMatchesWon() - pOrigPoolResB->getMatchesWon();
+				if (order)
+					return order;
+
+				break;
+			}
+			case CHEvent::eTeamPointsWon:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				int order = pOrigPoolResA->getAllRoundsPointsForWon() - pOrigPoolResB->getAllRoundsPointsForWon();
+				if (order)
+					return order;
+
+				break;
+			}
+			case CHEvent::eRating:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getOppAverageRating();
+				GScore pointsB = pOrigPoolResB->getOppAverageRating();
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;
+			}
+			case CHEvent::eSolkoff:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getSolkOffF();
+				GScore pointsB = pOrigPoolResB->getSolkOffF();
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;			
+			}
+			case CHEvent::eSolkoffCutLowestAndHighest:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getMedianSolkOffF(0,1,1);
+				GScore pointsB = pOrigPoolResB->getMedianSolkOffF(0,1,1);
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;			
+			}
+			case CHEvent::eSolkoffCutLowest:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getMedianSolkOffF(0,0,1);
+				GScore pointsB = pOrigPoolResB->getMedianSolkOffF(0,0,1);
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;			
+			}
+			case CHEvent::eSonneBerger:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getSonneBergerF();
+				GScore pointsB = pOrigPoolResB->getSonneBergerF();
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+
+				break;
+			}
+		}
+	}
+
+	return strcmp(pA->getKey(),pB->getKey());
+}
+
+static
+int orderPoolResultsByTeamPointsEliminatory(const MSLItem** a,const MSLItem** b)
+{
+	CHPoolResult * pA=((CHPoolResult *)(*a));
+	CHPoolResult * pB=((CHPoolResult *)(*b));
+	
+	// Qualitative
+	if (pA->getQualitativeCode()!=OK && 
+		pB->getQualitativeCode()!=OK)
+	{
+		GQualitative * pQA = pA->getQualitative();
+		GQualitative * pQB = pB->getQualitative();
+		if (pQA && pQB)
+			return pQA->getSort() - pQB->getSort();
+	}
+				
+	if (pA->getQualitativeCode()==DSQ)
+		return 1;
+	if (pA->getQualitativeCode()==RET)
+		return 1;
+	if (pA->getQualitativeCode()==FO)
+		return 1;
+	if (pB->getQualitativeCode()==DSQ)
+		return -1;		
+	if (pB->getQualitativeCode()==RET)
+		return -1;		
+	if (pB->getQualitativeCode()==FO)
+		return -1;
+	
 	GScore pointsA=pA->getPointsF();
 	GScore pointsB=pB->getPointsF();
 	
 	int order = orderPoints(pointsA,pointsB);
 	if (order)
 		return order;
+				
+	// Miro el ranking del matchResult ya calculado
+	MSLSortedVector vMatchResultsA;
+	pA->getMatchResultsVector(vMatchResultsA);
+	CHMatchResult * pMatchResultA = (CHMatchResult * ) vMatchResultsA[0];
+
+	MSLSortedVector vMatchResultsB;
+	pB->getMatchResultsVector(vMatchResultsB);
+	CHMatchResult * pMatchResultB = (CHMatchResult * ) vMatchResultsB[0];
+
+	if (pMatchResultA && pMatchResultB)
+	{
+		if (pMatchResultA->getQualitativeCode()==FO && 
+			pMatchResultB->getQualitativeCode()==FO)
+			return strcmp(pMatchResultA->getKey(),pMatchResultB->getKey());
+
+		if (pMatchResultA->getQualitativeCode()==FO)
+			return 1;
+
+		if (pMatchResultB->getQualitativeCode()==FO)
+			return -1;
+			
+		if (pMatchResultA->getRankPo()==0)
+			return 1;
+
+		if (pMatchResultB->getRankPo()==0)
+			return -1;
+
+		int rank=pMatchResultA->getRankPo() - pMatchResultB->getRankPo();
+		if(rank)
+			return rank;
+	}
+
+	return strcmp(pA->getKey(),pB->getKey());
+}
+
+static
+int orderPoolResults2Ties(const MSLItem** a,const MSLItem** b)
+{
+	CHPoolResult * pA=((CHPoolResult *)(*a));
+	CHPoolResult * pB=((CHPoolResult *)(*b));
+	
+	CHEvent *pEvent=(CHEvent*)pA->getEvent();
+
+	for(short i=0;i<pEvent->getNumRankOrder();i++)
+	{
+		CHEvent::TypeRank typeRnk=pEvent->getRankOrder(i);
+		switch(typeRnk)
+		{
+			case CHEvent::eQualitative:
+			{
+				// Qualitative
+				if (pA->getQualitativeCode()!=OK && 
+					pB->getQualitativeCode()!=OK)
+				{
+					GQualitative * pQA = pA->getQualitative();
+					GQualitative * pQB = pB->getQualitative();
+					if (pQA && pQB)
+						return pQA->getSort() - pQB->getSort();
+				}
+				
+				if (pA->getQualitativeCode()==DSQ)
+					return 1;
+				if (pA->getQualitativeCode()==RET)
+					return 1;
+				if (pA->getQualitativeCode()==FO)
+					return 1;
+				if (pB->getQualitativeCode()==DSQ)
+					return -1;		
+				if (pB->getQualitativeCode()==RET)
+					return -1;		
+				if (pB->getQualitativeCode()==FO)
+					return -1;
+				break;
+			}
+			case CHEvent::ePoints:
+			{		
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA=pOrigPoolResA->getPointsF();
+				GScore pointsB=pOrigPoolResB->getPointsF();
+	
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;
+			}			
+			case CHEvent::eMatchPoints:
+			{		
+				GScore pointsA=pA->getMatchPoints();
+				GScore pointsB=pB->getMatchPoints();
+	
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;
+			}
+			case CHEvent::eDirectEncounter:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				// Busco el partido que les enfrentó
+				CHPool * pPool = (CHPool * ) pA->getPool();
+				CHMatch * pMatch = pPool->findMatch(pOrigPoolResA, pOrigPoolResB);
+				if (pMatch)
+				{
+					CHMatchResult * pMR1 = pMatch->getWhite();
+					CHMatchResult * pMR2 = pMatch->getBlack();
+
+					if (pMR1->getPoolResult() == pA &&
+						pMR2->getPoolResult() == pB )
+					{
+						int order = orderMatchResultByPoints(pMR1, pMR2);
+						if (order)
+							return order;
+					}
+					else if (pMR1->getPoolResult() == pB &&
+						 	 pMR2->getPoolResult() == pA )
+					{
+						int order = orderMatchResultByPoints(pMR2, pMR1);
+						if (order)
+							return order;
+					}
+				}
+			
+				break;
+			}
+			case CHEvent::eMatchesWon:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				int order = pOrigPoolResA->getMatchesWon() - pOrigPoolResB->getMatchesWon();
+				if (order)
+					return order;
+
+				break;
+			}
+			case CHEvent::eTeamPointsWon:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				int order = pOrigPoolResA->getAllRoundsPointsForWon() - pOrigPoolResB->getAllRoundsPointsForWon();
+				if (order)
+					return order;
+
+				break;
+			}
+			case CHEvent::eRating:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getOppAverageRating();
+				GScore pointsB = pOrigPoolResB->getOppAverageRating();
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;
+			}
+			case CHEvent::eSolkoff:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getSolkOffF();
+				GScore pointsB = pOrigPoolResB->getSolkOffF();
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;			
+			}
+			case CHEvent::eSolkoffCutLowestAndHighest:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getMedianSolkOffF(0,1,1);
+				GScore pointsB = pOrigPoolResB->getMedianSolkOffF(0,1,1);
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;			
+			}
+			case CHEvent::eSolkoffCutLowest:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getMedianSolkOffF(0,0,1);
+				GScore pointsB = pOrigPoolResB->getMedianSolkOffF(0,0,1);
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;			
+			}
+			case CHEvent::eSonneBerger:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getSonneBergerF();
+				GScore pointsB = pOrigPoolResB->getSonneBergerF();
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+
+				break;
+			}
+		}
+	}
 
 	return strcmp(pA->getKey(),pB->getKey());
 }
@@ -301,20 +872,181 @@ int compPoolResults(const MSLItem** a,const MSLItem** b)
 	CHPoolResult * pA=((CHPoolResult *)(*a));
 	CHPoolResult * pB=((CHPoolResult *)(*b));
 	
-	if (pA->getQualitativeCode()==DSQ && 
-		pB->getQualitativeCode()==DSQ)
-		return strcmp(pA->getKey(),pB->getKey());
+	CHEvent *pEvent=(CHEvent*)pA->getEvent();
 
-	if (pA->getQualitativeCode()==FO && 
-		pB->getQualitativeCode()==FO)
-		return strcmp(pA->getKey(),pB->getKey());
+	for(short i=0;i<pEvent->getNumRankOrder();i++)
+	{
+		CHEvent::TypeRank typeRnk=pEvent->getRankOrder(i);
+		switch(typeRnk)
+		{
+			case CHEvent::eQualitative:
+			{
+				// Qualitative
+				if (pA->getQualitativeCode()!=OK && 
+					pB->getQualitativeCode()!=OK)
+				{
+					GQualitative * pQA = pA->getQualitative();
+					GQualitative * pQB = pB->getQualitative();
+					if (pQA && pQB)
+						return pQA->getSort() - pQB->getSort();
+				}
+				
+				if (pA->getQualitativeCode()==DSQ)
+					return 1;
+				if (pA->getQualitativeCode()==RET)
+					return 1;
+				if (pA->getQualitativeCode()==FO)
+					return 1;
+				if (pB->getQualitativeCode()==DSQ)
+					return -1;		
+				if (pB->getQualitativeCode()==RET)
+					return -1;		
+				if (pB->getQualitativeCode()==FO)
+					return -1;
+				break;
+			}
+			case CHEvent::ePoints:
+			{		
+				GScore pointsA=pA->getPointsF();
+				GScore pointsB=pB->getPointsF();
+	
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;
+			}			
+			case CHEvent::eMatchPoints:
+			{		
+				GScore pointsA=pA->getMatchPoints();
+				GScore pointsB=pB->getMatchPoints();
+	
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;
+			}
+			case CHEvent::eTeamPointsWon:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
 
-	if (pA->getQualitativeCode()==DSQ ||
-		pB->getQualitativeCode()==RET)
+				int order = pOrigPoolResA->getAllRoundsPointsForWon() - pOrigPoolResB->getAllRoundsPointsForWon();
+				if (order)
+					return order;
+
+				break;
+			}
+			case CHEvent::eMatchesWon:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				int order = pOrigPoolResA->getMatchesWon() - pOrigPoolResB->getMatchesWon();
+				if (order)
+					return order;
+
+				break;
+			}
+			case CHEvent::eRating:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getOppAverageRating();
+				GScore pointsB = pOrigPoolResB->getOppAverageRating();
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;
+			}
+			case CHEvent::eSolkoff:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getSolkOffF();
+				GScore pointsB = pOrigPoolResB->getSolkOffF();
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;			
+			}
+			case CHEvent::eSolkoffCutLowestAndHighest:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getMedianSolkOffF(0,1,1);
+				GScore pointsB = pOrigPoolResB->getMedianSolkOffF(0,1,1);
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;			
+			}
+			case CHEvent::eSolkoffCutLowest:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getMedianSolkOffF(0,0,1);
+				GScore pointsB = pOrigPoolResB->getMedianSolkOffF(0,0,1);
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;			
+			}
+			case CHEvent::eSonneBerger:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getSonneBergerF();
+				GScore pointsB = pOrigPoolResB->getSonneBergerF();
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+
+				break;
+			}
+		}
+	}
+	
+	return 0;
+}
+
+static
+	
+int compPoolResultsByTeamPointsEliminatory(const MSLItem** a,const MSLItem** b)
+{
+	CHPoolResult * pA=((CHPoolResult *)(*a));
+	CHPoolResult * pB=((CHPoolResult *)(*b));
+	
+	// Qualitative
+	if (pA->getQualitativeCode()!=OK && 
+		pB->getQualitativeCode()!=OK)
+	{
+		GQualitative * pQA = pA->getQualitative();
+		GQualitative * pQB = pB->getQualitative();
+		if (pQA && pQB)
+			return pQA->getSort() - pQB->getSort();
+	}
+				
+	if (pA->getQualitativeCode()==DSQ)
 		return 1;
-
-	if (pB->getQualitativeCode()==DSQ ||
-		pA->getQualitativeCode()==RET)
+	if (pA->getQualitativeCode()==RET)
+		return 1;
+	if (pA->getQualitativeCode()==FO)
+		return 1;
+	if (pB->getQualitativeCode()==DSQ)
+		return -1;		
+	if (pB->getQualitativeCode()==RET)
+		return -1;		
+	if (pB->getQualitativeCode()==FO)
 		return -1;
 	
 	GScore pointsA=pA->getPointsF();
@@ -323,6 +1055,222 @@ int compPoolResults(const MSLItem** a,const MSLItem** b)
 	int order = orderPoints(pointsA,pointsB);
 	if (order)
 		return order;
+				
+	// Miro el ranking del matchResult ya calculado
+	MSLSortedVector vMatchResultsA;
+	pA->getMatchResultsVector(vMatchResultsA);
+	CHMatchResult * pMatchResultA = (CHMatchResult * ) vMatchResultsA[0];
+
+	MSLSortedVector vMatchResultsB;
+	pB->getMatchResultsVector(vMatchResultsB);
+	CHMatchResult * pMatchResultB = (CHMatchResult * ) vMatchResultsB[0];
+
+	if (pMatchResultA && pMatchResultB)
+	{
+		if (pMatchResultA->getQualitativeCode()==FO && 
+			pMatchResultB->getQualitativeCode()==FO)
+			return strcmp(pMatchResultA->getKey(),pMatchResultB->getKey());
+
+		if (pMatchResultA->getQualitativeCode()==FO)
+			return 1;
+
+		if (pMatchResultB->getQualitativeCode()==FO)
+			return -1;
+			
+		if (pMatchResultA->getRankPo()==0)
+			return 1;
+
+		if (pMatchResultB->getRankPo()==0)
+			return -1;
+
+		int rank=pMatchResultA->getRankPo() - pMatchResultB->getRankPo();
+		if(rank)
+			return rank;
+	}
+
+	return 0;
+}
+
+static
+int compPoolResults2Ties(const MSLItem** a,const MSLItem** b)
+{
+	CHPoolResult * pA=((CHPoolResult *)(*a));
+	CHPoolResult * pB=((CHPoolResult *)(*b));
+	
+	CHEvent *pEvent=(CHEvent*)pA->getEvent();
+
+	for(short i=0;i<pEvent->getNumRankOrder();i++)
+	{
+		CHEvent::TypeRank typeRnk=pEvent->getRankOrder(i);
+		switch(typeRnk)
+		{
+			case CHEvent::eQualitative:
+			{
+				// Qualitative
+				if (pA->getQualitativeCode()!=OK && 
+					pB->getQualitativeCode()!=OK)
+				{
+					GQualitative * pQA = pA->getQualitative();
+					GQualitative * pQB = pB->getQualitative();
+					if (pQA && pQB)
+						return pQA->getSort() - pQB->getSort();
+				}
+				
+				if (pA->getQualitativeCode()==DSQ)
+					return 1;
+				if (pA->getQualitativeCode()==RET)
+					return 1;
+				if (pA->getQualitativeCode()==FO)
+					return 1;
+				if (pB->getQualitativeCode()==DSQ)
+					return -1;		
+				if (pB->getQualitativeCode()==RET)
+					return -1;		
+				if (pB->getQualitativeCode()==FO)
+					return -1;
+				break;
+			}
+			case CHEvent::ePoints:
+			{		
+				GScore pointsA=pA->getPointsF();
+				GScore pointsB=pB->getPointsF();
+	
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;
+			}			
+			case CHEvent::eMatchPoints:
+			{		
+				GScore pointsA=pA->getMatchPoints();
+				GScore pointsB=pB->getMatchPoints();
+	
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;
+			}
+			case CHEvent::eDirectEncounter:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				// Busco el partido que les enfrentó
+				CHPool * pPool = (CHPool * ) pA->getPool();
+				CHMatch * pMatch = pPool->findMatch(pOrigPoolResA, pOrigPoolResB);
+				if (pMatch)
+				{
+					CHMatchResult * pMR1 = pMatch->getWhite();
+					CHMatchResult * pMR2 = pMatch->getBlack();
+
+					if (pMR1->getPoolResult() == pA &&
+						pMR2->getPoolResult() == pB )
+					{
+						int order = orderMatchResultByPoints(pMR1, pMR2);
+						if (order)
+							return order;
+					}
+					else if (pMR1->getPoolResult() == pB &&
+						 	 pMR2->getPoolResult() == pA )
+					{
+						int order = orderMatchResultByPoints(pMR2, pMR1);
+						if (order)
+							return order;
+					}
+				}
+			
+				break;
+			}
+			case CHEvent::eMatchesWon:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				int order = pOrigPoolResA->getMatchesWon() - pOrigPoolResB->getMatchesWon();
+				if (order)
+					return order;
+
+				break;
+			}
+			case CHEvent::eTeamPointsWon:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				int order = pOrigPoolResA->getAllRoundsPointsForWon() - pOrigPoolResB->getAllRoundsPointsForWon();
+				if (order)
+					return order;
+
+				break;
+			}
+			case CHEvent::eRating:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getOppAverageRating();
+				GScore pointsB = pOrigPoolResB->getOppAverageRating();
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;
+			}
+			case CHEvent::eSolkoff:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getSolkOffF();
+				GScore pointsB = pOrigPoolResB->getSolkOffF();
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;			
+			}			
+			case CHEvent::eSolkoffCutLowestAndHighest:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getMedianSolkOffF(0,1,1);
+				GScore pointsB = pOrigPoolResB->getMedianSolkOffF(0,1,1);
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;			
+			}
+			case CHEvent::eSolkoffCutLowest:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getMedianSolkOffF(0,0,1);
+				GScore pointsB = pOrigPoolResB->getMedianSolkOffF(0,0,1);
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+				break;			
+			}
+			case CHEvent::eSonneBerger:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				GScore pointsA = pOrigPoolResA->getSonneBergerF();
+				GScore pointsB = pOrigPoolResB->getSonneBergerF();
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order)
+					return order;
+
+				break;
+			}
+		}
+	}
 
 	return 0;
 }
@@ -745,51 +1693,81 @@ mslToolsFcCompare CHRanking::getCompResultsTotal(GData* pData)
 
 mslToolsFcCompare CHRanking::getSortMatchResults(GTHMatch* pMatch)
 {
+	if ( ( (CHMatch*) pMatch)->isTeam() && pMatch->getPhaseCode()!=SWISS_ROUND)
+		return orderMatchResultByTeamPointsEliminatory;
+
 	return orderMatchResultByPoints;
 }
 
 mslToolsFcCompare CHRanking::getSortMatchResultsNoTies(GTHMatch* pMatch)
 {
+	if ( ( (CHMatch*) pMatch)->isTeam() && pMatch->getPhaseCode()!=SWISS_ROUND)
+		return orderMatchResultByTeamPointsEliminatory;
+
 	return orderMatchResultByPoints;
 }
 
 mslToolsFcCompare CHRanking::getSortMatchResults2Ties(GTHMatch* pMatch)
 {
+	if ( ( (CHMatch*) pMatch)->isTeam() && pMatch->getPhaseCode()!=SWISS_ROUND)
+		return orderMatchResultByTeamPointsEliminatory;
+
 	return orderMatchResultByPoints;
 }
 
 mslToolsFcCompare CHRanking::getSortMatchResults3Ties(GTHMatch* pMatch)
 {
+	if ( ( (CHMatch*) pMatch)->isTeam() && pMatch->getPhaseCode()!=SWISS_ROUND)
+		return orderMatchResultByTeamPointsEliminatory;
+
 	return orderMatchResultByPoints;
 }
 
 mslToolsFcCompare CHRanking::getSortMatchResultsTotal(GTHMatch* pMatch)
 {
+	if ( ( (CHMatch*) pMatch)->isTeam() && pMatch->getPhaseCode()!=SWISS_ROUND)
+		return orderMatchResultByTeamPointsEliminatory;
+
 	return orderMatchResultByPoints;
 }
 
 mslToolsFcCompare CHRanking::getCompMatchResults(GTHMatch* pMatch)
 {	
+	if ( ( (CHMatch*) pMatch)->isTeam() && pMatch->getPhaseCode()!=SWISS_ROUND)
+		return compMatchResultByTeamPointsEliminatory;
+
 	return compMatchResultByPoints;
 }
 
 mslToolsFcCompare CHRanking::getCompMatchResultsNoTies(GTHMatch* pMatch)
 {
+	if ( ( (CHMatch*) pMatch)->isTeam() && pMatch->getPhaseCode()!=SWISS_ROUND)
+		return compMatchResultByTeamPointsEliminatory;
+	
 	return compMatchResultByPoints;
 }
 
 mslToolsFcCompare CHRanking::getCompMatchResults2Ties(GTHMatch* pMatch)
 {
+	if ( ( (CHMatch*) pMatch)->isTeam() && pMatch->getPhaseCode()!=SWISS_ROUND)
+		return compMatchResultByTeamPointsEliminatory;
+
 	return compMatchResultByPoints;
 }
 
 mslToolsFcCompare CHRanking::getCompMatchResults3Ties(GTHMatch* pMatch)
 {
+	if ( ( (CHMatch*) pMatch)->isTeam() && pMatch->getPhaseCode()!=SWISS_ROUND)
+		return compMatchResultByTeamPointsEliminatory;
+
 	return compMatchResultByPoints;
 }
 
 mslToolsFcCompare CHRanking::getCompMatchResultsTotal(GTHMatch* pMatch)
 {
+	if ( ( (CHMatch*) pMatch)->isTeam() && pMatch->getPhaseCode()!=SWISS_ROUND)
+		return compMatchResultByTeamPointsEliminatory;
+
 	return compMatchResultByPoints;
 }
 
@@ -818,54 +1796,81 @@ bool CHRanking::preAcumulateMatchData(GTHMatchResult* pMatchResult)
 // POOL RANKINGS
 mslToolsFcCompare CHRanking::getSortPoolResults(GTHPool* pPool)
 {
+	if ( ( (CHPool*) pPool)->isTeam() && pPool->getPhaseCode()!=SWISS_ROUND)
+		return orderPoolResultsByTeamPointsEliminatory;
+
 	return orderPoolResults;
 	UNREFERENCED_PARAMETER(pPool);
 }
 
 mslToolsFcCompare CHRanking::getSortPoolResultsNoTies(GTHPool* pPool)
 {
+	if ( ( (CHPool*) pPool)->isTeam() && pPool->getPhaseCode()!=SWISS_ROUND)
+		return orderPoolResultsByTeamPointsEliminatory;
+
 	return orderPoolResults;
 	UNREFERENCED_PARAMETER(pPool);
 }
 
 mslToolsFcCompare CHRanking::getSortPoolResults2Ties(GTHPool* pPool)
 {
-	return orderPoolResults;
+	if ( ( (CHPool*) pPool)->isTeam() && pPool->getPhaseCode()!=SWISS_ROUND)
+		return orderPoolResultsByTeamPointsEliminatory;
+
+	return orderPoolResults2Ties;
 	UNREFERENCED_PARAMETER(pPool);
 }
 
 mslToolsFcCompare CHRanking::getSortPoolResults3Ties(GTHPool* pPool)
 {
+	if ( ( (CHPool*) pPool)->isTeam() && pPool->getPhaseCode()!=SWISS_ROUND)
+		return orderPoolResultsByTeamPointsEliminatory;
+
 	return orderPoolResults;
 	UNREFERENCED_PARAMETER(pPool);
 }
 
 mslToolsFcCompare CHRanking::getSortPoolResultsTotal(GTHPool* pPool)
 {
+	if ( ( (CHPool*) pPool)->isTeam() && pPool->getPhaseCode()!=SWISS_ROUND)
+		return orderPoolResultsByTeamPointsEliminatory;
+
 	return orderPoolResults;
 	UNREFERENCED_PARAMETER(pPool);
 }
 
 mslToolsFcCompare CHRanking::getCompPoolResults(GTHPool* pPool)
 {
+	if ( ( (CHPool*) pPool)->isTeam() && pPool->getPhaseCode()!=SWISS_ROUND)
+		return compPoolResultsByTeamPointsEliminatory;
+
 	return compPoolResults;
 	UNREFERENCED_PARAMETER(pPool);
 }	
 
 mslToolsFcCompare CHRanking::getCompPoolResultsNoTies(GTHPool* pPool)
 {
+	if ( ( (CHPool*) pPool)->isTeam() && pPool->getPhaseCode()!=SWISS_ROUND)
+		return compPoolResultsByTeamPointsEliminatory;
+
 	return compPoolResults;
 	UNREFERENCED_PARAMETER(pPool);
 }
 
 mslToolsFcCompare CHRanking::getCompPoolResults2Ties(GTHPool* pPool)
 {
-	return compPoolResults;
+	if ( ( (CHPool*) pPool)->isTeam() && pPool->getPhaseCode()!=SWISS_ROUND)
+		return compPoolResultsByTeamPointsEliminatory;
+
+	return compPoolResults2Ties;
 	UNREFERENCED_PARAMETER(pPool);
 }
 
 mslToolsFcCompare CHRanking::getCompPoolResults3Ties(GTHPool* pPool)
 {
+	if ( ( (CHPool*) pPool)->isTeam() && pPool->getPhaseCode()!=SWISS_ROUND)
+		return compPoolResultsByTeamPointsEliminatory;
+
 	return compPoolResults;
 	UNREFERENCED_PARAMETER(pPool);
 }

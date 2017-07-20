@@ -34,8 +34,8 @@ bool CHMatchConfigToolBar::onInit()
 {
 	doJump(7);
 	
-	bool enable = m_pMatch ? m_pMatch->hasCompetitors() && m_pMatch->getStatus()>=CHMemoryDataBase::eSchedulled : false;
-
+	bool enable = m_pMatch ? m_pMatch->hasByes() || ( m_pMatch->hasCompetitors() && m_pMatch->getStatus()>=CHMemoryDataBase::eSchedulled ) : false;
+		
 	doLabelEx(BT_AUTO_SET, "Auto Set",70,"Auto match member assigment",IDB_BMP_AUTOSET);	
 	doLabelEx(BT_REMOVE_SET, "Remove Set",70,"Remove match member assigment",IDB_BMP_REMOVESET);
 	doLabelEx(BT_CHANGE_SIDE, "Change Side",70,"Change side/color",IDB_BMP_CHANGESIDE);
@@ -58,7 +58,7 @@ bool CHMatchConfigToolBar::onInit()
 	m_gui.setEnable(BT_PRESS_WINNER_WHITE_F		,enable);
 	m_gui.setEnable(BT_PRESS_TIED_F				,enable);
 	m_gui.setEnable(BT_PRESS_WINNER_BLACK_F		,enable);
-	m_gui.setEnable(BT_PRESS_EMPTY				,enable);
+	m_gui.setEnable(BT_PRESS_EMPTY				,true);
 
 	doSeparator();
 
@@ -66,7 +66,7 @@ bool CHMatchConfigToolBar::onInit()
 	doLabelEx(BT_FINISH, "Finish",50,"Finish match");				
 	
 	m_gui.setEnable(BT_CHECK_AUTO_FINISH	,enable);
-	m_gui.setEnable(BT_FINISH				,enable);
+	m_gui.setEnable(BT_FINISH				,true);
 
 	return true;
 }

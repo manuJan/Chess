@@ -35,6 +35,7 @@ public:
 
 	bool canInsertAvailableMatch(GTHMatch *pMatch);
 
+	MSLWString getDescription			(GTHMatch *pMatch);
 	MSLWString getCompetitorDescription (GTHMatchResult *pMatchResult);
 	
 };

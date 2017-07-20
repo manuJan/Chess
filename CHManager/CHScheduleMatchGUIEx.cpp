@@ -42,3 +42,11 @@ MSLWString CHScheduleMatchGUIEx::getCompetitorsDescription	(GTHMatchResult *pMat
 	
 	return TOWSTRING(pMatchResult->getPoolPosition());
 }
+
+bool CHScheduleMatchGUIEx::canInsertScheduleMatch(GTHMatch *pMatch)
+{
+	if (pMatch->getSubCode())
+		return false;
+
+	return GTHScheduleMatchGUIEx::canInsertScheduleMatch(pMatch);
+}

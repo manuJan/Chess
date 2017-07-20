@@ -21,6 +21,7 @@
 *****************************************************************************************/
 
 #include "StdAfx.h"
+#include "CHManagerApp.h"
 #include "CHAvailableMatchGUIEx.h"
 #include "..\CHMngtModel\CHMatch.h"
 #include "..\CHMngtModel\CHMatchResult.h"
@@ -71,6 +72,44 @@ bool CHAvailableMatchGUIEx::paintGridAvailableMatches(gui_grid_cell* cell)
 	return GTHAvailableMatchGUIEx::paintGridAvailableMatches(cell);
 }
 
+MSLWString CHAvailableMatchGUIEx::getDescription(GTHMatch *pMatch)
+{
+	MSLWString dataDescription = NULLWSTRING;
+	if (m_pDataSel && 
+		m_pDataSel ->isA()==__GTHEVENT)
+	{
+		dataDescription+=pMatch->getPhaseSDescription();
+		dataDescription+=L"-";
+	}
+
+	if (m_pDataSel && 
+	   (m_pDataSel ->isA()==__GTHEVENT ||
+	    m_pDataSel ->isA()==__GTHPHASE ) )
+	{
+		if (pMatch->getIsPool())
+		{
+			GTHPool* pPool = pMatch->getPool();
+			dataDescription+=pPool->getPoolDescription();
+			dataDescription+=L"-";
+		}
+	}
+
+	if (m_pDataSel && 
+	   (m_pDataSel ->isA()==__GTHEVENT ||
+	    m_pDataSel ->isA()==__GTHPHASE ||
+		m_pDataSel ->isA()==__GTHPOOL ||
+		m_pDataSel ->isA()==__GTHMATCH ) )
+	{
+		dataDescription+=GUITHManagerApp::getOverallSMatchDescription();
+		dataDescription+=L" ";
+		dataDescription+=TOWSTRING(pMatch->getCode());
+		dataDescription+=L" ";
+		dataDescription+=( (CHMatch*) pMatch)->getRoundAsString(false, false).toUnicode();
+	}
+
+	return dataDescription;
+}
+
 MSLWString CHAvailableMatchGUIEx::getCompetitorDescription (GTHMatchResult *pMatchResult)
 {
 	if (!pMatchResult)
@@ -98,8 +137,11 @@ bool CHAvailableMatchGUIEx::canInsertAvailableMatch(GTHMatch *pMatch)
 	if (!pMatch)
 		return false;
 
-	if ( ( (CHMatch*)pMatch)->isTeam() && !pMatch->getSubMatch())
+	if ( ( (CHMatch*)pMatch)->isTeam() && pMatch->getSubMatch())
 		return false;
+
+	if ( pMatch->getStatus()==GTHMemoryDataBase::eAvailable && ( (CHMatch*)pMatch)->hasByes())
+		return true;
 
 	return GTHAvailableMatchGUIEx::canInsertAvailableMatch(pMatch);
 }

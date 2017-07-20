@@ -35,8 +35,24 @@
 #include "..\CHMngtModel\CHPool.h"
 #include "..\CHMngtModel\CHMatch.h"
 #include "..\CHMngtModel\CHInscription.h"
-
 #include <ovr\core\th\gthmsgdefines.h>
+
+static
+int orderPoolResults(const MSLItem** a, const MSLItem** b)
+{
+	GTHPoolResult * pA=(GTHPoolResult *)(*a);
+	GTHPoolResult * pB=(GTHPoolResult *)(*b);
+
+	int order=_wcsicoll(pA->getPrnLName(),pB->getPrnLName());
+	if(order)
+		return order;
+
+	order = pA->getOrder() - pB->getOrder();
+	if (order)
+		return order;
+
+	return strcmp(pA->getKey(),pB->getKey());
+}
 
 CHMatchGUIEx::CHMatchGUIEx(GTHProgression* pProgression, GTHProgressionData* pProgressionData, GTHStatusManager* pStatusManager, long id)
 :GTHMatchGUIEx(pProgression, pProgressionData, pStatusManager, id)
@@ -338,12 +354,20 @@ void CHMatchGUIEx::matchConfigurationDlg()
 	}
 }
 
+mslToolsFcCompare CHMatchGUIEx::getSortPoolResults() const
+{
+	return orderPoolResults;
+}
+
 bool CHMatchGUIEx::validComboPoolResult(GTHPoolResult *pPoolResult, GTHMatchResult* pMatchResult)
 {
 	// Si ese pool result ya esta en la ronda o ha jugado contra ese match result devuelvo false
 	CHMatch * pMatch = (CHMatch*)pMatchResult->getMatch();
 	if (!pMatch)
 		return false;
+
+	if (pPoolResult->getBye())
+		return true;
 
 	CHPool * pPool = (CHPool * ) pMatch->getPool();
 	MSLSortedVector vRoundMatches;

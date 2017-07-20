@@ -276,3 +276,26 @@ void CHProgression::changeSide(CHMatch *pMatch)
 	CHSend.toServerDB(pMR1);			
 	CHSend.toServerDB(pMR2);			
 }
+
+void CHProgression::startListMatch(CHMatch *pMatch)
+{
+	MSLSortedVector vMatchJudges;
+	pMatch->getMatchJudgesVector(vMatchJudges);
+
+	if (pMatch->getStatus()!=CHMemoryDataBase::eSchedulled)
+		return;
+
+	if (vMatchJudges.entries()==0)
+		return;
+
+	bool competitors = pMatch->hasCompetitors();
+	if (!competitors)
+		return;
+
+	bool teamCompetitors = pMatch->hasTeamCompetitors();
+	if (!teamCompetitors)
+		return;
+
+	CHStatusManager statusManager;
+	statusManager.setStatus(pMatch,CHMemoryDataBase::eStartList);		
+}

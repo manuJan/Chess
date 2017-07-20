@@ -59,6 +59,7 @@ protected:
 	void initialDraw					();
 	void matchConfigurationDlg			();
 
+	mslToolsFcCompare getSortPoolResults() const;
 	bool validComboPoolResult			(GTHPoolResult *pPoolResult, GTHMatchResult* pMatchResult);
 
 private:

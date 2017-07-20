@@ -215,3 +215,13 @@ bool CHPoolResultGUIEx::canChangePoolResult(GTHPoolResult* pPoolResult, int col)
 	return true;
 	UNREFERENCED_PARAMETER(col);
 }
+
+bool CHPoolResultGUIEx::fillComboCompetitors(GTHPoolResult* pPoolResult)
+{
+	bool ret = GTHPoolResultGUIEx::fillComboCompetitors(pPoolResult);
+
+	if(pPoolResult && pPoolResult->getIsPool())
+		m_gui.combo_add(CB_COMPETITORS,PROGRESSION_PRG_BYE2,1);
+
+	return ret;
+}

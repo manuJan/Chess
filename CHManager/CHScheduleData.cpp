@@ -83,7 +83,7 @@ void CHScheduleData::onMatchScheduled(GTHMatch* pMatch)
 {	
 	GTHScheduleData::onMatchScheduled(pMatch);
 
-	if(pMatch->getSubMatch()) //Fecha al padre
+	if(!pMatch->getSubMatch()) //Fecha a los hijos
 		onScheduleChangeSubMatch((CHMatch*)pMatch);	
 }
 	
@@ -91,7 +91,7 @@ void CHScheduleData::onMatchUndoScheduled(GTHMatch* pMatch)
 {
 	GTHScheduleData::onMatchUndoScheduled(pMatch);
 
-	if(pMatch->getSubMatch()) //Fecha al padre
+	if(!pMatch->getSubMatch()) //Fecha a los hijos
 	{
 		onScheduleChangeSubMatch((CHMatch*)pMatch);
 	}
@@ -101,31 +101,54 @@ bool CHScheduleData::onScheduleChangeSubMatch(CHMatch * pMatch)
 {
 	bool rtn=false;
 
-	if(!pMatch)
-		return rtn;
-
-	CHMatch * pMatchParent=(CHMatch*)pMatch->getParent();
-	if(!pMatchParent)
+	if(!pMatch || pMatch->getSubCode())
 		return rtn;
 
 	MSLSortedVector vSubMatches;
-	pMatchParent->getSubMatchesVector(vSubMatches,orderMatchByDateTime);
+	pMatch->getSubMatchesVector(vSubMatches,orderMatchByDateTime);
 
 	if(!vSubMatches.entries())
 		return rtn;
 
-	CHMatch* pSubMatch=(CHMatch*)vSubMatches[0];
-	if(!pSubMatch)
-		return rtn;
-
-	if (pMatchParent->getStartDate().value()!=pSubMatch->getStartDate().value() )
+	short courtCodeSubMatch = pMatch->getCourtCode();
+	
+	for (short i=0;i<vSubMatches.entries();i++)
 	{
-		pMatchParent->setStartDate(pSubMatch->getStartDate());
-		pMatchParent->setStartTime(pSubMatch->getStartTime());
-		APP::out(*pMatchParent);
-		APP::out(TRN_SET_MATCH);
-		rtn=true;
+		CHMatch* pSubMatch=(CHMatch*)vSubMatches[i];
+		
+		if (pMatch->getStartDate().value()!=pSubMatch->getStartDate().value() )
+		{
+			pSubMatch->setStartDate(pMatch->getStartDate());
+			pSubMatch->setStartTime(pMatch->getStartTime());									
+			rtn=true;
+		}
+		
+		if (pMatch->getStatus()!=pSubMatch->getStatus() )
+		{
+			pSubMatch->setStatus(pMatch->getStatus());
+			rtn=true;
+		}
+
+		if (pMatch->getCourtCode()==0)
+		{
+			pSubMatch->setVenueCode(NULLSTRING);
+			pSubMatch->setCourtCode(0);
+			rtn=true;
+		}
+		else if (pSubMatch->getCourtCode()!=courtCodeSubMatch)
+		{
+			pSubMatch->setVenueCode(pMatch->getVenueCode());
+			pSubMatch->setCourtCode(courtCodeSubMatch);
+			rtn=true;
+			courtCodeSubMatch++;
+		}		
+
+		if (rtn)
+			APP::out(*pSubMatch);
 	}
+
+	if (rtn)
+		APP::out(TRN_SET_MATCH);
 	
 	return rtn;
 }

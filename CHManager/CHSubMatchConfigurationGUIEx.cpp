@@ -376,7 +376,7 @@ void CHSubMatchConfigurationGUIEx::createGridSubmatches()
 
 	Y+=18;
 
-	m_gui.doGrid(GR_SUBMATCHES_CNF,RC(aRc.left,Y,aRc.right-16,Y+80),GUI_ID_STY_BOR,GUI_ID_STY_SEL,25);
+	m_gui.doGrid(GR_SUBMATCHES_CNF,RC(aRc.left,Y,aRc.right-16,Y+120),GUI_ID_STY_BOR,GUI_ID_STY_SEL,25);
 
 	m_gui.grid_addColumn(GR_SUBMATCHES_CNF,"Date"	  ,GUI_JUST_CENTER,80 ,C_DATE_SUBMATCH_CNF);
 	m_gui.grid_addColumn(GR_SUBMATCHES_CNF,"Time"	  ,GUI_JUST_CENTER,50 ,C_SESSI_SUBMATCH_CNF);
@@ -391,6 +391,7 @@ void CHSubMatchConfigurationGUIEx::createGridSubmatches()
 
 	m_gui.grid_setLineColor(GR_SUBMATCHES_CNF,GUI_RGB_OFF,GUI_RGB_OFF); 	
 	m_gui.doCombo(CB_SUBMATCH_CNF,RC(0,0,0,0));
+	m_gui.doCombo(CB_MATCHMEMBERS_CNF,RC(0,0,0,0));
 }
 
 void CHSubMatchConfigurationGUIEx::fillGridSubmatches()

@@ -24,6 +24,7 @@
 #include "CHUmpireGUIEx.h"
 #include "CHManagerApp.h"
 #include "CHManagerDefs.h"
+#include "CHProgression.h"
 #include <OVR/CORE/TH/GTHMsgDefines.h>
 #include "..\CHMngtModel\CHMatch.h"
 #include "..\CHMngtModel\CHRegister.h"
@@ -332,6 +333,9 @@ void CHUmpireGUIEx::dblClickGridChairUmpire(long x,long y)
 		return;
 
 	setMatchJudge(getOfficial());
+
+	CHProgression aProgression(this);
+	aProgression.startListMatch(m_pMatch);
 
 	dlgClose(0);
 }

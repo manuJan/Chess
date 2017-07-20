@@ -36,6 +36,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 CHEventControlOperations::CHEventControlOperations(MSLGUIEx* pGUIEx)
+:m_pGUIEx(pGUIEx)
 {	
 }
 
@@ -135,6 +136,7 @@ void CHEventControlOperations::setScore(long idEvent,CHMatch *pMatch)
 		if(forfeit==1 || forfeit==3)
 		{
 			pWhite->setQualitative(FO);			
+			pWhite->setResult( pWhite->getQualitativeSDescription().toAscii() );
 			if(forfeit==1)
 			{
 				pBlack->setQualitative(OK);
@@ -147,6 +149,7 @@ void CHEventControlOperations::setScore(long idEvent,CHMatch *pMatch)
 		if(forfeit==2 || forfeit==3)
 		{
 			pBlack->setQualitative(FO);
+			pBlack->setResult( pBlack->getQualitativeSDescription().toAscii() );
 			if(forfeit==2)
 			{
 				pWhite->setQualitative(OK);
@@ -341,11 +344,20 @@ void CHEventControlOperations::finishMatch(CHMatch *pMatch,bool status)
 		// Ranking de pool
 		aRanking.calculateRankings(pPool);
 
+		APP::out(*pPool);
+		APP::out(TRN_SET_RANKINGS);
+
 		// Ranking de fase
 		aRanking.calculateRankings(pPhase);
 
+		APP::out(*pPhase);
+		APP::out(TRN_SET_RANKINGS);
+
 		// Ranking de evento
 		aRanking.calculateRankings(pEvent);
+
+		APP::out(*pEvent);
+		APP::out(TRN_SET_RANKINGS);
 	}
 
 	CHProgression aProgression((MSLGUIEx*)m_pGUIEx);

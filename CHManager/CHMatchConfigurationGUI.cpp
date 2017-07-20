@@ -257,7 +257,7 @@ MSLGUIEx * CHMatchConfigurationGUI::onNewGUIEx(long id)
 			RECT aRc=getRect();
 
 			CHSubMatchConfigurationGUIEx * pSubMatchConfigGUIEx= new CHSubMatchConfigurationGUIEx(CHSUBMATCHCONFIGGUIEX_ID,m_pMatch);
-			pSubMatchConfigGUIEx->init(m_gui.getHWnd(0),m_hWnd,RC(aRc.left+10,240,aRc.right,400));			
+			pSubMatchConfigGUIEx->init(m_gui.getHWnd(0),m_hWnd,RC(aRc.left+10,240,aRc.right,440));			
 			return pSubMatchConfigGUIEx;
 		}
 	}

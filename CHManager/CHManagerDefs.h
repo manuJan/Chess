@@ -52,16 +52,16 @@
 #define COLOR_BLUE_HEADER							RGB(0,128,183)
 
 /************************************* BITMAPS ********************************************/
-#define BM_LOAD										CH_GUI+50
-#define BM_SAVE										CH_GUI+51
-#define BM_TARGET									CH_GUI+52
+#define BM_LOAD										CH_GUI+1
+#define BM_SAVE										CH_GUI+2
+#define BM_TARGET									CH_GUI+3
 
 //////////////////////////////////// SPORT //////////////////////////////////////////////
 /*********************************** ARSPORTGUI *****************************************/
-#define CHSPORTGUI_ID								CH_GUI+100
-	#define LB_AUTO_PROG							CHSPORTGUI_ID+10
-	#define FRM_AUTO_PROG							CHSPORTGUI_ID+11
-	#define CH_AUTO_PROG							CHSPORTGUI_ID+12
+#define CHSPORTGUI_ID								CH_GUI+10
+	#define LB_AUTO_PROG							CHSPORTGUI_ID+1
+	#define FRM_AUTO_PROG							CHSPORTGUI_ID+2
+	#define CH_AUTO_PROG							CHSPORTGUI_ID+3
 
 //////////////////////////////////// EVENTS //////////////////////////////////////////////
 /*********************************** CHEnableEventGUIEx *********************************/
@@ -74,6 +74,8 @@
 	#define C_EV_BRONZES							C_ENABLE_EVENT+6	
 	#define C_EV_CODE_REPORTS						C_ENABLE_EVENT+7
 	#define C_EV_TEAM_CFG							C_ENABLE_EVENT+8
+
+	#define CB_TEAM_CFG								CH_GUI+20
 	
 /*********************************** CHEventCriteriaGUIEx *******************************/
 #define CHEVENTCRITERIAGUIEX_ID						CH_GUI+110

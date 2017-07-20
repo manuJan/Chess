@@ -32,4 +32,7 @@ public:
 	virtual ~CHScheduleMatchGUIEx(void);	
 
 	MSLWString getCompetitorsDescription		(GTHMatchResult *pMatchResult);
+
+	bool canInsertScheduleMatch					(GTHMatch *pMatch);
+
 };

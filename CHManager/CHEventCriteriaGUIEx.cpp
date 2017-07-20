@@ -415,12 +415,20 @@ MSLString CHEventCriteriaGUIEx::getTypeCriteria(short typeCrit)
 			return "Qualitative";
 		case CHEvent::ePoints:
 			return "Points";
+		case CHEvent::eMatchPoints:
+			return "Match Points";
+		case CHEvent::eDirectEncounter:
+			return "Direct Encounter";
+		case CHEvent::eKoyaTieBreak:
+			return "Koya Tie Break";
 		case CHEvent::eSolkoff:
-			return "Solkoff";
+			return "Buchholz";
 		case CHEvent::eSonneBerger:
 			return "Sonneberger";
-		case CHEvent::eMedianSolkoff:
-			return "Median solkoff";
+		case CHEvent::eSolkoffCutLowest:
+			return "Buchholz Cut Lowest";
+		case CHEvent::eSolkoffCutLowestAndHighest:
+			return "Buchholz Cut Lowest & Highest";
 		case CHEvent::eProgressiveScore:
 			return "Progressive score";
 		case CHEvent::eRating:

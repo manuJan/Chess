@@ -280,7 +280,7 @@ void CHProgressionGUI::onReportRequest(MSLReportItem  *pReport)
 				nRound!=ALL_ROUNDS)
 			{
 				MSLString round = TOSTRING(nRound);
-				pReport->setParameters(round);
+				pReport->setParameters("R_" + round);
 			}
 			break;
 		}

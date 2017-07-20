@@ -27,6 +27,15 @@
 #include "..\CHMngtModel\CHEvent.h"
 #include <ovr/core/G/GScore.h>
 
+int orderTeamMatchCfgs(const MSLItem** a, const MSLItem** b)
+{
+	CHTeamMatchsCnfg *pTeamMatchsCnfgA = (CHTeamMatchsCnfg *)(*a);
+	CHTeamMatchsCnfg *pTeamMatchsCnfgB = (CHTeamMatchsCnfg *)(*b);
+	
+	return pTeamMatchsCnfgA->getId() - pTeamMatchsCnfgB->getId();
+}
+
+
 CHEnableEventGUIEx::CHEnableEventGUIEx(long id,GEnableEventGUIEx::TypeControl tCtrl)
 :GEnableEventGUIEx(id,tCtrl)
 {
@@ -61,6 +70,23 @@ void CHEnableEventGUIEx::createGridEvent()
 	m_gui.grid_setCellTT(GR_EVENT,m_gui.grid_findCol(GR_EVENT,C_EV_BRONZES		),-1,"Number of bronze medals");
 	m_gui.grid_setCellTT(GR_EVENT,m_gui.grid_findCol(GR_EVENT,C_EV_CODE_REPORTS	),-1,"Code for printouts");
 	m_gui.grid_setCellTT(GR_EVENT,m_gui.grid_findCol(GR_EVENT,C_EV_TEAM_CFG		),-1,"Team Configuration");
+
+	// Combo TeamCfgs
+	m_gui.doCombo(CB_TEAM_CFG, RC(0,0,0,0));
+	fillComboTeamConfig();
+}
+
+void CHEnableEventGUIEx::fillComboTeamConfig()
+{
+	m_gui.combo_reset(CB_TEAM_CFG);
+	
+	MSLSortedVector vTeamCfgs(CHMemoryDataBase::getCol(__CHTEAMMATCHSCNFG), orderTeamMatchCfgs );
+	for (short i=0; i<vTeamCfgs.entries(); i++)
+	{
+		CHTeamMatchsCnfg *pTeamMatchsCnfg = (CHTeamMatchsCnfg *) vTeamCfgs[i];
+		if (pTeamMatchsCnfg)
+			m_gui.combo_add(CB_TEAM_CFG, pTeamMatchsCnfg->getLDescription(), (LPARAM) pTeamMatchsCnfg);
+	}
 }
 
 void CHEnableEventGUIEx::fillGridEvent()
@@ -134,6 +160,8 @@ void CHEnableEventGUIEx::dblClickGridEvent(long x, long y)
 			editByePoints(pEvent);	
 	else if (col==C_EV_CODE_REPORTS)
 			editCodeForReports(pEvent);
+	else if (col==C_EV_TEAM_CFG)
+			editTeamCfg(pEvent);
 
 	m_gui.redraw(GR_EVENT);
 }
@@ -147,9 +175,10 @@ void CHEnableEventGUIEx::editConstRating(CHEvent *pEvent)
 	MSLString sNewRating = m_gui.grid_showEdit(GR_EVENT,sOldRating,9,"#",1);
 	GScore newRating = GScore(sNewRating);
 	if (sNewRating!=sOldRating)
+	{
 		pEvent->setConstRating(newRating.getScore());
-
-	CHSend.toServerDB(pEvent);
+		CHSend.toServerDB(pEvent);
+	}
 }
 
 void CHEnableEventGUIEx::editBronzes(CHEvent *pEvent)
@@ -159,7 +188,6 @@ void CHEnableEventGUIEx::editBronzes(CHEvent *pEvent)
 
 	short oldValue = pEvent->getTwoBronces();
 	pEvent->setTwoBronces( oldValue==1 ? 0 : 1);
-
 	CHSend.toServerDB(pEvent);
 }
 
@@ -172,9 +200,10 @@ void CHEnableEventGUIEx::editByePoints(CHEvent *pEvent)
 	MSLString sNewPoints = m_gui.grid_showEdit(GR_EVENT,sOldPoints,9,"#",1);
 	GScore newPoints = GScore(sNewPoints);
 	if (sNewPoints!=sOldPoints)
+	{
 		pEvent->setPointsBye(newPoints);
-
-	CHSend.toServerDB(pEvent);
+		CHSend.toServerDB(pEvent);
+	}
 }
 
 void CHEnableEventGUIEx::editCodeForReports(CHEvent *pEvent)
@@ -185,13 +214,36 @@ void CHEnableEventGUIEx::editCodeForReports(CHEvent *pEvent)
 	MSLString sOld = pEvent->getCodeReports();
 	MSLString sNew = m_gui.grid_showEdit(GR_EVENT,sOld,9,0,10);	
 	if (sNew!=sOld)
+	{
 		pEvent->setCodeReports(sNew);
+		CHSend.toServerDB(pEvent);
+	}
+}
 
-	CHSend.toServerDB(pEvent);
+void CHEnableEventGUIEx::editTeamCfg(CHEvent *pEvent)
+{
+	CHTeamMatchsCnfg* pTeamMatchsCnfg=pEvent->getTeamMatchCfg();
+	m_gui.combo_selL(CB_TEAM_CFG,(LPARAM)pTeamMatchsCnfg);
+
+	CHTeamMatchsCnfg * pNewTeamMatchsCnfg = (CHTeamMatchsCnfg*) m_gui.grid_showCombo(GR_EVENT, CB_TEAM_CFG);
+	if(pNewTeamMatchsCnfg!=pTeamMatchsCnfg && pNewTeamMatchsCnfg)
+	{
+		pEvent->setIdTeamMatchsCnfg(pNewTeamMatchsCnfg->getId());
+		CHSend.toServerDB(pEvent);
+	}
+
 }
 
 bool CHEnableEventGUIEx::canChangeEvent(CHEvent *pEvent, int col)
 {
+	if (pEvent && 
+		pEvent->getStatus()>=CHMemoryDataBase::eRunning &&
+		col == C_EV_TEAM_CFG)
+	{
+		MSLMsgBox(m_hWnd, L"The event is running, this value cannot be changed",GUI_ICO_STOP,GUI_MB_OK,L"Events");
+		return false;
+	}
+
 	return true;
 	UNREFERENCED_PARAMETER(col);
 	UNREFERENCED_PARAMETER(pEvent);
