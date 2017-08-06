@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Screens">
+      <UniqueIdentifier>{8e836db0-0601-4209-b4f6-03f36851dbc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="References">
+      <UniqueIdentifier>{3725aec9-830a-461b-8eda-4e8cb1ea0f93}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="small.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="CHOVR2CIS.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="references\eng.ch.labels.ref">
+      <Filter>References</Filter>
+    </None>
+    <None Include="references\esp.ch.labels.ref">
+      <Filter>References</Filter>
+    </None>
+    <None Include="screens\ch.match_header.screen">
+      <Filter>Screens</Filter>
+    </None>
+    <None Include="screens\ch.match_results.screen">
+      <Filter>Screens</Filter>
+    </None>
+    <None Include="screens\ch.round_results.screen">
+      <Filter>Screens</Filter>
+    </None>
+    <None Include="screens\ch.round_startlist.screen">
+      <Filter>Screens</Filter>
+    </None>
+    <None Include="screens\ch.team_match_results.screen">
+      <Filter>Screens</Filter>
+    </None>
+    <None Include="screens\ch.team_round_results.screen">
+      <Filter>Screens</Filter>
+    </None>
+    <None Include="screens\ch.team_round_startlist.screen">
+      <Filter>Screens</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHOVR2CIS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHCISApp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHCISProcess.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHCISGUIEx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHCISPaint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHCISDefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHCISItemSchUnit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHCISItemSchUnitResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHCISScreenBracket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHCISScreenStartList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHCISScreenResults.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHOVR2CIS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHCISApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHCISProcess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHCISGUIEx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHCISPaint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHCISItemSchUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHCISItemSchUnitResult.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHCISScreenBracket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHCISScreenStartList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHCISScreenResults.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CHOVR2CIS.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
