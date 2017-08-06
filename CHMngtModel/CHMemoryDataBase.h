@@ -69,8 +69,8 @@ public:
 	static MSLString	getRSCCH			(const GData * pData);
 	static MSLString	getRSC_Unit			(const CHMatch *pMatch);
 	
-	static MSLString	getRSC_Client		(HMODULE hModule, const GData * pData, int typeClient=0);
-	static MSLString	getRSCField_Client	(HMODULE hModule, MSLString rsc, int typeTraslate); 
+	static MSLString	getRSC_Client		(HMODULE hModule, const GData * pData, int typeTraslate, int typeClient=0);
+	static MSLString	getRSCField_Client	(HMODULE hModule, MSLString rsc, int typeTraslate, int typeClient=0); 
 		
 };
 

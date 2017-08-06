@@ -270,7 +270,7 @@ MSLString CHMemoryDataBase::getRSC_Unit(const CHMatch *pMatch)
 	return rsc;
 }
 
-MSLString CHMemoryDataBase::getRSC_Client(HMODULE hModule, const GData * pData, int typeClient/*=0*/)
+MSLString CHMemoryDataBase::getRSC_Client(HMODULE hModule, const GData * pData, int typeTraslate, int typeClient/*=0*/)
 {
 	MSLString value = CHMemoryDataBase::getRSCCH(pData); // MSL code
 
@@ -278,8 +278,8 @@ MSLString CHMemoryDataBase::getRSC_Client(HMODULE hModule, const GData * pData, 
 		return value;
 
 	MSLString params="";
-	int typeTraslate=RSC_ALL;
-	if( pData )
+	
+	if( pData && typeTraslate!=RSC_ALL)
 	{
 		if( pData->isA()==__GSESSION )
 		{
@@ -300,12 +300,12 @@ MSLString CHMemoryDataBase::getRSC_Client(HMODULE hModule, const GData * pData, 
 	return value;
 }
 
-MSLString CHMemoryDataBase::getRSCField_Client(HMODULE hModule, MSLString rsc, int typeTraslate)
+MSLString CHMemoryDataBase::getRSCField_Client(HMODULE hModule, MSLString rsc, int typeTraslate, int typeClient/*=0*/)
 {
 	if( !rsc.length() )
 		return "";
 	MSLString value="",g="",ev="",ph="",unit="";
-	
+	MSLString params="";
 	// El rsc pasado es el de msl
 	if( rsc.length()==17 )
 	{
@@ -326,8 +326,13 @@ MSLString CHMemoryDataBase::getRSCField_Client(HMODULE hModule, MSLString rsc, i
 	if( !hModule )
 		return value;
 	
-	PFN_RSC_FIELD m_pProcedureRSC = (PFN_RSC_FIELD)::GetProcAddress(hModule,"getRSC_Field");
+	PFN_RSC m_pProcedureRSC = (PFN_RSC)::GetProcAddress(hModule,"getRSC");
 	if( m_pProcedureRSC )
-		value = ((*m_pProcedureRSC)(rsc,typeTraslate));
+		((*m_pProcedureRSC)(value,params,"",typeTraslate,typeClient));
+
+	/*PFN_RSC_FIELD m_pProcedureRSC = (PFN_RSC_FIELD)::GetProcAddress(hModule,"getRSC");
+	if( m_pProcedureRSC )
+		((*m_pProcedureRSC)(value,params,"",typeTraslate,typeClient));*/
+		//value = ((*m_pProcedureRSC)(rsc,typeTraslate));
 	return value;
 }

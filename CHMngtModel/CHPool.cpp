@@ -35,6 +35,30 @@ MSLDEFINE_ITEM(CHPool, __CHPOOL)
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+
+static int orderMatches(const MSLItem** a, const MSLItem** b)
+{
+	CHMatch * pMatchA = (CHMatch *) (*a);
+	CHMatch * pMatchB = (CHMatch *) (*b);
+	
+	// Order by m_round
+	int order = pMatchA->getRound() - pMatchB->getRound();
+	if( order )
+		return order;
+
+	order = pMatchA->getMatchNumber() - pMatchB->getMatchNumber();
+	if( order )
+		return order;
+
+	// Order by Match Code
+	order = pMatchA->getCode() - pMatchB->getCode();
+	if( order )
+		return order;
+	
+	// Order by key
+	return strcmp(pMatchA->getKey(),pMatchB->getKey());
+}
+
 CHPool::CHPool()
 :GTHPool()
 {
@@ -243,6 +267,21 @@ void CHPool::getRoundMatchesVector(MSLSortedVector &vRoundMatches, short nRound)
 		if (pMatch->getRound()==nRound && pMatch->getSubMatch()==0)
 			vRoundMatches.insert(pMatch);
 	}
+	vRoundMatches.setFcCompare(orderMatches);
+	vRoundMatches.sort();
+}
+
+void CHPool::getFromRoundMatchesVector(MSLSortedVector &vRoundMatches, short nRound)
+{
+	CHMatch* pMatch=0;
+	MSLSortedVector vMatches;
+	getMatchesVector(vMatches);
+	for (short i=0;i<vMatches.entries();i++)
+	{
+		pMatch = (CHMatch*) vMatches[i];
+		if (pMatch->getRound()>=nRound && pMatch->getSubMatch()==0)
+			vRoundMatches.insert(pMatch);
+	}
 }
 
 bool CHPool::hasCompatibleColors(CHPoolResult* pPR1,CHPoolResult* pPR2, short round)
@@ -312,3 +351,19 @@ bool CHPool::isTeam()
 
 	return false;
 }
+
+void CHPool::getSamePointsCompetitorsVector(MSLSortedVector &vector, CHPoolResult * pPoolResult)
+{
+	MSLSortedVector vCompetitors;
+	getPoolResultsVector(vCompetitors);
+	for (short i=0;i<vCompetitors.entries();i++)
+	{
+		CHPoolResult * pPR = (CHPoolResult *)vCompetitors[i];
+		if (pPR==pPoolResult)
+			continue;
+
+		if (pPR->getPointsF() == pPoolResult->getPointsF())
+			vector.insert(pPR);
+	}
+}
+

@@ -1531,7 +1531,7 @@ GScore CHPoolResult::getMatchPoints(short nRound/*=0*/,bool onlyRound)
 	if( !pPool )
 		return 0.0;
 
-	short maxRound=!nRound?pPool->getNumRounds():nRound;
+	short maxRound=!nRound ? ( pPool->getIsPool() ? pPool->getNumRounds() : pPool->getMatches().entries() ) : nRound;
 	GScore points = 0.0;
 	CHMatch * pMatch = 0;
 	CHMatchResult * pMatchResult = 0;
@@ -1572,6 +1572,26 @@ MSLString CHPoolResult::getMatchPointsStr(short nRound/*=0*/,bool onlyRound)
 	p=p.strip(MSLString::leading,' ');
 	return p;
 	
+}
+
+MSLString CHPoolResult::getDirectMatchPtsStr()
+{
+	if (!getMatchesPlayed())
+		return NULLSTRING;
+
+	MSLSortedVector vSamePoints;
+	CHPool* pPool = (CHPool*) getPool();
+	pPool ->getSamePointsCompetitorsVector(vSamePoints, this);
+
+	if (vSamePoints.entries()==1)
+	{
+		// Miro si se han enfrentado
+		CHPoolResult * pPR = (CHPoolResult * )vSamePoints[0];
+		CHMatch *pMatch = pPool->findMatch(this,pPR);
+		if (pMatch)
+			return pMatch->getResultAsString();
+	}
+	return NULLSTRING;
 }
 
 
@@ -1917,4 +1937,31 @@ mslToolsFcSelect CHPoolResult::getSelectFn(const GData *pData)
 	case __CHEVENTRESULT:	return poolResultEventResult;
 	}
 	return 0;
+}
+
+void CHPoolResult::getParentMatchResultsVector(MSLSortedVector& vMatchResults, mslToolsFcCompare compare)
+{
+	GTHPool* pPool = getPool();
+	if (!pPool)
+		return;
+
+	MSLSortedVector vMatches;
+	pPool->getMatchesVector(vMatches);
+	for (long i=0;i<vMatches.entries();i++)
+	{
+		GTHMatch* pMatch = (GTHMatch*)vMatches[i];
+		if (!pMatch)
+			continue;
+
+		MSLSortedVector vResults;
+		pMatch->getMatchResultsVector(vResults);
+		for (long j=0;j<vResults.entries();j++)
+		{
+			GTHMatchResult* pMatchResult = (GTHMatchResult*)vResults[j];
+			if (getOrder()==pMatchResult->getPoolPosition() && pMatchResult->getMatchSubCode()==0)
+				vMatchResults.insert(pMatchResult);
+		}
+	}
+
+	vMatchResults.setFcCompare(compare ? compare : orderMatchResultsByRound);
 }

@@ -105,6 +105,7 @@ public:
 	GScore			getPointsSO(short nRound=0,bool onlyRound=false);
 	GScore			getMatchPoints(short nRound=0,bool onlyRound=false);
 	MSLString		getMatchPointsStr(short nRound=0,bool onlyRound=false);
+	MSLString		getDirectMatchPtsStr();
 	
 	MSLWString		getDescription(bool longDescription=true) const;
 	MSLWString		getSourceCompetitor();
@@ -129,6 +130,8 @@ public:
 	void			clearData();
 
 	CHPhase*		getPrevPhase();
+
+	void			getParentMatchResultsVector	(MSLSortedVector& vMatchResults, mslToolsFcCompare compare=0);
 
 	// select function
 	mslToolsFcSelect getSelectFn(const GData *pData);

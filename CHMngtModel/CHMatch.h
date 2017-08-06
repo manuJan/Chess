@@ -116,9 +116,13 @@ public:
 	CHMatchResult*	findMatchResult(GRegister * pRegister) const;
 	CHMatchResult*	findMatchResult(CHInscription *pInscription) const;
 	CHMatchResult*	findMatchResultByProgression(CHMatchResult * pMatchResult) const;
+	GTHMatchJudge*	findMatchJudge(GOfficial* pOfficial);
 
 	// select function
 	mslToolsFcSelect getSelectFn(const GData *pData);
+
+	MSLWString		getSDescription(const char * lang=0);
+	MSLWString		getLDescription(const char * lang=0);
 
 private:
 	

@@ -23,6 +23,8 @@
 #include "stdCHMngt.h"
 #include "CHMatch.h"
 #include "CHMatchResult.h"
+#include "CHDefinition.h"
+#include "CHMemoryDataBase.h"
 #include "CHPoolResult.h"
 #include "UCHMatch.h"
 #include "QCHMatch.h"
@@ -576,6 +578,8 @@ MSLString CHMatch::getTotalResult(bool onlyRound)
 
 MSLString CHMatch::getRoundAsString(bool lDesc/*=true*/,bool date/*=true*/)
 {
+	if (getPhaseCode()!=SWISS_ROUND)
+		return NULLSTRING;
 
 	char tmp[20];
 	MSLString m_roundDesc=NULLSTRING;
@@ -709,6 +713,13 @@ bool CHMatch::hasTeamCompetitors(bool any/*=false*/)
 		pMatchResult->getMatchMembersVector(vMatchMembers);
 		if (!vMatchMembers.entries())
 			return false;
+
+		for (short k=0;k<vMatchMembers.entries();k++)
+		{
+			GTHMatchMember* pMM = (GTHMatchMember*)vMatchMembers[k];
+			if (!pMM->getRegister())
+				return false;
+		}
 	}
 	return true;
 }
@@ -759,6 +770,19 @@ CHMatchResult * CHMatch::findMatchResult(GRegister * pRegister) const
 	return 0;
 }
 
+GTHMatchJudge* CHMatch::findMatchJudge(GOfficial* pOfficial)
+{
+	MSLSortedVector vMatchJudges;
+	getMatchJudgesVector(vMatchJudges);
+	for (short i=0;i<vMatchJudges.entries();i++)
+	{
+		GTHMatchJudge * pMatchJudge = (GTHMatchJudge*)vMatchJudges[i];
+		if (pMatchJudge->getRegister()==pOfficial->getRegister())
+			return pMatchJudge;
+	}
+	return 0;
+}
+
 CHMatchResult *CHMatch::findMatchResult(CHInscription *pInscription) const
 {
 	if( !pInscription )
@@ -802,4 +826,130 @@ mslToolsFcSelect CHMatch::getSelectFn(const GData *pData)
 	case __GSESSION:		return matchSession;
 	}
 	return 0;
+}
+
+MSLWString CHMatch::getSDescription(const char * lang)
+{
+	CHDefinition &aDef = (CHDefinition &)CHMemoryDataBase::getDefinition();
+	MSLWString desc = NULLWSTRING;	
+	CHPhase *pPhase = (CHPhase *) getPhase();
+	
+	CHEvent * pEvent = (CHEvent * )getEvent();
+	if (pEvent->isTeam())
+	{
+		if(getSubMatch())
+		{
+			desc += L" ";
+			desc += aDef.getSMatchDescription(lang);
+			desc += L" ";
+			desc += TOWSTRING(getSubCode());
+		}
+		else
+		{
+			if (pPhase->getIsPool())
+			{
+				desc += L", ";
+				desc += getRoundAsString(false,false).toUnicode();
+				desc += L" ";
+				desc += aDef.getSMatchDescription(lang);
+				desc += L" ";
+				desc += TOWSTRING(getCode());
+			}			
+			else
+			{
+				desc += L" ";
+				desc += aDef.getSMatchDescription(lang);
+				desc += L" ";
+				desc += TOWSTRING(getCode());
+			}
+		}
+	}
+	else
+	{
+		if (pPhase->getIsPool())
+		{
+			desc += L", ";
+			desc += getRoundAsString(false,false).toUnicode();
+			desc += L" ";
+			desc += aDef.getSMatchDescription(lang);
+			desc += L" ";
+			desc += TOWSTRING(getMatchNumber());
+		}
+		else 
+		{
+			desc += L" ";
+			desc += aDef.getSMatchDescription(lang);
+			desc += L" ";
+			desc += TOWSTRING(getMatchNumber());
+		}
+	}
+
+	return desc;
+}
+
+MSLWString CHMatch::getLDescription(const char *lang)
+{
+	CHDefinition &aDef = (CHDefinition &)CHMemoryDataBase::getDefinition();
+	MSLWString desc = NULLWSTRING;	
+	CHPhase *pPhase = (CHPhase *) getPhase();
+	
+	if (pPhase)
+	{
+		if (pPhase->getIsPool())
+			desc += pPhase->getLDescription(lang);
+		else
+			desc += pPhase->getLDescription(lang);
+	}
+
+	CHEvent * pEvent = (CHEvent * )getEvent();
+	if (pEvent->isTeam())
+	{
+		if(getSubMatch())
+		{
+			desc += L" ";
+			desc += aDef.getSMatchDescription(lang);
+			desc += L" ";
+			desc += TOWSTRING(getSubCode());
+		}
+		else
+		{
+			if (pPhase->getIsPool())
+			{
+				desc += L", ";
+				desc += getRoundAsString(false,false).toUnicode();
+				desc += L" ";
+				desc += aDef.getSMatchDescription(lang);
+				desc += L" ";
+				desc += TOWSTRING(getCode());
+			}			
+			else
+			{
+				desc += L" ";
+				desc += aDef.getSMatchDescription(lang);
+				desc += L" ";
+				desc += TOWSTRING(getCode());
+			}
+		}
+	}
+	else
+	{
+		if (pPhase->getIsPool())
+		{
+			desc += L", ";
+			desc += getRoundAsString(false,false).toUnicode();
+			desc += L" ";
+			desc += aDef.getSMatchDescription(lang);
+			desc += L" ";
+			desc += TOWSTRING(getMatchNumber());
+		}
+		else 
+		{
+			desc += L" ";
+			desc += aDef.getSMatchDescription(lang);
+			desc += L" ";
+			desc += TOWSTRING(getMatchNumber());
+		}
+	}
+
+	return desc;
 }
