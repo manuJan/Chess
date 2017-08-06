@@ -56,6 +56,12 @@ MSLGUIEx * CHManagerPhaseGUI::onNewGUIEx	(long id, GData* pData, long idTrigger)
 	return GTHManagerPhaseGUI::onNewGUIEx(id, pData, idTrigger);
 }
 
+bool CHManagerPhaseGUI::hasSplits()
+{
+	return false;
+}
+
+
 void CHManagerPhaseGUI::onCreateUserControls()
 {
 	RECT rect = getRect();

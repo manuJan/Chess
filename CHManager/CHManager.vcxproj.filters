@@ -49,6 +49,9 @@
     <None Include="res\removeset.bmp">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="res\rankings.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -174,6 +177,21 @@
     <ClInclude Include="CHSummaryGUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CHMSLODFDataTransfer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHODFLoadInscription.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHODFLoadRegister.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHMsgGnralGUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHRankingsGUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -288,6 +306,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CHSummaryGUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHMSLODFDataTransfer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHODFLoadInscription.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHODFLoadRegister.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHMsgGnralGUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHRankingsGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

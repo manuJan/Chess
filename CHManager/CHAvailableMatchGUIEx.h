@@ -31,9 +31,10 @@ public:
 	CHAvailableMatchGUIEx(GTHScheduleData* pScheduleData, GTHProgressionData * pProgressionData, long id);
 	virtual ~CHAvailableMatchGUIEx(void);
 
-	bool paintGridAvailableMatches(gui_grid_cell* cell);
+	void createGridAvailableMatches		();
+	bool paintGridAvailableMatches		(gui_grid_cell* cell);
 
-	bool canInsertAvailableMatch(GTHMatch *pMatch);
+	bool canInsertAvailableMatch		(GTHMatch *pMatch);
 
 	MSLWString getDescription			(GTHMatch *pMatch);
 	MSLWString getCompetitorDescription (GTHMatchResult *pMatchResult);

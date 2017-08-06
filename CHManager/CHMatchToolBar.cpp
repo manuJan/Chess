@@ -22,7 +22,8 @@ bool CHMatchToolBar::onInit()
 	bool ret = GTHMatchToolBar::onInit();
 
 	doLabelEx(LX_PHASE_CHDRAW,"",30,"Initial Draw", IDB_BMP_DRAW );
-	doLabelEx(LX_MATCH_CONFIG,"",70,"Match Configuration" ,IDB_BMP_MATCHCONFIG);
+	doLabelEx(LX_MATCH_CONFIG,"Match Conf.",100,"Match Configuration" ,IDB_BMP_MATCHCONFIG);
+	doLabelEx(LX_RANKINGS,"Rankings",100,"Rankings",IDB_BMP_RANKINGS);
 
 	m_gui.setEnable(LX_PHASE_CHDRAW, false);	
 
@@ -34,7 +35,7 @@ bool CHMatchToolBar::onInit()
 
 HINSTANCE CHMatchToolBar::getHInstance(int idCtrl,UINT idRes)
 {
-	if (idCtrl==LX_PHASE_CHDRAW || idCtrl==LX_MATCH_CONFIG)
+	if (idCtrl==LX_PHASE_CHDRAW || idCtrl==LX_MATCH_CONFIG || idCtrl==LX_RANKINGS)
 		return CHManagerApp::m_hCHMyModule;
 
 	return GTHMatchToolBar::getHInstance(idCtrl,idRes);
@@ -95,6 +96,7 @@ void CHMatchToolBar::onClick(long id,LPARAM lParam)
 	{
 		case LX_PHASE_CHDRAW:
 		case LX_MATCH_CONFIG:
+		case LX_RANKINGS:
 		{
 			SendMessage(getHWndMsgs(),UM_LBUTDOWN_TOOLBAR,id,lParam);
 			return;

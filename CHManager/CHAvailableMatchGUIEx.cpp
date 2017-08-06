@@ -36,6 +36,26 @@ CHAvailableMatchGUIEx::~CHAvailableMatchGUIEx(void)
 {
 }
 
+void CHAvailableMatchGUIEx::createGridAvailableMatches()
+{
+	RECT aRect=getRect();
+	
+	short hCtrl1=16;
+	short hCtrl2=40;
+	
+	m_gui.doGrid(GR_AVAILABLE_MATCHES,RC(aRect.left,aRect.top+hCtrl1+hCtrl2,aRect.right-16,aRect.bottom),getStyGrid(GR_AVAILABLE_MATCHES),getStyGridSel(GR_AVAILABLE_MATCHES),18,getStyHeaderGrid(GR_AVAILABLE_MATCHES));
+	m_gui.grid_setLineColor(GR_AVAILABLE_MATCHES,GUI_RGB_OFF,GUI_RGB_OFF);
+	m_gui.grid_setSelMult(GR_AVAILABLE_MATCHES,true);
+	m_gui.setDragDrop(GR_AVAILABLE_MATCHES,"Schedule");
+	m_gui.setDragDropOn(GR_AVAILABLE_MATCHES,true,true);
+	
+	m_gui.grid_addColumn(GR_AVAILABLE_MATCHES,"",GUI_JUST_CENTER, 40	,C_AV_MATCH_CODE);
+	m_gui.grid_addColumn(GR_AVAILABLE_MATCHES,"",GUI_JUST_LEFT  ,128	,C_AV_DESCRIPTION);
+	m_gui.grid_addColumn(GR_AVAILABLE_MATCHES,"",GUI_JUST_LEFT  ,150    ,C_AV_HOME);
+	m_gui.grid_addColumn(GR_AVAILABLE_MATCHES,"",GUI_JUST_CENTER,150	,C_AV_AWAY);		
+}
+
+
 bool CHAvailableMatchGUIEx::paintGridAvailableMatches(gui_grid_cell* cell)
 {
 	if(cell->y==-1 || !cell->lParamLine)

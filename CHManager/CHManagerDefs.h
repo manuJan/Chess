@@ -26,6 +26,10 @@
 #include <OVR\GUI\MSLFlags\MSLFlags.h>
 #include <OVR\TOOLS\MSLTools\MSLToolsIncs.h>
 
+#define CH_GM					"GM"
+#define CH_FM					"FM"
+#define CH_IM					"IM"
+
 /*********************************** USER MESSAGES **************************************/
 #define UM_CHMANAGER								WM_USER+3000
 #define UM_REGISTER_CREATED							UM_CHMANAGER+1
@@ -130,6 +134,7 @@
 #define TB_CHMATCH_ID							CH_GUI+170
 #define LX_PHASE_CHDRAW								TB_CHMATCH_ID+1
 #define LX_MATCH_CONFIG								TB_CHMATCH_ID+2
+#define LX_RANKINGS									TB_CHMATCH_ID+3
 
 /****************** CHMatchConfigurationGUI *********************************/
 	#define CHMATCHCONFIGGUI_ID					CH_GUI+180
@@ -194,76 +199,25 @@
 /************ TEChairUmpireGUIEx ***********************/
 #define CHUMPIREGUIEX_ID					CH_GUI+200
 	#define CK_ALL_OFFICIALS			CHUMPIREGUIEX_ID+1
-	#define GR_CHAIR_UMPIRE				CHUMPIREGUIEX_ID+2
-		#define C_NOC_CHAIRUMP				GR_CHAIR_UMPIRE+1
-		#define C_NAME_CHAIRUMP				GR_CHAIR_UMPIRE+2
-		#define C_FUNCTION_CHAIRUMP			GR_CHAIR_UMPIRE+3
+	#define CK_ASSIGN_ALL_ROUND			CHUMPIREGUIEX_ID+2
+	#define GR_UMPIRES					CHUMPIREGUIEX_ID+3
+		#define C_SEL_UMP				GR_UMPIRES+1
+		#define C_NOC_UMP				GR_UMPIRES+2
+		#define C_NAME_UMP				GR_UMPIRES+3
+		#define C_FUNCTION_UMP			GR_UMPIRES+4
+	#define BT_OK						CHUMPIREGUIEX_ID+4
 
+/****************** CHRankingsGUI *********************************/
+#define CHRANKINGSGUI_ID					CH_GUI+240
 
-/******************************* AREventControlGUIEx ****************************************/
-#define AREVENTCONTROLGUIEX_ID					CH_GUI+220
-	#define C_EC_RANK								AREVENTCONTROLGUIEX_ID+1
-	#define C_EC_SCORE								AREVENTCONTROLGUIEX_ID+2
-	#define C_EC_QUALITATIVE						AREVENTCONTROLGUIEX_ID+3
-	#define C_EC_TENS								AREVENTCONTROLGUIEX_ID+4
-	#define C_EC_INNER								AREVENTCONTROLGUIEX_ID+5
-	#define C_EC_RECORD								AREVENTCONTROLGUIEX_ID+6
-	#define C_EC_TIES								AREVENTCONTROLGUIEX_ID+7
-	#define C_EC_END								AREVENTCONTROLGUIEX_ID+8
-	#define C_EC_MTS								AREVENTCONTROLGUIEX_ID+9
-	#define C_MR_ARROW								AREVENTCONTROLGUIEX_ID+10
-	#define C_EC_PORT_DOS							AREVENTCONTROLGUIEX_ID+11
-	#define C_EC_PORT_MTS							AREVENTCONTROLGUIEX_ID+12
-	#define MN_DOUBT_ARROW							AREVENTCONTROLGUIEX_ID+13
-		#define MN_OPT_DOUBT							MN_DOUBT_ARROW+1
-		#define MN_OPT_CONFIRMED						MN_DOUBT_ARROW+2
-		#define MN_OPT_ADD_EXTRA						MN_DOUBT_ARROW+3
-		#define MN_OPT_REM_EXTRA						MN_DOUBT_ARROW+4
-	#define PRG_DATA_ENTRY							AREVENTCONTROLGUIEX_ID+14
-	
-/******************************* AREventControlArrowsGUIEx ****************************************/
-#define AREVENTCONTROLARROWSGUIEX_ID				CH_GUI+240
-/******************************* AREventControlEndsGUIEx ******************************************/
-#define AREVENTCONTROLENDSGUIEX_ID					CH_GUI+245
-/******************************* AREventControlSplitsGUIEx ****************************************/
-#define AREVENTCONTROLSPLITSGUIEX_ID				CH_GUI+250
-/******************************* AREventControlSetsGUIEx ******************************************/
-#define AREVENTCONTROLSETSGUIEX_ID					CH_GUI+255
-
-/******************************* AREventControlToolBar ****************************************/
-	#define RD_ARROW								CH_GUI+270
-	#define RD_END									CH_GUI+271
-	#define RD_SPLIT								CH_GUI+272
-	#define RD_SET									CH_GUI+273
-	#define BT_STATUS								CH_GUI+274
-	#define BT_MATCH_OFFICIAL						CH_GUI+275
-	#define BT_PHASE_OFFICIAL						CH_GUI+276
-	#define CB_FIRST_TRGT							CH_GUI+277
-	#define CB_LAST_TRGT							CH_GUI+278
-	#define CB_SPLIT								CH_GUI+279
-	#define BT_LOAD_RESULTS							CH_GUI+280
-	#define BT_SAVE_RESULTS							CH_GUI+281
-	#define BT_REMOVE_PHASE_RESULTS					CH_GUI+282
-	#define BT_REMOVE_MATCH_RESULTS					CH_GUI+283
-	#define BT_MEDALS_DISTANCE						CH_GUI+284
-	#define BT_CALC_RECORDS							CH_GUI+285
-	#define BT_CALC_RANKS							CH_GUI+286
-	#define MN_LOAD_RESULTS							CH_GUI+287
-	#define BT_MATCH_UNOFFICIAL						CH_GUI+288
-	#define BT_PHASE_UNOFFICIAL						CH_GUI+289
-	#define	BT_RANKING_TO_BIB						CH_GUI+290
-	#define BT_TARGET_TO_BIB						CH_GUI+291
-	#define BT_DATA_TEST							CH_GUI+292
-		#define MN_LOAD_TOTALS							MN_LOAD_RESULTS+1
-		#define MN_LOAD_END_BY_END						MN_LOAD_RESULTS+2
-	#define BT_DISK_TOSS							CH_GUI+293
-
-/******************************* ARDistanceGUIEx **************************************************/
-#define ARDISTANCEGUIEX_ID							CH_GUI+290
-	#define GR_DISTANCE								ARDISTANCEGUIEX_ID+1
-		#define C_DISTANCE_DESC						GR_DISTANCE+1		
-	#define CB_DISTANCE								ARDISTANCEGUIEX_ID+2
-	#define LB_DISTANCE								ARDISTANCEGUIEX_ID+3
+#define C_PR_CH_QCODE								GR_POOLRESULTS+12
+#define C_PR_CH_POINTS								GR_POOLRESULTS+13
+#define C_PR_CH_MATCHPOINTS							GR_POOLRESULTS+14
+#define C_PR_CH_DIRECTMATCH							GR_POOLRESULTS+15
+#define C_PR_CH_BUCHOLZCUT1							GR_POOLRESULTS+16
+#define C_PR_CH_BUCHOLZ								GR_POOLRESULTS+17
+#define C_PR_CH_WONGAMES							GR_POOLRESULTS+18
+#define C_PR_CH_SONNEBERGER							GR_POOLRESULTS+19
 
 /***************************** ARInscriptionLineGUIEx ***********************************************/
 #define ARINSCRIPTIONLINEGUIEX_ID					CH_GUI+300

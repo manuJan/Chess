@@ -9,10 +9,9 @@
 #include "CHProgressionGUI.h"
 #include "CHScheduleGUI.h"
 #include "CHSummaryGUI.h"
-/*#include "AREventControlGUI.h"
-#include "ARRecordsGUI.h"
-#include "ARMsgGnralGUI.h"
-#include "ARMSLODFDataTransfer.h"*/
+//#include "AREventControlGUI.h"
+#include "CHMsgGnralGUI.h"
+#include "CHMSLODFDataTransfer.h"
 #include "resource.h"
 #include <OVR/GUI/MSLIPCTransfer/MSLIPCDataTransferDefs.h>
 #include <OVR/gui/guimanager/GWeatherGUI.h>
@@ -87,8 +86,8 @@ MSLAppModule *CHManagerApp::onGetModule(long id) const
 		case GTHPROGRESSIONGUI_ID	: return new CHProgressionGUI(GTHPROGRESSIONGUI_ID);
 		case GTHSCHEDULEGUI_ID		: return new CHScheduleGUI(GTHSCHEDULEGUI_ID);
 		case GSUMMARYGUI_ID			: return new CHSummaryGUI(GSUMMARYGUI_ID);		
-		//case GMSGGNRALGUIEX_ID		: return new BKMsgGnralGUI(GMSGGNRALGUIEX_ID);		
-		//case DATATRANSFER_GUI		: return new BKMSLODFDataTransfer(DATATRANSFER_GUI);
+		case GMSGGNRALGUIEX_ID		: return new CHMsgGnralGUI(GMSGGNRALGUIEX_ID);		
+		case DATATRANSFER_GUI		: return new CHMSLODFDataTransfer(DATATRANSFER_GUI);
 	}
 	
 	return GUITHManagerApp::onGetModule(id);

@@ -59,6 +59,7 @@ protected:
 	virtual LRESULT onRedrawControl				(WPARAM wParam=0, LPARAM lParam=0);
 	   	    LRESULT onChangeUmpire				(WPARAM wParam=0, LPARAM lParam=0);
 			LRESULT onGotoNextMatch				(WPARAM wParam=0, LPARAM lParam=0);
+			LRESULT onChangeMatch				(WPARAM wParam=0, LPARAM lParam=0);
 
 	virtual LRESULT onCommsPackTransaction		(WPARAM wParam,LPARAM lParam);
 	virtual LRESULT onComms						(WPARAM wParam,LPARAM lParam);

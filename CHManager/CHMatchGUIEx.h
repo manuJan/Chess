@@ -27,6 +27,7 @@
 class CHMatchResult;
 class CHMatch;
 class CHMatchConfigurationGUI;
+class CHRankingsGUI;
 
 class CHMatchGUIEx : public GTHMatchGUIEx
 {
@@ -58,6 +59,7 @@ protected:
 
 	void initialDraw					();
 	void matchConfigurationDlg			();
+	void rankingsDlg					();
 
 	mslToolsFcCompare getSortPoolResults() const;
 	bool validComboPoolResult			(GTHPoolResult *pPoolResult, GTHMatchResult* pMatchResult);
@@ -65,4 +67,5 @@ protected:
 private:
 
 	CHMatchConfigurationGUI * m_pDlgMatchConfig;
+	CHRankingsGUI * m_pDlgRankings;
 };

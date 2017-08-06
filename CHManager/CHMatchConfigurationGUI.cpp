@@ -161,6 +161,7 @@ LRESULT CHMatchConfigurationGUI::wndProc(HWND hWnd, UINT message, WPARAM wParam,
 	{
 		case UM_GOTO_NEXT_MATCH: return onGotoNextMatch		(wParam, lParam);
 		case UM_CHANGE_UMPIRE: return onChangeUmpire		(wParam, lParam);
+		case UM_CHANGE_MATCH: return onChangeMatch			(wParam, lParam);
 	}
 
 	return GTHManagerGUI::wndProc(hWnd,message,wParam,lParam);
@@ -228,6 +229,16 @@ LRESULT CHMatchConfigurationGUI::onRedrawControl(WPARAM wParam/*=0*/, LPARAM lPa
 		if (m_pSubMatchConfigurationGUIEx)
 			SendMessage(m_pSubMatchConfigurationGUIEx->getHWnd(),UM_REDRAW_CONTROL,wParam,lParam);	
 	}
+	return 0;
+}
+
+LRESULT CHMatchConfigurationGUI::onChangeMatch(WPARAM wParam/*=0*/, LPARAM lParam/*=0*/)
+{
+	redrawGrid(GR_MATCH_CNF);
+
+	if (m_pSubMatchConfigurationGUIEx)
+		SendMessage(m_pSubMatchConfigurationGUIEx->getHWnd(),UM_CHANGE_MATCH,wParam,lParam);	
+		
 	return 0;
 }
 

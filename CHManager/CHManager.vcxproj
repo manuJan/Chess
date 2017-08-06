@@ -88,6 +88,7 @@
     <None Include="res\draw.bmp" />
     <None Include="res\load.bmp" />
     <None Include="res\matchConfig.bmp" />
+    <None Include="res\rankings.bmp" />
     <None Include="res\removeset.bmp" />
     <None Include="res\white_line_black.bmp" />
     <None Include="res\white_line_white.bmp" />
@@ -114,6 +115,10 @@
     <ClInclude Include="CHMatchGUIEx.h" />
     <ClInclude Include="CHMatchToolBar.h" />
     <ClInclude Include="CHModalityData.h" />
+    <ClInclude Include="CHMsgGnralGUI.h" />
+    <ClInclude Include="CHMSLODFDataTransfer.h" />
+    <ClInclude Include="CHODFLoadInscription.h" />
+    <ClInclude Include="CHODFLoadRegister.h" />
     <ClInclude Include="CHPhaseGUIEx.h" />
     <ClInclude Include="CHPoolResultGUIEx.h" />
     <ClInclude Include="CHPoolResultToolBar.h" />
@@ -121,6 +126,7 @@
     <ClInclude Include="CHProgressionData.h" />
     <ClInclude Include="CHProgressionGUI.h" />
     <ClInclude Include="CHRanking.h" />
+    <ClInclude Include="CHRankingsGUI.h" />
     <ClInclude Include="CHRatingDiffGUIEx.h" />
     <ClInclude Include="CHScheduleData.h" />
     <ClInclude Include="CHScheduleGUI.h" />
@@ -156,6 +162,10 @@
     <ClCompile Include="CHMatchGUIEx.cpp" />
     <ClCompile Include="CHMatchToolBar.cpp" />
     <ClCompile Include="CHModalityData.cpp" />
+    <ClCompile Include="CHMsgGnralGUI.cpp" />
+    <ClCompile Include="CHMSLODFDataTransfer.cpp" />
+    <ClCompile Include="CHODFLoadInscription.cpp" />
+    <ClCompile Include="CHODFLoadRegister.cpp" />
     <ClCompile Include="CHPhaseGUIEx.cpp" />
     <ClCompile Include="CHPoolResultGUIEx.cpp" />
     <ClCompile Include="CHPoolResultToolBar.cpp" />
@@ -163,6 +173,7 @@
     <ClCompile Include="CHProgressionData.cpp" />
     <ClCompile Include="CHProgressionGUI.cpp" />
     <ClCompile Include="CHRanking.cpp" />
+    <ClCompile Include="CHRankingsGUI.cpp" />
     <ClCompile Include="CHRatingDiffGUIEx.cpp" />
     <ClCompile Include="CHScheduleData.cpp" />
     <ClCompile Include="CHScheduleGUI.cpp" />

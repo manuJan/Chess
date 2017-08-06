@@ -35,6 +35,8 @@ public:
 		
 protected:
 
+	bool hasSplits();
+
 	void onCreateUserControls					();
 	void onInitControls							();
 	void onInitUserControls						();

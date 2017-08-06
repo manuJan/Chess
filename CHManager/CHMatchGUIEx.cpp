@@ -27,6 +27,7 @@
 #include "CHMatchGUIEx.h"
 #include "CHMatchToolBar.h"
 #include "CHMatchConfigurationGUI.h"
+#include "CHRankingsGUI.h"
 
 #include "..\CHVMngtModel\CHRoundDraw.h"
 
@@ -57,6 +58,7 @@ int orderPoolResults(const MSLItem** a, const MSLItem** b)
 CHMatchGUIEx::CHMatchGUIEx(GTHProgression* pProgression, GTHProgressionData* pProgressionData, GTHStatusManager* pStatusManager, long id)
 :GTHMatchGUIEx(pProgression, pProgressionData, pStatusManager, id)
 ,m_pDlgMatchConfig(0)
+,m_pDlgRankings(0)
 {
 
 }
@@ -89,7 +91,11 @@ LRESULT CHMatchGUIEx::onLButDownToolBar(WPARAM wParam/*=0*/, LPARAM lParam/*=0*/
 		matchConfigurationDlg();
 		return 0;
 	}
-
+	if(wParam==LX_RANKINGS)
+	{
+		rankingsDlg();
+		return 0;
+	}
 	return GTHMatchGUIEx::onLButDownToolBar(wParam, lParam);
 }
 
@@ -351,6 +357,42 @@ void CHMatchGUIEx::matchConfigurationDlg()
 		m_pDlgMatchConfig=0;
 
 		m_gui.redraw(GR_MATCHES);
+	}
+}
+
+void CHMatchGUIEx::rankingsDlg()
+{
+	CHPool * pPool = 0;
+	CHMatch * pMatch=getMatch();
+	if(pMatch)
+		pPool = (CHPool*)pMatch->getPool();
+	else if (m_pDataSel)
+	{
+		if (m_pDataSel->isA()==__CHPHASE)
+		{
+			CHPool *pPool = (CHPool *) ((CHPhase*)m_pDataSel)->getPool(0);
+		}
+		else if (m_pDataSel->isA()==__CHPOOL)
+		{
+			pPool = (CHPool*)m_pDataSel;
+		}
+		else if (m_pDataSel->isA()==__CHMATCH)
+		{
+			pPool = (CHPool*) ((CHMatch*)m_pDataSel)->getPool();	
+		}
+	}
+
+	if (!pPool)
+		return;
+
+	if(APP::lock("Rankings "+ pPool->getKey()))
+	{
+		m_pDlgRankings = new CHRankingsGUI(pPool,m_pTHProgression, m_pTHProgressionData, CHRANKINGSGUI_ID);
+		MSLWString title=L"Rankings " + pPool->getLDescription();
+		MSLDialog(m_hWnd,*m_pDlgRankings ,800,550,title,0,true,-1,GUI_RGB_WHITE,m_hWnd);
+		APP::unlock("Rankings "+ pPool->getKey());
+		delete m_pDlgRankings;
+		m_pDlgRankings=0;
 	}
 }
 
