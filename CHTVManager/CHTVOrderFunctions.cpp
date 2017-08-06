@@ -78,6 +78,10 @@ int fnOrderMatchByDateTime(const MSLItem** a, const MSLItem** b)
 	order = pA->getStartTime().value() - pB->getStartTime().value();
 	if (order)
 		return order;
+
+	order = pA->getCode() - pB->getCode();
+	if (order)
+		return order;
 		
 	return strcmp(pA->getKey(),pB->getKey());
 }
@@ -353,3 +357,31 @@ int fnOrderGroupInfoByRankPo(const MSLItem** a, const MSLItem** b)
 
 	return strcmp( pA->getKey() , pB->getKey());
 }
+
+int fnOrderMatchesByEventDateTime(const MSLItem** a, const MSLItem** b)
+{
+	CHMatch * pA = (CHMatch *)((MSLItem*)*a),
+			* pB = (CHMatch *)((MSLItem*)*b);
+
+	if( !pA->getStartDate().isValid() && pB->getStartDate().isValid() )
+		return 1;
+	if( !pB->getStartDate().isValid() && pA->getStartDate().isValid() )
+		return -1;
+
+	int order = pA->getStartDate().value() - pB->getStartDate().value();
+	if( order )
+		return order;
+
+	// Order by Start Time.
+	if( !pA->getStartTime().isValid() && pB->getStartTime().isValid() )
+		return 1;
+	if( !pB->getStartTime().isValid() && pA->getStartTime().isValid() )
+		return -1;
+
+	order = pA->getStartTime().value() - pB->getStartTime().value();
+	if (order)
+		return order;
+		
+	return strcmp(pA->getKey(),pB->getKey());
+}
+

@@ -44,7 +44,7 @@ public:
 
 	// RSC Library
 	void				loadRSCLibrary();
-	static MSLString	getRSC_TV(const GData * pData);
+	static MSLString	getRSC_TV(const GData * pData, int typeTraslate);
 	static MSLString	getRSC_Field(MSLString atosRSC, int typeTraslate); 
 
 private:

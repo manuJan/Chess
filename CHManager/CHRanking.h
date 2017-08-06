@@ -123,6 +123,7 @@ public:
 	// Ranking Round Tie
 	int getNumByes												(CHPhase *pPhase);
 
+	void calculateMedals										(GTHPhase* pPhase);
 	void onMedallistCreated										(GMedallist * pMedallist);
 
 private:

@@ -89,9 +89,9 @@ void CHTVApp::loadRSCLibrary()
 	m_hModuleRSC=::LoadLibrary( dllName.toUnicode() );
 }
 
-MSLString CHTVApp::getRSC_TV(const GData * pData)
+MSLString CHTVApp::getRSC_TV(const GData * pData, int typeTraslate)
 {
-	return CHMemoryDataBase::getRSC_Client(m_hModuleRSC,pData,APP_TV);
+	return CHMemoryDataBase::getRSC_Client(m_hModuleRSC,pData,typeTraslate,APP_TV);
 }
 
 MSLString CHTVApp::getRSC_Field(MSLString atosRSC, int typeTraslate)

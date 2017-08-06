@@ -26,6 +26,7 @@
 #include "CHTVOrderFunctions.h"
 #include <OVR\core\th\gthmsgdefines.h>
 
+#include "..\CHMngtModel\CHPool.h"
 #include "..\CHMngtModel\CHMatch.h"
 #include "..\CHMngtModel\CHMatchResult.h"
 
@@ -70,6 +71,7 @@ void CHTVGUI::callForRequiredFiles()
 			addReqField(file,"Event_Code");
 			addReqField(file,"Competition_Phase");
 			addReqField(file,"Event_Unit");
+			addReqField(file,"Round");
 
 		// SCHEDULE_DETAILED
 		file=addReqFile(FILE_CSV_SCHEDULE_DETAILED,SESSION_LEVEL,fnOrderMatchByDateTime); 
@@ -77,8 +79,9 @@ void CHTVGUI::callForRequiredFiles()
 			addReqField(file,"Event_Code");
 			addReqField(file,"Competition_Phase");
 			addReqField(file,"Event_Unit");
-			addReqField(file,"Mat_Code");
-			addReqField(file,"Bout_Number");
+			addReqField(file,"Table_Code");
+			addReqField(file,"Match_Number");
+			addReqField(file,"Round");
 			addReqField(file,"Start_Time");
 
 		// SCHEDULE_UNIT
@@ -106,8 +109,6 @@ void CHTVGUI::callForRequiredFiles()
 			addReqField(file,"Result");
 			addReqField(file,"Ranking");
 			addReqField(file,"Display_Pos");
-			addReqField(file,"Current_OnCourt");
-			addReqField(file,"Next_OnCourt");
 			addReqField(file,"Round");
 
 
@@ -123,7 +124,7 @@ void CHTVGUI::callForRequiredFiles()
 			addReqField(file,"Referee_Long_TV_Name");
 			addReqField(file,"Referee_Short_TV_Name");
 			addReqField(file,"Referee_NOC");
-			addReqField(file,"Mat_Code");
+			addReqField(file,"Table_Code");
 
 		// OFFICIALS
 		file=addReqFile(FILE_CSV_OFFICIALS,EVENT_LEVEL,fnOrderMatchJudgeByPosition);
@@ -140,14 +141,34 @@ void CHTVGUI::callForRequiredFiles()
 			addReqField(file,"NOC_Code");
 			addReqField(file,"Color");
 			addReqField(file,"Score");
-			addReqField(file,"Points");
-			addReqField(file,"Decision");
+			addReqField(file,"Points");						
 			addReqField(file,"W");
-			addReqField(file,"L");
+			addReqField(file,"D");
+			addReqField(file,"L");			
 			addReqField(file,"Display_Pos");
-			addReqField(file,"IRM");
-			addReqField(file,"AdvanceTo_Phase");
-			addReqField(file,"AdvanceTo_Match");
+			addReqField(file,"IRM");			
+			addReqField(file,"Round");			
+
+		file=addReqFile(FILE_CSV_TEAM_COMPETITORS,EVENT_LEVEL,fnOrderMatchResultByColor);
+			addReqField(file,"Athlete_ID");
+			addReqField(file,"Long_TV_Name");
+			addReqField(file,"Short_TV_Name");
+			addReqField(file,"1_Athlete_ID");
+			addReqField(file,"1_Long_TV_Name");
+			addReqField(file,"1_Short_TV_Name");
+			addReqField(file,"2_Athlete_ID");
+			addReqField(file,"2_Long_TV_Name");
+			addReqField(file,"2_Short_TV_Name");
+			addReqField(file,"NOC_Code");
+			addReqField(file,"Color");
+			addReqField(file,"Score");
+			addReqField(file,"Points");						
+			addReqField(file,"W");
+			addReqField(file,"D");
+			addReqField(file,"L");			
+			addReqField(file,"Display_Pos");
+			addReqField(file,"IRM");			
+			addReqField(file,"Round");		
 		
 		// COMPETITORS
 		file=	addReqFile(FILE_CSV_POOL_STANDINGS,EVENT_LEVEL,fnOrderPoolResultsByRankPo);
@@ -156,6 +177,7 @@ void CHTVGUI::callForRequiredFiles()
 				addReqField(file,"Rank");
 				addReqField(file,"GP");
 				addReqField(file,"W");
+				addReqField(file,"D");
 				addReqField(file,"L");
 				addReqField(file,"Pts");
 				addReqField(file,"Match_Pts");
@@ -268,6 +290,8 @@ void CHTVGUI::callForContent  (long level,MSLString name,DWORD dataParent)
 		m_tools.saveOfficials((CHMatch *)dataParent);
 	else if( name==FILE_CSV_COMPETITORS && dataParent )
 		m_tools.saveCompetitor((CHMatch *)dataParent);
+	else if( name==FILE_CSV_TEAM_COMPETITORS && dataParent )
+		m_tools.saveTeamCompetitor((CHMatch *)dataParent);
 	else if( name==FILE_CSV_POOL_STANDINGS && dataParent )
 		m_tools.savePoolStandings((CHMatch *)dataParent);
 	else if( name==FILE_CSV_BRACKET && dataParent )
@@ -283,6 +307,25 @@ void CHTVGUI::callForContent  (long level,MSLString name,DWORD dataParent)
 bool CHTVGUI::callForIsRequired (long level,MSLString name,DWORD dataParent)
 {
 	UNREFERENCED_PARAMETER(level);
+	if( name==FILE_CSV_COMPETITORS && dataParent )
+	{
+		CHMatch * pMatch = (CHMatch *)dataParent;
+		CHEvent * pEvent = pMatch ? (CHEvent*) pMatch->getEvent() : 0;
+		if( pEvent && !pEvent->isTeam())
+			return true;
+
+		return false;
+	}
+	if( name==FILE_CSV_TEAM_COMPETITORS && dataParent )
+	{
+		CHMatch * pMatch = (CHMatch *)dataParent;
+		CHEvent * pEvent = pMatch ? (CHEvent*) pMatch->getEvent() : 0;
+		if( pEvent && pEvent->isTeam())
+			return true;
+
+		return false;
+	}
+
 	if( name==FILE_CSV_MEDALS && dataParent )
 	{
 		CHMatch * pMatch = (CHMatch *)dataParent;
@@ -296,6 +339,13 @@ bool CHTVGUI::callForIsRequired (long level,MSLString name,DWORD dataParent)
 	if (name==FILE_CSV_BRACKET && dataParent )
 	{
 		CHMatch * pMatch = (CHMatch *)dataParent;
+		CHEvent * pEvent = (CHEvent*)pMatch->getEvent();
+		MSLSortedVector vPhases;
+		pEvent->getPhasesVector(vPhases);
+		if (vPhases.entries()==1)
+		{
+			return false;
+		}
 		return true;		
 	}
 
@@ -304,6 +354,16 @@ bool CHTVGUI::callForIsRequired (long level,MSLString name,DWORD dataParent)
 		CHMatch * pMatch = (CHMatch *)dataParent;
 		return true;		
 	}
+
+	if (name==FILE_CSV_POOL_STANDINGS && dataParent )
+	{
+		CHMatch * pMatch = (CHMatch *)dataParent;
+		if (pMatch->getPhaseCode()==SWISS_ROUND)
+			return true;
+		
+		return false;		
+	}
+
 
 	return true;
 }
@@ -322,6 +382,18 @@ void CHTVGUI::onComms(MSLTransaction &pt)
 	case TRN_SET_PROGRESSION:
 	case TRN_SET_UNPROGRESSION:
 		preprocessed=preprocessTrnProgression(pt);
+		break;
+	case TRN_SET_MATCHJUDGE:
+	case TRN_REMOVE_MATCHJUDGE:
+		preprocessed=preprocessTrnOfficials(pt);
+		break;
+	case TRN_SET_MATCHRESULT:
+	case TRN_REMOVE_MATCHRESULT:
+		preprocessed=preprocessTrnProgression(pt);
+		break;
+	
+	case TRN_SET_RANKINGS:
+		preprocessed=preprocessTrnRankings(pt);
 		break;
 	}
 	if( !preprocessed )
@@ -462,7 +534,7 @@ bool CHTVGUI::preprocessTrnOfficials(MSLTransaction &pt)
 	return false;
 }
 
-bool CHTVGUI::preprocessTrnDataEntry(MSLTransaction &pt)
+bool CHTVGUI::preprocessTrnRankings(MSLTransaction &pt)
 {
 	long isA;
 	bool bInsert;
@@ -481,6 +553,7 @@ bool CHTVGUI::preprocessTrnDataEntry(MSLTransaction &pt)
 			if( pMatch )
 			{
 				rebuildCSV(FILE_CSV_COMPETITORS,DWORD(pMatch));				
+				rebuildCSV(FILE_CSV_TEAM_COMPETITORS,DWORD(pMatch));				
 				rebuildCSV(FILE_CSV_SCHEDULE_UNIT,DWORD((GSession*)pMatch->getSession()));
 			}
 			return true;
@@ -490,7 +563,28 @@ bool CHTVGUI::preprocessTrnDataEntry(MSLTransaction &pt)
 			updateModel(pt); // actualizo el modelo
 			CHMatchResult * pMatchResult = (CHMatchResult *)m_pMem->find(*pData);
 			if (pMatchResult->getMatch())
-				rebuildCSV(FILE_CSV_COMPETITORS,DWORD(pMatchResult->getMatch()));			
+			{				
+				rebuildCSV(FILE_CSV_COMPETITORS,DWORD(pMatchResult->getMatch()));
+				rebuildCSV(FILE_CSV_TEAM_COMPETITORS,DWORD(pMatchResult->getMatch()));
+				rebuildCSV(FILE_CSV_SCHEDULE_UNIT,DWORD((GSession*)pMatchResult->getMatch()->getSession()));
+			}			
+			return true;
+		}
+		else if( isA == __CHPOOL )
+		{
+			updateModel(pt); // actualizo el modelo
+			CHPool * pPool = (CHPool *)m_pMem->find(*pData);
+			if( pPool )
+			{
+				short current_round = pPool->getNumRoundsPlayed();
+				MSLSortedVector vRoundMatches;
+				pPool->getFromRoundMatchesVector(vRoundMatches,current_round);
+				for (short i=0;i<vRoundMatches.entries();i++)
+				{
+					CHMatch * pMatch = (CHMatch*)vRoundMatches[i];
+					rebuildCSV(FILE_CSV_POOL_STANDINGS,DWORD(pMatch));								
+				}
+			}			
 		}
 
 	}
@@ -526,6 +620,7 @@ bool CHTVGUI::preprocessTrnProgression(MSLTransaction &pt)
 				// competidores
 				
 				rebuildCSV(FILE_CSV_COMPETITORS,DWORD(pMatch));				
+				rebuildCSV(FILE_CSV_TEAM_COMPETITORS,DWORD(pMatch));				
 				rebuildCSV(FILE_CSV_SCHEDULE_UNIT,DWORD((GSession*)pMatch->getSession()));
 
 				MSLSortedVector vMatches;
@@ -534,15 +629,17 @@ bool CHTVGUI::preprocessTrnProgression(MSLTransaction &pt)
 				for(long i=0;i<vMatches.entries();i++)
 				{
 					CHMatch * pMatchAux = (CHMatch *)vMatches[i];
+					if (pMatchAux->getSubMatch())
+						continue;
+
 					if( pMatchAux->getPhaseOrder() >= phaseOrder /*pMatch->getPhaseOrder()*/ )
 					{
 
 						rebuildCSV(FILE_CSV_BRACKET,DWORD(pMatchAux));
 						if( pt.getTrnId()== TRN_SET_UNPROGRESSION ||
-							(pt.getTrnId() == TRN_SET_PROGRESSION && (pMatchAux->findMatchResult(pMatch->getWhiteInscription()) ||
-																	  pMatchAux->findMatchResult(pMatch->getBlackInscription()))) )
+							pt.getTrnId() == TRN_SET_PROGRESSION )
 						{
-							rebuildCSV(FILE_CSV_COMPETITORS,DWORD(pMatchAux));							
+							rebuildCSV(FILE_CSV_TEAM_COMPETITORS,DWORD(pMatchAux));							
 							rebuildCSV(FILE_CSV_TOURNAMENT_HISTORY,DWORD(pMatchAux));
 							courtProgressed=pMatchAux->getCourtCode();
 						}

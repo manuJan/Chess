@@ -50,7 +50,7 @@ static int orderMatches(const MSLItem** a, const MSLItem** b)
 }
 /////////////////////////////////////////////////////////////////////
 CHRC74::CHRC74(CReportManager& aReportManager,CReportConfig& aReportConfig,CHPhase * pSelPhase,short roundSel)
-:CHReportTemplate(aReportManager,aReportConfig,(CHEvent*)pSelPhase->getEvent())
+:CHReportTemplate(aReportManager,aReportConfig,pSelPhase)
 ,m_pLis(0)
 ,m_pPhase(pSelPhase)
 ,m_index(0)
@@ -382,6 +382,8 @@ CReportBase::ReportReturn CHRC74::paintMembers(CHMatch *pMatch)
 	for(short i=0;i<vSubMatches.entries();i++)
 	{
 		pSubMatch=(CHMatch*)vSubMatches[i];
+		if (!pSubMatch->hasTeamCompetitors())
+			continue;
 		
 		assignDataMember(pSubMatch);
 		// Pintamos la members

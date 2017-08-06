@@ -42,7 +42,6 @@ public:
 	bool onInit									();
 	bool onGridPaint							(long id,gui_grid_cell* cell);
 	void onClick								(long id,LPARAM lParam);
-	void onLButDblClick							(long id,long x,long y);
 	void onLButDown								(long id,long x,long y);
 
 protected:
@@ -67,12 +66,11 @@ protected:
 	void redrawGridChairUmpire					();
 	bool handGridChairUmpire					(long x,long y);
 	void clickGridChairUmpire					(long x,long y);
-	void dblClickGridChairUmpire				(long x,long y);
-	
+	//void dblClickGridChairUmpire				(long x,long y);
+
 private:
-	void setMatchJudge							(GOfficial * pOfficial);
-	bool createMatchJudge						(CHRegister * pRegister);
-	bool deleteMatchJudge						(GTHMatchJudge * pMatchJudge);
+	
+	bool assignOfficialsAllRound				();
 
 private:
 	CHMatch * m_pMatch;

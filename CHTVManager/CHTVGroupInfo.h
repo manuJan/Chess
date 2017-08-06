@@ -16,6 +16,7 @@ public:
 	void addGP				();
 	void addW				();
 	void addL				();
+	void addD				();
 	
 public:
 	CHPoolResult * m_pResult;
@@ -23,8 +24,8 @@ public:
 	int m_rank;
 	int m_GP;
 	int m_W;
-	int m_L;
-	GScore m_pts;
+	int m_D;
+	int m_L;	
 	int m_displayPos;
 	//MSLString m_IRM;
 	MSLString m_advanceTo;

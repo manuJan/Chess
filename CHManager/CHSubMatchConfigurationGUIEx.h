@@ -53,6 +53,7 @@ protected:
 	/***** Virtual from MSLGUIEX ****/
 	LRESULT wndProc								(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	LRESULT onLButDownToolBar					(WPARAM wParam=0, LPARAM lParam=0);
+	LRESULT onChangeMatch						(WPARAM wParam=0, LPARAM lParam=0);
 
 	/***** Controls *****/
 	virtual LRESULT onCreateControl				(WPARAM wParam=0, LPARAM lParam=0);
@@ -75,6 +76,7 @@ private:
 	void fillGridSubmatches						();
 	bool paintGridSubmatches					(gui_grid_cell* cell);
 	void dblClickGridSubmatches					(long x,long y);
+	void redrawGridSubmatches					();
 	bool handGridSubmatches						(int x,int y);
 	CHMatch *getSubmatchSelected				();
 	CHMatch *selectFirstAvailableSubMatch		();

@@ -39,3 +39,4 @@ int fnOrderMembersByName			(const MSLItem** a, const MSLItem** b);
 int fnOrderPhasesByPhaseOrder		(const MSLItem** a, const MSLItem** b);
 int fnOrderPoolResultsByRankPo		(const MSLItem** a, const MSLItem** b);
 int fnOrderGroupInfoByRankPo		(const MSLItem** a, const MSLItem** b);
+int fnOrderMatchesByEventDateTime	(const MSLItem** a, const MSLItem** b);

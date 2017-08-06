@@ -28,9 +28,18 @@
 CHRSCATOS_API void getRSC(MSLString& msl,MSLString& params,const char * auxInfo,int typeTraslate/*=0*/,int typeClient/*=0*/)
 {
 	int len = msl.length();
-	if( len==17 || ( len==18 && typeTraslate==RSC_TYPEREC) )
+	if( len==17 )
 	{
-		if(typeTraslate==RSC_ALL)
+		if (MSLString(auxInfo) == "C75" || MSLString(auxInfo) == "C74")
+		{
+			MSLString rsc=msl(0,2); //Discipline
+			rsc+=getATOSSexCode(msl,params,auxInfo,typeClient);
+			rsc+=getATOSEventCode(msl,params,auxInfo,typeClient);
+			rsc+=getATOSPhaseCode(msl,params,auxInfo,typeClient);
+			rsc+="00";
+			msl=rsc;
+		}
+		else if(typeTraslate==RSC_ALL)
 			msl=getATOSRSC(msl,params,auxInfo,typeClient);
 		else if(typeTraslate==RSC_SEX)
 			msl=getATOSSexCode(msl,params,auxInfo,typeClient);
@@ -38,7 +47,7 @@ CHRSCATOS_API void getRSC(MSLString& msl,MSLString& params,const char * auxInfo,
 			msl=getATOSEventCode(msl,params,auxInfo,typeClient);
 		else if(typeTraslate==RSC_PHASE)
 			msl=getATOSPhaseCode(msl,params,auxInfo,typeClient);
-		else if(typeTraslate==RSC_MATCH)
+		else if(typeTraslate==RSC_UNIT)
 			msl=getATOSEventUnitCode(msl,params,auxInfo,typeClient);
 	
 		// RSC de Date (DD0000YDD)
@@ -250,23 +259,6 @@ MSLString getATOSEventUnitCode(MSLString msl,MSLString mslParams,const char* aux
 
 	MSLString unit =mslUnit(3,2);
 	return unit;*/
-}
-
-MSLString getATOSTypeRecordCode	(MSLString msl,MSLString mslParams,const char* auxInfo,int typeClient)
-{
-	MSLString type=msl(17,1); //Type Record
-	if (type=="6") // 144
-		return "0";
-	if (type=="9")
-		return "5";
-	if (type=="7")
-		return "6";
-		
-	return type;
-//ARM0700000	Men 72 Arrows Ranking Round	
-//ARM4700005	Men 216 Arrows Ranking Round	
-//ARM4700006	Men 24 Arrows Match	Match
-
 }
 
 // Si pasara diferentes parametros

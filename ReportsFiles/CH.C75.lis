@@ -59,6 +59,7 @@ Vari[ 110] =	1   /* Sonneberger Points	     	*/
 Vari[ 111] =	0   /* Salto Points			     	*/
 Vari[ 112] =	35  /* Salto Points			     	*/
 Vari[ 113] =	20  /* Salto Points			     	*/
+Vari[ 120] =	1   /* Salto Points			     	*/
 
 
 /* Ancho de cada una de las celdas */
@@ -73,7 +74,7 @@ Vari[ 207] =	220 /* Ancho de Wins by Members		*/
 Vari[ 208] =	200 /* Ancho de Points				*/
 Vari[ 209] =	150 /* Ancho de Solkoff				*/
 Vari[ 210] =	150 /* Ancho de SonneBerger			*/
-
+Vari[ 220] =	200 /* Ancho de Phase				*/
 
 /* Offset x de cada una de las celdas  Cabecera */
 Vari[ 300] =	60  /* Offset de Rank        		*/
@@ -87,7 +88,7 @@ Vari[ 307] =	110 /* Offset de Wins by Members	*/
 Vari[ 308] =	100 /* Offset de Points				*/
 Vari[ 309] =	75  /* Offset de Solkoff			*/
 Vari[ 310] =	75  /* Offset de Sonneberger		*/
-
+Vari[ 320] =	75  /* Offset de Phase				*/
 
 /* Offset x de cada una de las celdas  Cuerpo */
 Vari[ 400] =	105 /* Offset de Rank        		*/
@@ -101,6 +102,7 @@ Vari[ 407] =	110 /* Offset de Win by Members		*/
 Vari[ 408] = 	100 /* Offset de Points				*/
 Vari[ 409] = 	10  /* Offset de Solkoff			*/
 Vari[ 410] = 	10  /* Offset de Sonneberger		*/
+Vari[ 420] = 	10  /* Offset de Sonneberger		*/
 
  
 /* Saltos de pagina */
@@ -128,6 +130,7 @@ data[1012], d_al=1,	font=&Vari[507]
 data[1013], d_al=1,	font=&Vari[507] 
 data[1014], d_al=1	font=&Vari[507] 
 data[1015], d_al=1	font=&Vari[507] 
+data[1020], d_al=1	font=&Vari[507] 
 
 data[1500], d_al=1, font=&Vari[507]
 
@@ -144,7 +147,7 @@ data[2008], d_al=1,									                /* Points 		*/
 data[2009], d_al=0,									                /* Solkoff		*/
 data[2010], d_al=0,									                /* Sonneberger 	*/
 data[2011], d_al=0,									                /* MSolkoff 	*/
-
+data[2020], d_al=0,									                /* Game		 	*/
 
 
 data[2100], d_al=1,									font=&Vari[511] /* Round x, Fecha */
@@ -165,6 +168,12 @@ Table 1 /* Cabecera Tabla Ranking */
 			{ outline_upper=1 }{ outline_lower=1 }
 			{ outline_right=0 }{ outline_left =1 }
 			{ data=1000, Offset_dx=&Vari[300], Offset_dy=55 }
+
+		/* Phase */
+		cell[21] { call=&Vari[120], height=&Vari[5], width=&Vari[220] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=1020, Offset_dx=&Vari[320], Offset_dy=55 }		
 
 		/* Cartel Noc Code */
 		cell[11] { call=&Vari[101], height= &Vari[5], width=&Vari[201] }
@@ -216,7 +225,7 @@ Table 1 /* Cabecera Tabla Ranking */
 			/*{ data=1007, Offset_dx=&Vari[308], Offset_dy=55 }*/
 
 		/* Cartel Solkoff */
-		cell[19] { call=1, height=&Vari[5], width=&Vari[209] }
+		cell[19] { call=0, height=&Vari[5], width=&Vari[209] }
 			{ outline_upper=1 }{ outline_lower=1 }
 			{ outline_right=0 }{ outline_left =1 }
 			{ data=1011, Offset_dx=&Vari[309], Offset_dy=55 }
@@ -241,6 +250,12 @@ Table 2 /* Cuerpo Tabla Ranking */
 			{ outline_upper=1 }{ outline_lower=1 }
 			{ outline_right=1 }{ outline_left =1 }
 			{ data=2000, Offset_dx=&Vari[400], Offset_dy=55 }
+
+		/* Phase */
+		cell[21] { call=&Vari[120], height=&Vari[6], width=&Vari[220] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=0 }{ outline_left =1 }
+			{ data=2020, Offset_dx=&Vari[420], Offset_dy=55 }		
 
 		/* NOC Code */
 		cell[11] { call=&Vari[101], height=&Vari[6], width=&Vari[201] }
@@ -291,7 +306,7 @@ Table 2 /* Cuerpo Tabla Ranking */
 			{ data=2008, Offset_dx=&Vari[408], Offset_dy=55 }
 
 		/* Solkoff */
-		cell[19] { call=1, height=&Vari[6], width=&Vari[209] }
+		cell[19] { call=0, height=&Vari[6], width=&Vari[209] }
 			{ outline_upper=1 }{ outline_lower=1 }
 			{ outline_right=0 }{ outline_left =1 }
 			{ data=2009, Offset_dx=&Vari[409], Offset_dy=55 }

@@ -124,6 +124,7 @@ LRESULT CHSubMatchConfigurationGUIEx::wndProc(HWND hWnd, UINT message, WPARAM wP
 {
 	switch (message)
 	{
+		case UM_CHANGE_MATCH	: return onChangeMatch(wParam, lParam);
 		case UM_LBUTDOWN_TOOLBAR: return onLButDownToolBar(wParam, lParam);
 	}
 
@@ -169,6 +170,12 @@ LRESULT CHSubMatchConfigurationGUIEx::onLButDownToolBar(WPARAM wParam/*=0*/, LPA
 
 	return 0;
 	UNREFERENCED_PARAMETER(lParam);
+}
+
+LRESULT CHSubMatchConfigurationGUIEx::onChangeMatch(WPARAM wParam/*=0*/, LPARAM lParam/*=0*/)
+{
+	redrawGridSubmatches();
+	return 0;
 }
 
 long CHSubMatchConfigurationGUIEx::getResultCode(long idCtrl)
@@ -566,6 +573,11 @@ void CHSubMatchConfigurationGUIEx::dblClickGridSubmatches(long x,long y)
 
 }
 
+void CHSubMatchConfigurationGUIEx::redrawGridSubmatches	()
+{
+	m_gui.redraw(GR_SUBMATCHES_CNF);
+}
+
 bool CHSubMatchConfigurationGUIEx::handGridSubmatches(int x,int y)
 {
 	gui_grid_cell * pCell=m_gui.grid_getCell(GR_SUBMATCHES_CNF,x,y);
@@ -710,6 +722,8 @@ void CHSubMatchConfigurationGUIEx::subMatchesAutoSet()
 	aProgression.setAutoSubMatchesAssign(m_pMatch);
 
 	m_gui.redraw(GR_SUBMATCHES_CNF);
+
+	SendMessage(getHWndMsgs(),UM_CHANGE_MATCH,0,0);
 }
 
 void CHSubMatchConfigurationGUIEx::subMatchesRemoveSet()
@@ -718,6 +732,8 @@ void CHSubMatchConfigurationGUIEx::subMatchesRemoveSet()
 	aProgression.removeAutoSubMatchesAssign(m_pMatch);
 
 	m_gui.redraw(GR_SUBMATCHES_CNF);
+
+	SendMessage(getHWndMsgs(),UM_CHANGE_MATCH,0,0);
 }
 
 void CHSubMatchConfigurationGUIEx::changeSide(CHMatch *pMatch)

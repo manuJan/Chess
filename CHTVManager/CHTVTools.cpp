@@ -165,9 +165,9 @@ MSLString CHTVTools::getSessionDesc(GSession * pSession) const
 }
 
 
-void CHTVTools::getPhases(GSession * pSession, MSLSortedVector &vPhases)
+void CHTVTools::getRounds(GSession * pSession, MSLSortedVector &vRounds)
 {
-	vPhases.clear();
+	vRounds.clear();
 	MSLSortedVector vMatches;
 	getMatches(vMatches);
 	CHMatch * pMatch = 0;
@@ -177,11 +177,24 @@ void CHTVTools::getPhases(GSession * pSession, MSLSortedVector &vPhases)
 		pMatch = (CHMatch *)vMatches[i];
 		if( pMatch->getSession() != pSession )
 			continue;
-		pPhase = (CHPhase *)pMatch->getPhase();
-		if( !vPhases.find(pPhase) )
-			vPhases.insert(pPhase);
+		
+		short round = pMatch->getRound();
+		bool insert=true;
+		for (short j=0;j<vRounds.entries();j++)
+		{
+			CHMatch * pMatchF = (CHMatch*)vRounds[j];
+			if (pMatchF->getPhase()==pMatch->getPhase() &&
+				pMatchF->getRound()==round)
+			{
+				insert=false;
+				break;
+			}
+		}
+		if (insert)
+			vRounds.insert(pMatch);
 	}
-	vPhases.setFcCompare(fnOrderPhaseByDateTime);
+
+	vRounds.setFcCompare(fnOrderMatchesByEventDateTime);
 }
 
 void CHTVTools::getMatches(MSLSortedVector &vMatches, const bool withByes/*=false*/)
@@ -214,11 +227,14 @@ MSLString CHTVTools::getDesc(const CHMatch * pMatch) const
 		return NULLSTRING;
 
 	MSLString	descMatch = "";
-	if (pMatch->getCourt())
-		descMatch =((CHMatch *)pMatch)->getCourtSDescription().toAscii();
-	if( descMatch.length() )
-		descMatch += "_";
-	MSLString mn=TOSTRING(pMatch->getMatchNumber(),"0");
+	
+	char tmp[4];
+	if (pMatch->getMatchNumber())
+		sprintf_s(tmp,"%.3d",pMatch->getMatchNumber());
+	else
+		sprintf_s(tmp,"%.3d",pMatch->getCode());
+
+	MSLString mn=tmp;
 	descMatch = descMatch + "Match_" + MSLString(mn);
 	MSLString	descEvent = pMatch->getEventSDescription().toAscii();
 	MSLString	descPhase = "";
@@ -305,13 +321,13 @@ void CHTVTools::saveSessionSchedule(GSession * pSession)
 {
 	if( !pSession )
 		return;
-	CHPhase * pPhase = 0;
-	MSLSortedVector vPhases;
-	getPhases(pSession, vPhases);
-	for(long i=0;i<vPhases.entries();i++)
+	CHMatch * pMatch = 0;
+	MSLSortedVector vRounds;
+	getRounds(pSession, vRounds);
+	for(long i=0;i<vRounds.entries();i++)
 	{
-		pPhase = (CHPhase*)vPhases[i];
-		saveSchedule(pPhase);
+		pMatch = (CHMatch*)vRounds[i];
+		saveSchedule(pMatch);
 	}
 }
 
@@ -358,18 +374,37 @@ void CHTVTools::saveSessionScheduleUnit(GSession * pSession)
 	}
 }
 
-void CHTVTools::saveSchedule(CHPhase * pPhase) 
+void CHTVTools::saveSchedule(CHMatch * pMatch) 
 {
-	if( !pPhase )
+	if( !pMatch )
 		return;
 	
-	MSLString rsc = CHTVApp::getRSC_TV(pPhase);
+	MSLString rsc = CHTVApp::getRSC_TV(pMatch, RSC_ALL);
+	MSLString value="",g="",ev="",ph="",unit="";
 	
+	// El rsc pasado es el de msl
+	if( rsc.length()==9 )
+	{
+		g	= rsc(2,1);
+		ev	= rsc(3,3);		// Nos saltamos el event parent
+		ph	= rsc(6,1);
+		unit= rsc(7,2);	// dos ultimos
+	}
+
 	int pos=0;
-	m_pGUI->addContent(pPhase,pos++,CHTVApp::getRSC_Field(rsc,RSC_GENDER));	// "Gender"
-	m_pGUI->addContent(pPhase,pos++,CHTVApp::getRSC_Field(rsc,RSC_EVENT));	// "Event_Code"	
-	m_pGUI->addContent(pPhase,pos++,CHTVApp::getRSC_Field(rsc,RSC_PHASE));	// "Competition_Phase"	
-	m_pGUI->addContent(pPhase,pos++,CHTVApp::getRSC_Field(rsc,RSC_UNIT));	// "Event_Unit"
+	m_pGUI->addContent(pMatch,pos++,g);		// "Gender"
+	m_pGUI->addContent(pMatch,pos++,ev);	// "Event_Code"	
+	m_pGUI->addContent(pMatch,pos++,ph);	// "Competition_Phase"	
+	if (pMatch->getPhaseCode()==SWISS_ROUND)
+	{
+		m_pGUI->addContent(pMatch,pos++,"00");	// "Event_Unit"
+		m_pGUI->addContent(pMatch,pos++,pMatch->getRoundAsString(true,false));	// "Round"
+	}
+	else
+	{
+		m_pGUI->addContent(pMatch,pos++,unit);	// "Event_Unit"
+		m_pGUI->addContent(pMatch,pos++,"");
+	}
 }
 
 void CHTVTools::saveScheduleDetailed(CHMatch* pMatch) 
@@ -377,15 +412,26 @@ void CHTVTools::saveScheduleDetailed(CHMatch* pMatch)
 	if( !pMatch )
 		return;
 	
-	MSLString rsc = CHTVApp::getRSC_TV(pMatch);
+	MSLString rsc = CHTVApp::getRSC_TV(pMatch, RSC_ALL);
+	MSLString value="",g="",ev="",ph="",unit="";
 	
+	// El rsc pasado es el de msl
+	if( rsc.length()==9 )
+	{
+		g	= rsc(2,1);
+		ev	= rsc(3,3);		// Nos saltamos el event parent
+		ph	= rsc(6,1);
+		unit= rsc(7,2);	// dos ultimos
+	}
+
 	int pos=0;
-	m_pGUI->addContent(pMatch,pos++,CHTVApp::getRSC_Field(rsc,RSC_GENDER));	// "Gender"
-	m_pGUI->addContent(pMatch,pos++,CHTVApp::getRSC_Field(rsc,RSC_EVENT));	// "Event_Code"	
-	m_pGUI->addContent(pMatch,pos++,CHTVApp::getRSC_Field(rsc,RSC_PHASE));	// "Competition_Phase"	
-	m_pGUI->addContent(pMatch,pos++,CHTVApp::getRSC_Field(rsc,RSC_UNIT));	// "Event_Unit"
+	m_pGUI->addContent(pMatch,pos++,g);	// "Gender"
+	m_pGUI->addContent(pMatch,pos++,ev);	// "Event_Code"	
+	m_pGUI->addContent(pMatch,pos++,ph);	// "Competition_Phase"	
+	m_pGUI->addContent(pMatch,pos++,unit);	// "Event_Unit"
 	m_pGUI->addContent(pMatch,pos++,TOSTRING(pMatch->getCourtCode()));		// "Mat_code"
 	m_pGUI->addContent(pMatch,pos++,TOSTRING(pMatch->getMatchNumber()));	// "Bout_Number"
+	m_pGUI->addContent(pMatch,pos++,pMatch->getRoundAsString(true,false));
 	m_pGUI->addContent(pMatch,pos++,pMatch->getStartTimeAsString("%H:%M"));	// "Start_Time"
 }
 
@@ -393,24 +439,34 @@ void CHTVTools::saveScheduleUnit(CHMatchResult * pMatchResult)
 {
 	if( !pMatchResult )
 		return;
+
 	CHMatch *pMatch = (CHMatch *) pMatchResult->getMatch();
-	MSLString rsc = CHTVApp::getRSC_TV(pMatch);
+	MSLString rsc = CHTVApp::getRSC_TV(pMatch, RSC_ALL);
+	MSLString value="",g="",ev="",ph="",unit="";
 	
+	// El rsc pasado es el de msl
+	if( rsc.length()==9 )
+	{
+		g	= rsc(2,1);
+		ev	= rsc(3,3);		// Nos saltamos el event parent
+		ph	= rsc(6,1);
+		unit= rsc(7,2);	// dos ultimos
+	}
+
 	// Order: Unit start date, unit start time, unit order
 	MSLString keyCode = pMatch->getStartDateAsString("%Y%m%d").toAscii()+
-						pMatch->getStartTimeAsString("%H%M")+
-						pMatch->getCourtKey()+
-						MSLString().format("%2d",pMatch->getCode())+
+						pMatch->getStartTimeAsString("%H%M")+						
+						MSLString().format("%3d",pMatch->getCode())+
 						TOSTRING(pMatchResult->getPosition());
 
 	GData *pData = m_pGUI->data(keyCode);
 	int pos=0;
-	m_pGUI->addContent(pData,pos++,CHTVApp::getRSC_Field(rsc,RSC_GENDER));		// "Gender"
-	m_pGUI->addContent(pData,pos++,CHTVApp::getRSC_Field(rsc,RSC_EVENT));		// "Event_Code"	
-	m_pGUI->addContent(pData,pos++,CHTVApp::getRSC_Field(rsc,RSC_PHASE));		// "Phase_Code"
-	m_pGUI->addContent(pData,pos++,CHTVApp::getRSC_Field(rsc,RSC_UNIT));		// "Unit_Code"
-	m_pGUI->addContent(pData,pos++,CHMemoryDataBase::getMainVenueCode());		// "Venue_Code"
-	m_pGUI->addContent(pData,pos++,pMatch->getCourtCode());						// "Court_Code"
+	m_pGUI->addContent(pData,pos++,g);											// "Gender"
+	m_pGUI->addContent(pData,pos++,ev);											// "Event_Code"	
+	m_pGUI->addContent(pData,pos++,ph);											// "Phase_Code"
+	m_pGUI->addContent(pData,pos++,unit);										// "Unit_Code"
+	m_pGUI->addContent(pData,pos++,pMatch->getVenueCode());						// "Venue_Code"
+	m_pGUI->addContent(pData,pos++,TOSTRING(pMatch->getCourtCode()));						// "Court_Code"
 	m_pGUI->addContent(pData,pos++,pMatch->getCode());							// "Unit_Order"
 	m_pGUI->addContent(pData,pos++,pMatch->getMatchNumber());					// "Unit_Number"
 	m_pGUI->addContent(pData,pos++,pMatch->getSessionCode());					// "Session_Code"
@@ -425,6 +481,9 @@ void CHTVTools::saveScheduleUnit(CHMatchResult * pMatchResult)
 		athleteDesc = TV_BYE;
 	else
 	{
+		if (!pMatchResult->getRegister())
+			athleteDesc = TV_NOCOMP;
+
 		//athleteDesc = !pMatchResult->getRegister() ? pMatchResult->getIDCompetitor("-Loser to ","BYE","-Loser ","-Winner ","Contest %d",0):L"";
 	}
 
@@ -434,49 +493,31 @@ void CHTVTools::saveScheduleUnit(CHMatchResult * pMatchResult)
 	m_pGUI->addContent(pData,pos++,pMatchResult->getGroup());					// "NOC_Code"
 	m_pGUI->addContent(pData,pos++,pMatchResult->getPosition());				// "NOC_Code"
 	
-	MSLString irm = NULLSTRING;
-	
-/*	bool isLoser = pMatch->getWinner() && !pMatchResult->isWinner();
+	MSLWString irm = NULLSTRING;
+	if (pMatchResult->isQualitative())
+		irm = pMatchResult->getQualitativeSDescription();
 
-	bool bothLosser = pMatch->getDecisionCode() == D_BDQ || pMatch->getDecisionCode() == D_BWD;
-	if( pMatch->getDecisionCode() == D_BDQ || (pMatch->getDecisionCode() == D_DSQ && isLoser) )
-		irm = "DSQ";
-	if( pMatch->getDecisionCode() == D_BWD || (pMatch->getDecisionCode() == D_WDR && isLoser) )
-		irm = "WDR";
 	m_pGUI->addContent(pData,pos++,irm);										// "IRM"
 
 	// Result. Running: score of competitor. >Running: decision if winner
 	MSLString result = "";
-	if( pMatch->getStatus()==GMemoryDataBase::eRunning )
-		result = getResultScore(pMatchResult);
-	else if( pMatch->getStatus()>=GMemoryDataBase::eRunning && pMatchResult->isWinner() )
-		result = pMatch->getOutResult().toAscii();
-	m_pGUI->addContent(pData,pos++,result);										// "Result"
+	if( pMatch->getStatus()>=GMemoryDataBase::eRunning )
+		result = pMatchResult->getPointsAsString();
 
-	if (bothLosser)
-		m_pGUI->addContent(pData,pos++,TOSTRING(2));								// "Ranking"
-	else
-		m_pGUI->addContent(pData,pos++,TOSTRING(pMatchResult->getRank()));			// "Ranking"
+	m_pGUI->addContent(pData,pos++,result);										// "Result"
+	m_pGUI->addContent(pData,pos++,TOSTRING(pMatchResult->getRank()));			// "Ranking"
 	
 	MSLString displayPos = "";
-	if( bothLosser )
-		displayPos = TOSTRING(pMatchResult->getPosition());
-	else if( pMatchResult->isByeScheduled() )
-		displayPos = "2";
-	else 
+	CHMatch::typeWinner winner = CHMatch::typeWinner(pMatch->getWinner());
+	if (winner==CHMatch::eWinnerWhite || winner==CHMatch::eWinnerBlack)
 		displayPos = TOSTRING(pMatchResult->getRankPo());
+	else 
+		displayPos = TOSTRING(pMatchResult->getPosition());
+	
 	m_pGUI->addContent(pData,pos++,pMatch->getStatus()<=GMemoryDataBase::eRunning ? "":displayPos );			// "Display_Pos"
-
-
-	int b_OrderOnCourt = getOrderOnCourt(pMatchResult);								// -1=Nada, 0=Current, 1=Next1, 2=Next2, 3=Next3, etc... 
-	m_pGUI->addContent(pData,pos++, (b_OrderOnCourt==0) ? "X": "" );				// "Current_OnCourt"
-	m_pGUI->addContent(pData,pos++, (b_OrderOnCourt==1) ? "X": "" );				// "Next_OnCourt"
-
+	
 	// "Round"
-	if (pMatch->getStatus()==CHMemoryDataBase::eRunning)
-		m_pGUI->addContent(pData,pos++,pMatch->getRoundWin());
-	else
-		m_pGUI->addContent(pData,pos++,"");*/
+	m_pGUI->addContent(pData,pos++,pMatch->getRoundAsString(true,false));	
 }
 
 void CHTVTools::saveEventInfo(CHMatch * pMatch) 
@@ -484,7 +525,18 @@ void CHTVTools::saveEventInfo(CHMatch * pMatch)
 	if( !pMatch )
 		return;
 	
-	MSLString rsc = CHTVApp::getRSC_TV(pMatch);
+	MSLString rsc = CHTVApp::getRSC_TV(pMatch, RSC_ALL);
+	MSLString value="",g="",ev="",ph="",unit="";
+	
+	// El rsc pasado es el de msl
+	if( rsc.length()==9 )
+	{
+		g	= rsc(2,1);
+		ev	= rsc(3,3);		// Nos saltamos el event parent
+		ph	= rsc(6,1);
+		unit= rsc(7,2);	// dos ultimos
+	}
+
 	GTHMatchJudge * pMatchJudge = (GTHMatchJudge *)pMatch->getMatchJudge(0,fnOrderMatchJudgeByPosition);
 	MSLWString	sRefLong  = NULLWSTRING, sRefShort = NULLWSTRING;
 	MSLString	sRefNOC   = NULLSTRING;
@@ -497,11 +549,12 @@ void CHTVTools::saveEventInfo(CHMatch * pMatch)
 
 	int pos=0;
 	m_pGUI->addContent(pMatch,pos++,"CH");										// "Discipline"
-	m_pGUI->addContent(pMatch,pos++,CHTVApp::getRSC_Field(rsc,RSC_GENDER));		// "Gender"
-	m_pGUI->addContent(pMatch,pos++,CHTVApp::getRSC_Field(rsc,RSC_EVENT));		// "Event_Code"	
-	m_pGUI->addContent(pMatch,pos++,CHTVApp::getRSC_Field(rsc,RSC_PHASE));		// "Competition_Phase"	
-	m_pGUI->addContent(pMatch,pos++,CHTVApp::getRSC_Field(rsc,RSC_UNIT));		// "Event_Unit"
-	m_pGUI->addContent(pMatch,pos++,CHMemoryDataBase::getMainVenueCode());		// "Venue"
+	m_pGUI->addContent(pMatch,pos++,g);											// "Gender"
+	m_pGUI->addContent(pMatch,pos++,ev);										// "Event_Code"	
+	m_pGUI->addContent(pMatch,pos++,ph);										// "Competition_Phase"	
+	m_pGUI->addContent(pMatch,pos++,unit);										// "Event_Unit"
+	m_pGUI->addContent(pMatch,pos++,pMatch->getVenueCode());					// "Venue"
+	m_pGUI->addContent(pMatch,pos++,pMatch->getRoundAsString(true,false));
 	m_pGUI->addContent(pMatch,pos++,sRefLong);									// Referee_Long_TV_Name
 	m_pGUI->addContent(pMatch,pos++,sRefShort);									// Referee_Short_TV_Name
 	m_pGUI->addContent(pMatch,pos++,sRefNOC);									// Referee_NOC_COde
@@ -513,13 +566,14 @@ void CHTVTools::saveOfficials(CHMatch * pMatch)
 	if( !pMatch )
 		return;
 	
-	MSLString rsc = CHTVApp::getRSC_TV(pMatch);
+	MSLSortedVector vMatchJudges;
+	pMatch->getMatchJudgesVector(vMatchJudges);
 
-	/*for(int i=0;i<((CHDefinition&)m_pMem->getDefinition()).getNumJudges()+1;i++)
+	for(int i=0;i<vMatchJudges.entries()+1;i++)
 	{	
-		GTHMatchJudge * pMatchJudge = (GTHMatchJudge *)pMatch->getMatchJudge(CHMatchJudge::MatchJudgePosition(CHMatchJudge::eReferee+i),fnOrderMatchJudgeByPosition);
+		GTHMatchJudge * pMatchJudge = (GTHMatchJudge *)vMatchJudges[i];
 		saveOfficial(pMatchJudge);
-	}*/
+	}
 }
 
 
@@ -529,7 +583,7 @@ void CHTVTools::saveOfficial(GTHMatchJudge * pMatchJudge)
 		return;
 
 	int pos=0;
-	m_pGUI->addContent(pMatchJudge,pos++,pMatchJudge->getPositionLDescription());		// "Position"
+	m_pGUI->addContent(pMatchJudge,pos++,pMatchJudge->getFunctionLDescription());		// "Position"
 	m_pGUI->addContent(pMatchJudge,pos++,pMatchJudge->getCountry());					// "NOC"
 	m_pGUI->addContent(pMatchJudge,pos++,m_pGUI->getRegisterLName(pMatchJudge->getRegister()));					// "Long name"
 	m_pGUI->addContent(pMatchJudge,pos++,m_pGUI->getRegisterSName(pMatchJudge->getRegister()));					// "Short name"
@@ -542,6 +596,15 @@ void CHTVTools::saveCompetitor(CHMatch * pMatch)
 
 	saveCompetitor(pMatch->getWhite());
 	saveCompetitor(pMatch->getBlack());	
+}
+
+void CHTVTools::saveTeamCompetitor(CHMatch * pMatch)
+{
+	if( !pMatch )
+		return;
+
+	saveTeamCompetitor(pMatch->getWhite());
+	saveTeamCompetitor(pMatch->getBlack());	
 }
 
 void CHTVTools::saveCompetitor(CHMatchResult *pMatchResult, GData *pData/*=0*/,long pos/*=0*/,bool showProgression/*=false*/)
@@ -568,72 +631,97 @@ void CHTVTools::saveCompetitor(CHMatchResult *pMatchResult, GData *pData/*=0*/,l
 		}
 	}
 	
-	m_pGUI->addContent(pData,pos++,getAthleteID(pMatchResult->getRegister()));				// "Athlete_ID"
-	m_pGUI->addContent(pData,pos++,longName);												// "Long_TV_Name"
-	m_pGUI->addContent(pData,pos++,shortName);												// "Short_TV_Name"
-	m_pGUI->addContent(pData,pos++,pMatchResult->getGroup());								// "NOC_Code"	
-	m_pGUI->addContent(pData,pos++,pMatchResult->getColor()==CHMatchResult::eBlack?"B":"R");// "Color"	
-	/*m_pGUI->addContent(pData,pos++,pMatchResult->getNetScoreAsString(0,true));								// "Round_1"
-	m_pGUI->addContent(pData,pos++,pMatchResult->getNetScoreAsString(1,true));								// "Round_2"
-	m_pGUI->addContent(pData,pos++,pMatchResult->getNetScoreAsString(2,true));								// "Round_3"
-	m_pGUI->addContent(pData,pos++,pMatchResult->getNetScoreAsString(3,true));								// "Round_4"
-	m_pGUI->addContent(pData,pos++,getResultScore(pMatchResult));							// "Points"	
-
-	MSLWString dec = NULLWSTRING;
-	if( pMatch->getDecisionCode() != D_NONE && pMatchResult->isWinner() )
-		dec = pMatch->getDecisionSDescription();
-	m_pGUI->addContent(pData,pos++,dec);													// "Decision"
-
-	short W,L;
-	getWinnsLosses(pMatchResult, W, L);
+	m_pGUI->addContent(pData,pos++,getAthleteID(pMatchResult->getRegister()));					// "Athlete_ID"
+	m_pGUI->addContent(pData,pos++,longName);													// "Long_TV_Name"
+	m_pGUI->addContent(pData,pos++,shortName);													// "Short_TV_Name"
+	m_pGUI->addContent(pData,pos++,pMatchResult->getGroup());									// "NOC_Code"	
+	m_pGUI->addContent(pData,pos++,pMatchResult->getColor()==CHMatchResult::eWhite?"W":"B");	// "Color"	
+	m_pGUI->addContent(pData,pos++,pMatchResult->getPointsAsString());							// "Score"
+	m_pGUI->addContent(pData,pos++,pMatchResult->getSwissRoundScore());							//"Points"
+		
+	short W,L,D;
+	getWinnsLossesDrawn(pMatchResult, W, L, D);
 	m_pGUI->addContent(pData,pos++,TOSTRING(W,"0"));										// "W"
+	m_pGUI->addContent(pData,pos++,TOSTRING(D,"0"));										// "D"
 	m_pGUI->addContent(pData,pos++,TOSTRING(L,"0"));										// "L"
 
 	MSLString dispPos = NULLSTRING;
-	if( pMatch->getWinner() )
-		dispPos = pMatchResult->isWinner()?"1":"2";
+	if( pMatch->getWinner()!=CHMatch::eNoWinner &&
+		pMatch->getWinner()!=CHMatch::eDraw)
+		dispPos = TOSTRING(pMatchResult->getRankPo());
+	else
+		dispPos = pMatchResult->getColor()==CHMatchResult::eWhite ? "1" : "2";
+
 	m_pGUI->addContent(pData,pos++,dispPos);												// "Display_Pos"
 
-	if (pMatchResult->getQualitativeCode()!=Q_OK)
-		m_pGUI->addContent(pData,pos++,pMatchResult->getQualitativeSDescription());		// "IRM"
+	if (pMatchResult->getQualitativeCode()!=OK)
+		m_pGUI->addContent(pData,pos++,pMatchResult->getQualitativeSDescription());			// "IRM"
 	else
-		m_pGUI->addContent(pData,pos++,"");												// "IRM"
-
-	MSLString rsc, adPh = NULLSTRING, adUn = NULLSTRING;
-
-	CHEvent *pEvent = pMatch->getEvent();
-	if( (pMatch->getWinner() && pMatchResult->isWinner()) )
-	{
-		MSLSet colMatchResults;
-		pMatchResult->getTargetByProgression(colMatchResults);
-		MSLSortedVector vMatchResults(colMatchResults,fnOrderMatchResultByPhaseAndMatch);
-		CHMatchResult * pAdvance = (CHMatchResult *)vMatchResults[0];
-		if( pAdvance )
-		{
-			pMatch = pAdvance->getMatch();
-			rsc = CHTVApp::getRSC_TV(pMatch);
-			adPh = CHTVApp::getRSC_Field(rsc, RSC_PHASE);
-			adUn = CHTVApp::getRSC_Field(rsc, RSC_UNIT);
-		}
-	}
-
-	m_pGUI->addContent(pData,pos++,adPh);	// "AdvanceTo_Phase"
-	m_pGUI->addContent(pData,pos++,adUn);	// "AdvanceTo_Unit"
-
-	// "Round"
-	pMatch  = pMatchResult->getMatch();
-	if (pMatch->getStatus()==CHMemoryDataBase::eRunning)
-		m_pGUI->addContent(pMatchResult,pos++,pMatch->getRoundWin());
-	else
-		m_pGUI->addContent(pMatchResult,pos++,"");
-
-	m_pGUI->addContent(pData,pos++,pMatchResult->getScore1());								// "Score_1"
-	m_pGUI->addContent(pData,pos++,pMatchResult->getScore2());								// "Score_2"
-	m_pGUI->addContent(pData,pos++,pMatchResult->getAdmonitions());							// "Admonitions"
-	m_pGUI->addContent(pData,pos++,pMatchResult->getWarnings());							// "Warnings"*/
+		m_pGUI->addContent(pData,pos++,"");													// "IRM"
+		
+	pMatch = (CHMatch*)pMatchResult->getMatch();
+	m_pGUI->addContent(pMatchResult,pos++,pMatch->getRound());								// "Round"
 }
 
-void CHTVTools::saveTeamMembers(GData* pData, short &pos)
+
+void CHTVTools::saveTeamCompetitor(CHMatchResult *pMatchResult, GData *pData/*=0*/,long pos/*=0*/,bool showProgression/*=false*/)
+{
+	if( !pMatchResult )
+		return;
+
+	CHMatch * pMatch  = (CHMatch*) pMatchResult->getMatch();
+	
+	if( !pData )
+		pData = pMatchResult;
+
+	MSLWString	shortName = m_pGUI->getRegisterSName(pMatchResult->getRegister());
+	MSLWString  longName = m_pGUI->getRegisterLName(pMatchResult->getRegister());
+	
+	if( !pMatchResult->getRegister() && showProgression )
+	{
+		CHMatchResult *pSource = pMatchResult->getSourceByProgression();
+		if( pSource && pSource->getMatch() && pSource->getMatch()->getMatchNumber() )
+		{
+			shortName = L"Winner of bout "+TOWSTRING(pSource->getMatch()->getMatchNumber());
+			longName = shortName;
+		}
+	}
+	
+	m_pGUI->addContent(pData,pos++,getAthleteID(pMatchResult->getRegister()));					// "Athlete_ID"
+	m_pGUI->addContent(pData,pos++,longName);													// "Long_TV_Name"
+	m_pGUI->addContent(pData,pos++,shortName);													// "Short_TV_Name"
+	saveTeamMembers(pMatchResult,pos);
+	m_pGUI->addContent(pData,pos++,pMatchResult->getGroup());									// "NOC_Code"	
+	m_pGUI->addContent(pData,pos++,pMatchResult->getColor()==CHMatchResult::eWhite?"W":"B");	// "Color"	
+	m_pGUI->addContent(pData,pos++,pMatchResult->getPointsAsString());							// "Score"
+	m_pGUI->addContent(pData,pos++,pMatchResult->getSwissRoundScore());							//"Points"
+		
+	short W,L,D;
+	getWinnsLossesDrawn(pMatchResult, W, L, D);
+	m_pGUI->addContent(pData,pos++,TOSTRING(W,"0"));										// "W"
+	m_pGUI->addContent(pData,pos++,TOSTRING(D,"0"));										// "D"
+	m_pGUI->addContent(pData,pos++,TOSTRING(L,"0"));										// "L"
+
+	MSLString dispPos = NULLSTRING;
+	if( pMatch->getWinner()!=CHMatch::eNoWinner &&
+		pMatch->getWinner()!=CHMatch::eDraw)
+		dispPos = TOSTRING(pMatchResult->getRankPo());
+	else
+		dispPos = pMatchResult->getColor()==CHMatchResult::eWhite ? "1" : "2";
+
+	m_pGUI->addContent(pData,pos++,dispPos);												// "Display_Pos"
+
+	if (pMatchResult->getQualitativeCode()!=OK)
+		m_pGUI->addContent(pData,pos++,pMatchResult->getQualitativeSDescription());			// "IRM"
+	else
+		m_pGUI->addContent(pData,pos++,"");													// "IRM"
+		
+	pMatch = (CHMatch*)pMatchResult->getMatch();
+	m_pGUI->addContent(pMatchResult,pos++,pMatch->getRound());								// "Round"
+}
+
+
+void CHTVTools::saveTeamMembers(GData* pData, long &pos)
 {
 	MSLSortedVector vMembers;	
 	CHEvent * pEvent = 0;
@@ -666,7 +754,7 @@ void CHTVTools::saveTeamMembers(GData* pData, short &pos)
 		vMembers.setFcCompare(fnOrderMembersByName);
 	}
 
-	for (short i=0;i<3;i++)
+	for (short i=0;i<2;i++)
 	{
 		if (!vMembers[i])
 		{
@@ -701,6 +789,9 @@ void CHTVTools::savePoolStandings(CHMatch * pMatch)
 	CHPoolResult * pPoolResult=0;
 	while((pPoolResult=(CHPoolResult*)iter())!=0)
 	{
+		if (pPoolResult->getBye())
+			continue;
+
 		if(pPoolResult->getEvent()==pMatch->getEvent() &&
 		   pPoolResult->getPhase()==pMatch->getPhase())
 		{
@@ -752,9 +843,12 @@ void CHTVTools::savePoolStandings(CHMatch * pMatch)
 		m_pGUI->addContent(pPoolResult,2,TOSTRING(pGrpInfo->m_rank));									// "Rank"
 		m_pGUI->addContent(pPoolResult,3,pGrpInfo->m_GP);												// "GP"
 		m_pGUI->addContent(pPoolResult,4,pGrpInfo->m_W);												// "W"
-		m_pGUI->addContent(pPoolResult,5,pGrpInfo->m_L);												// "L"
-		m_pGUI->addContent(pPoolResult,6,pGrpInfo->m_pts);												// "Pts"
-		m_pGUI->addContent(pPoolResult,7,pGrpInfo->m_displayPos ? pGrpInfo->m_displayPos : index);		// "Display_Pos"
+		m_pGUI->addContent(pPoolResult,5,pGrpInfo->m_D);
+		m_pGUI->addContent(pPoolResult,6,pGrpInfo->m_L);												// "L"
+		m_pGUI->addContent(pPoolResult,7,pPoolResult->getPointsFStr());									// "Pts"
+		m_pGUI->addContent(pPoolResult,8,pPoolResult->getMatchPointsStr());								// "Match Pts"
+
+		m_pGUI->addContent(pPoolResult,9,pGrpInfo->m_displayPos ? pGrpInfo->m_displayPos : index);		// "Display_Pos"
 
 		MSLString irm;
 		CHEventResult * pEventResult=(CHEventResult*)pPoolResult->getEventResult();
@@ -762,14 +856,14 @@ void CHTVTools::savePoolStandings(CHMatch * pMatch)
 			pEventResult->getQualitativeCode()==DSQ)
 			irm="DSQ";
 
-		m_pGUI->addContent(pPoolResult,8,irm);									// "IRM"
-		m_pGUI->addContent(pPoolResult,9,"");									// "AdvancedFrom" Empty
+		m_pGUI->addContent(pPoolResult,10,irm);									// "IRM"
+		m_pGUI->addContent(pPoolResult,11,"");									// "AdvancedFrom" Empty
 
-		m_pGUI->addContent(pPoolResult,10,pGrpInfo->m_advanceTo);					// "AdvancedTo"
-		m_pGUI->addContent(pPoolResult,11,pGrpInfo->m_advanceTo_Game);			// "AdvancedTo_Game"
+		m_pGUI->addContent(pPoolResult,12,pGrpInfo->m_advanceTo);				// "AdvancedTo"
+		m_pGUI->addContent(pPoolResult,13,pGrpInfo->m_advanceTo_Game);			// "AdvancedTo_Game"
 		
-		m_pGUI->addContent(pPoolResult,13,m_pGUI->getRegisterLName(pPoolResult->getRegister()));	// "Country_Long_TV_Name"
-		m_pGUI->addContent(pPoolResult,14,m_pGUI->getRegisterSName(pPoolResult->getRegister()));	// "Country_Short_TV_Name"
+		m_pGUI->addContent(pPoolResult,14,m_pGUI->getRegisterLName(pPoolResult->getRegister()));	// "Country_Long_TV_Name"
+		m_pGUI->addContent(pPoolResult,15,m_pGUI->getRegisterSName(pPoolResult->getRegister()));	// "Country_Short_TV_Name"
 
 
 		index++;
@@ -801,11 +895,10 @@ void CHTVTools::savePoolInfo(MSLSortedVector * pColGroupInfo,CHMatch * pMatch)
 				MSLString grp(car);
 				pGroupInfo->m_group=grp;
 				pGroupInfo->m_rank=pPoolRes->getRank();
-				pGroupInfo->m_GP=pPoolRes->getMatchesPlayed();
-				pGroupInfo->m_W=pPoolRes->getMatchesWon();
-				pGroupInfo->m_L=pPoolRes->getMatchesLost();
-
-				pGroupInfo->m_pts=pPoolRes->getPoints();
+				pGroupInfo->m_GP=pPoolRes->getMPlayed();
+				pGroupInfo->m_W=pPoolRes->getMWon();
+				pGroupInfo->m_D=pPoolRes->getMDrawn();
+				pGroupInfo->m_L=pPoolRes->getMLost();				
 				pGroupInfo->m_displayPos=pPoolRes->getRankPo();
 			}
 		}
@@ -852,6 +945,9 @@ void CHTVTools::saveBracket(CHMatch * pMatch)
 	for(long i=0;i<vAllMatchResults.entries();i++)
 	{
 		pMatchResult = (CHMatchResult*)vAllMatchResults[i];
+		if (pMatchResult->getPhaseCode()==SWISS_ROUND)
+			continue;
+
 		saveBracket(pMatchResult);
 	}
 }
@@ -862,13 +958,19 @@ void CHTVTools::saveBracket(CHMatchResult *pMatchResult)
 		return;
 	
 	CHMatch * pMatch = (CHMatch*) pMatchResult->getMatch();
-	MSLString	rsc = CHTVApp::getRSC_TV(pMatch),
+	MSLString	rsc = CHTVApp::getRSC_TV(pMatch, RSC_ALL),
 				matchID = NULLSTRING,
 				key = NULLSTRING;
-	char euCode[3];
-	sprintf_s(euCode,3,"%.2d", pMatch->getCode());
 
-	matchID = CHTVApp::getRSC_Field(rsc,RSC_PHASE) + "_" + euCode + "_";
+	// El rsc pasado es el de msl
+	MSLString ph,unit=NULLSTRING;
+	if( rsc.length()==9 )
+	{
+		ph	= rsc(6,1);	
+		unit= rsc(7,2);	// dos ultimos
+	}
+
+	matchID = ph + "_" + unit + "_";
 	key = matchID;
 
 	if( pMatchResult->getColor() == CHMatchResult::eWhite )
@@ -965,28 +1067,38 @@ void CHTVTools::saveHistory(CHMatchResult *pMatchResult, MSLString key)
 
 	// "Result"
 	MSLString res;
-	/*if( pOpp->getBye() || !pMatch->getWinner() )
-		res = NULLSTRING;
+	if( pOpp->getBye() )
+		res = TV_BYE;
+	else if (!pOpp->getInscription())
+		res = TV_NOCOMP;
 	else
-		res = pMatchResult->isWinner()?"W":"L";*/
-
+	{
+		CHMatch::typeWinner winner = CHMatch::typeWinner(pMatch->getWinner());
+		if (winner==CHMatch::eWinnerWhite && pMatchResult->getColor()==CHMatchResult::eWhite)
+			res = "W";
+		else if (winner==CHMatch::eWinnerBlack && pMatchResult->getColor()==CHMatchResult::eBlack)
+			res = "W";
+		else if (winner==CHMatch::eDraw)
+			res = "D";
+		else
+			res = "L";
+	}
+		
 	m_pGUI->addContent(pKey,pos++,res);
 
 	// "Decision"
-/*	MSLWString dec = pMatch->getDecisionSDescription();
-	if( pMatch->getDecisionCode() == D_NORMAL )
-		dec = pMatchResult->getScoreAsString() + _T(" - ") + pOpp->getScoreAsString();
-	else if( pOpp->getBye() )
-		dec = MSLWString(TV_BYE);
+	MSLWString dec = NULLWSTRING;
+	if (pOpp->isQualitative())
+		dec = pOpp->getQualitativeSDescription();
+
 	m_pGUI->addContent(pKey,pos++,dec);
 	
 	// "IRM"
-	MSLString irm = NULLSTRING; 
-	if( pMatch->getDecisionCode() == D_BDQ )
-		irm = "DSQ";
-	else if( pMatch->getDecisionCode() == D_BWD )
-		irm = "WDR";
-	m_pGUI->addContent(pKey,pos++,irm);*/
+	MSLWString irm = NULLWSTRING; 
+	if (pMatchResult->isQualitative())
+		irm = pMatchResult->getQualitativeSDescription();
+
+	m_pGUI->addContent(pKey,pos++,irm);
 
 }
 
@@ -1114,7 +1226,11 @@ void CHTVTools::changedCompetitor(bool update,CHMatchResult *pMatchResult)
 	if( pMatchResult )
 	{
 		CHMatch *pMatch = (CHMatch*)pMatchResult->getMatch();
-		m_pGUI->useCSV(DWORD(pMatch),FILE_CSV_COMPETITORS);
+		CHEvent *pEvent = pMatch ? (CHEvent*)pMatch->getEvent() : 0;
+		if (pEvent && !pEvent->isTeam())
+			m_pGUI->useCSV(DWORD(pMatch),FILE_CSV_COMPETITORS);
+		else
+			m_pGUI->useCSV(DWORD(pMatch),FILE_CSV_TEAM_COMPETITORS);
 		
 		if( update )
 			saveCompetitor(pMatchResult);
@@ -1170,29 +1286,19 @@ void CHTVTools::changedMedals(bool update,CHMatch *pMatch)
 }
 
 // Help
-void CHTVTools::getWinnsLosses(CHMatchResult *pMatchResult, short &W, short&L)
+void CHTVTools::getWinnsLossesDrawn(CHMatchResult *pMatchResult, short &W, short&L, short &D)
 {
-	W=L=0;
+	W=L=D=0;
 	if( !pMatchResult || !pMatchResult->getInscription() )
 		return;
-	CHMatch * pMatch = 0;
-	CHMatchResult * pWinner = 0;
-	MSLSortedVector vPrevMatches;
-	m_pMem->getVector(__CHMATCH,vPrevMatches,pMatchResult->getInscription());
-	for(long i=0;i<vPrevMatches.entries();i++)
-	{
-		pMatch = (CHMatch*)vPrevMatches[i];
-		if( pMatch->hasByes() || pMatch == pMatchResult->getMatch() )
-			continue;
-//		pWinner = pMatch->getWinner();
-		if( pWinner )
-		{
-			if( pWinner->getInscription() == pMatchResult->getInscription() )
-				W++;
-			else
-				L++;
-		}
-	}
+
+	CHPoolResult * pPoolResult = (CHPoolResult*) pMatchResult->getPoolResult();
+	if (!pPoolResult)
+		return;
+
+	W = pPoolResult->getMWon();
+	L = pPoolResult->getMLost();
+	D = pPoolResult->getMDrawn();
 }
 
 int CHTVTools::getOrderOnCourt(CHMatchResult* pMatchResult)

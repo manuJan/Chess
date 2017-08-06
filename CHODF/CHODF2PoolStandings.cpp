@@ -170,7 +170,7 @@ void CHODF2PoolStandings::fillExtendedResults(MSLItem * pCompetitor,XMLElement *
 
 		// MATCH POINTS
 		if (pCHPoolResult->isTeamEvent())
-			addExtension(	"Extensions", "Extension",pExtendedResults,MATCHES,MATCH_POINTS,"",TOSTRING(pCHPoolResult->getAllRoundsPointsForWon()));
+			addExtension(	"Extensions", "Extension",pExtendedResults,MATCHES,MATCH_POINTS,"",pCHPoolResult->getMatchPointsStr());
 	}
 }
 

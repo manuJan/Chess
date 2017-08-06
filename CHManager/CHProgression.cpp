@@ -29,8 +29,12 @@
 #include "..\CHMngtModel\CHMatchResult.h"
 #include "..\CHMngtModel\CHInscription.h"
 #include "..\CHMngtModel\CHMember.h"
+#include "..\CHMngtModel\CHRegister.h"
+#include "..\CHMngtModel\CHPool.h"
 
 #include <OVR\GUI\GUITHManager\GTHRanking.h>
+
+#define UMPIRE 2 //a pinrel
 
 static
 int orderMatchMemberByRating(const MSLItem** a, const MSLItem** b)
@@ -201,6 +205,8 @@ void CHProgression::setAutoSubMatchesAssign(CHMatch *pMatch)
 			}
 		}
 	}
+
+	startListScheduleMatch(pMatch);
 }
 
 void CHProgression::removeAutoSubMatchesAssign (CHMatch *pMatch)
@@ -250,6 +256,7 @@ void CHProgression::removeAutoSubMatchesAssign (CHMatch *pMatch)
 			}
 		}
 	}
+	startListScheduleMatch(pMatch);
 }
 
 void CHProgression::changeSide(CHMatch *pMatch)
@@ -277,25 +284,157 @@ void CHProgression::changeSide(CHMatch *pMatch)
 	CHSend.toServerDB(pMR2);			
 }
 
-void CHProgression::startListMatch(CHMatch *pMatch)
+void CHProgression::startListScheduleMatch(CHMatch *pMatch)
 {
+	CHStatusManager statusManager;
+
 	MSLSortedVector vMatchJudges;
 	pMatch->getMatchJudgesVector(vMatchJudges);
+	
+	MSLSortedVector vSubMatches;
+	pMatch->getSubMatchesVector(vSubMatches);
 
-	if (pMatch->getStatus()!=CHMemoryDataBase::eSchedulled)
+	if (pMatch->getStatus()==CHMemoryDataBase::eStartList && vMatchJudges.entries()==0)
+	{
+		statusManager.setStatus(pMatch,CHMemoryDataBase::eSchedulled);
+		for (short i=0;i<vSubMatches.entries();i++)
+		{
+			CHMatch * pSubMatch = (CHMatch *)vSubMatches[i];
+			statusManager.setStatus(pSubMatch,CHMemoryDataBase::eSchedulled);	
+		}
 		return;
-
-	if (vMatchJudges.entries()==0)
-		return;
+	}
 
 	bool competitors = pMatch->hasCompetitors();
-	if (!competitors)
+	if (pMatch->getStatus()==CHMemoryDataBase::eStartList && !competitors)
+	{
+		statusManager.setStatus(pMatch,CHMemoryDataBase::eSchedulled);		
+		for (short i=0;i<vSubMatches.entries();i++)
+		{
+			CHMatch * pSubMatch = (CHMatch *)vSubMatches[i];
+			statusManager.setStatus(pSubMatch,CHMemoryDataBase::eSchedulled);	
+		}
 		return;
+	}
 
 	bool teamCompetitors = pMatch->hasTeamCompetitors();
-	if (!teamCompetitors)
-		return;
+	bool teamSubMatchesCompetitors = true;
+	
+	if (vSubMatches.entries())
+	{
+		for (short i=0;i<vSubMatches.entries();i++)
+		{
+			CHMatch * pSubMatch = (CHMatch *)vSubMatches[i];
+			teamSubMatchesCompetitors = pSubMatch->hasTeamCompetitors();
+			if (!teamSubMatchesCompetitors)
+				break;
+		}
+	}
 
-	CHStatusManager statusManager;
-	statusManager.setStatus(pMatch,CHMemoryDataBase::eStartList);		
+	if (pMatch->getStatus()==CHMemoryDataBase::eStartList && ( !teamCompetitors || !teamSubMatchesCompetitors) )
+	{
+		statusManager.setStatus(pMatch,CHMemoryDataBase::eSchedulled);	
+		for (short i=0;i<vSubMatches.entries();i++)
+		{
+			CHMatch * pSubMatch = (CHMatch *)vSubMatches[i];
+			statusManager.setStatus(pSubMatch,CHMemoryDataBase::eSchedulled);	
+		}
+		return;
+	}
+
+	if (pMatch->getStatus()==CHMemoryDataBase::eSchedulled && teamCompetitors && teamSubMatchesCompetitors &&  vMatchJudges.entries()>0)
+	{
+		statusManager.setStatus(pMatch,CHMemoryDataBase::eStartList);		
+
+		for (short i=0;i<vSubMatches.entries();i++)
+		{
+			CHMatch * pSubMatch = (CHMatch *)vSubMatches[i];
+			statusManager.setStatus(pSubMatch,CHMemoryDataBase::eStartList);
+		}
+	}
+}
+
+void CHProgression::setMatchJudge(CHMatch * pMatch, GOfficial * pOfficial)
+{
+	CHRegister * pRegister    =(CHRegister*)(pOfficial? pOfficial->getRegister():0);
+	if(pRegister)
+	{
+		if(createMatchJudge(pMatch, pRegister))
+			APP::out(TRN_SET_MATCHJUDGE);
+	}		
+}
+
+bool CHProgression::createMatchJudge(CHMatch * pMatch,CHRegister * pRegister)
+{
+	if(!pRegister)
+		return false;
+
+	GTHMatchJudge aMatchJudge;
+	aMatchJudge.setMatch(pMatch);
+	aMatchJudge.setRegister(pRegister);
+	
+	GFunction * pFunction = 0;
+		
+	pFunction=CHMemoryDataBase::findFunction(UMPIRE);
+	if( pFunction )
+		aMatchJudge.setFunction(pFunction);
+
+	if(!CHMemoryDataBase::find(aMatchJudge))
+	{
+		GTHMatchJudge * pMatchJudge = (GTHMatchJudge *)getMem()->set(aMatchJudge);
+
+		if(pMatchJudge )
+		{
+			APP::out(*pMatchJudge);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool CHProgression::deleteMatchJudge(GTHMatchJudge * pMatchJudge)
+{
+	if(!pMatchJudge)
+		return false;
+
+	GTHMatchJudge * pDelJudge = (GTHMatchJudge *)getMem()->remove(*pMatchJudge);
+	if(pDelJudge )
+	{
+		APP::out(*pDelJudge,false);
+		APP::out(TRN_REMOVE_MATCHJUDGE);
+		return true;
+	}
+	return false;
+}
+
+bool CHProgression::assignOfficialsToAllRoundGames	(CHMatch *pMatch)
+{
+	CHPool * pPool = (CHPool *) pMatch->getPool();
+	MSLSortedVector vRoundMatches;
+	if (pPool)
+		pPool->getRoundMatchesVector(vRoundMatches, pMatch->getRound());
+
+	MSLSortedVector vOfficials;
+	pMatch->getMatchJudgesVector(vOfficials);
+
+	for (short i=0;i<vRoundMatches.entries();i++)
+	{
+		CHMatch* pRoundMatch = (CHMatch* )vRoundMatches[i];
+		if (pRoundMatch == pMatch)
+			continue;
+
+		for (short j=0;j<vOfficials.entries();j++)
+		{
+			GTHMatchJudge * pMJ = (GTHMatchJudge*)vOfficials[j];						
+			if (pMJ->getRegister())
+			{
+				createMatchJudge(pRoundMatch, (CHRegister*)pMJ->getRegister());
+				APP::out(TRN_SET_MATCHJUDGE);
+			}
+		}		
+
+		startListScheduleMatch(pRoundMatch);
+	}
+
+	return true;
 }

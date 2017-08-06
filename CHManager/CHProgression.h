@@ -29,6 +29,7 @@ class CHPhase;
 class CHPoolResult;
 class CHMatchResult;
 class CHMatch;
+class CHRegister;
 
 class CHProgression : public GTHProgression
 {
@@ -40,9 +41,13 @@ public:
 	void setData				(GTHInscription* pInscription, GTHMatchResult* pMatchResult, bool bye, bool includeSubMacthes, bool progression=true);
 	void initAllMatchMember		(CHMatchResult * pMatchResult);
 
-	void manageByes					(CHMatch *pMatch);
-	void setAutoSubMatchesAssign	(CHMatch *pMatch);
-	void removeAutoSubMatchesAssign (CHMatch *pMatch);
-	void changeSide					(CHMatch *pMatch);
-	void startListMatch				(CHMatch *pMatch);
+	void manageByes						(CHMatch *pMatch);
+	void setAutoSubMatchesAssign		(CHMatch *pMatch);
+	void removeAutoSubMatchesAssign		(CHMatch *pMatch);
+	void changeSide						(CHMatch *pMatch);
+	void startListScheduleMatch			(CHMatch *pMatch);
+	bool assignOfficialsToAllRoundGames	(CHMatch *pMatch);
+	void setMatchJudge					(CHMatch * pMatch, GOfficial * pOfficial);
+	bool createMatchJudge				(CHMatch * pMatch, CHRegister * pRegister);
+	bool deleteMatchJudge				(GTHMatchJudge * pMatchJudge);
 };

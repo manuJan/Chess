@@ -52,7 +52,7 @@ private:
 	bool preprocessTrnDataEntry			(MSLTransaction &pt);
 	bool preprocessTrnProgression		(MSLTransaction &pt);
 	bool preprocessTrnMedals			(MSLTransaction &pt);
-	bool preprocessTrnFinalRank			(MSLTransaction &pt);
+	bool preprocessTrnRankings			(MSLTransaction &pt);
 	void updateModel					(MSLTransaction &pt);
 
 private:

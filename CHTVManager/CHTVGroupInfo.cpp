@@ -9,7 +9,6 @@ CHTVGroupInfo::CHTVGroupInfo(CHPoolResult * pPR)
 ,m_GP(0)
 ,m_W(0)
 ,m_L(0)
-,m_pts(0.0)
 ,m_displayPos(0)
 //,m_IRM("")
 ,m_advanceTo("")
@@ -42,3 +41,7 @@ void CHTVGroupInfo::addL()
 	m_L++;
 }
 
+void CHTVGroupInfo::addD()
+{
+	m_D++;
+}

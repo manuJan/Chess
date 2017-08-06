@@ -33,6 +33,8 @@
 
 #include "..\CHMngtModel\CHEvent.h"
 #include "..\CHMngtModel\CHPhase.h"
+#include "..\CHMngtModel\CHPool.h"
+#include "..\CHMngtModel\CHMatch.h"
 
 #include "..\CHVMngtModel\CHVMngtModelDefs.h"
 #include "..\CHVMngtModel\CHRC51.h"
@@ -198,8 +200,8 @@ void CHProgressionGUI::guiInitialAssign()
 void CHProgressionGUI::onReportsAdd()
 {
 	int nC51=3000, nC51Event=3100 , nC51Phase=3200;
-	int nC74=4000, nC74Event=4100 , nC74Phase=4200 , nC74Round=4300;
-	int nC75=5000, nC75Event=5100 , nC75Phase=5200 , nC75Round=5300;
+	int nC74=4000, nC74Event=4100 , nC74Phase=4200 , nC74Pool=4300, nC74Round=4400;
+	int nC75=5000, nC75Event=5100 , nC75Phase=5200 , nC75Pool=5300;	
 	
 	APP_CH::report_add(nC51,0, CH51_NAME, CH51);
 	APP_CH::report_add(nC74,0, CH74_NAME, CH74);
@@ -224,16 +226,25 @@ void CHProgressionGUI::onReportsAdd()
 			APP_CH::report_add(++nC74Phase ,nC74Event, pPhase->getLDescription(),CH74 ,LPARAM(pPhase));
 			APP_CH::report_add(++nC75Phase ,nC75Event, pPhase->getLDescription(),CH75 ,LPARAM(pPhase));
 
-			for(short k=0;k<pPhase->getNumRounds();k++)
-			{
-				MSLWString round = pPhase->getSDescription() + L" Round ";
-				round += TOWSTRING(k+1);
-				
-				APP::report_add(++nC74Round,nC74Phase,round,CH74,LPARAM(pPhase),LPARAM(k+1));
-				APP::report_add(++nC75Round,nC75Phase,round,CH75,LPARAM(pPhase),LPARAM(k+1));
-			}
+			MSLSortedVector vPools;
+			pPhase->getPoolesVector(vPools);
 
-			APP::report_add(++nC74Round,nC74Phase,L"All rounds",CH74,LPARAM(pPhase),LPARAM(ALL_ROUNDS));
+			for (short k=0;k<vPools.entries();k++)
+			{
+				CHPool* pPool = (CHPool*)vPools[k];
+				if (pPool->getIsPool())
+				{
+					APP_CH::report_add(++nC74Pool ,nC74Phase, pPool->getLDescription(), CH74 ,LPARAM(pPhase), LPARAM(pPool));
+					short nRounds = pPool->getNumRounds();
+					for (short l=0;l<nRounds;l++)
+					{
+						MSLWString round = "Round " + TOWSTRING(l+1);
+						APP_CH::report_add(++nC74Round ,nC74Pool, round, CH74 ,LPARAM(pPool), LPARAM(l+1));
+					}
+
+					APP_CH::report_add(++nC75Pool ,nC75Phase, pPool->getLDescription(), CH75 ,LPARAM(pPhase), LPARAM(pPool));
+				}
+			}
 		}
 	}	
 
@@ -262,26 +273,89 @@ void CHProgressionGUI::onReportRequest(MSLReportItem  *pReport)
 			break;
 		}
 		case CH74:
+		{
+			GData *pData = (GData *)pReport->getLParam1();
+			if (!pData)
+				break;
+
+			if (pData->isA()!=__CHPHASE && pData->isA()!=__CHPOOL)
+				break;
+			
+			CHPhase * pPhase = 0;
+			if (pData->isA()==__CHPHASE)
+				pPhase = (CHPhase*)pData;
+			else 
+				pPhase = (CHPhase*) ((CHPool*) pData)->getPhase();
+						
+			if (pData && 
+				pData->isA()==__CHPOOL)
+			{
+				CHPool * pPool = (CHPool *)pData;
+				short current_round = (short) pReport->getLParam2();
+				MSLSortedVector vMatches;
+				pPool->getRoundMatchesVector(vMatches,current_round);
+				CHMatch * pMatch = vMatches.entries() ? (CHMatch*)vMatches[0] : 0;
+
+				if (pMatch)
+					pReport->setRSC(GET_RSC(pMatch));				
+			}
+			else if (pData && 
+				pData->isA()==__CHPHASE)
+			{
+				CHPool * pPool = (CHPool *)pReport->getLParam2();
+				if (pPool)
+				{
+					short current_round = pPool->getNumRoundsPlayed();
+					MSLSortedVector vMatches;
+					pPool->getRoundMatchesVector(vMatches,current_round);
+					CHMatch * pMatch = vMatches.entries() ? (CHMatch*)vMatches[0] : 0;
+
+					if (pMatch)
+						pReport->setRSC(GET_RSC(pMatch));				
+				}
+				else
+					pReport->setRSC(GET_RSC(pPhase));
+			}
+			else
+				pReport->setRSC(GET_RSC(pPhase));
+						
+			break;
+		}
 		case CH75:
 		{
 			GData *pData = (GData *)pReport->getLParam1();
 			if (!pData)
 				break;
 
-			if (pData->isA()!=__CHPHASE)
+			if (pData->isA()!=__CHPHASE && pData->isA()!=__CHPOOL)
 				break;
-
-			CHPhase * pPhase = (CHPhase*)pData;
-			pReport->setRSC(GET_RSC(pPhase));
 			
-			short nRound = (short)pReport->getLParam2();
+			CHPhase * pPhase = 0;
+			if (pData->isA()==__CHPHASE)
+				pPhase = (CHPhase*)pData;
+			else 
+				pPhase = (CHPhase*) ((CHPool*) pData)->getPhase();
 						
-			if(	nRound && 
-				nRound!=ALL_ROUNDS)
+			if (pData && 
+				pData->isA()==__CHPHASE)
 			{
-				MSLString round = TOSTRING(nRound);
-				pReport->setParameters("R_" + round);
+				CHPool * pPool = (CHPool *)pReport->getLParam2();
+				if (pPool)
+				{
+					short current_round = pPool->getNumRoundsPlayed();
+					MSLSortedVector vMatches;
+					pPool->getRoundMatchesVector(vMatches,current_round);
+					CHMatch * pMatch = vMatches.entries() ? (CHMatch*)vMatches[0] : 0;
+
+					if (pMatch)
+						pReport->setRSC(GET_RSC(pMatch));				
+				}
+				else
+					pReport->setRSC(GET_RSC(pPhase));
 			}
+			else
+				pReport->setRSC(GET_RSC(pPhase));
+								
 			break;
 		}
 	}
@@ -296,7 +370,7 @@ bool CHProgressionGUI::onReportGeneration(CReportManager *pReportMngr, CReportCo
 	{
 		case CH51:
 		{
-			CHPhase *pPhase = (CHPhase*)pReport->getLParam1();
+			CHPhase *pPhase = (CHPhase*)pReport->getLParam1();			
 			if( !pPhase )
 			{
 				MSLMsgBox( m_gui.getHWndBase() ,"Phase not selected",GUI_ICO_ERROR, GUI_MB_OK, "CHManager Error");
@@ -309,26 +383,80 @@ bool CHProgressionGUI::onReportGeneration(CReportManager *pReportMngr, CReportCo
 
 		case CH74:
 		{
-			CHPhase *pPhase = (CHPhase*)pReport->getLParam1();
+			GData *pData = (GData *)pReport->getLParam1();
+			if (!pData)
+				break;
+
+			if (pData->isA()!=__CHPHASE && pData->isA()!=__CHPOOL)
+				break;
+			
+			CHPhase * pPhase = 0;
+			if (pData->isA()==__CHPHASE)
+				pPhase = (CHPhase*)pData;
+			else 
+				pPhase = (CHPhase*) ((CHPool*) pData)->getPhase();
+						
 			if( !pPhase )
 			{
 				MSLMsgBox( m_gui.getHWndBase() ,"Phase not selected",GUI_ICO_ERROR, GUI_MB_OK, "CHManager Error");
 				return false;
 			}			
 
-			CHRC74 aCHRC74(*pReportMngr,*pReportCfg,(CHPhase*)pReport->getLParam1(),short(pReport->getLParam2()));
+			short current_round = 0;
+
+			if (pData && 
+				pData->isA()==__CHPOOL)
+			{
+				current_round = (short) pReport->getLParam2();				
+			}
+			if (pData && 
+				pData->isA()==__CHPHASE)
+			{
+				CHPool * pPool = (CHPool *)pReport->getLParam2();
+				if (pPool)
+				{
+					current_round = pPool->getNumRoundsPlayed();					
+				}
+				else
+					current_round = ALL_ROUNDS;
+			}
+	
+			CHRC74 aCHRC74(*pReportMngr,*pReportCfg,pPhase,current_round);
 			return aCHRC74.Run();
 		}
 		case CH75:
 		{
-			CHPhase *pPhase = (CHPhase*)pReport->getLParam1();
+			GData *pData = (GData *)pReport->getLParam1();
+			if (!pData)
+				break;
+
+			if (pData->isA()!=__CHPHASE && pData->isA()!=__CHPOOL)
+				break;
+			
+			CHPhase * pPhase = 0;
+			CHPool * pPool = 0;
+			if (pData->isA()==__CHPHASE)
+			{
+				pPhase = (CHPhase*)pData;
+				MSLSortedVector vPools;
+				pPhase->getPoolesVector(vPools);
+				pPool = (CHPool*)vPools[0];
+			}
+			else 
+			{
+				pPhase = (CHPhase*) ((CHPool*) pData)->getPhase();
+				pPool = (CHPool*) pData;
+			}
+
 			if( !pPhase )
 			{
 				MSLMsgBox( m_gui.getHWndBase() ,"Phase not selected",GUI_ICO_ERROR, GUI_MB_OK, "CHManager Error");
 				return false;
 			}			
+			
+			short current_round = pPool ? pPool->getNumRoundsPlayed() : 0;
 
-			CHRC75 aCHRC75(*pReportMngr,*pReportCfg,(CHPhase*)pReport->getLParam1(),short(pReport->getLParam2()));
+			CHRC75 aCHRC75(*pReportMngr,*pReportCfg,pPhase,current_round);
 			return aCHRC75.Run();
 		}
 	}

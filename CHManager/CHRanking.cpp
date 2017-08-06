@@ -30,6 +30,7 @@
 #include "..\CHMngtModel\CHPool.h"
 #include "..\CHMngtModel\CHMatch.h"
 #include "..\CHMngtModel\CHInscription.h"
+#include "..\CHMngtModel\CHStatisticDefines.h"
 
 #include <ovr\core\th\gthmsgdefines.h>
 #include <OVR\core\G\GScore.h>
@@ -1484,6 +1485,13 @@ short CHRanking::getEventRank(CHEventResult *pEventResult, CHPoolResult *pPoolRe
 		return 0;
 
 	int winerRank = pPhase->getWinnerRank();
+	if (winerRank==0)
+	{
+		CHEvent * pEvent = (CHEvent * ) pPhase->getEvent();
+		if (pEvent->getPhases().entries()==1 && pPhase->getPhase()==SWISS_ROUND)
+			winerRank=1;
+	}
+	
 	int loserRank = pPhase->getLoserRank();
 
 	if(pEventResult->getQualitativeCode()==DSQ) // no le doy ranking para la medalla
@@ -2044,17 +2052,44 @@ void CHRanking::userAcumulatePoolData(GTHPoolResult* pPoolResult, GTHMatchResult
 				if (pSubMatchResult->getMatchStatus() == CHMemoryDataBase::eFinished ||
 					pSubMatchResult->getMatchStatus() == CHMemoryDataBase::eUnofficial ) 
 				{
+					CHMatch * pSubMatch=(CHMatch*)pSubMatchResult->getMatch();
+
 					if (((CHMatchResult*)pSubMatchResult)->getPoints()==WIN_POINTS)
 						((CHPoolResult*)pPoolResult)->setMWon( ((CHPoolResult*)pPoolResult)->getMWon() + 1);
 					if (((CHMatchResult*)pSubMatchResult)->getPoints()==DRAW_POINTS)
 						((CHPoolResult*)pPoolResult)->setMDrawn( ((CHPoolResult*)pPoolResult)->getMDrawn() + 1);
-					if (((CHMatchResult*)pSubMatchResult)->getPoints()==LOST_POINTS)
+					if (((CHMatchResult*)pSubMatchResult)->getPoints()==LOST_POINTS && pSubMatch && pSubMatch->getResultCode()!=EV_EMPTY)
 						((CHPoolResult*)pPoolResult)->setMLost( ((CHPoolResult*)pPoolResult)->getMLost() + 1);				
 				}			
 			}
 		}
 
 		APP::out(*pPoolResult);
+	}
+}
+
+void CHRanking::calculateMedals(GTHPhase* pPhase)
+{
+	if(!pPhase)
+		return;
+
+	bool calculateMedals=false;
+	if (pPhase->getEvent() && pPhase->getEvent()->getPhases().entries()==1)
+		calculateMedals=true;
+
+	int winerRank = pPhase->getWinnerRank();
+	int loserRank = pPhase->getLoserRank();
+
+	if( ( winerRank==1 || winerRank==2 || winerRank==3 ||
+	      loserRank==1 || loserRank==2 || loserRank==3 ) || calculateMedals )
+	{
+		GTHEvent * pEvent =(GTHEvent*)pPhase->getEvent();
+
+		//si hay medallistas primero me los cargo
+		deleteMedallist(pEvent);
+
+		//Creo los medallistas nuevos
+		createMedallist(pEvent);
 	}
 }
 

@@ -29,6 +29,7 @@
 #define FILE_CSV_SCHEDULE					"tv_schedule.csv"
 #define FILE_CSV_EVENT_INFO					"tv_event_info.csv"
 #define FILE_CSV_COMPETITORS				"tv_competitors.csv"
+#define FILE_CSV_TEAM_COMPETITORS			"tv_team_competitors.csv"
 #define FILE_CSV_POOL_STANDINGS				"tv_pool_standings.csv"
 #define FILE_CSV_BRACKET					"tv_bracket.csv"
 #define FILE_CSV_TOURNAMENT_HISTORY			"tv_tournament_history.csv"
@@ -48,3 +49,4 @@
 #define TV_BRONZE					"Bronze"
 
 #define TV_BYE						"BYE"
+#define TV_NOCOMP					"NO_COMP"

@@ -26,6 +26,7 @@
 #include "..\CHMngtModel\CHEvent.h"
 #include "..\CHMngtModel\CHPhase.h"
 #include "..\CHMngtModel\CHPool.h"
+#include "..\CHMngtModel\CHMatch.h"
 #include "..\CHMngtModel\CHPoolResult.h"
 #include "..\CHMngtModel\CHRegister.h"
 #include "..\CHMngtModel\CHInscription.h"
@@ -71,7 +72,7 @@ static int orderPoolResult(const MSLItem** a, const MSLItem** b)
 }
 /////////////////////////////////////////////////////////////////////
 CHRC75::CHRC75(CReportManager& aReportManager,CReportConfig& aReportConfig,CHPhase * pSelPhase,short roundSel)
-:CHReportTemplate(aReportManager,aReportConfig,(CHEvent*)pSelPhase->getEvent())
+:CHReportTemplate(aReportManager,aReportConfig,pSelPhase)
 ,m_pLis(0)
 ,m_pPhase(pSelPhase)
 ,m_index(0)
@@ -144,6 +145,14 @@ void CHRC75::OnBeginReport()
 			m_pLis->setVari(111,m_pLis->getVari(113));
 		}
 
+		if (m_pPhase->getPhase()!=SWISS_ROUND)
+		{
+			m_pLis->setVari(120, m_pPhase->getPools().entries()>1 ? 1 : 0);
+		}
+		else
+		{
+			m_pLis->setVari(120, 0);
+		}
 	}
 	else
 	{	// Si hubo error en el report mostramos el error.
@@ -167,6 +176,7 @@ void CHRC75::initLabels()
 	m_pLis->setData(1012,getUserLabel(171)); // "SB"			
 	m_pLis->setData(1013,getUserLabel(172)); // "Game"				
 	m_pLis->setData(1015,getUserLabel(173)); // "After Round "	
+	m_pLis->setData(1020,getUserLabel(175)); // "Game "	
 	m_pLis->setData(1500,getUserLabel(174)); // "Legend"		
 }
 
@@ -353,7 +363,7 @@ void CHRC75::assignDataIndividual(CHPoolResult *pPoolResult)
 		m_pLis->setData(2002,pRegister->getPrnLName());
 
 	bool paintPoolResults=false;
-	if (pPool->getNumRoundsPlayed()==m_round)
+	if (pPool->getNumRoundsPlayed()==m_round || pPool->getPhaseCode()!=SWISS_ROUND)
 		paintPoolResults=true;
 	// Games Played
 	
@@ -416,6 +426,21 @@ void CHRC75::assignDataIndividual(CHPoolResult *pPoolResult)
 	else
 		m_pLis->setData(2012,pPoolResult->getProgressiveFStr(m_round));
 	
+	MSLSortedVector vMatchResults;
+	pPoolResult->getMatchResultsVector(vMatchResults);
+	if (vMatchResults.entries())
+	{
+		for (short i=0;i<vMatchResults.entries();i++)
+		{
+			CHMatchResult * pMatchResult = (CHMatchResult * )vMatchResults[i];
+			if (pMatchResult->getMatchSubCode())
+				continue;
+
+			if (pMatchResult &&
+				pMatchResult->getPhase()==m_pPhase)
+				m_pLis->setData(2020, ((CHMatch*)pMatchResult->getMatch())->getSDescription());
+		}
+	}
 }
 
 void CHRC75::buildVector()

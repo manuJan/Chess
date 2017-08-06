@@ -58,7 +58,7 @@ public:
 	MSLString	getSessionDesc(GSession * pSession=0) const;
 	
 	// Phases
-	void		getPhases(GSession * pSession, MSLSortedVector &vMatches);
+	void		getRounds(GSession * pSession, MSLSortedVector &vMatches);
 
 	// Matches
 	void		getMatches(MSLSortedVector &vMatches, const bool withByes=false);
@@ -72,21 +72,23 @@ public:
 	void saveSessionSchedule	(GSession * pSession);
 	void saveSessionScheduleDetailed(GSession * pSession);
 	void saveSessionScheduleUnit(GSession * pSession);
-	void saveSchedule			(CHPhase * pPhase);
+	void saveSchedule			(CHMatch * pMatch);
 	void saveScheduleDetailed	(CHMatch * pMatch);
 	void saveScheduleUnit		(CHMatchResult * pMatchResult);
 	void saveEventInfo			(CHMatch * pMatch);
 	void saveOfficials			(CHMatch * pMatch);
 	void saveOfficial			(GTHMatchJudge * pMatchJudge);
 	void saveCompetitor			(CHMatch * pMatch);
+	void saveTeamCompetitor		(CHMatch * pMatch);
 	void saveCompetitor			(CHMatchResult *pMatchResult,GData *pData=0,long pos=0,bool showProgression=false);
+	void saveTeamCompetitor		(CHMatchResult *pMatchResult,GData *pData=0,long pos=0,bool showProgression=false);
 	void saveBracket			(CHMatch * pMatch);
 	void saveBracket			(CHMatchResult *pMatchResult);
 	void saveHistory			(CHMatch * pMatch);
 	void saveHistory			(CHMatchResult *pMatchResult, MSLString key);
 	void saveMedals				(CHMatch * pMatch);
 	void saveMedals				(CHEventResult *pEventResult, const long i);
-	void saveTeamMembers		(GData* pData, short &pos);
+	void saveTeamMembers		(GData* pData, long &pos);
 	void savePoolStandings		(CHMatch * pMatch);
 	void savePoolInfo			(MSLSortedVector * pColGroupInfo,CHMatch * pMatch);
 	void saveKnockoutInfo		(MSLSortedVector * pColGroupInfo,CHMatch * pMatch);
@@ -101,7 +103,7 @@ public:
 	void changedMedals			(bool update,CHMatch *pMatch);
 	
 	// help
-	void	getWinnsLosses		(CHMatchResult *pMatchResult, short &W, short&L);
+	void	getWinnsLossesDrawn	(CHMatchResult *pMatchResult, short &W, short&L, short &D);
 	int		getOrderOnCourt		(CHMatchResult* pMatchResult);
 	MSLString getMedalDesc		(short rank);
 

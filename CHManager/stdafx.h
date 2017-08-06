@@ -18,5 +18,5 @@
 #include <tchar.h>
 #include <stdio.h>
 
-
+#include <ovr\tools\msltools\MSLDescriptions.h>
 #include "..\CHMngtModel\CHMemoryDataBase.h"
