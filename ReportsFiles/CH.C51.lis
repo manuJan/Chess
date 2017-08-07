@@ -17,7 +17,7 @@ Vari[   6] =   70 /* Height Body															*/
 
 
 /* Numero de ejecuciones de las celdas				*/
-Vari[ 100] =	1   /* Start Number               	*/
+Vari[ 100] =	0   /* Start Number               	*/
 Vari[ 101] =	1   /* Master Type               	*/
 Vari[ 102] =	1   /* Name			               	*/
 Vari[ 103] =	1   /* Initial Rating              	*/
@@ -28,15 +28,15 @@ Vari[ 200] =	280 /* Ancho de Start Number		*/
 Vari[ 201] =	200 /* Ancho de Master Type			*/
 Vari[ 202] =	650 /* Ancho de Name-Team			*/
 Vari[ 203] =	280 /* Ancho de Initial Rating		*/
-Vari[ 204] =	200 /* Ancho de Group Code		    */
+Vari[ 204] =	300 /* Ancho de Group Code		    */
 
 
 /* Offset x de cada una de las celdas */
 Vari[ 300] =	10 /* Offset de Start Number		*/
-Vari[ 301] =	10 /* Offset de Master Type		*/
+Vari[ 301] =   100 /* Offset de Master Type		*/
 Vari[ 302] = 	10 /* Offset de Name-Team			*/
-Vari[ 303] =	10 /* Offset de Initial Rating		*/
-Vari[ 304] =	10 /* Offset de Group Code			*/
+Vari[ 303] =   270 /* Offset de Initial Rating		*/
+Vari[ 304] =   150 /* Offset de Group Code			*/
 
 
 /* -- ZONA DE DECLARACION DE VARIABLES DE FUENTES NO CAMBIAR--- */
@@ -76,19 +76,19 @@ Vari[800] =  250 /* Salto de pagina														*/
 
 /* Datos Cabecera */
 data[1000], d_al=0,									font=&Vari[507] 
-data[1001], d_al=0,									font=&Vari[507] 
+data[1001], d_al=1,									font=&Vari[507] 
 data[1002], d_al=0,									font=&Vari[507] 
-data[1003], d_al=0,									font=&Vari[507] 
-data[1004], d_al=0,									font=&Vari[507] 
+data[1003], d_al=2,									font=&Vari[507] 
+data[1004], d_al=1,									font=&Vari[507] 
 
 data[1500], d_al=1, lcpy= "Legend"				,	font=&Vari[507]
 
 /* Datos Cuerpo */
 data[2000], d_al=0,									font=&Vari[506] /* Start Number		*/
-data[2001], d_al=0,									font=&Vari[506] /* Master Type		*/
+data[2001], d_al=1,									font=&Vari[506] /* Master Type		*/
 data[2002], d_al=0,									font=&Vari[506] /* Name				*/
-data[2003], d_al=0,									font=&Vari[506] /* Initial Rating	*/
-data[2004], d_al=0,									font=&Vari[506] /* Group			*/
+data[2003], d_al=2,									font=&Vari[506] /* Initial Rating	*/
+data[2004], d_al=1,									font=&Vari[506] /* Group			*/
 
 
 /***************************************/

@@ -224,7 +224,8 @@ void CHProgressionGUI::onReportsAdd()
 			CHPhase* pPhase = (CHPhase*)vPhases[j];
 			APP_CH::report_add(++nC51Phase ,nC51Event, pPhase->getLDescription(),CH51 ,LPARAM(pPhase));
 			APP_CH::report_add(++nC74Phase ,nC74Event, pPhase->getLDescription(),CH74 ,LPARAM(pPhase));
-			APP_CH::report_add(++nC75Phase ,nC75Event, pPhase->getLDescription(),CH75 ,LPARAM(pPhase));
+			if (pPhase->getIsPool())
+				APP_CH::report_add(++nC75Phase ,nC75Event, pPhase->getLDescription(),CH75 ,LPARAM(pPhase));
 
 			MSLSortedVector vPools;
 			pPhase->getPoolesVector(vPools);

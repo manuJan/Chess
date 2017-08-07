@@ -232,10 +232,10 @@ void CHRC74::setGlobalVaris()
 	CHEvent *pEvent=(CHEvent*)m_pPhase->getEvent();
 
 	// En equipos no se pinta el Master Type1 ni Master Type2, no lo hay.
-	if(pEvent->isTeam())
+	/*if(pEvent->isTeam())
 	{
-		m_pLis->setVari(102,0);
-		m_pLis->setVari(109,0);
+		m_pLis->setVari(102,1);
+		m_pLis->setVari(109,1);
 		m_pLis->setVari(203,560);
 		m_pLis->setVari(210,560);
 	}
@@ -243,9 +243,7 @@ void CHRC74::setGlobalVaris()
 	{
 		m_pLis->setVari(102,1);
 		m_pLis->setVari(109,1);
-		m_pLis->setVari(203,500);
-		m_pLis->setVari(210,500);
-	}
+	}*/
 
 	
 	
@@ -311,9 +309,15 @@ void CHRC74::assignDataIndividual(CHMatch *pMatch)
 
 	// Bout Number
 	if(pMatch->isTeam())
-		 m_pLis->setData(2000,pMatch->getRoundMatch());
-	else m_pLis->setData(2000,pMatch->getParent()?pMatch->getParent()->getCode():0);
-	
+	{
+		if (pMatch->getSubCode()==0)
+			m_pLis->setData(2000,pMatch->getRoundMatch());
+		else
+			m_pLis->setData(2000,pMatch->getSubCode());
+	}
+	else
+		m_pLis->setData(2000, pMatch->getMatchNumber());
+		
 	// Seed Number 1
 	if(pInsHome)
 		m_pLis->setData(2001,pInsHome->getSeed());
@@ -419,7 +423,7 @@ void CHRC74::assignDataMember(CHMatch *pSubMatch)
 		pMemberAway=(CHMember*)pMatchMemAway->getMember();
 
 	// Bout Number
-	m_pLis->setData(3000,pSubMatch->getSubMatch());
+	m_pLis->setData(3000,pSubMatch->getSubCode());
 	
 		
 	// Master Type 1
@@ -427,7 +431,7 @@ void CHRC74::assignDataMember(CHMatch *pSubMatch)
 	{
 		CHRegister *pRegister=(CHRegister*)pMatchMemHome->getRegister();
 		if(pRegister)
-			m_pLis->setData(3001,pRegister->getMasterTypeSDescription());
+			m_pLis->setData(3002,pRegister->getMasterTypeSDescription());
 		
 	}
 
@@ -462,7 +466,7 @@ void CHRC74::assignDataMember(CHMatch *pSubMatch)
 	{
 		CHRegister *pRegister=(CHRegister*)pMatchMemAway->getRegister();
 		if(pRegister)
-			m_pLis->setData(3008,pRegister->getMasterTypeSDescription());
+			m_pLis->setData(3009,pRegister->getMasterTypeSDescription());
 		
 	}
 
