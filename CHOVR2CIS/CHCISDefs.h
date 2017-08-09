@@ -55,6 +55,53 @@
 #define COL_TEAM_STL_NAME_BLACK				9
 #define COL_TEAM_STL_NOC_BLACK				10
 
+#define LST_MATCH_HEADER_1					2003
+#define COL_HEA_MN_LABEL					0
+#define COL_HEA_MN							1
+
+#define LST_MATCH_HEADER_2					2004
+#define COL_HEA_FLAG_1						0
+#define COL_HEA_NAME_1						1
+#define COL_HEA_NOC_1						2
+#define COL_HEA_NOC_2						4
+#define COL_HEA_NAME_2						5
+#define COL_HEA_FLAG_2						6
+
+#define LST_MATCH_HEADER_3					2005
+#define COL_HEA_COLOR_1						0
+#define COL_HEA_MASTER_LABEL_1				2
+#define COL_HEA_MASTER_1					3
+#define COL_HEA_RATING_LABEL_1				4
+#define COL_HEA_RATING_1					5
+#define COL_HEA_RATING_LABEL_2				7
+#define COL_HEA_RATING_2					8
+#define COL_HEA_MASTER_LABEL_2				9
+#define COL_HEA_MASTER_2					10
+#define COL_HEA_COLOR_2						11
+
+#define LST_MATCH_HEADER_TOTAL				2006
+#define COL_HEA_WINNER_HOME					0
+#define COL_HEA_TOTAL_HOME					2
+#define COL_HEA_TOTAL						4
+#define COL_HEA_TOTAL_AWAY					6
+#define COL_HEA_WINNER_AWAY					8
+
+
+#define LST_SUBMATCH_RESULTS				2007
+#define COL_HEA_COLOR_HOME					0
+#define COL_HEA_MASTER_HOME					1
+#define COL_HEA_FLAG_HOME					2
+#define COL_HEA_NAME_HOME					3
+#define COL_HEA_NOC_HOME					4
+#define COL_HEA_RESULT_HOME					5
+#define COL_HEA_STATUS						6
+#define COL_HEA_RESULT_AWAY					7
+#define COL_HEA_FLAG_AWAY					8
+#define COL_HEA_NAME_AWAY					9
+#define COL_HEA_NOC_AWAY					10
+#define COL_HEA_MASTER_AWAY					11
+#define COL_HEA_COLOR_AWAY					12
+
 #define LIST_CH_SUMMARY						1100
 #define COL_CHPRS_RK						0
 #define COL_CHPRS_FLAG						1

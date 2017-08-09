@@ -47,7 +47,7 @@
 #define __CISCHSCREEN_ROUND_RESULTS_DESIGN						"CH.ROUND_RESULTS"
 #define __CISCHSCREEN_TEAM_ROUND_RESULTS_DESIGN					"CH.ROUND_TEAM_RESULTS"
 #define __CISCHSCREEN_MATCH_RESULTS_DESIGN						"CH.MATCH_RESULTS"	
-#define __CISCHSCREEN_TEAM_MATCH_RESULTS_DESIGN					"CH.MATCH_TEAM_RESULTS"
+#define __CISCHSCREEN_TEAM_MATCH_RESULTS_DESIGN					"CH.TEAM_MATCH_RESULTS"
 #define __CISCHSCREEN_BRACKET_DESIGN							"CH.BRACKETS"
 
 CHCISProcess * CHCISProcess::chProcess = 0;
@@ -242,13 +242,27 @@ GCISItem * CHCISProcess::onNewItem(GData * pData, long idItem)
 	{
 		case __CISITEM_SCHEDULE_UNIT:
 		{
-			CHCISItemSchUnit* pCISSchUnitItem = new CHCISItemSchUnit(pData);
-			return pCISSchUnitItem;
+			if (pData && pData->isA()==__CHMATCH)
+			{
+				CHMatch * pMatch = (CHMatch *)pData;
+				if (pMatch->getSubCode()!=0)
+					return 0;
+
+				CHCISItemSchUnit* pCISSchUnitItem = new CHCISItemSchUnit(pData);
+				return pCISSchUnitItem;
+			}
 		}
 		case __CISITEM_SCHEDULE_UNIT_RES:
 		{
-			CHCISItemSchUnitResult* pCISSchUnitResultItem = new CHCISItemSchUnitResult(pData);
-			return pCISSchUnitResultItem;
+			if (pData && pData->isA()==__CHMATCHRESULT)
+			{
+				CHMatchResult * pMatchResult = (CHMatchResult *)pData;
+				if (pMatchResult->getMatchSubCode()!=0)
+					return 0;
+
+				CHCISItemSchUnitResult* pCISSchUnitResultItem = new CHCISItemSchUnitResult(pData);
+				return pCISSchUnitResultItem;
+			}
 		}		
 	}
 	return GTHCISProcess::onNewItem(pData, idItem);
@@ -283,6 +297,8 @@ void CHCISProcess::setRefMatchResult(GTHMatchResult* pMatchResult , MSLString la
 	setRef(pMatchResult, REF_TITLE			, getDataRef(pMatchResult, REF_TITLE	,lang, bInsert),lang, bInsert);
 	setRef(pMatchResult, REF_PREV_PTS		, getDataRef(pMatchResult, REF_PREV_PTS	,lang, bInsert),lang, bInsert);
 	setRef(pMatchResult, REF_OPPRK_RESULT	, getDataRef(pMatchResult, REF_OPPRK_RESULT	,lang, bInsert),lang, bInsert);
+	setRef(pMatchResult, REF_POINTS_F		, getDataRef(pMatchResult, REF_POINTS_F ,lang, bInsert),lang, bInsert);
+
 }
 
 void CHCISProcess::setRefPoolResult(GTHPoolResult* pPoolResult, MSLString lang, bool bInsert)
@@ -366,10 +382,15 @@ MSLString CHCISProcess::getDataRefMatchResult(CHMatchResult* pMatchResult, MSLSt
 			CHPoolResult * pPR = (CHPoolResult*) pOpponent->getPoolResult();
 			desc = "(" + TOSTRING(pPR->getRank(),"") + ") ";
 		}
-
-		CHMatch * pMatch = (CHMatch *)pMatchResult->getMatch();
-		desc += pMatch->getResultAsString();
+				
+		desc += pMatchResult->getPointsAsString();
+		desc += "-";
+		desc += pOpponent->getPointsAsString();
 		return desc;
+	}
+	if (reference==REF_POINTS_F)
+	{
+		return pMatchResult->getPointsAsString();
 	}
 
 	return NULLSTRING;

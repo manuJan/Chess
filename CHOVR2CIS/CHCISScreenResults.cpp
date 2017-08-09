@@ -52,5 +52,8 @@ void CHCISScreenResults::onRunNotTeamMatch()
 	CHMatch* pMatch = (CHMatch*)m_pData;
 	
 	// Results
-	CHPAINT->paintResults(isA(),LST_RESULTS,pMatch);
+	if (pMatch->getPhaseCode()==SWISS_ROUND)
+		CHPAINT->paintRoundResults(isA(),LST_RESULTS,pMatch);
+	else
+		CHPAINT->paintMatchResults(isA(),LST_RESULTS,pMatch);
 }

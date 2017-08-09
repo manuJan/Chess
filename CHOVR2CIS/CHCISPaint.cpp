@@ -66,7 +66,7 @@ CHCISPaint::~CHCISPaint()
 void CHCISPaint::paintRegister(long idScreen, long idLayer, long column, long line, const wchar_t * text, GRegister * pRegister, GData* pData)
 {
 	MSLWString txt(text);
-	if( idLayer == LIST_SCHEDULE || idScreen == __CISSCREEN_LIVE_RESULTS || idLayer == LST_STARTLIST || idLayer == LST_RESULTS)
+	if( idLayer == LIST_SCHEDULE || idScreen == __CISSCREEN_LIVE_RESULTS || idLayer == LST_STARTLIST || idLayer == LST_RESULTS || idLayer==LST_SUBMATCH_RESULTS)
 	{
 		GTHMatch * pMatch = GTHPROCESS->getMatchClass(pData);
 		if( pMatch && pMatch->getSubMatch() )
@@ -219,7 +219,7 @@ void CHCISPaint::paintSubMatchStartList(long idScreen, long idLayer, short y, CH
 	}	
 }
 
-void CHCISPaint::paintResults(long idScreen, long idLayer, CHMatch* pMatch)
+void CHCISPaint::paintRoundResults(long idScreen, long idLayer, CHMatch* pMatch)
 {
 	if (!pMatch)
 		return;
@@ -236,7 +236,7 @@ void CHCISPaint::paintResults(long idScreen, long idLayer, CHMatch* pMatch)
 		for (short i=0;i<vRoundMatches.entries();i++)
 		{
 			CHMatch* pMatch = (CHMatch*)vRoundMatches[i];			
-			paintMatchResults(idScreen, idLayer, lastLine, pMatch);
+			paintRoundMatchResults(idScreen, idLayer, lastLine, pMatch);
 			lastLine++;
 
 			if (pMatch->isTeam())
@@ -246,7 +246,7 @@ void CHCISPaint::paintResults(long idScreen, long idLayer, CHMatch* pMatch)
 				for (short j=0;j<vSubMatches.entries();j++)
 				{
 					CHMatch* pSubMatch = (CHMatch*)vSubMatches[j];			
-					paintSubMatchResults(idScreen, idLayer, lastLine, pSubMatch);
+					paintRoundSubMatchResults(idScreen, idLayer, lastLine, pSubMatch);
 					lastLine++;
 				}
 			}
@@ -287,7 +287,7 @@ void CHCISPaint::paintResultsHeader(long idScreen, long idLayer, CHMatch* pMatch
 	UNREFERENCED_PARAMETER(pMatch);
 }
 
-void CHCISPaint::paintMatchResults(long idScreen, long idLayer, short y, CHMatch *pMatch)
+void CHCISPaint::paintRoundMatchResults(long idScreen, long idLayer, short y, CHMatch *pMatch)
 {
 	CHMatchResult * pWhite = pMatch->getWhite();
 	CHMatchResult * pBlack = pMatch->getBlack();
@@ -324,7 +324,7 @@ void CHCISPaint::paintMatchResults(long idScreen, long idLayer, short y, CHMatch
 	}	
 }
 
-void CHCISPaint::paintSubMatchResults(long idScreen, long idLayer, short y, CHMatch *pSubMatch)
+void CHCISPaint::paintRoundSubMatchResults(long idScreen, long idLayer, short y, CHMatch *pSubMatch)
 {
 	CHMatchResult * pWhite = pSubMatch->getWhite();
 	CHMatchResult * pBlack = pSubMatch->getBlack();
@@ -359,6 +359,179 @@ void CHCISPaint::paintSubMatchResults(long idScreen, long idLayer, short y, CHMa
 		if (pBlack->getRegister())
 			CISAPP->setText (idLayer,COL_RES_NOC_BLACK,y,getRefCode(pBlack,REF_REG,__GREGISTER,REF_NOC_CODE));
 	}	
+}
+
+void CHCISPaint::paintMatchResults(long idScreen, long idLayer, CHMatch* pMatch)
+{
+	// Header 1
+	paintResultsHeader1(idScreen, LST_MATCH_HEADER_2, pMatch);
+
+	// Header 2
+	paintResultsHeader2(idScreen, LST_MATCH_HEADER_3, pMatch);
+
+	// Match scores
+	paintResultsTotal(idScreen, LST_MATCH_HEADER_TOTAL, pMatch);
+
+	// Resultado por periodos
+	paintSubMatchesResults(idScreen, LST_SUBMATCH_RESULTS, pMatch);
+}
+
+void CHCISPaint::paintResultsHeader1(long idScreen, long idLayer, CHMatch* pMatch)
+{
+	CHPhase* pPhase = (CHPhase*)pMatch->getPhase();
+	if (!pPhase)
+		return;
+
+	CHMatchResult* pHome = (CHMatchResult*) pMatch->getWhite();
+	CHMatchResult* pAway = (CHMatchResult*) pMatch->getBlack();
+
+	// Header 1
+	CISAPP->setImage(LST_MATCH_HEADER_2,COL_HEA_FLAG_1,0,pHome ? getRefCode(pHome,REF_REG,__GREGISTER,REF_NOC_CODE).toAscii()+"%#4%" : L"",0);	
+	paintRegister(idScreen,LST_MATCH_HEADER_2,COL_HEA_NAME_1,0, pHome ? getRefCode(pHome,REF_REG,__GREGISTER,REF_LDESC) : L"", pHome->getRegister(), pHome);
+	CISAPP->setText (LST_MATCH_HEADER_2,COL_HEA_NOC_1,0,getRefCode(pHome,REF_REG,__GREGISTER,REF_NOC_CODE));
+	CISAPP->setTextFont(LST_MATCH_HEADER_2,COL_HEA_NAME_1,0,"30B");
+	CISAPP->setTextFont(LST_MATCH_HEADER_2,COL_HEA_NOC_1,0,"30B");
+	
+	CISAPP->setImage(LST_MATCH_HEADER_2,COL_HEA_FLAG_2,0,pAway ? getRefCode(pAway,REF_REG,__GREGISTER,REF_NOC_CODE).toAscii()+"%#4%" : L"",0);	
+	paintRegister(idScreen,LST_MATCH_HEADER_2,COL_HEA_NAME_2,0, pAway ? getRefCode(pAway,REF_REG,__GREGISTER,REF_LDESC) : L"", pAway->getRegister(), pAway);
+	CISAPP->setText (LST_MATCH_HEADER_2,COL_HEA_NOC_2,0,getRefCode(pAway,REF_REG,__GREGISTER,REF_NOC_CODE));
+	CISAPP->setTextFont(LST_MATCH_HEADER_2,COL_HEA_NAME_2,0,"30B");
+	CISAPP->setTextFont(LST_MATCH_HEADER_2,COL_HEA_NOC_2,0,"30B");
+}
+
+void CHCISPaint::paintResultsHeader2(long idScreen, long idLayer, CHMatch* pMatch)
+{
+	CHMatchResult* pHome = (CHMatchResult*) pMatch->getHome();
+	CHMatchResult* pAway = (CHMatchResult*) pMatch->getAway();
+
+	// COLOR 1
+/*	CISAPP->setBackground(LST_MATCH_HEADER_3,COL_HEA_COLOR_1,0,GX_BCK_GRAY);		
+	CISAPP->setText(LST_MATCH_HEADER_3,COL_HEA_COLOR_1,0,L"WHITE");	
+	CISAPP->setTextColor(LST_MATCH_HEADER_3, COL_HEA_COLOR_1, 0, RGB(0,0,0));
+	
+	// COLOR 2
+	CISAPP->setBackground(LST_MATCH_HEADER_3,COL_HEA_COLOR_2,0,GX_BCK_BLACK);		
+	CISAPP->setText(LST_MATCH_HEADER_3,COL_HEA_COLOR_2,0,L"BLACK");				
+	CISAPP->setTextColor(LST_MATCH_HEADER_3, COL_HEA_COLOR_2, 0, RGB(255,255,255));*/	
+}
+
+void CHCISPaint::paintResultsTotal(long idScreen, long idLayer, CHMatch* pMatch)
+{
+	CHMatchResult* pHome = (CHMatchResult*) pMatch->getWhite();
+	CHMatchResult* pAway = (CHMatchResult*) pMatch->getBlack();
+
+	// Header 4
+	CISAPP->setBackground(LST_MATCH_HEADER_TOTAL, COL_HEA_TOTAL_HOME, 0, 101);
+	CISAPP->setTextColor(LST_MATCH_HEADER_TOTAL, COL_HEA_TOTAL_HOME, 0, RGB(255,255,255));
+	CISAPP->setTextFont(LST_MATCH_HEADER_TOTAL,COL_HEA_TOTAL_HOME,0,"40B");
+	CISAPP->setText (LST_MATCH_HEADER_TOTAL,COL_HEA_TOTAL_HOME,0,getRefCode(pHome,REF_SCORE));
+
+	CISAPP->setBackground(LST_MATCH_HEADER_TOTAL, COL_HEA_TOTAL, 0, 101);
+	CISAPP->setTextColor(LST_MATCH_HEADER_TOTAL, COL_HEA_TOTAL, 0, RGB(255,255,255));
+	CISAPP->setText (LST_MATCH_HEADER_TOTAL,COL_HEA_TOTAL,0,getRefLabel("RES_RESULT"));
+
+	CISAPP->setBackground(LST_MATCH_HEADER_TOTAL, COL_HEA_TOTAL_AWAY, 0, 101);
+	CISAPP->setTextColor(LST_MATCH_HEADER_TOTAL, COL_HEA_TOTAL_AWAY, 0, RGB(255,255,255));
+	CISAPP->setText (LST_MATCH_HEADER_TOTAL,COL_HEA_TOTAL_AWAY,0,getRefCode(pAway,REF_SCORE));
+	CISAPP->setTextFont(LST_MATCH_HEADER_TOTAL,COL_HEA_TOTAL_AWAY,0,"40B");
+
+	if (pMatch->getStatus()==CHMemoryDataBase::eUnofficial || 
+		pMatch->getStatus()==CHMemoryDataBase::eFinished)
+	{
+		CHMatchResult * pWhite = (CHMatchResult*) pMatch->getWhite();
+		CHMatchResult * pBlack = (CHMatchResult*) pMatch->getBlack();
+
+		if (pWhite &&
+			pWhite->getRank()==1)
+		{
+			CISAPP->setBackground(LST_MATCH_HEADER_TOTAL, COL_HEA_WINNER_HOME, 0, GX_BCK_GRAY);
+			CISAPP->setTextColor(LST_MATCH_HEADER_TOTAL, COL_HEA_WINNER_HOME, 0, RGB(0,0,0));
+			CISAPP->setText(LST_MATCH_HEADER_TOTAL, COL_HEA_WINNER_HOME, 0, getRefLabel("RES_WINNER") );	
+
+			CISAPP->setBackground(LST_MATCH_HEADER_TOTAL, COL_HEA_WINNER_AWAY, 0, 0);
+			CISAPP->setTextColor(LST_MATCH_HEADER_TOTAL, COL_HEA_WINNER_AWAY, 0, RGB(0,0,0));
+			CISAPP->setText(LST_MATCH_HEADER_TOTAL, COL_HEA_WINNER_AWAY, 0, L"" );	
+		}	
+		else if (pBlack &&
+				 pBlack->getRank()==1)
+		{
+			CISAPP->setBackground(LST_MATCH_HEADER_TOTAL, COL_HEA_WINNER_AWAY, 0, GX_BCK_BLACK);
+			CISAPP->setTextColor(LST_MATCH_HEADER_TOTAL, COL_HEA_WINNER_AWAY, 0, RGB(255,255,255));
+			CISAPP->setText(LST_MATCH_HEADER_TOTAL, COL_HEA_WINNER_AWAY, 0, getRefLabel("RES_WINNER") );	
+
+			CISAPP->setBackground(LST_MATCH_HEADER_TOTAL, COL_HEA_WINNER_HOME, 0, 0);
+			CISAPP->setTextColor(LST_MATCH_HEADER_TOTAL, COL_HEA_WINNER_HOME, 0, RGB(0,0,0));
+			CISAPP->setText(LST_MATCH_HEADER_TOTAL, COL_HEA_WINNER_HOME, 0, L"" );				
+		}
+	}
+}
+
+void CHCISPaint::paintSubMatchesResultsHeader(long idScreen, long idLayer, CHMatch *pMatch)
+{	
+	CISAPP->setText(idLayer,COL_HEA_MASTER_HOME	,0, getRefLabel("RES_TITLE") );
+	CISAPP->setText(idLayer,COL_HEA_NAME_HOME	,0, getRefLabel("RES_NAME") );	
+	CISAPP->setText(idLayer,COL_HEA_NOC_HOME	,0, getRefLabel("RES_NOC") );
+	CISAPP->setText(idLayer,COL_HEA_RESULT_HOME	,0, getRefLabel("RES_RESULT") );
+	CISAPP->setText(idLayer,COL_HEA_STATUS		,0, getRefLabel("RES_STATUS") );
+	CISAPP->setText(idLayer,COL_HEA_RESULT_AWAY	,0, getRefLabel("RES_RESULT") );
+	CISAPP->setText(idLayer,COL_HEA_NAME_AWAY	,0, getRefLabel("RES_NAME") );
+	CISAPP->setText(idLayer,COL_HEA_NOC_AWAY	,0, getRefLabel("RES_NOC") );
+	CISAPP->setText(idLayer,COL_HEA_MASTER_AWAY	,0, getRefLabel("RES_TITLE") );
+}
+
+void CHCISPaint::paintSubMatchesResults(long idScreen, long idLayer,  CHMatch* pMatch)
+{
+	// Header
+	paintSubMatchesResultsHeader(idScreen, LST_SUBMATCH_RESULTS, pMatch);
+	
+	MSLSortedVector vSubMatches;
+	pMatch->getSubMatchesVector(vSubMatches);
+	long lastLine=1;
+	for (short i=0;i<vSubMatches.entries();i++)
+	{
+		CHMatch* pSubMatch = (CHMatch*)vSubMatches[i];
+		if (!pSubMatch->hasTeamCompetitors())
+			continue;
+
+		paintSubMatchResults(idScreen, LST_SUBMATCH_RESULTS, lastLine, pSubMatch);
+		lastLine++;
+	}
+}
+
+void CHCISPaint::paintSubMatchResults(long idScreen, long idLayer, short y, CHMatch *pSubMatch)
+{
+	CHMatchResult * pHome = (CHMatchResult * ) pSubMatch->getHome();
+	CHMatchResult * pAway = (CHMatchResult * ) pSubMatch->getAway();
+
+	CISAPP->setBackground(idLayer,COL_HEA_COLOR_HOME,y,pHome->getColor()==CHMatchResult::eWhite ? GX_BCK_GRAY : GX_BCK_BLACK );		
+	CISAPP->setText(idLayer,COL_HEA_COLOR_HOME,0,L"");	
+	CISAPP->setTextColor(idLayer, COL_HEA_COLOR_HOME, 0, pHome->getColor()==CHMatchResult::eWhite ? RGB(0,0,0) : RGB(255,255,255));
+
+	GTHMatchMember * pMM = pHome->getMatchMember(0);
+	if (pMM && pMM->getRegister())
+		CISAPP->setText	(idLayer,COL_HEA_MASTER_HOME,y,	getRefCode(pMM,REF_REG,__GREGISTER,REF_TITLE_SDESC));
+		
+	CISAPP->setImage(idLayer,COL_HEA_FLAG_HOME,y, getRefCode(pHome,REF_REG,__GREGISTER,REF_NOC_CODE).toAscii()+"%#4%",0);
+	paintRegister	(idScreen,idLayer,COL_HEA_NAME_HOME,y, getRefCode(pHome,REF_REG,__GREGISTER,REF_LDESC),pHome->getRegister(),pHome);
+	if (pHome->getRegister())
+		CISAPP->setText (idLayer,COL_HEA_NOC_HOME,y,getRefCode(pHome,REF_REG,__GREGISTER,REF_NOC_CODE));
+
+	CISAPP->setText (idLayer,COL_HEA_RESULT_HOME,y,getRefCode(pHome,REF_POINTS_F));
+		
+	CISAPP->setText (idLayer,COL_HEA_STATUS,y, getRefCode(pSubMatch,REF_STATUS,__GSTATUS,REF_LDESC));
+			
+	CISAPP->setText (idLayer,COL_HEA_RESULT_AWAY,y,getRefCode(pAway,REF_POINTS_F));	
+	CISAPP->setImage(idLayer,COL_HEA_FLAG_AWAY,y, getRefCode(pAway,REF_REG,__GREGISTER,REF_NOC_CODE).toAscii()+"%#4%",0);
+	paintRegister	(idScreen,idLayer,COL_HEA_NAME_AWAY,y, getRefCode(pAway,REF_REG,__GREGISTER,REF_LDESC),pAway->getRegister(),pAway);
+	if (pAway->getRegister())
+		CISAPP->setText (idLayer,COL_HEA_NOC_AWAY,y,getRefCode(pAway,REF_REG,__GREGISTER,REF_NOC_CODE));
+
+	CISAPP->setBackground(idLayer,COL_HEA_COLOR_AWAY,y,pAway->getColor()==CHMatchResult::eWhite ? GX_BCK_GRAY : GX_BCK_BLACK);
+	CISAPP->setText(idLayer,COL_HEA_COLOR_AWAY,y,L"");
+	CISAPP->setTextColor(idLayer, COL_HEA_COLOR_AWAY, y, pAway->getColor()==CHMatchResult::eWhite ? RGB(255,255,255) : RGB(0,0,0));
+
+	if (pMM && pMM->getRegister())
+		CISAPP->setText	(idLayer,COL_HEA_MASTER_AWAY,y,	getRefCode(pMM,REF_REG,__GREGISTER,REF_TITLE_SDESC));	
 }
 
 void CHCISPaint::paintPoolHeader(long idScreen, long idLayer, long y, GTHPool* pPool )
