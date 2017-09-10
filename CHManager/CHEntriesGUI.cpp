@@ -255,7 +255,11 @@ void CHEntriesGUI::editMasterType(CHRegister *pRegister)
 	CHMasterType* pMasterType=pRegister->getMasterType();
 	m_gui.combo_selL(CB_MASTER_TYPE,(LPARAM)pMasterType);
 
-	CHMasterType * pNewMasterType = (CHMasterType*) m_gui.grid_showCombo(GR_REGISTER_ENTRIES, CB_MASTER_TYPE);
+	LPARAM lParam = m_gui.grid_showCombo(GR_REGISTER_ENTRIES, CB_MASTER_TYPE);
+	if (lParam==-1)
+		return;
+	CHMasterType * pNewMasterType = (CHMasterType*) lParam; 
+//	CHMasterType * pNewMasterType = (CHMasterType*) m_gui.grid_showCombo(GR_REGISTER_ENTRIES, CB_MASTER_TYPE);
 	if(pNewMasterType!=pMasterType && pNewMasterType)
 	{
 		pRegister->setMasterTypeCode(pNewMasterType->getMasterType());
