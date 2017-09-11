@@ -225,7 +225,11 @@ void CHEnableEventGUIEx::editTeamCfg(CHEvent *pEvent)
 	CHTeamMatchsCnfg* pTeamMatchsCnfg=pEvent->getTeamMatchCfg();
 	m_gui.combo_selL(CB_TEAM_CFG,(LPARAM)pTeamMatchsCnfg);
 
-	CHTeamMatchsCnfg * pNewTeamMatchsCnfg = (CHTeamMatchsCnfg*) m_gui.grid_showCombo(GR_EVENT, CB_TEAM_CFG);
+	LPARAM lParam = m_gui.grid_showCombo(GR_EVENT, CB_TEAM_CFG);
+	if (lParam==-1)
+		return;
+	CHTeamMatchsCnfg * pNewTeamMatchsCnfg = (CHTeamMatchsCnfg*) lParam;
+//	CHTeamMatchsCnfg * pNewTeamMatchsCnfg = (CHTeamMatchsCnfg*) m_gui.grid_showCombo(GR_EVENT, CB_TEAM_CFG);
 	if(pNewTeamMatchsCnfg!=pTeamMatchsCnfg && pNewTeamMatchsCnfg)
 	{
 		pEvent->setIdTeamMatchsCnfg(pNewTeamMatchsCnfg->getId());
