@@ -27,8 +27,17 @@
 #include <OVR\TOOLS\MSLTools\MSLToolsIncs.h>
 
 #define CH_GM					"GM"
+#define CH_GM_DESC				"Grandmaster"
 #define CH_FM					"FM"
+#define CH_FM_DESC				"FIDEMaster"
 #define CH_IM					"IM"
+#define CH_IM_DESC				"InternationalMast"
+#define CH_I					"I"
+#define CH_I_DESC				"International"
+#define CH_C					"C"
+#define CH_C_DESC				"Candidate"
+#define CH_CM					"CM"
+#define CH_CM_DESC				"CandidateMaster"
 
 /*********************************** USER MESSAGES **************************************/
 #define UM_CHMANAGER								WM_USER+3000

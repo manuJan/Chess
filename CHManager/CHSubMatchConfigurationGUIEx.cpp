@@ -257,6 +257,8 @@ MSLGUIEx * CHSubMatchConfigurationGUIEx::onNewGUIEx(long id)
 			RECT rect = getRect();
 
 			CHMatch* pMatch = getSubmatchSelected();
+			if (!pMatch)
+				pMatch=m_pMatch;
 
 			CHMatchConfigToolBar * pMatchConfigToolBar= new CHMatchConfigToolBar(CHMATCHCONFIGURATION_TB, pMatch, m_autoFinish);
 			pMatchConfigToolBar->initToolBar(m_gui.getHWnd(0),m_hWnd,GToolBar::eTop,34,0,0,rect.right-rect.left-16);

@@ -386,9 +386,9 @@ void CHRC58::setDataMatch(CHMatch* pMatch)
 					{
 						
 						if( pInscription->getSeed() )
-							competitor = pMatchResult->getMatchMemberLDescription() + L" (" + TOWSTRING(pInscription->getSeed()) + L")";
+							competitor = pMatchResult->getMatchMemberSDescription() + L" (" + TOWSTRING(pInscription->getSeed()) + L")";
 						else
-							competitor = pMatchResult->getMatchMemberLDescription();
+							competitor = pMatchResult->getMatchMemberSDescription();
 					}
 					m_pLis->setData( 2017,competitor);
 					
@@ -440,9 +440,9 @@ void CHRC58::setDataMatch(CHMatch* pMatch)
 					else
 					{
 						if( pInscription->getSeed() )
-							competitor = pMatchResult->getMatchMemberLDescription() + L" (" + TOWSTRING(pInscription->getSeed()) + L")";
+							competitor = pMatchResult->getMatchMemberSDescription() + L" (" + TOWSTRING(pInscription->getSeed()) + L")";
 						else
-							competitor = pMatchResult->getMatchMemberLDescription();
+							competitor = pMatchResult->getMatchMemberSDescription();
 					}
 
 					m_pLis->setData( 2018,competitor);
@@ -466,16 +466,12 @@ void CHRC58::setDataMatch(CHMatch* pMatch)
 	pMatch->getMatchJudgesVector(vMatchJudges);	
 	for (short i=0;i<vMatchJudges.entries();i++)
 	{
-		/*GTHMatchJudge* pMatchJudge=(GTHMatchJudge*)vMatchJudges[i];
-		if ( pMatchJudge->getPosition() && 
-		   ( pMatchJudge->getPositionCode()==CHRegister::eUmpire1 ||
-			 pMatchJudge->getPositionCode()==CHRegister::eUmpire2) &&
-			 pMatchJudge->getRegister())
+		GTHMatchJudge* pMatchJudge=(GTHMatchJudge*)vMatchJudges[i];
+		if ( pMatchJudge && pMatchJudge->getRegister())
 		{
-			short posicion=short(pMatchJudge->getPosition()->getPosition()-1);
-			m_pLis->setData(short(2021+posicion),pMatchJudge->getRegister()->getPrnLName());
-			m_pLis->setData(short(2024+posicion),pMatchJudge->getRegister()->getGroup());
-		}*/
+			m_pLis->setData(short(2021+i),pMatchJudge->getRegister()->getPrnLName());
+			m_pLis->setData(short(2024+i),pMatchJudge->getRegister()->getGroup());
+		}
 	}
 }
 

@@ -76,8 +76,8 @@ void CHCISPaint::paintRegister(long idScreen, long idLayer, long column, long li
 		{
 			GTHMatchResult * pMatchResult = line%2 ? pMatch->getHome() : pMatch->getAway();
 			GTHCISItemSchUnitResult * pSchUnitRes = (GTHCISItemSchUnitResult *)GTHPROCESS->findItem(pMatchResult);
-			if( pMatchResult && pMatchResult->getBye() )
-				txt = GTHPAINT->getRefLabel("LABEL_BYE");
+			if( pMatchResult && pMatchResult->getBye() && idScreen!=__CISSCREEN_SCHEDULE && idScreen!=__CISSCREEN_SCHEDULE_VENUE)
+ 				txt = GTHPAINT->getRefLabel("LABEL_BYE");
 			else
 			if( pSchUnitRes )
 				txt = CHPAINT->getRefCode(pSchUnitRes,REF_IDCOMP_LDESC);

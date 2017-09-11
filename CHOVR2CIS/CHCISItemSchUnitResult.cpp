@@ -48,16 +48,37 @@ MSLWString CHCISItemSchUnitResult::getScore(const char * lang/*=0*/)
 
 MSLString CHCISItemSchUnitResult::getRegKeyA()
 {
+	if( m_pData && m_pData->isA()==__CHMATCHRESULT )
+	{
+		CHMatch* pMatch = (CHMatch*) ((CHMatchResult *)m_pData)->getMatch();
+		if (pMatch->getPhaseCode()==SWISS_ROUND)
+			return NULLSTRING;
+	}
+
 	return GTHCISItemSchUnitResult::getRegKeyA();
 }
 
 MSLString CHCISItemSchUnitResult::getRegKeyB()
 {
+	if( m_pData && m_pData->isA()==__CHMATCHRESULT )
+	{
+		CHMatch* pMatch = (CHMatch*) ((CHMatchResult *)m_pData)->getMatch();
+		if (pMatch->getPhaseCode()==SWISS_ROUND)
+			return NULLSTRING;
+	}
+
 	return GTHCISItemSchUnitResult::getRegKeyB();
 }
 
 MSLWString CHCISItemSchUnitResult::getIDCompetitorSDesc(const char* lang)
 {
+	if( m_pData && m_pData->isA()==__CHMATCHRESULT )
+	{
+		CHMatch* pMatch = (CHMatch*) ((CHMatchResult *)m_pData)->getMatch();
+		if (pMatch->getPhaseCode()==SWISS_ROUND)
+			return NULLSTRING;
+	}
+
 	return GTHCISItemSchUnitResult::getIDCompetitorSDesc(lang);
 }
 

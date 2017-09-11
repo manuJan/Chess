@@ -57,7 +57,7 @@ Vari[9006]=4101
 
 
 	data[2010], d_al=1, 			font=&Vari[505]
-	data[2011], d_al=2, 			font=&Vari[505]
+	data[2011], d_al=1, 			font=&Vari[505]
 	data[2012], d_al=0, 			font=&Vari[504] 
 	data[2013], d_al=0, 			font=&Vari[504] 
 	data[2014], d_al=2, 			font=&Vari[504] 
@@ -97,16 +97,16 @@ Table 102 /* -- TABLA DE REGISTROS -- */
 			{ data=1010, Offset_dx=55, Offset_dy=70 }
 
 		/* Date */
-		Vari[1201] = 310 /*ancho de la celda*/
+		Vari[1201] = 410 /*ancho de la celda*/
 		cell[20] { call=1, height=&Vari[700], width=&Vari[1201] }
 			{ outline_upper=1 }
 			{ outline_lower=1 }
 			{ outline_right=1 }
 			{ outline_left =1 }
-			{ data=1011, Offset_dx=55, Offset_dy=70 }
+			{ data=1011, Offset_dx=205, Offset_dy=70 }
 
 		/* Event phase/pool */
-		Vari[1301] = 900 /*ancho de la celda*/
+		Vari[1301] =1000 /*ancho de la celda*/
 		cell[30] { call=1, height=&Vari[700], width=&Vari[1301] }
 			{ outline_upper=1 }
 			{ outline_lower=1 }
@@ -142,55 +142,55 @@ Table 102 /* -- TABLA DE REGISTROS -- */
 			{ data=1015, Offset_dx=205, Offset_dy=70 }
 
 	/*---------------Template para la datos------------------------*/
-	template[0] { call=&Vari[10], height=60  }
+	template[0] { call=&Vari[10], height=50  }
 
 		/* Day */
-		cell[1] { call=1, height=60, width=&Vari[1101] }
+		cell[1] { call=1, height=50, width=&Vari[1101] }
 			{ outline_upper=&Vari[5] }
 			{ outline_lower=&Vari[6] }
 			{ outline_right=0 }
 			{ outline_left =0 }
-			{ data=2010, Offset_dx=55, Offset_dy=50 }
+			{ data=2010, Offset_dx=55, Offset_dy=40 }
 
 		/* Date */
-		cell[2] { call=1, height=60, width=&Vari[1201] }
+		cell[2] { call=1, height=50, width=&Vari[1201] }
 			{ outline_upper=&Vari[5] }
 			{ outline_lower=&Vari[6] }
 			{ outline_right=0 }
 			{ outline_left =0 }
-			{ data=2011, Offset_dx=200, Offset_dy=50 }
+			{ data=2011, Offset_dx=205, Offset_dy=40 }
 
 		/* Event phase/pool */
-		cell[3] { call=1, height=60, width=&Vari[1301] }
+		cell[3] { call=1, height=50, width=&Vari[1301] }
 			{ outline_upper=&Vari[7] }
 			{ outline_lower=&Vari[8] }
 			{ outline_right=0 }
 			{ outline_left =0 }
-			{ data=2012, Offset_dx=10, Offset_dy=50 }
+			{ data=2012, Offset_dx=10, Offset_dy=40 }
 
 		/* Session */
-		cell[4] { call=&Vari[11], height=60, width=&Vari[1401] }
+		cell[4] { call=&Vari[11], height=50, width=&Vari[1401] }
 			{ outline_upper=&Vari[7] }
 			{ outline_lower=&Vari[8] }
 			{ outline_right=0 }
 			{ outline_left =0 }
-			{ data=2013, Offset_dx=20, Offset_dy=50 }
+			{ data=2013, Offset_dx=20, Offset_dy=40 }
 
 		/* start Time */
-		cell[5] { call=1, height=60, width=&Vari[1501] }
+		cell[5] { call=1, height=50, width=&Vari[1501] }
 			{ outline_upper=&Vari[7] }
 			{ outline_lower=&Vari[8] }
 			{ outline_right=0 }
 			{ outline_left =0 }
-			{ data=2014, Offset_dx=180, Offset_dy=50 }
+			{ data=2014, Offset_dx=180, Offset_dy=40 }
 
 		/* number of matches */
-		cell[6] { call=&Vari[12], height=60, width=&Vari[1601] }
+		cell[6] { call=&Vari[12], height=50, width=&Vari[1601] }
 			{ outline_upper=&Vari[7] }
 			{ outline_lower=&Vari[8] }
 			{ outline_right=0 }
 			{ outline_left =0 }
-			{ data=2015, Offset_dx=200, Offset_dy=50 }
+			{ data=2015, Offset_dx=200, Offset_dy=40 }
 
 
 Line 1010 /* Tabla de registros */

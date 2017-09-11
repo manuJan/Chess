@@ -45,7 +45,7 @@ void CHManagerPoolGUI::onInitOtherControls()
 {
 	GTHManagerPoolGUI::onInitOtherControls();
 	
-	short rounds = 9;
+	short rounds = 7;
 
 	if (m_pDataSel &&
 		m_pDataSel->isA()==__CHPHASE)

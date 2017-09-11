@@ -28,7 +28,7 @@ class CHMngtModelExport CHRegister : public GRegister
 {
 	MSLDECLARE_ITEM(CHRegister)
 			
-	enum masterType {mNone=0,mGMaster,mFMaster,mIMaster};
+	enum masterType {mNone=0,mGMaster,mFMaster,mIMaster,mInternational,mCandidate,mCandidateMaster};
 
 public:
 	CHRegister();	

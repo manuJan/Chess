@@ -195,6 +195,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_23355ACCB45140029E97EE5D2A183E66"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_24A045B45AE24661B39AC5089F4C7619"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -405,6 +411,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4513E9E53F794A828464E30698858465"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_46612358998216123FE63AB08D4B5288"
         "OwnerKey" = "8:_227DFBF5F8634CE5B4800438A625602E"
         "MsmSig" = "8:_UNDEFINED"
@@ -483,6 +495,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_542081F83D5C4FED992703BB2871C903"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_570E7F61CE37414AB20B349EDD56B085"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -508,6 +526,12 @@
         "Entry"
         {
         "MsmKey" = "8:_5A148F1B203A4182B57B2EF4F6598C97"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5A5EA26CDDCB4C74B441B8171F264F3C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -753,6 +777,30 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_8C8CD79183BC44B7A5647A5BF596DBD6"
+        "OwnerKey" = "8:_1D8FF0D4B0824FF59AC9F105DE03CFDE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8C8CD79183BC44B7A5647A5BF596DBD6"
+        "OwnerKey" = "8:_CB947F1F1E744F7EB7EECC306EB881A0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8C8CD79183BC44B7A5647A5BF596DBD6"
+        "OwnerKey" = "8:_689A0332981642B694611FB5D7739EFB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8C8CD79183BC44B7A5647A5BF596DBD6"
+        "OwnerKey" = "8:_227DFBF5F8634CE5B4800438A625602E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_8E4BD2EDF3D640CBBBA39A11F0CFA60F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -802,12 +850,6 @@
         "Entry"
         {
         "MsmKey" = "8:_997E9A25A5FA449DA753821CFA741B66"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9A2C6A4F48B54CCB943613AC66FA93A7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -952,6 +994,12 @@
         "Entry"
         {
         "MsmKey" = "8:_B1C3DB31C2D844E8BF96E194FF9F4CFD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B24A0DAF90CB49CC8A1D67111D4047CE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1239,30 +1287,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_DFB1F3A105C54AC5ABCEFC4DBCB8825B"
-        "OwnerKey" = "8:_1D8FF0D4B0824FF59AC9F105DE03CFDE"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_DFB1F3A105C54AC5ABCEFC4DBCB8825B"
-        "OwnerKey" = "8:_CB947F1F1E744F7EB7EECC306EB881A0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_DFB1F3A105C54AC5ABCEFC4DBCB8825B"
-        "OwnerKey" = "8:_689A0332981642B694611FB5D7739EFB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_DFB1F3A105C54AC5ABCEFC4DBCB8825B"
-        "OwnerKey" = "8:_227DFBF5F8634CE5B4800438A625602E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_DFC91E91A5AB4CAC82B760B121E628DA"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1306,6 +1330,12 @@
         "Entry"
         {
         "MsmKey" = "8:_E68A20FD4C624DEA91F60CC6C095AEE9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E6E38E1D4F174CDDA60B612BB6111A64"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2164,6 +2194,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_23355ACCB45140029E97EE5D2A183E66"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\ovr-general\\common\\reports\\Competitions\\ASHGABAT\\ZZ.Labels.ENG.lis"
+            "TargetName" = "8:ZZ.Labels.ENG.lis"
+            "Tag" = "8:"
+            "Folder" = "8:_7D6D8D5772BA43349563D9398D5F0207"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_24A045B45AE24661B39AC5089F4C7619"
             {
             "SourcePath" = "8:..\\..\\DataBase\\CHLoadModel.bat"
@@ -2744,6 +2794,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4513E9E53F794A828464E30698858465"
+            {
+            "SourcePath" = "8:..\\..\\DataBase\\Data\\ZTH026_PROG_POOL_POSITION.txt"
+            "TargetName" = "8:ZTH026_PROG_POOL_POSITION.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_E1ACF353ADF946559C9033448542DA2D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_46612358998216123FE63AB08D4B5288"
             {
             "SourcePath" = "8:ODF2THBase.dll"
@@ -2984,6 +3054,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_542081F83D5C4FED992703BB2871C903"
+            {
+            "SourcePath" = "8:..\\..\\DataBase\\Data\\ZTH023_MODALITY_PHASE.txt"
+            "TargetName" = "8:ZTH023_MODALITY_PHASE.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_E1ACF353ADF946559C9033448542DA2D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_570E7F61CE37414AB20B349EDD56B085"
             {
             "SourcePath" = "8:C:\\workingdll\\lib\\foxe.exe"
@@ -3070,6 +3160,26 @@
             "TargetName" = "8:TH.SPLITS.ENG.txt"
             "Tag" = "8:"
             "Folder" = "8:_399B577670F146DDB1DE254A23B37E77"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5A5EA26CDDCB4C74B441B8171F264F3C"
+            {
+            "SourcePath" = "8:..\\..\\DataBase\\Data\\ZTH022_MODALITY.txt"
+            "TargetName" = "8:ZTH022_MODALITY.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_E1ACF353ADF946559C9033448542DA2D"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3924,26 +4034,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9A2C6A4F48B54CCB943613AC66FA93A7"
-            {
-            "SourcePath" = "8:..\\..\\..\\..\\ovr-general\\common\\reports\\ReportsFiles\\ZZ.Labels.ENG.lis"
-            "TargetName" = "8:ZZ.Labels.ENG.lis"
-            "Tag" = "8:"
-            "Folder" = "8:_7D6D8D5772BA43349563D9398D5F0207"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9A93CA7D9E194907BDBA804B77041D5E"
             {
             "SourcePath" = "8:..\\..\\..\\..\\ovr-general\\common\\databases\\Data\\ZZT015_STATUS.txt"
@@ -4350,6 +4440,26 @@
             "TargetName" = "8:ZZ.APPLICENSE.ENG.txt"
             "Tag" = "8:"
             "Folder" = "8:_399B577670F146DDB1DE254A23B37E77"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B24A0DAF90CB49CC8A1D67111D4047CE"
+            {
+            "SourcePath" = "8:..\\..\\DataBase\\Data\\ZTH027_PROG_MATCH_POSITION.txt"
+            "TargetName" = "8:ZTH027_PROG_MATCH_POSITION.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_E1ACF353ADF946559C9033448542DA2D"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5384,6 +5494,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E6E38E1D4F174CDDA60B612BB6111A64"
+            {
+            "SourcePath" = "8:..\\..\\DataBase\\Data\\ZTH025_MODALITY_POOL.txt"
+            "TargetName" = "8:ZTH025_MODALITY_POOL.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_E1ACF353ADF946559C9033448542DA2D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E70D8FB0401342D68A0F082FE446A109"
             {
             "SourcePath" = "8:..\\..\\..\\..\\ovr-general\\common\\databases\\Scripts\\GEntityModel.sql"
@@ -6237,7 +6367,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Chess"
         "ProductCode" = "8:{86AB5EEE-5533-420B-A493-6A6A4D692726}"
-        "PackageCode" = "8:{82E224AC-96DB-4476-B4E0-66DFBA4F019B}"
+        "PackageCode" = "8:{2DCDBE2B-9525-4CF4-82BE-AF4C6CC5D292}"
         "UpgradeCode" = "8:{D5BB1AAC-6A84-4506-AE57-E92B7A2E5FC7}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -6911,7 +7041,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_DFB1F3A105C54AC5ABCEFC4DBCB8825B"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_8C8CD79183BC44B7A5647A5BF596DBD6"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"

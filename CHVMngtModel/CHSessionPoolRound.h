@@ -24,6 +24,7 @@
 #include "CHVMngtModelDefs.h"
 
 class CHPool;
+class CHPhase;
 
 class CHSessionPoolRound : public GData  
 {
@@ -44,6 +45,7 @@ public:
 
 	MSLDate	getStartDate() const;
 	GSession *getSession() const;
+	CHPhase *getPhase() const; 
 	short getRound() const;
 
 private:

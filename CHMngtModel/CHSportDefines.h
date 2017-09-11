@@ -50,4 +50,6 @@
 #define COLOR_NEGRO				RGB(  0,  0,  0)	// Negro
 #define COLOR_BLANCO			RGB(255,255,255)	// Blanco
 
+#define N_RANKING_CIS			605 //Notificacion de Calculo de ranking de pool para el CIS
+
 #endif // _CHSPORTDEFINES_H_

@@ -24,7 +24,10 @@
 #include "CHCISGUIEx.h"
 #include "CHCISProcess.h"
 
+#include "..\CHMngtModel\CHPhase.h"
+#include "..\CHMngtModel\CHPool.h"
 #include "..\CHMngtModel\CHMatchResult.h"
+#include "..\CHMngtModel\CHSportDefines.h"
 
 CHCISGUIEx::CHCISGUIEx()
 {
@@ -39,13 +42,14 @@ bool CHCISGUIEx::processSportNotify(GData * pData, int idNotify, MSLString buffe
 	if (!pData)
 		return true;
 
-	/*if (idNotify==N_RANKING_CIS)
+	if (idNotify==N_RANKING_CIS)
 	{
-		if (pData->isA()==__BKPOOL)
-			CHPROCESS->updateScreen(__CISTHSCREEN_POOLSUMMARY, ((BKPool*)pData)->getPhaseKey());
-		if (pData->isA()==__CHPhase)
+		if (pData->isA()==__CHPOOL)
+			CHPROCESS->updateScreen(__CISTHSCREEN_POOLSUMMARY, ((CHPool*)pData)->getPhaseKey());
+
+		if (pData->isA()==__CHPHASE)
 			CHPROCESS->updateScreen(__CISTHSCREEN_POOLSUMMARY, ((CHPhase*)pData)->getKey());
-	}*/
+	}
 
 	return true;
 }

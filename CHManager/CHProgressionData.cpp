@@ -69,6 +69,35 @@ bool CHProgressionData::preSelectModality(GTHEvent* pEvent, GTHModality* pModali
 		MSLMsgBox( m_pGUIEx->getHWnd() ,"This event has no entries, the modality cannot be assigned",GUI_ICO_ERROR, GUI_MB_OK, "CHManager Error");
 		return false;
 	}
+	if (entries && entries%2!=0)
+		entries++;
+
+	int matches = calculateMatchesByPool(entries);
+
+	MSLSortedVector vModalityPhases;
+	pModality->getModalityPhasesVector(vModalityPhases);
+
+	GTHModalityPhase * pModalityPhase=0;
+	for (short i=0;i<vModalityPhases.entries();i++)
+	{
+		pModalityPhase = (GTHModalityPhase*)vModalityPhases[i];
+
+		if (pModalityPhase->getOrderPhase()==1 &&
+			pModalityPhase->getIsPool())
+		{
+			MSLSortedVector vModalityPools;
+			pModalityPhase->getModalityPoolsVector(vModalityPools);
+			
+			GTHModalityPool * pModalityPool=0;
+			for (short i=0;i<vModalityPools.entries();i++)
+			{
+				pModalityPool = (GTHModalityPool*)vModalityPools[i];
+		
+				pModalityPool->setNumCompetitors(short(entries));				
+				pModalityPool->setNumMatchs(matches);
+			}
+		}		
+	}
 
 	return true;
 }	

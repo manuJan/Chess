@@ -63,6 +63,14 @@ int orderSessionPoolRound(const MSLItem** a, const MSLItem** b)
 				 pSesB->getSessionStartTime() );
 	if (order)
 		return order;
+
+	CHPhase* pPhaseA=(CHPhase*)pSesA->getPhase();
+	CHPhase* pPhaseB=(CHPhase*)pSesB->getPhase();
+
+	order = pPhaseB->getOrder()-pPhaseA->getOrder();
+	if (order)
+		return order;
+	
 	return pSesA->getRound() - pSesB->getRound();
 }
 //////////////////////////////////////////////////////////////////////
@@ -73,6 +81,7 @@ VCHSchedule::VCHSchedule()
 ,m_countDate(0)
 ,m_ndate(0)
 {
+	//m_vector.setFcCompare(orderSessionPoolRound);
 	build();
 }
 
@@ -125,7 +134,7 @@ bool VCHSchedule::build()
 			else
 				pSesP->setNumMatches();
 		}
-	}
+	}	
 	setDates();
 	return true;
 }
@@ -163,6 +172,7 @@ int VCHSchedule::loadNextDate()
 	}
 	m_countDate++;
 	vTmp.clear();
+	//m_vector.setFcCompare(orderSessionPoolRound);
 	if (m_vector.entries())
 		return m_vector.entries();
 	

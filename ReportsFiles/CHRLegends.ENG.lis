@@ -64,7 +64,8 @@ Data[508],lcpy= "3|BMT|Blitz Men's Team"
 Data[509],lcpy= "1|BWT|Blitz Women's Team"
 Data[510],lcpy= "2|U-BMT|Under 23 Blitz Men's Team"
 Data[511],lcpy= "3|U-BWT|Under 23 Blitz Women's Team"
-Data[512],lcpy= "end"
+Data[512],lcpy= "1|SR|Swiss Round"
+Data[513],lcpy= "end"
 
 /* ------------------------------------------------------------------ */
 /* ------------------------------ C51 ------------------------------- */
@@ -72,7 +73,10 @@ Data[512],lcpy= "end"
 Data[600],lcpy= "FM|Fide Master"
 Data[601],lcpy= "GM|Grand Master"
 Data[602],lcpy= "IM|International Master"
-Data[603],lcpy= "end"
+Data[603],lcpy= "I|International"
+Data[604],lcpy= "C|Candidate"
+Data[605],lcpy= "CM|Candidate Master"
+Data[606],lcpy= "end"
 
 /* ------------------------------------------------------------------ */
 /* ------------------------------ C74 ------------------------------- */

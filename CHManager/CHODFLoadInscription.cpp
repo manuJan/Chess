@@ -25,6 +25,7 @@
 
 #include "..\CHMngtModel\CHInscription.h"
 #include "..\CHMngtModel\CHRegister.h"
+#include "..\CHMngtModel\CHMember.h"
 
 CHODFLoadInscription::CHODFLoadInscription(GInscription* pInsc, MSLIPCDataTransferModule* module)
 :ODFLoadInscription(pInsc, module)
@@ -74,22 +75,31 @@ void CHODFLoadInscription::onMemberEventEntry(XMLElement * pElEventEntry, GMembe
 {
 	CHMember* pPMem = (CHMember*) pMember;
 
-	MSLWString type	= pElEventEntry->getAttributeValue("Type");
-	MSLWString value= pElEventEntry->getAttributeValue("Value");
-	MSLWString code = pElEventEntry->getAttributeValue("Code");
+	MSLString type	= pElEventEntry->getAttributeValue("Type");
+	MSLString value= pElEventEntry->getAttributeValue("Value");
+	MSLString code = pElEventEntry->getAttributeValue("Code");
 
-	
+	if (code=="RATING")
+	{
+		((CHMember*)pMember)->setRating( atoi(value.data()) );
+	}
 
 }
 
 short CHODFLoadInscription::getMasterTypeCode(MSLString value)
 {
-	if(value==CH_GM)
+	if(value==CH_GM || value==CH_GM_DESC) 
 		return CHRegister::mGMaster;		
-	else if(value==CH_FM)
+	else if(value==CH_FM || value==CH_FM_DESC)
 		return CHRegister::mFMaster;
-	else if(value==CH_IM)
+	else if(value==CH_IM || value==CH_IM_DESC)
 		return CHRegister::mIMaster;
-	
+	else if(value==CH_I || value==CH_I_DESC)
+		return CHRegister::mInternational;
+	else if(value==CH_C || value==CH_C_DESC)
+		return CHRegister::mCandidate;
+	else if(value==CH_CM || value==CH_CM_DESC)
+		return CHRegister::mCandidateMaster;
+
 	return CHRegister::mNone;
 }

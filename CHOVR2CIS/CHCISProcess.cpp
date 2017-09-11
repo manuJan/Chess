@@ -28,6 +28,7 @@
 #include "CHCISScreenBracket.h"
 #include "CHCISScreenStartList.h"
 #include "CHCISScreenResults.h"
+#include "CHCISScreenPoolSummary.h"
 
 #include <ovr\core\th\GTHMsgDefines.h>
 
@@ -177,6 +178,11 @@ GCISScreen	* CHCISProcess::onNewScreen(long idScreen, MSLString key, MSLString n
 				return new CHCISScreenBracket(key,name,designFile,(GTHEvent*)pData);						
 			break;
 		}
+		case __CISTHSCREEN_POOLSUMMARY:
+		{
+			if (pData && pData->isA()==__GTHPHASE)
+				return new CHCISScreenPoolSummary(key,name,designFile,(GTHPhase*)pData);		
+		}
 	}
 	
 	return GTHCISProcess::onNewScreen(idScreen,key,name,designFile,pData);
@@ -200,7 +206,9 @@ void CHCISProcess::fillColItems(long idItem, MSLSet & col)
 						MSLSortedVector vRoundMatches;
 						pPool->getRoundMatchesVector(vRoundMatches,i);
 						if (vRoundMatches.entries())
-							col.insert(vRoundMatches[0]);
+						{														
+							col.insert(vRoundMatches[vRoundMatches.entries()-1]);
+						}
 					}
 				}
 				else
@@ -248,6 +256,19 @@ GCISItem * CHCISProcess::onNewItem(GData * pData, long idItem)
 				if (pMatch->getSubCode()!=0)
 					return 0;
 
+				CHPool* pPool = (CHPool* ) pMatch->getPool();
+				if (pPool->getPhaseCode()==SWISS_ROUND)
+				{
+					MSLSortedVector vRoundMatches;						
+					pPool->getRoundMatchesVector(vRoundMatches,pMatch->getRound());
+					if (!vRoundMatches.entries())
+						return 0;
+
+					CHMatch * pRoundMatch = (CHMatch * ) vRoundMatches[vRoundMatches.entries()-1];
+					if (!pRoundMatch || pRoundMatch->getKey()!=pMatch->getKey())
+						return 0;
+				}
+
 				CHCISItemSchUnit* pCISSchUnitItem = new CHCISItemSchUnit(pData);
 				return pCISSchUnitItem;
 			}
@@ -258,7 +279,17 @@ GCISItem * CHCISProcess::onNewItem(GData * pData, long idItem)
 			{
 				CHMatchResult * pMatchResult = (CHMatchResult *)pData;
 				if (pMatchResult->getMatchSubCode()!=0)
+					return 0;				
+
+				CHMatch * pMatch = (CHMatch*) pMatchResult->getMatch();
+				if (!pMatch)
 					return 0;
+
+				CHPool* pPool = (CHPool* ) pMatchResult->getPool();
+				if (pPool->getPhaseCode()==SWISS_ROUND)
+				{
+					return 0;
+				}
 
 				CHCISItemSchUnitResult* pCISSchUnitResultItem = new CHCISItemSchUnitResult(pData);
 				return pCISSchUnitResultItem;

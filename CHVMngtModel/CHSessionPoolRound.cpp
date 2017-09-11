@@ -22,6 +22,7 @@
 #include "stdafx.h"
 #include "CHSessionPoolRound.h"
 
+#include "..\CHMngtModel\CHPhase.h"
 #include "..\CHMngtModel\CHPool.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -45,8 +46,10 @@ void CHSessionPoolRound::setKey()
 	char aux[3];
 	if (m_pSession && m_pPool)
 	{
+		CHPhase * pPhase = (CHPhase * )m_pPool->getPhase();
+
 		sprintf_s(aux,"%.2d",m_round);
-		key=m_pSession->getKey()+m_pPool->getKey()+MSLString(aux);
+		key=m_pSession->getKey()+TOSTRING(pPhase->getOrder())+m_pPool->getKey()+MSLString(aux);
 	}
 }
 
@@ -124,4 +127,9 @@ GSession *CHSessionPoolRound::getSession() const
 short CHSessionPoolRound::getRound() const
 {
 	return m_round;
+}
+
+CHPhase *CHSessionPoolRound::getPhase() const
+{
+	return m_pPool ? (CHPhase*)m_pPool->getPhase() : 0;
 }

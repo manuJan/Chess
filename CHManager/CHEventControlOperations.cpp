@@ -32,6 +32,7 @@
 #include "..\CHMngtModel\CHMatch.h"
 #include "..\CHMngtModel\CHPoolResult.h"
 #include "..\CHMngtModel\CHStatisticDefines.h"
+#include "..\CHMngtModel\CHSportDefines.h"
 
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -347,11 +348,28 @@ void CHEventControlOperations::finishMatch(CHMatch *pMatch,bool status)
 		APP::out(*pPool);
 		APP::out(TRN_SET_RANKINGS);
 
+		GBuffer aBufferPool;
+		aBufferPool	<< pPool->isA()
+					<< pPool->getKey();
+
+		GNotify aNotifyPool(N_RANKING_CIS);
+		aNotifyPool.setBuffer(aBufferPool);
+		APP::outN(aNotifyPool);
+
+
 		// Ranking de fase
 		aRanking.calculateRankings(pPhase);
 
 		APP::out(*pPhase);
 		APP::out(TRN_SET_RANKINGS);
+
+		GBuffer aBufferPhase;
+		aBufferPhase	<< pPhase->isA()
+						<< pPhase->getKey();
+
+		GNotify aNotifyPhase(N_RANKING_CIS);
+		aNotifyPhase.setBuffer(aBufferPhase);
+		APP::outN(aNotifyPhase);
 
 		// Ranking de evento
 		aRanking.calculateRankings(pEvent);

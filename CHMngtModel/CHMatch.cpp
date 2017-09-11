@@ -684,6 +684,9 @@ bool CHMatch::hasCompetitors(bool any/*=false*/)
 	for (short j=0; j<vMatchResult.entries(); j++)
 	{
 		pMatchResult=(CHMatchResult*)vMatchResult[j];
+		if (pMatchResult->getBye())
+			continue;
+
 		if (!pMatchResult->getRegister() && !any)
 			return false;
 		else if (any && pMatchResult->getRegister())

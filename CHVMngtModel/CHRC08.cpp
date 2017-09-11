@@ -91,7 +91,7 @@ CReportBase::ReportReturn CHRC08::body(const int nLin)
 		return error;
 	//pinto as of
 	m_pSchedule->assignVari( 4, m_bNewPage?true:false);
-	m_pSchedule->assignVari(2023, m_bNewPage ? 200 : m_pReport->getYCoor());
+	m_pSchedule->assignVari(2023, m_bNewPage ? 10 : m_pReport->getYCoor());
 	m_bNewPage = false;
 	if( m_pSchedule->runLis() )
 		return ok;
