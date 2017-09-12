@@ -39,6 +39,9 @@ protected:
 	MSLGUIEx * onNewGUIEx		(long id, WPARAM wParam, LPARAM lParam);
 	void * onNewDataObject		(long id);
 
+	virtual LRESULT onMatchScheduled		(WPARAM wParam=0, LPARAM lParam=0); 
+	virtual LRESULT onMatchRescheduled		(WPARAM wParam=0, LPARAM lParam=0); 
+
 	void onReportsAdd			();
 	void onReportRequest		(MSLReportItem  *pReport);
 	bool onReportGeneration		(CReportManager *pReportMngr,CReportConfig *pReportCfg,MSLReportItem *pReport);	

@@ -219,14 +219,15 @@
 /****************** CHRankingsGUI *********************************/
 #define CHRANKINGSGUI_ID					CH_GUI+240
 
-#define C_PR_CH_QCODE								GR_POOLRESULTS+12
-#define C_PR_CH_POINTS								GR_POOLRESULTS+13
-#define C_PR_CH_MATCHPOINTS							GR_POOLRESULTS+14
-#define C_PR_CH_DIRECTMATCH							GR_POOLRESULTS+15
-#define C_PR_CH_BUCHOLZCUT1							GR_POOLRESULTS+16
-#define C_PR_CH_BUCHOLZ								GR_POOLRESULTS+17
-#define C_PR_CH_WONGAMES							GR_POOLRESULTS+18
-#define C_PR_CH_SONNEBERGER							GR_POOLRESULTS+19
+#define C_PR_CH_RK									GR_POOLRESULTS+12
+#define C_PR_CH_QCODE								GR_POOLRESULTS+13
+#define C_PR_CH_POINTS								GR_POOLRESULTS+14
+#define C_PR_CH_MATCHPOINTS							GR_POOLRESULTS+15
+#define C_PR_CH_DIRECTMATCH							GR_POOLRESULTS+16
+#define C_PR_CH_BUCHOLZCUT1							GR_POOLRESULTS+17
+#define C_PR_CH_BUCHOLZ								GR_POOLRESULTS+18
+#define C_PR_CH_WONGAMES							GR_POOLRESULTS+19
+#define C_PR_CH_SONNEBERGER							GR_POOLRESULTS+20
 
 /***************************** ARInscriptionLineGUIEx ***********************************************/
 #define ARINSCRIPTIONLINEGUIEX_ID					CH_GUI+300

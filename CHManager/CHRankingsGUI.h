@@ -38,10 +38,12 @@ public:
 	virtual MSLGUIEx * onNewGUIEx	(long id);
 	void onClick					(long id,LPARAM lParam);
 	void createGridPoolResults		();
+	bool paintHeaderGrid			(gui_grid_cell* cell);
 	void createOtherControls		();
 	void fillGridPoolResultsCH		();
 	void onLButDblClick				(long id,long x,long y);
 	void dblClickGridPoolResultsCH	(int x, int y);
+	void editPoolRankingPositionCH	(GTHPoolResult *pPoolResult);
 	void editPoolRankingCH			(GTHPoolResult *pPoolResult);
 	void insertPoolResultCH			(GTHPoolResult* pPoolResult);
 	bool paintGridPoolResults		(gui_grid_cell* cell);

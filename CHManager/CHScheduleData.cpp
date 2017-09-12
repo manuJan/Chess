@@ -24,6 +24,7 @@
 #include "StdAfx.h"
 #include "CHManagerApp.h"
 #include "CHScheduleData.h"
+#include "..\CHMngtModel\CHPool.h"
 #include "..\CHMngtModel\CHMatch.h"
 
 #include <ovr\core\th\gthmsgdefines.h>
@@ -82,6 +83,44 @@ CHScheduleData::~CHScheduleData(void)
 void CHScheduleData::onMatchScheduled(GTHMatch* pMatch)
 {	
 	GTHScheduleData::onMatchScheduled(pMatch);
+
+	// Assigno el tablero
+	CHPool * pPool = (CHPool * ) pMatch->getPool();
+	MSLSortedVector vRoundMatches;
+	pPool->getRoundMatchesVector( vRoundMatches, ((CHMatch*)pMatch)->getRound());
+
+	if (vRoundMatches.entries())
+	{
+		long index = vRoundMatches.index( pMatch );
+		if (index>0)
+		{
+			CHMatch * pPrevMatch = (CHMatch*)vRoundMatches[index-1];
+			if (pPrevMatch)
+			{
+				if (pPrevMatch->getCourt())
+				{
+					short courtCodeSubMatch = pPrevMatch->getCourtCode();
+					if (pPrevMatch->isTeam())
+					{
+						MSLSet colSubMatches;
+						pPrevMatch->getSubMatches(colSubMatches);	
+						courtCodeSubMatch=courtCodeSubMatch+colSubMatches.entries();
+					}
+					else
+						courtCodeSubMatch++;
+
+					pMatch->setCourtCode(courtCodeSubMatch);
+				}				
+			}
+		}
+		else
+		{
+			pMatch->setCourtCode(1);
+		}
+	}
+	
+	APP::out(*pMatch);
+	APP::out(TRN_SET_MATCH);
 
 	if(!pMatch->getSubMatch()) //Fecha a los hijos
 		onScheduleChangeSubMatch((CHMatch*)pMatch);	

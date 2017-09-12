@@ -179,6 +179,7 @@ void CHRankingsGUI::createGridPoolResults()
 	m_gui.grid_setLineColor(GR_POOLRESULTS,GUI_RGB_OFF,GUI_RGB_OFF); 
 	
 	m_gui.grid_addColumn(GR_POOLRESULTS,"",GUI_JUST_RIGHT , 35	,C_PR_RANK			);	
+	m_gui.grid_addColumn(GR_POOLRESULTS,"Rk",GUI_JUST_RIGHT , 35	,C_PR_CH_RK		);	
 	m_gui.grid_addColumn(GR_POOLRESULTS,"",GUI_JUST_LEFT  ,250	,C_PR_NAME			);
 	m_gui.grid_addColumn(GR_POOLRESULTS,"",GUI_JUST_CENTER, 25			,C_PR_COUNTRY		);
 	m_gui.grid_addColumn(GR_POOLRESULTS,"IRM",GUI_JUST_CENTER, 35		,C_PR_CH_QCODE		);	
@@ -211,8 +212,20 @@ void CHRankingsGUI::createGridPoolResults()
 	
 	
 	m_gui.grid_setCellTT(GR_POOLRESULTS,m_gui.grid_findCol(GR_POOLRESULTS,C_PR_RANK			),-1,DESC(PROGRESSION_PRG_COMPPOOLRK));	
+	m_gui.grid_setCellTT(GR_POOLRESULTS,m_gui.grid_findCol(GR_POOLRESULTS,C_PR_CH_RK		),-1,DESC(PROGRESSION_PRG_COMPPOOLRK));	
 	m_gui.grid_setCellTT(GR_POOLRESULTS,m_gui.grid_findCol(GR_POOLRESULTS,C_PR_NAME			),-1,DESC(PROGRESSION_PRG_COMPNAME));
 	m_gui.grid_setCellTT(GR_POOLRESULTS,m_gui.grid_findCol(GR_POOLRESULTS,C_PR_COUNTRY		),-1,DESC(PROGRESSION_PRG_COMPCTRY));	
+}
+
+bool CHRankingsGUI::paintHeaderGrid(gui_grid_cell* cell)
+{
+	switch (cell->lParamColumn)
+	{
+		case C_PR_RANK:
+		m_gui.paint_text("Rk Po", GUI_ID_FNT, GUI_RGB_BLACK, GUI_JUST_CENTER);
+		return false;
+	}
+	return GTHPoolResultGUIEx::paintHeaderGrid(cell);
 }
 
 void CHRankingsGUI::fillGridPoolResultsCH()
@@ -283,6 +296,9 @@ bool CHRankingsGUI::paintGridPoolResults(gui_grid_cell* cell)
 	
 	switch (cell->lParamColumn)
 	{
+		case C_PR_CH_RK:
+			m_gui.paint_text(TOWSTRING(pPoolResult->getRank()), GUI_ID_FNT, COLORREF(-1), GUI_JUST_CENTER);
+			break;
 		case C_PR_CH_POINTS:
 			m_gui.paint_text(pPoolResult->getPointsFStr().toUnicode(), GUI_ID_FNT, COLORREF(-1), GUI_JUST_CENTER);
 			break;
@@ -335,22 +351,43 @@ void CHRankingsGUI::dblClickGridPoolResultsCH(int x, int y)
 		return;
 
 	if (col==C_PR_RANK)
+		editPoolRankingPositionCH(pPoolResult);	
+	if (col==C_PR_CH_RK)
 		editPoolRankingCH(pPoolResult);	
 }
 
 
-void CHRankingsGUI::editPoolRankingCH(GTHPoolResult *pPoolResult)
+void CHRankingsGUI::editPoolRankingPositionCH(GTHPoolResult *pPoolResult)
 {
 	if (!pPoolResult)
 		return;
 	short oldRank = pPoolResult->getRankPo();
 
 	MSLString sNewRank = m_gui.grid_showEdit(GR_POOLRESULTS,TOSTRING(pPoolResult->getRankPo()),3,"###",3);
-	pPoolResult->setRank(short(atoi(sNewRank)));
+	
 	pPoolResult->setRankPo(short(atoi(sNewRank)));
 	
 	recalculateAllRanks((CHPoolResult*)pPoolResult, oldRank, short(atoi(sNewRank)));
 
+	APP::out(*pPoolResult);	
+	APP::out(TRN_SET_POOLRESULT);
+	
+	m_gui.grid_sort(GR_POOLRESULTS, pfc_orderPoolResultsByRank);
+
+	SendMessage(getHWndMsgs(), UM_DATA_UPDATED, (WPARAM)GTHPOOLRESULTGUIEX_ID, (LPARAM)pPoolResult);	
+}
+
+void CHRankingsGUI::editPoolRankingCH(GTHPoolResult *pPoolResult)
+{
+	if (!pPoolResult)
+		return;
+	
+	short oldRank = pPoolResult->getRank();
+
+	MSLString sNewRank = m_gui.grid_showEdit(GR_POOLRESULTS,TOSTRING(pPoolResult->getRankPo()),3,"###",3);
+	
+	pPoolResult->setRank(short(atoi(sNewRank)));
+		
 	APP::out(*pPoolResult);	
 	APP::out(TRN_SET_POOLRESULT);
 	
@@ -377,7 +414,7 @@ void CHRankingsGUI::recalculateAllRanks(CHPoolResult *pPoolResult, short oldRank
             
             if (rankPo >= sNewRank && rankPo < oldRank)
             {
-				pPR->setRank(rankPo+1);
+				//pPR->setRank(rankPo+1);
 				pPR->setRankPo(rankPo+1);
                 APP::out(*pPR);	
             }
@@ -389,7 +426,7 @@ void CHRankingsGUI::recalculateAllRanks(CHPoolResult *pPoolResult, short oldRank
 
 			if (rankPo > oldRank && rankPo <= sNewRank)
 			{
-				pPR->setRank( rankPo-1);
+				//pPR->setRank( rankPo-1);
 				pPR->setRankPo( rankPo-1);
 				APP::out(*pPR);					
 			}

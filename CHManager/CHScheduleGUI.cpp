@@ -92,6 +92,24 @@ CHScheduleGUI::~CHScheduleGUI()
 {
 }
 
+LRESULT CHScheduleGUI::onMatchScheduled(WPARAM wParam/*=0*/, LPARAM lParam/*=0*/)
+{
+	GTHScheduleGUI::onMatchScheduled(wParam,lParam);
+
+	onReportsAdd();
+
+	return 0;
+}
+
+LRESULT CHScheduleGUI::onMatchRescheduled(WPARAM wParam/*=0*/, LPARAM lParam/*=0*/)
+{
+	GTHScheduleGUI::onMatchRescheduled(wParam,lParam);
+
+	onReportsAdd();
+
+	return 0;
+}
+
 void * CHScheduleGUI::onNewDataObject(long id)
 {
 	switch (id)
@@ -137,10 +155,14 @@ void CHScheduleGUI::onReportsAdd()
 {
 	int nC08=1000;
 	int nC58=2000;
-	int nC51=3000, nC51Event=3100	, nC51Phase=3200;
+	int nC58_Round=3000;
+	int nC51=4000, nC51Event=4100, nC51Phase=4200;
 	
+	APP_CH::report_reset();
+
 	APP_CH::report_add(nC08,0, CH08_NAME, CH08);
 	APP_CH::report_add(nC58,0, CH58_NAME, CH58);	
+	APP_CH::report_add(nC58_Round,0, CH58_ROUND_NAME, CH58_ROUND);
 	APP_CH::report_add(nC51,0, CH51_NAME, CH51);
 
 	GTHMatch *pMatch = 0;
@@ -177,6 +199,18 @@ void CHScheduleGUI::onReportsAdd()
 		MSLDate *pDate=(MSLDate*)m_availableDates[j];
 		if( pDate )
 			APP_CH::report_add(++nC58,2000,pDate->asString("%a %d %b %Y").toUnicode(),CH58,LPARAM(pDate),0);
+	}
+
+	MSLSortedVector vSessions(mem()->getCol(__GSESSION),orderSessions);
+	for ( long i=0;i<vSessions.entries();i++) 
+	{
+		GSession * pSession = (GSession * )vSessions[i];
+
+		MSLWString desc = pSession->getDateAsString("%a %d %b %Y");
+		desc += " - ";
+		desc += pSession->getTimeAsString("%H:%M").toUnicode();
+
+		APP_CH::report_add(++nC58_Round,3000,desc,CH58_ROUND,LPARAM(pSession),0);
 	}
 
 	CHEvent * pEvent=0;
@@ -218,7 +252,22 @@ void CHScheduleGUI::onReportRequest(MSLReportItem  *pReport)
 			{
 				MSLWString params=NULLSTRING;
 				params = pDate->asString("%Y%m%d").toUnicode();
-				pReport->setParameters("D_"+params.toAscii());			
+				pReport->setParameters("D_"+params.toAscii());	
+				pReport->setRSC(GET_RSC(0));				
+			}
+			break;
+		}
+		case CH58_ROUND:
+		{
+			pReport->setORIS("C58");
+
+			GSession *pSession = (GSession*)pReport->getLParam1();
+			if( pSession )
+			{
+				//MSLWString params=NULLSTRING;
+				pReport->setParameters("D_"+MSLString(pSession->getDateAsString("%Y%m%d"))+"_S_"+TOSTRING(pSession->getAcumulated(),"0"));
+				//params = pSession->getDateAsString("%Y%m%d");
+				//pReport->setParameters("D_"+params.toAscii());			
 				pReport->setRSC(GET_RSC(0));				
 			}
 			break;
@@ -262,6 +311,18 @@ bool CHScheduleGUI::onReportGeneration(CReportManager *pReportMngr,CReportConfig
 			}			
 
 			CHRC58 aRC58(*pReportMngr,*pReportCfg,*pDate);
+			return aRC58.Run();
+		}		
+		case CH58_ROUND:
+		{
+			GSession *pSession = (GSession*)pReport->getLParam1();
+			if( !pSession )
+			{
+				MSLMsgBox( m_gui.getHWndBase() ,"Sessopm not selected",GUI_ICO_ERROR, GUI_MB_OK, "CHManager Error");				
+				return 0;
+			}			
+
+			CHRC58 aRC58(*pReportMngr,*pReportCfg,pSession);
 			return aRC58.Run();
 		}		
 		case CH51:
