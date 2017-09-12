@@ -305,7 +305,7 @@ MSLString CHMatch::getResultWhiteBlackAsString() const
 	return MSLString(sResult);
 }
 
-MSLString CHMatch::getResultAsString() const
+MSLString CHMatch::getResultAsString(bool homeFirst/*=false*/) const
 {	
 	if( getStatus() < CHMemoryDataBase::eRunning )
 		return NULLSTRING;
@@ -313,9 +313,8 @@ MSLString CHMatch::getResultAsString() const
 	CHMatchResult * pMatchResult1 = 0;
 	CHMatchResult * pMatchResult2= 0;
 	
-
-	pMatchResult1 = (CHMatchResult *) getWhite();
-	pMatchResult2 = (CHMatchResult *) getBlack();
+	pMatchResult1 = homeFirst ? (CHMatchResult *) getHome() : (CHMatchResult *) getWhite();
+	pMatchResult2 = homeFirst ? (CHMatchResult *) getAway() : (CHMatchResult *) getBlack();
 
 	MSLString result=NULLSTRING;	
 	MSLString qualita="";
@@ -379,7 +378,7 @@ MSLString CHMatch::getResultIncidence() const
 		result = pMatchResult1->getPointsAsString();		
 		result += "-";
 		result += pMatchResult2->getPointsAsString();
-		result += pMatchResult1->getQualitativeSDescription().toAscii();
+		result += pMatchResult2->getQualitativeSDescription().toAscii();
 	}
 	
 	return result;

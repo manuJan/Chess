@@ -78,7 +78,7 @@ public:
 	bool areTeamIndividual() const;
 	bool thereAreQualitative() const;
 	int	  getResultCode() const;
-	MSLString getResultAsString() const;
+	MSLString getResultAsString(bool homeFirst=false) const;
 	MSLString getResultWhiteBlackAsString() const;
 	MSLString getResultIncidence() const;
 	MSLString getResultWhiteBlackIncidence() const;

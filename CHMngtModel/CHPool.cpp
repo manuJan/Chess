@@ -46,6 +46,23 @@ static int orderMatches(const MSLItem** a, const MSLItem** b)
 	if( order )
 		return order;
 
+	if (!pMatchA->getMatchNumber() && !pMatchB->getMatchNumber())
+	{
+		// Order by Match Code
+		order = pMatchA->getCode() - pMatchB->getCode();
+		if( order )
+			return order;
+	
+		// Order by key
+		return strcmp(pMatchA->getKey(),pMatchB->getKey());
+	}
+
+	if (!pMatchA->getMatchNumber())
+		return 1;
+
+	if (!pMatchB->getMatchNumber())
+		return -1;
+
 	order = pMatchA->getMatchNumber() - pMatchB->getMatchNumber();
 	if( order )
 		return order;
