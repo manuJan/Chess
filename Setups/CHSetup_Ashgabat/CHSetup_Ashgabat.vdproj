@@ -207,6 +207,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_25360F2C8827D404E87E18FAEEB0991E"
+        "OwnerKey" = "8:_689A0332981642B694611FB5D7739EFB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_254373FE242F408BB4F11A82F8FD11C1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -245,12 +251,6 @@
         {
         "MsmKey" = "8:_28874B5D586140B58AE74ACDEB012D62"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_29425028DDA48527BA29167DA787AB24"
-        "OwnerKey" = "8:_689A0332981642B694611FB5D7739EFB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -681,6 +681,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_7A1CD00AEB2947E48EDB454938048D21"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7AB36C8D9E63491F8CB45682A65D035D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -773,30 +779,6 @@
         {
         "MsmKey" = "8:_8C5220F932554F73B01770C94240EA2C"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8C8CD79183BC44B7A5647A5BF596DBD6"
-        "OwnerKey" = "8:_1D8FF0D4B0824FF59AC9F105DE03CFDE"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8C8CD79183BC44B7A5647A5BF596DBD6"
-        "OwnerKey" = "8:_CB947F1F1E744F7EB7EECC306EB881A0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8C8CD79183BC44B7A5647A5BF596DBD6"
-        "OwnerKey" = "8:_689A0332981642B694611FB5D7739EFB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8C8CD79183BC44B7A5647A5BF596DBD6"
-        "OwnerKey" = "8:_227DFBF5F8634CE5B4800438A625602E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1217,6 +1199,30 @@
         {
         "MsmKey" = "8:_D0E19890A6154CE3874559DB9BBD7BA7"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D15FF63D988F408A880DAF64E7C44E67"
+        "OwnerKey" = "8:_1D8FF0D4B0824FF59AC9F105DE03CFDE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D15FF63D988F408A880DAF64E7C44E67"
+        "OwnerKey" = "8:_CB947F1F1E744F7EB7EECC306EB881A0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D15FF63D988F408A880DAF64E7C44E67"
+        "OwnerKey" = "8:_689A0332981642B694611FB5D7739EFB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D15FF63D988F408A880DAF64E7C44E67"
+        "OwnerKey" = "8:_227DFBF5F8634CE5B4800438A625602E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1859,7 +1865,7 @@
             "SourcePath" = "8:XMLModel.dll"
             "TargetName" = "8:XMLModel.dll"
             "Tag" = "8:"
-            "Folder" = "8:_21B70B8BB0A14D5D9DDED7BBFF523400"
+            "Folder" = "8:_98AE05C019E9465486EE6FBC544F1FBA"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2234,6 +2240,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_25360F2C8827D404E87E18FAEEB0991E"
+            {
+            "SourcePath" = "8:MSLFlags_ioc.dll"
+            "TargetName" = "8:MSLFlags_ioc.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_98AE05C019E9465486EE6FBC544F1FBA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_254373FE242F408BB4F11A82F8FD11C1"
             {
             "SourcePath" = "8:C:\\WorkingDll\\lib\\MSLReports.dll"
@@ -2312,26 +2338,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_29425028DDA48527BA29167DA787AB24"
-            {
-            "SourcePath" = "8:MSLFlags.dll"
-            "TargetName" = "8:MSLFlags.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_98AE05C019E9465486EE6FBC544F1FBA"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2977EF90A2DD486A90ADB66CCA6777BE"
@@ -3439,7 +3445,7 @@
             "SourcePath" = "8:VMngtModel.dll"
             "TargetName" = "8:VMngtModel.dll"
             "Tag" = "8:"
-            "Folder" = "8:_6B7B54CB3D92463082F7CC56F392B7E1"
+            "Folder" = "8:_98AE05C019E9465486EE6FBC544F1FBA"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3592,6 +3598,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7A1CD00AEB2947E48EDB454938048D21"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\ovr-general\\common\\flags\\Competition\\IOC\\MSLFlags.dll"
+            "TargetName" = "8:MSLFlags.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_98AE05C019E9465486EE6FBC544F1FBA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7AB36C8D9E63491F8CB45682A65D035D"
@@ -6367,7 +6393,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Chess"
         "ProductCode" = "8:{86AB5EEE-5533-420B-A493-6A6A4D692726}"
-        "PackageCode" = "8:{2DCDBE2B-9525-4CF4-82BE-AF4C6CC5D292}"
+        "PackageCode" = "8:{1F1DB5AC-39A3-49D7-BA6F-5E0ACF2FB335}"
         "UpgradeCode" = "8:{D5BB1AAC-6A84-4506-AE57-E92B7A2E5FC7}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -7041,7 +7067,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_8C8CD79183BC44B7A5647A5BF596DBD6"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_D15FF63D988F408A880DAF64E7C44E67"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
