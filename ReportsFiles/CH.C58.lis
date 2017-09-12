@@ -70,7 +70,7 @@ Vari[2013]=820	/* Posicion relativa de pintado. Se desplaza antes del dato Date 
 Vari[2014]=820	/* Posicion relativa de pintado. Se desplaza antes del dato Date of Birth */
 
 /*  Datos del cuerpo, se pintan en la linea 2000 */		
-	data[2000],font=&Vari[509], d_al=1		/* Session Detail */ 
+	data[2000],font=&Vari[505], d_al=0		/* Session Detail */ 
 
 	data[2010],font=&Vari[508]		, d_al=2		/* starting Time */ 
 	data[2011],font=&Vari[508]		, d_al=1		/* Green */ 
@@ -258,7 +258,7 @@ Line 1010 /* Match */
 
 Line 1020 /* Session */
     	{ jump_d =  90 }
-    	{ data  =  2000,corx=1000  }
+    	{ data  =  2000,corx=100  }
 
 
     	
