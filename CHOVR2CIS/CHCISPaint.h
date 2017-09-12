@@ -37,6 +37,7 @@ public:
 
 	virtual void paintRegister					 (long idScreen, long idLayer, long column, long line, const wchar_t * text, GRegister * pRegister, GData* pData=0 );
 	virtual void paintStartList					 (long idScreen, long idLayer, CHMatch* pMatch);
+	virtual void paintMatchStartList					 (long idScreen, long idLayer, CHMatch* pMatch);
 	virtual void paintRoundResults				 (long idScreen, long idLayer, CHMatch* pMatch);
 	virtual void paintMatchResults				 (long idScreen, long idLayer, CHMatch* pMatch);
 

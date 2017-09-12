@@ -53,4 +53,6 @@ void CHCISScreenStartList::onRunNotTeamMatch()
 	// Startlist
 	if (pMatch->getPhaseCode()==SWISS_ROUND)
 		CHPAINT->paintStartList(isA(),LST_STARTLIST,pMatch);
+	else
+		CHPAINT->paintMatchStartList(isA(),LST_STARTLIST,pMatch);
 }

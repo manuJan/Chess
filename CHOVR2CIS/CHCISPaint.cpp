@@ -361,6 +361,21 @@ void CHCISPaint::paintRoundSubMatchResults(long idScreen, long idLayer, short y,
 	}	
 }
 
+void CHCISPaint::paintMatchStartList(long idScreen, long idLayer, CHMatch* pMatch)
+{
+	// Header 1
+	paintResultsHeader1(idScreen, LST_MATCH_HEADER_2, pMatch);
+
+	// Header 2
+	paintResultsHeader2(idScreen, LST_MATCH_HEADER_3, pMatch);
+
+	// Match scores
+	paintResultsTotal(idScreen, LST_MATCH_HEADER_TOTAL, pMatch);
+
+	// Resultado por periodos
+	paintSubMatchesResults(idScreen, LST_SUBMATCH_RESULTS, pMatch);
+}
+
 void CHCISPaint::paintMatchResults(long idScreen, long idLayer, CHMatch* pMatch)
 {
 	// Header 1

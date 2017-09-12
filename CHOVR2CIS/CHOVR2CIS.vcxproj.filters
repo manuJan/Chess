@@ -55,6 +55,9 @@
     <None Include="screens\ch.team_round_startlist.screen">
       <Filter>Screens</Filter>
     </None>
+    <None Include="screens\ch.team_match_startlist.screen">
+      <Filter>Screens</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

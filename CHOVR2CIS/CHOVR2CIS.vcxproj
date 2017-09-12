@@ -90,6 +90,7 @@
     <None Include="screens\ch.round_results.screen" />
     <None Include="screens\ch.round_startlist.screen" />
     <None Include="screens\ch.team_match_results.screen" />
+    <None Include="screens\ch.team_match_startlist.screen" />
     <None Include="screens\ch.team_round_results.screen" />
     <None Include="screens\ch.team_round_startlist.screen" />
     <None Include="small.ico" />
