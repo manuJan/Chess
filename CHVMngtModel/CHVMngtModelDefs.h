@@ -75,6 +75,9 @@
 #define CH95			2014
 #define CH95_NAME		L"Medals Standings (C95)"
 
+#define CH58_ROUND			2015
+#define CH58_ROUND_NAME		L"Pairings by Round (C58)"
+
 #define ALL_ROUNDS 100
 
 #endif _CHVMNGTMODELDEFS_H__

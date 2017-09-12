@@ -450,7 +450,7 @@ void CHRC74::assignDataMember(CHMatch *pSubMatch)
 		m_pLis->setData(3005,pMatchMemHome->getPointsAsString());*/
 
 	// Result
-	m_pLis->setData(3006,pSubMatch->getResultAsString());
+	m_pLis->setData(3006,pSubMatch->getResultAsString(true));
 
 	
 	// Rating 2

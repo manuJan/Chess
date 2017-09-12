@@ -106,8 +106,23 @@ CHRC58::CHRC58(CReportManager& aReportManager,CReportConfig& aReportConfig,MSLDa
 :CHReportTemplate(aReportManager,aReportConfig,aDate)
 ,m_pData(0)
 ,m_pLis(0)
-,m_pSession(0)
+,m_pCurrentSession(0)
 ,m_date(aDate)
+,m_pLegends(0)
+,m_paintSession(false)
+,m_vMatches()
+,m_posVector(0)
+{
+	m_pLegends = new CHRLegends(this,m_pReport,CH58);
+}
+
+CHRC58::CHRC58(CReportManager& aReportManager,CReportConfig& aReportConfig,GSession *aSession)
+:CHReportTemplate(aReportManager,aReportConfig,aSession->getDate())
+,m_pData(0)
+,m_pLis(0)
+,m_pCurrentSession(0)
+,m_pSelSession(aSession)
+,m_date(INVALID_DATE)
 ,m_pLegends(0)
 ,m_paintSession(false)
 ,m_vMatches()
@@ -163,19 +178,19 @@ CReportBase::ReportReturn CHRC58::OnBody()
 		CHMatch *pMatchSel =(CHMatch *)m_vMatches[i];
 		GSession *pSessionAux = (GSession *)pMatchSel->getSession();
 
-		if (m_pSession && pSessionAux &&
-			m_pSession->getSession() != pSessionAux->getSession())
+		if (m_pCurrentSession && pSessionAux &&
+			m_pCurrentSession->getSession() != pSessionAux->getSession())
 		{
-			m_pSession = 0;
+			m_pCurrentSession = 0;
 			return ok;
 		}
 
-		if (!m_pSession || m_pSession->getSession() != pSessionAux->getSession())
+		if (!m_pCurrentSession || m_pCurrentSession->getSession() != pSessionAux->getSession())
 		{
-			m_pSession = pSessionAux;
+			m_pCurrentSession = pSessionAux;
 			m_paintSession = true;
 			// Pintamos el letrero de la sesión
-			if( m_pSession )
+			if( m_pCurrentSession )
 			{
 				MSLString sessionDetailed=getSessionDetailed();
 				m_pLis->setData(2000,sessionDetailed);
@@ -479,16 +494,16 @@ MSLWString CHRC58::getSessionDetailed()
 {
 	MSLWString aux = NULLWSTRING;
 	int counterTotal = 0;
-	if( m_pSession )
+	if( m_pCurrentSession )
 	{
 		aux = m_pLis->getData(1000);
 		aux += " ";
-		aux += TOWSTRING(m_pSession->getSession());
+		aux += TOWSTRING(m_pCurrentSession->getSession());
 		aux += ": ";
 		
 		bool first = true;
 		MSLSortedVector vEvents(CHMemoryDataBase::getCol(__CHEVENT),orderEventsByOrder);
-		MSLSortedVector aVector = getMatchesSession(m_pSession);
+		MSLSortedVector aVector = getMatchesSession(m_pCurrentSession);
 		if(aVector.entries())
 		{
 			CHEvent *pEvent = 0;
@@ -563,11 +578,22 @@ void CHRC58::buildVector()
 	{
 		/*if (pMatch->areTeamIndividual())
 			continue;*/
+		
 		if (pMatch->areTeams())
 			continue;
-		if(pMatch->getSession() && 
-			(pMatch->getStartDate()==m_date) && pMatch->getCourt())
-			m_vMatches.insert(pMatch);
+
+		if (m_date.isValid())
+		{
+			if(pMatch->getSession() && 
+			  (pMatch->getStartDate()==m_date) && pMatch->getCourt())
+				m_vMatches.insert(pMatch);
+		}
+		else if (m_pSelSession)
+		{
+			if(pMatch->getSession() && 
+			  (pMatch->getSessionKey()==m_pSelSession->getKey()) && pMatch->getCourt())
+				m_vMatches.insert(pMatch);
+		}
 	}
 	if(m_pLis->getVari(901))
 		m_vMatches.setFcCompare(orderMatchesBySessionAndMatchNumber);

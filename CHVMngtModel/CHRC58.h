@@ -30,6 +30,7 @@ class CHRLegends;
 class CHVMngtModelExport CHRC58 : public CHReportTemplate  
 {
 public:
+	CHRC58(CReportManager& aReportManager, CReportConfig& aReportConfig, GSession *aSession);
 	CHRC58(CReportManager& aReportManager, CReportConfig& aReportConfig, MSLDate aDate);
 	virtual ~CHRC58();
 
@@ -65,7 +66,8 @@ private:
 	CReportManager	*m_pReportMng;
 	GData			*m_pData;
 	CLis			*m_pLis;
-	GSession		*m_pSession;
+	GSession		*m_pSelSession;
+	GSession		*m_pCurrentSession;
 	MSLDate			m_date;
 	CHRLegends		* m_pLegends;
 	bool       m_paintSession;
