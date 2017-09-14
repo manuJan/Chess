@@ -335,6 +335,8 @@ void CHEventControlOperations::finishMatch(CHMatch *pMatch,bool status)
 	CHPhase * pPhase = (CHPhase *) pMatch->getPhase();
 	CHEvent * pEvent = (CHEvent *) pPhase->getEvent();
 
+	CHProgression aProgression((MSLGUIEx*)m_pGUIEx);
+	
 	if(pMatch->getFinishedRound() || 
 	   (pPool->getStatus()==CHMemoryDataBase::eUnofficial ||
 		pPool->getStatus()==CHMemoryDataBase::eFinished ) )
@@ -370,6 +372,13 @@ void CHEventControlOperations::finishMatch(CHMatch *pMatch,bool status)
 		GNotify aNotifyPhase(N_RANKING_CIS);
 		aNotifyPhase.setBuffer(aBufferPhase);
 		APP::outN(aNotifyPhase);
+		
+		if (pPool->getStatus()==CHMemoryDataBase::eUnofficial ||
+			pPool->getStatus()==CHMemoryDataBase::eFinished )
+		{
+			// Pool Progression
+			aProgression.doProgression(pPool);
+		}
 
 		// Ranking de evento
 		aRanking.calculateRankings(pEvent);
@@ -377,15 +386,7 @@ void CHEventControlOperations::finishMatch(CHMatch *pMatch,bool status)
 		APP::out(*pEvent);
 		APP::out(TRN_SET_RANKINGS);
 	}
-
-	CHProgression aProgression((MSLGUIEx*)m_pGUIEx);
-
-	if (pPool->getStatus()==CHMemoryDataBase::eUnofficial ||
-		pPool->getStatus()==CHMemoryDataBase::eFinished )
-	{
-		// Pool Progression
-		aProgression.doProgression(pPool);
-	}
+	
 
 	if (pPhase->getStatus()==CHMemoryDataBase::eUnofficial || 
 		pPhase->getStatus()==CHMemoryDataBase::eFinished )
