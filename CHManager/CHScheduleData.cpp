@@ -115,7 +115,8 @@ void CHScheduleData::onMatchScheduled(GTHMatch* pMatch)
 		}
 		else
 		{
-			pMatch->setCourtCode(1);
+			if (!pMatch->getCourt())
+				pMatch->setCourtCode(1);
 		}
 	}
 	
