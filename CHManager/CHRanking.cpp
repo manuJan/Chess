@@ -1506,15 +1506,10 @@ short CHRanking::getEventRank(CHEventResult *pEventResult, CHPoolResult *pPoolRe
 	}
 	else if(!pPhase->getIsPool()) //Phase Eliminatoria
 	{
-		if (pPhase->getPhase()!=SEMIFINAL		&&
-			pPhase->getPhase()!=GOLD_MEDAL		&&
-			pPhase->getPhase()!=BRONZE_MEDAL	)
-		{
-			if(pPoolResult->getRank()==1 && winerRank) 
-				return short(winerRank);
-			else if(pPoolResult->getRank()==2 && loserRank)
-				return short(loserRank);
-		}
+		if(pPoolResult->getRank()==1 && winerRank) 
+			return short(winerRank);
+		else if(pPoolResult->getRank()==2 && loserRank)
+			return short(loserRank);		
 	}
 	
 	return rank;
