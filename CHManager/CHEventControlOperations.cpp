@@ -395,6 +395,7 @@ void CHEventControlOperations::finishMatch(CHMatch *pMatch,bool status)
 		aProgression.doProgression(pPhase);
 	}
 
+
 	// Calculamos medallas
 	aRanking.calculateMedals(pMatch->getPhase());
 }
