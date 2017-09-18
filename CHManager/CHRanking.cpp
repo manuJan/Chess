@@ -42,6 +42,9 @@ bool poolResultsRanked(const MSLItem* p,const void *n)
 	if (!pPoolResult)
 		return false;
 
+	if (!pPoolResult->getRegister())
+		return false;
+
 	if (pPoolResult->getMatchesPlayed())
 		return true;
 
@@ -54,6 +57,9 @@ bool phaseResultsRanked(const MSLItem* p,const void *n)
 {
 	CHPoolResult* pPoolResult = (CHPoolResult *)p;	
 	if (!pPoolResult)
+		return false;
+
+	if (!pPoolResult->getRegister())
 		return false;
 
 	if ( pPoolResult->getRank())
