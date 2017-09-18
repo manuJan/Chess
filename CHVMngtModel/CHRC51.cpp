@@ -298,6 +298,9 @@ void CHRC51::buildVector()
 	CHPoolResult *pPoolResult = 0;
 	while ((pPoolResult = (CHPoolResult*) iter())!=0 )
 	{
+		if (pPoolResult->getBye())
+			continue;
+
 		if (pPoolResult->getPhase() == m_pPhase )
 			m_vPoolResults.insert(pPoolResult);
 	}
