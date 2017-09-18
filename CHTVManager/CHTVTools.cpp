@@ -454,8 +454,11 @@ void CHTVTools::saveScheduleUnit(CHMatchResult * pMatchResult)
 	}
 
 	// Order: Unit start date, unit start time, unit order
-	MSLString keyCode = pMatch->getStartDateAsString("%Y%m%d").toAscii()+
-						pMatch->getStartTimeAsString("%H%M")+						
+	MSLString keyCode = pMatch->getEventKey()+
+						pMatch->getStartDateAsString("%Y%m%d").toAscii()+
+						pMatch->getStartTimeAsString("%H%M")+					
+						pMatch->getCourtKey()+
+						MSLString().format("%.2d",pMatch->getMatchNumber())+
 						MSLString().format("%3d",pMatch->getCode())+
 						TOSTRING(pMatchResult->getPosition());
 
