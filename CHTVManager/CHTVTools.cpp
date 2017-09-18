@@ -429,7 +429,7 @@ void CHTVTools::saveScheduleDetailed(CHMatch* pMatch)
 	m_pGUI->addContent(pMatch,pos++,ev);	// "Event_Code"	
 	m_pGUI->addContent(pMatch,pos++,ph);	// "Competition_Phase"	
 	m_pGUI->addContent(pMatch,pos++,unit);	// "Event_Unit"
-	m_pGUI->addContent(pMatch,pos++,TOSTRING(pMatch->getCourtCode()));		// "Mat_code"
+	m_pGUI->addContent(pMatch,pos++,TOSTRING(pMatch->getCourtCode()));		// "Table_Code"
 	m_pGUI->addContent(pMatch,pos++,TOSTRING(pMatch->getMatchNumber()));	// "Bout_Number"
 	m_pGUI->addContent(pMatch,pos++,pMatch->getRoundAsString(true,false));
 	m_pGUI->addContent(pMatch,pos++,pMatch->getStartTimeAsString("%H:%M"));	// "Start_Time"
@@ -515,9 +515,8 @@ void CHTVTools::saveScheduleUnit(CHMatchResult * pMatchResult)
 		displayPos = TOSTRING(pMatchResult->getPosition());
 	
 	m_pGUI->addContent(pData,pos++,pMatch->getStatus()<=GMemoryDataBase::eRunning ? "":displayPos );			// "Display_Pos"
-	
-	// "Round"
-	m_pGUI->addContent(pData,pos++,pMatch->getRoundAsString(true,false));	
+	m_pGUI->addContent(pData,pos++,pMatch->getRoundAsString(true,false));	// "Round"
+	m_pGUI->addContent(pData,pos++,TOSTRING(pMatch->getCourtCode()));		// "Table_Code"
 }
 
 void CHTVTools::saveEventInfo(CHMatch * pMatch) 
@@ -1391,4 +1390,33 @@ MSLString CHTVTools::getMedalDesc(short rank)
 	MSLString sLang = GUtils::getAppLang();
 	GMedal * pMedal = m_pMem->findMedal(char(rank));
 	return pMedal ? pMedal->getSDescription(sLang).toAscii() : "";
+}
+
+void CHTVTools::getCSVMedalStandings()
+{
+	VMedalStandings aVMedalStandings;
+	for(long i=0;i<aVMedalStandings.getNLines();i++)
+	{
+		GMedalsByNoc * pMedalsByNoc = (GMedalsByNoc *)aVMedalStandings[i];
+		saveMedalStandings(pMedalsByNoc,i);
+	}
+}
+
+void CHTVTools::saveMedalStandings(GMedalsByNoc *pMedalsByNoc, const long i)
+{
+	if( !pMedalsByNoc ) 
+		return;
+
+	char rk[4];
+	sprintf_s(rk,4,"%.3d" ,pMedalsByNoc->getRk());
+	MSLString keyCode = MSLString(rk) + "_" + TOSTRING(i+1);
+	GData *pData = m_pGUI->data(keyCode);
+	m_pGUI->addContent(pData,0,pMedalsByNoc->getGroup()->getGroup());		// NOC_Code
+	m_pGUI->addContent(pData,1,pMedalsByNoc->getRk());						// Rank
+	m_pGUI->addContent(pData,2,pMedalsByNoc->getRkPo());					// Display_Pos
+	m_pGUI->addContent(pData,3,pMedalsByNoc->getGroup()->getLDescription());// Long_TV_Name
+	m_pGUI->addContent(pData,4,pMedalsByNoc->getNMedals(1));				// Gold
+	m_pGUI->addContent(pData,5,pMedalsByNoc->getNMedals(2));				// Silver
+	m_pGUI->addContent(pData,6,pMedalsByNoc->getNMedals(3));				// Bronze
+	m_pGUI->addContent(pData,7,pMedalsByNoc->getNMedals());					// Total
 }

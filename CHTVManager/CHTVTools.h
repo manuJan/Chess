@@ -106,6 +106,9 @@ public:
 	void	getWinnsLossesDrawn	(CHMatchResult *pMatchResult, short &W, short&L, short &D);
 	int		getOrderOnCourt		(CHMatchResult* pMatchResult);
 	MSLString getMedalDesc		(short rank);
+	
+	void getCSVMedalStandings();
+	void saveMedalStandings(GMedalsByNoc *pMedalsByNoc, const long i);
 
 private:
 	CHMemoryDataBase*	m_pMem;

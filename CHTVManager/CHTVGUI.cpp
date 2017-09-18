@@ -110,6 +110,7 @@ void CHTVGUI::callForRequiredFiles()
 			addReqField(file,"Ranking");
 			addReqField(file,"Display_Pos");
 			addReqField(file,"Round");
+			addReqField(file,"Table_Code");
 
 
 		// EVENT INFO
@@ -300,6 +301,9 @@ void CHTVGUI::callForContent  (long level,MSLString name,DWORD dataParent)
 		m_tools.saveHistory((CHMatch *)dataParent);
 	else if( name==FILE_CSV_MEDALS && dataParent )
 		m_tools.saveMedals((CHMatch *)dataParent);
+	else if( name==FILE_CSV_MEDAL_STANDINGS )
+		m_tools.getCSVMedalStandings();
+
 
 	MSLAppModuleTV::callForContent(level,name,dataParent);
 }
