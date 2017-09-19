@@ -85,7 +85,7 @@ void CHRLegends::loadData()
 	switch(m_idReport)
 	{
 	case CH30:
-		printLegend	(200);
+		printLegend	(200, 3);
 		break;
 	case CH32A:
 		printLegend	(300,3);
