@@ -196,7 +196,7 @@ MSLWString CHODFZZScheduleDescription::getPhaseMatchILDescription(CHMatch *pMatc
 {
 	MSLWString desc = getPhaseILDescription(pMatch->getPhase(), lang);
 	desc += L", ";
-	desc += pMatch->getRoundAsString(true,false).toUnicode();
+	desc += pMatch->getRoundAsString(true,false);
 	return desc;
 }
 
@@ -204,7 +204,7 @@ MSLWString CHODFZZScheduleDescription::getPhaseMatchIDescription(CHMatch *pMatch
 {
 	MSLWString desc = getPhaseIDescription(pMatch->getPhase(), lang);
 	desc += L", ";
-	desc += pMatch->getRoundAsString(true,false).toUnicode();
+	desc += pMatch->getRoundAsString(true,false);
 	return desc;
 }
 
@@ -212,7 +212,7 @@ MSLWString CHODFZZScheduleDescription::getPhaseMatchLDescription(CHMatch *pMatch
 {
 	MSLWString desc = getPhaseLDescription(pMatch->getPhase(), lang);
 	desc += L", ";
-	desc += pMatch->getRoundAsString(true,false).toUnicode();
+	desc += pMatch->getRoundAsString(true,false);
 	return desc;
 }
 
@@ -220,7 +220,7 @@ MSLWString CHODFZZScheduleDescription::getPhaseMatchSDescription(CHMatch *pMatch
 {
 	MSLWString desc = getPhaseSDescription(pMatch->getPhase(), lang);
 	desc += L", ";
-	desc += pMatch->getRoundAsString(false,false).toUnicode();
+	desc += pMatch->getRoundAsString(false,false);
 	return desc;
 }
 

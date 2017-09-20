@@ -158,7 +158,7 @@ data[3009], d_al=1,									font=&Vari[506] /* Master Type 2	*/
 data[3010], d_al=0,									font=&Vari[506] /* Name 2			*/
 data[3011], d_al=1,									font=&Vari[506] /* NOC Code2		*/
 
-
+data[5000], lcpy= "Aýlaw", d_al=1,					font=&Vari[506] /* TKM Round		*/
 
 /***************************************/
 /* -- ZONA DE DECLARACION DE TABLAS -- */

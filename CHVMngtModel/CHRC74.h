@@ -47,9 +47,6 @@ private:
 	ReportReturn	paintTemplateResults	();
 	ReportReturn	paintMembers			(CHMatch *pMatch);
 		
-	
-	MSLDate			OnGetEventDate() const;
-	MSLTime			OnGetEventTime() const;
 	MSLWString		OnGetLine(const int lineNumber,const char *language) const;
 
 	void			initLabels();

@@ -175,8 +175,8 @@ CReportBase::ReportReturn CHRC74::paintTemplateHeader()
 	{
 		m_pLis->setData(2100,pMatchAux->getRoundAsString(true,true));
 		// Pintamos la ronda
-		if( !m_pLis->runline(5) )
-			return OnError(error,10);
+		/*if( !m_pLis->runline(5) )
+			return OnError(error,10);*/
 	}
 
 	// Pintamos la cabecera
@@ -265,18 +265,25 @@ void CHRC74::setGlobalVaris()
 }
 
 /////////////////////////////////////////////////////////////////////
-MSLDate CHRC74::OnGetEventDate() const
-{
-	return INVALID_DATE;
-}
-
-MSLTime CHRC74::OnGetEventTime() const
-{
-	return INVALID_TIME;
-}
 
 MSLWString CHRC74::OnGetLine(const int lineNumber,const char *language) const
 {
+	switch( lineNumber )
+	{
+	case 2:
+	
+		CHMatch * pMatch = (CHMatch * )	m_vMatches[0];
+		if (pMatch)
+		{
+			if (!strcmp(language,"TKM"))
+				return pMatch->getRoundAsString(true,false,m_pLis->getData(5000));
+			else
+				return pMatch->getRoundAsString(true,false);
+
+		}
+		break;
+	}
+
 	return CReportTemplate::OnGetLine(lineNumber,language);
 }
 
@@ -311,7 +318,7 @@ void CHRC74::assignDataIndividual(CHMatch *pMatch)
 	if(pMatch->isTeam())
 	{
 		if (pMatch->getSubCode()==0)
-			m_pLis->setData(2000,pMatch->getRoundMatch());
+			m_pLis->setData(2000,pMatch->getMatchNumber());
 		else
 			m_pLis->setData(2000,pMatch->getSubCode());
 	}

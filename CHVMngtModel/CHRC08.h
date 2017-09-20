@@ -38,8 +38,6 @@ protected:
 	ReportReturn	body(const int nLin);
 	unsigned short	OnCallbackFn(struct USR_TAB * pTableInfo);
 	void			OnBeginReport();
-	MSLDate			OnGetEventDate() const;
-	MSLTime			OnGetEventTime() const;
 
 private:
 	RCHSchedule		*m_pSchedule;

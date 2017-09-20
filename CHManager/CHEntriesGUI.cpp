@@ -23,6 +23,19 @@
 #include "..\ChVMngtModel\CHRC32C.h"
 #include "..\CHVMngtModel\CHRC38.h"
 
+static
+bool eventInscriptions(const MSLItem* p,const void *n)
+{
+	CHEvent* pEvent = (CHEvent *)n;
+	CHInscription* pInscription = (CHInscription *)p;	
+
+	if ( pEvent && 
+		 pInscription->getEventKey() == pEvent->getKey() )
+		 return true;
+
+	return false;
+}
+
 int orderMasterTypeByCode(const MSLItem** a, const MSLItem** b)
 {
 	CHMasterType *pMasterTypeA = (CHMasterType *)(*a);
@@ -180,7 +193,10 @@ LRESULT CHEntriesGUI::onLButDownToolBar(WPARAM wParam, LPARAM lParam)
 	if (lParam==LX_SEED_CALCULATION)
 	{
 		if (MSLMsgBox( m_gui.getHWndBase(),"this operation will remove the seeds assigned manually, continue?", GUI_ICO_WARNING, GUI_MB_YESNO, "CHManager Warning")==IDYES)
-			calculateSeedsFromRating(0,false);
+		{
+			calculateTeamsRatings(0,false);
+			calculateSeedsFromRating(0,false);			
+		}
 
 		return 0;
 	}
@@ -471,6 +487,47 @@ bool CHEntriesGUI::onReportGeneration(CReportManager *pReportMngr,CReportConfig 
 	}
 	
 	return false;
+}
+
+void CHEntriesGUI::calculateTeamsRatings(GEvent *pEvent, bool reset)
+{
+	MSLSortedVector vEvents=MSLSortedVector(CHMemoryDataBase::getCol(__CHEVENT));
+	for (short i=0;i<vEvents.entries();i++)
+	{
+		CHEvent * pEvent = (CHEvent * )vEvents[i];
+		if (!pEvent->isTeam())
+			continue;
+
+		MSLSortedVector vInscriptions = MSLSortedVector(CHMemoryDataBase::getCol(__CHINSCRIPTION).select(eventInscriptions, pEvent));
+
+		for (short i=0; i<vInscriptions.entries(); i++ )
+		{
+			CHInscription *pInscription=(CHInscription *)vInscriptions[i];			
+			short rating=0;
+			MSLSortedVector vMembers;
+			pInscription->getMembersVector(vMembers);
+			for (short j=0;j<vMembers.entries();j++)
+			{
+				CHMember *pMember=(CHMember *)vMembers[j];	
+				rating+=pMember->getRating();
+			}
+
+			if (vMembers.entries())
+			{
+				GScore gRating= 0.0;
+
+				gRating=float(float(rating)/float(vMembers.entries()));
+				
+				long aux = long(gRating.getScore()*10); 
+				if ((aux % 10)>=5)
+					gRating += 1;
+	
+				pInscription->setRating(gRating.getScore()); 
+
+				CHSend.toServerDB(pInscription);	
+			}	
+		}
+	}	
 }
 
 void CHEntriesGUI::calculateSeedsFromRating(GEvent *pEvent, bool reset)

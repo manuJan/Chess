@@ -96,13 +96,13 @@ Vari[2014]=820	/* Posicion relativa de pintado. Se desplaza antes del dato Date 
 
 Data[208], d_al=1 /* As of        */
 
-Vari[1001]=180;
-Vari[1002]=120;
-Vari[1003]=110;
+Vari[1001]=280;
+Vari[1002]=220;
+Vari[1003]=210;
 Vari[1004]=140;
 Vari[1005]=250;
 Vari[1006]=130;
-Vari[1007]=760;
+Vari[1007]=860;
 Vari[1008]=130;
 Vari[1009]=380;
 Vari[1010]=130;
@@ -145,7 +145,7 @@ Table 101 /* -- TABLA DE CABECERAS -- */
 			{ Run_Line=1520, Offset_lx=20, Offset_ly=45 }
 		
 		/* Fase */
-		cell[5] { call=1, height=110, width=&Vari[1006] }
+		cell[5] { call=0, height=110, width=&Vari[1006] }
 			{ outline_upper=1 }
 			{ outline_lower=1 }
 			{ data=1017, Offset_dx=55, Offset_dy=70 }
@@ -164,13 +164,13 @@ Table 101 /* -- TABLA DE CABECERAS -- */
 			{ Run_Line=1530, Offset_lx=20, Offset_ly=45 }
 
 		/* Umpire and Service Judge */
-		cell[8] { call=1, height=110, width=&Vari[1009] }
+		cell[8] { call=0, height=110, width=&Vari[1009] }
 			{ outline_upper=1 }
 			{ outline_lower=1 }
 			{ Run_Line=1540, Offset_lx=10, Offset_ly=70 }
 
 		/* NOC Code */
-		cell[9] { call=1, height=110, width=&Vari[1010] }
+		cell[9] { call=0, height=110, width=&Vari[1010] }
 			{ outline_upper=1 }
 			{ outline_lower=1 }
 			{ outline_right=1 }
@@ -214,7 +214,7 @@ Table 102 /* -- TABLA DE MATCHS -- */
 			/*{ Run_Line=2013, Offset_lx=20, Offset_ly=50 }*/
 		
 		/* Fase */
-		cell[5] { call=1, height=130, width=&Vari[1006] }
+		cell[5] { call=0, height=130, width=&Vari[1006] }
 			{ outline_upper=1 }
 			{ outline_lower=1 }
 			{ data=2014, Offset_dx=75, Offset_dy=80 }
@@ -233,13 +233,13 @@ Table 102 /* -- TABLA DE MATCHS -- */
 			{ Run_Line=1570, Offset_lx=20, Offset_ly=45 }
 
 		/* Umpire and Service Judge */
-		cell[8] { call=1, height=130, width=&Vari[1009] }
+		cell[8] { call=0, height=130, width=&Vari[1009] }
 			{ outline_upper=1 }
 			{ outline_lower=1 }
 			{ Run_Line=1580, Offset_lx=10, Offset_ly=45 }
 
 		/* NOC Code */
-		cell[9] { call=1, height=130, width=&Vari[1010] }
+		cell[9] { call=0, height=130, width=&Vari[1010] }
 			{ outline_upper=1 }
 			{ outline_lower=1 }
 			{ outline_right=1 }

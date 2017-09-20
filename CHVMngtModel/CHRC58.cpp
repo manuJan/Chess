@@ -293,11 +293,11 @@ void CHRC58::centerReport()
 				m_pLis->getVari(1003)+	// Name	
 				m_pLis->getVari(1004)+
 				m_pLis->getVari(1005)+
-				m_pLis->getVari(1006)+
+				//m_pLis->getVari(1006)+
 				m_pLis->getVari(1007)+
-				m_pLis->getVari(1008)+
+				m_pLis->getVari(1008);/*+
 				m_pLis->getVari(1009)+
-				m_pLis->getVari(1010);	// Date of Birth
+				m_pLis->getVari(1010);*/	// Date of Birth
 
 	int corx  = getCenter()-(width/2);
 
@@ -338,8 +338,16 @@ void CHRC58::setDataMatch(CHMatch* pMatch)
 	time = (pMatch->getStartTimeAsString("%H:%M")).strip(MSLString::leading,'0');
 	m_pLis->setData( 2010, time);
 	//Round
-	if ( pMatch->getRound() )
-		m_pLis->setData(2011, pMatch->getRound());
+	if (pMatch->getPhaseCode()==SWISS_ROUND)
+	{
+		if ( pMatch->getRound() )
+			m_pLis->setData(2011, pMatch->getRound());
+	}
+	else
+	{
+		m_pLis->setData(2011, pMatch->getPhaseSDescription());
+	}
+
 	// Mesa
 	if( pMatch->getCourt() )
 		m_pLis->setData( 2027, pMatch->getCourt()->getCourt());
@@ -652,7 +660,8 @@ void CHRC58::setDynamicLegends()
 	MSLSetIterator iter2(CHMemoryDataBase::getCol(__CHPHASEBASE));
 	while ((pPhaseBase=(CHPhaseBase*)iter2())!=0)
 	{
-		m_pLegends->setDynamic( pPhaseBase->getSDescription());							
+		if (pPhaseBase->getCode()!=SWISS_ROUND)
+			m_pLegends->setDynamic( pPhaseBase->getSDescription());							
 	}
 
 	//m_pLegends->createDynamic();

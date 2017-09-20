@@ -164,8 +164,9 @@ void CHODF2Results::fillVectorExtendedInfo(MSLArray& vExInfos)
 	{
 		pSubMatch = (CHMatch *)vSubMatches[i];
 		
-		MSLString subMatchDesc = TOSTRING(pSubMatch->getSubCode());		
-		vExInfos.insert(insertZZExtension(pSubMatch, UI, MATCH, TOSTRING(pSubMatch->getSubCode()), subMatchDesc));		
+		MSLString subMatchDesc = TOSTRING(pSubMatch->getSubCode());	
+		if (pSubMatch->hasTeamCompetitors())
+			vExInfos.insert(insertZZExtension(pSubMatch, UI, MATCH, TOSTRING(pSubMatch->getSubCode()), subMatchDesc));		
 	}
 }
 

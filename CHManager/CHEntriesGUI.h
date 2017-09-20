@@ -56,6 +56,7 @@ protected:
 	bool canDeleteInscription				(GInscription * pInscription);
 
 	void calculateSeedsFromRating			(GEvent *pEvent, bool reset);
+	void calculateTeamsRatings				(GEvent *pEvent, bool reset);
 	short getKConst							(CHInscription *pInscription);
 	short getKConst							(CHMember *pMemb);
 	short getTeamRating						(CHInscription *pIns);

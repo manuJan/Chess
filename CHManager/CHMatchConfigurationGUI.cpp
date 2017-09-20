@@ -327,7 +327,7 @@ bool CHMatchConfigurationGUI::paintGridMatch(gui_grid_cell* cell)
 		m_gui.paint_text(pMatch->getSessionTimeAsString("%H:%M").toUnicode(),GUI_ID_FNT_MED_B);
 		break;	
 	case C_COURT_MATCH_CNF:
-		m_gui.paint_text(pMatch->getRoundAsString(false,false).toUnicode(),GUI_ID_FNT_MED_B);
+		m_gui.paint_text(pMatch->getRoundAsString(false,false),GUI_ID_FNT_MED_B);
 		break;
 	case C_GAME_MATCH_CNF:
 		m_gui.paint_text(((CHManagerApp*)MSLAPP)->getMatchTitle(pMatch),GUI_ID_FNT_MED_B);

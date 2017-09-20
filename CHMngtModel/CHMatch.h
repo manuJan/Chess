@@ -102,7 +102,7 @@ public:
 	MSLString		getRoundMatch();
 	MSLSortedVector	getRoundMatches();
 	bool			getFinishedRound();	
-	MSLString		getRoundAsString(bool lDesc=true,bool date=true);
+	MSLWString		getRoundAsString(bool lDesc=true,bool date=true, MSLWString roundDesc=L"");
 	MSLString		getEventCodeReports();
 
 	// From CHEvent

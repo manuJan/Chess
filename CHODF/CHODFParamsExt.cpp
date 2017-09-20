@@ -232,7 +232,7 @@ MSLWString CHODFParamsExt::getMatchDescription(GTHMatch * pMatch)
 		if (pPhase->getIsPool())
 		{
 			desc += L" ";
-			desc += ((CHMatch*) pMatch)->getRoundAsString(false,false).toUnicode();
+			desc += ((CHMatch*) pMatch)->getRoundAsString(false,false);
 			desc += L" ";
 			desc += aDef.getSMatchDescription();
 			desc += L" ";
@@ -253,7 +253,7 @@ MSLWString CHODFParamsExt::getMatchDescription(GTHMatch * pMatch)
 		if (pPhase->getIsPool())
 		{
 			desc += L" ";
-			desc += ((CHMatch*)pMatch)->getRoundAsString(false,false).toUnicode();
+			desc += ((CHMatch*)pMatch)->getRoundAsString(false,false);
 			desc += L" ";
 			desc += aDef.getSMatchDescription();
 			desc += L" ";

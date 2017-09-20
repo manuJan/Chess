@@ -46,7 +46,7 @@ bool CHEntriesToolBar::onInit()
 
 	doSeparator();
 
-	doLabelEx(LX_SEED_CALCULATION,"Calculate Seed",100,"Seed Calculation from initial rating",IDB_BMP_SEED_CALC);
+	doLabelEx(LX_SEED_CALCULATION,"Calculate Seed & Ratings",150,"Seed Calculation from initial rating",IDB_BMP_SEED_CALC);
 
 	return ret;
 }

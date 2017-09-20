@@ -124,7 +124,7 @@ MSLWString CHAvailableMatchGUIEx::getDescription(GTHMatch *pMatch)
 		dataDescription+=L" ";
 		dataDescription+=TOWSTRING(pMatch->getCode());
 		dataDescription+=L" ";
-		dataDescription+=( (CHMatch*) pMatch)->getRoundAsString(false, false).toUnicode();
+		dataDescription+=( (CHMatch*) pMatch)->getRoundAsString(false, false);
 	}
 
 	return dataDescription;

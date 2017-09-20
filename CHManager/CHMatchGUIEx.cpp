@@ -180,7 +180,7 @@ bool CHMatchGUIEx::paintGridMatches(gui_grid_cell* cell)
 	{
 		case C_MT_ROUND:
 		{
-			m_gui.paint_text( pMatch->getRoundAsString(false,false).toUnicode(), GUI_ID_FNT, COLORREF(-1), GUI_JUST_CENTER);	
+			m_gui.paint_text( pMatch->getRoundAsString(false,false), GUI_ID_FNT, COLORREF(-1), GUI_JUST_CENTER);	
 			return false;
 		}
 

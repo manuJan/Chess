@@ -44,6 +44,7 @@ public:
 	MSLString getSessionStartDate(MSLString format="%d %b %Y") const;
 
 	MSLDate	getStartDate() const;
+	MSLTime	getStartTime() const;
 	GSession *getSession() const;
 	CHPhase *getPhase() const; 
 	short getRound() const;

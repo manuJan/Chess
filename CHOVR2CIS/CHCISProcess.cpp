@@ -465,19 +465,19 @@ MSLWString CHCISProcess::getMatchSDescription(CHMatch *pMatch, const char * lang
 
 	CHPhase *pPhase = (CHPhase *) pMatch->getPhase();
 	if (pPhase)
-	{
-		desc += L", ";
-		if (pPhase->getIsPool())
+	{		
+		if (!pPhase->getIsPool())
+		{
+			desc += L", ";
 			desc += pPhase->getLDescription(lang);
-		else
-			desc += pPhase->getLDescription(lang);
+		}
 	}
 	if (pEvent->isTeam())
 	{
 		if (pPhase->getIsPool())
 		{
 			desc += L", ";
-			desc += pMatch->getRoundAsString(true,false).toUnicode();
+			desc += pMatch->getRoundAsString(true,false);
 		}			
 		else
 		{
@@ -492,7 +492,7 @@ MSLWString CHCISProcess::getMatchSDescription(CHMatch *pMatch, const char * lang
 		if (pPhase->getIsPool())
 		{
 			desc += L", ";
-			desc += pMatch->getRoundAsString(true,false).toUnicode();
+			desc += pMatch->getRoundAsString(true,false);
 		}
 		else 
 		{
@@ -520,9 +520,7 @@ MSLWString CHCISProcess::getMatchLDescription(CHMatch *pMatch, const char * lang
 	if (pPhase)
 	{
 		desc += L", ";
-		if (pPhase->getIsPool())
-			desc += pPhase->getLDescription(lang);
-		else
+		if (!pPhase->getIsPool())
 			desc += pPhase->getLDescription(lang);
 	}
 	if (pEvent->isTeam())
@@ -530,7 +528,7 @@ MSLWString CHCISProcess::getMatchLDescription(CHMatch *pMatch, const char * lang
 		if (pPhase->getIsPool())
 		{
 			desc += L", ";
-			desc += pMatch->getRoundAsString(true,false).toUnicode();
+			desc += pMatch->getRoundAsString(true,false);
 		}			
 		else
 		{
@@ -545,7 +543,7 @@ MSLWString CHCISProcess::getMatchLDescription(CHMatch *pMatch, const char * lang
 		if (pPhase->getIsPool())
 		{
 			desc += L", ";
-			desc += pMatch->getRoundAsString(true,false).toUnicode();
+			desc += pMatch->getRoundAsString(true,false);
 		}
 		else 
 		{

@@ -130,6 +130,7 @@ data[1012], d_al=1,	font=&Vari[507]
 data[1013], d_al=1,	font=&Vari[507] 
 data[1014], d_al=1	font=&Vari[507] 
 data[1015], d_al=1	font=&Vari[507] 
+data[1016], d_al=1	font=&Vari[507]
 data[1020], d_al=1	font=&Vari[507] 
 
 data[1500], d_al=1, font=&Vari[507]
@@ -191,7 +192,8 @@ Table 1 /* Cabecera Tabla Ranking */
 		cell[13] { call=&Vari[103], height=&Vari[5], width=&Vari[203] }
 			{ outline_upper=1 }{ outline_lower=1 }
 			{ outline_right=0 }{ outline_left =1 }
-			{ data=1002, Offset_dx=&Vari[303], Offset_dy=55 }
+			{ Run_line=103, Offset_lx=&Vari[303], Offset_ly=35 }
+			/*{ data=1002, Offset_dx=&Vari[303], Offset_dy=55 }*/
 
 		/* Cartel Win */
 		cell[14] { call=&Vari[104], height=&Vari[5], width=&Vari[204] }
@@ -358,3 +360,8 @@ Line 102  /* **** Linea de Game Points ***************************** */
 	{ Data=1014 }	/* Game   */
 	{ jump_d=&Vari[111] }
 	{ Data=1007 }   /* Points */
+
+Line 103  /* **** Linea de Game Points ***************************** */
+	{ Data=1002 }	/* Games   */
+	{ jump_d=35 }
+	{ Data=1016 }   /* Played */

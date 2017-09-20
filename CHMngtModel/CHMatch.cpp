@@ -575,20 +575,23 @@ MSLString CHMatch::getTotalResult(bool onlyRound)
 	return result1+"-"+result2;
 }
 
-MSLString CHMatch::getRoundAsString(bool lDesc/*=true*/,bool date/*=true*/)
+MSLWString CHMatch::getRoundAsString(bool lDesc/*=true*/,bool date/*=true*/, MSLWString roundDesc/*=""*/)
 {
 	if (getPhaseCode()!=SWISS_ROUND)
-		return NULLSTRING;
+		return NULLWSTRING;
 
-	char tmp[20];
-	MSLString m_roundDesc=NULLSTRING;
+	MSLWString rndLDesc = roundDesc.length()>0 ? roundDesc : L"Round";
+	MSLWString rndSDesc = roundDesc.length()>0 ? roundDesc : L"R.";
+
+	wchar_t tmp[50];
+	MSLWString m_roundDesc=NULLWSTRING;
 	if(lDesc)
-		 sprintf_s(tmp,"Round %d", getRound());
-	else sprintf_s(tmp,"R.%d", getRound());
+		swprintf_s(tmp,_T("%s %d"), rndLDesc.data(), getRound());
+	else swprintf_s(tmp,_T("%s%d"), rndSDesc.data(), getRound());
 
-	m_roundDesc=MSLString(tmp);
+	m_roundDesc=MSLWString(tmp);
 	if(date && getStartDate()!=INVALID_DATE)
-		m_roundDesc+=", "+getStartDateAsString("%a %d %b %Y").toAscii();
+		m_roundDesc+=", "+getStartDateAsString("%a %d %b %Y");
 
 	return m_roundDesc;	
 }
@@ -851,7 +854,7 @@ MSLWString CHMatch::getSDescription(const char * lang)
 			if (pPhase->getIsPool())
 			{
 				desc += L", ";
-				desc += getRoundAsString(false,false).toUnicode();
+				desc += getRoundAsString(false,false);
 				desc += L" ";
 				desc += aDef.getSMatchDescription(lang);
 				desc += L" ";
@@ -871,7 +874,7 @@ MSLWString CHMatch::getSDescription(const char * lang)
 		if (pPhase->getIsPool())
 		{
 			desc += L", ";
-			desc += getRoundAsString(false,false).toUnicode();
+			desc += getRoundAsString(false,false);
 			desc += L" ";
 			desc += aDef.getSMatchDescription(lang);
 			desc += L" ";
@@ -918,7 +921,7 @@ MSLWString CHMatch::getLDescription(const char *lang)
 			if (pPhase->getIsPool())
 			{
 				desc += L", ";
-				desc += getRoundAsString(false,false).toUnicode();
+				desc += getRoundAsString(false,false);
 				desc += L" ";
 				desc += aDef.getSMatchDescription(lang);
 				desc += L" ";
@@ -938,7 +941,7 @@ MSLWString CHMatch::getLDescription(const char *lang)
 		if (pPhase->getIsPool())
 		{
 			desc += L", ";
-			desc += getRoundAsString(false,false).toUnicode();
+			desc += getRoundAsString(false,false);
 			desc += L" ";
 			desc += aDef.getSMatchDescription(lang);
 			desc += L" ";

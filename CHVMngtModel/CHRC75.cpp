@@ -176,6 +176,7 @@ void CHRC75::initLabels()
 	m_pLis->setData(1012,getUserLabel(171)); // "SB"			
 	m_pLis->setData(1013,getUserLabel(172)); // "Game"				
 	m_pLis->setData(1015,getUserLabel(173)); // "After Round "	
+	m_pLis->setData(1016,getUserLabel(176)); // "After Round "	
 	m_pLis->setData(1020,getUserLabel(175)); // "Game "	
 	m_pLis->setData(1500,getUserLabel(174)); // "Legend"		
 }
@@ -327,6 +328,12 @@ MSLTime CHRC75::OnGetEventTime() const
 }
 MSLWString CHRC75::OnGetLine(const int lineNumber,const char *language) const
 {
+	switch( lineNumber )
+	{
+		case 2:
+			return NULLWSTRING;
+	}
+
 	return CReportTemplate::OnGetLine(lineNumber,language);
 }
 unsigned short CHRC75::OnCallbackFn( struct USR_TAB * pTableInfo )

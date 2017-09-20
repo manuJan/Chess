@@ -21,6 +21,7 @@
 ***************************************************************************************/
 #include "stdafx.h"
 #include "CHRC08.h"
+#include "CHSessionPoolRound.h"
 #include "RCHSchedule.h"
 #include "VCHSchedule.h"
 //////////////////////////////////////////////////////////////////////
@@ -42,7 +43,7 @@ CHRC08::~CHRC08()
 void CHRC08::OnBeginReport()
 {
 	m_bOkLis=m_pSchedule->loadLis();
-	m_bHeaderAsOf=true;
+	m_bHeaderAsOf=false;
 }
 
 unsigned short CHRC08::OnCallbackFn(struct USR_TAB * pTableInfo)
@@ -98,12 +99,3 @@ CReportBase::ReportReturn CHRC08::body(const int nLin)
 	return error;
 }
 
-MSLDate CHRC08::OnGetEventDate() const
-{
-	return INVALID_DATE;
-}
-
-MSLTime CHRC08::OnGetEventTime() const
-{
-	return INVALID_TIME;
-}

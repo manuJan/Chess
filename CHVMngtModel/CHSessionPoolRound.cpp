@@ -80,8 +80,8 @@ MSLWString CHSessionPoolRound::getFullEventDescription() const
 	char aux[3];
 	MSLWString full = NULLSTRING;
 	full = m_pPool->getEventLDescription();
-	full += " ";
-	full += m_pPool->getPhaseLDescription();
+	//full += " ";
+	//full += m_pPool->getPhaseLDescription();
 	if (m_pPool->getIsPool())
 	{
 		full +=	m_pPool->getNumRounds()>1?" Round ":" ";
@@ -117,6 +117,11 @@ MSLString CHSessionPoolRound::getSessionStartDate(MSLString format/*="%d %b %Y"*
 MSLDate CHSessionPoolRound::getStartDate() const
 {
 	return m_pSession->getDate();
+}
+
+MSLTime	CHSessionPoolRound::getStartTime() const
+{
+	return m_pSession->getTime();
 }
 
 GSession *CHSessionPoolRound::getSession() const
