@@ -125,6 +125,8 @@ bool VCHSchedule::build()
 			CHPool *pPool=pPhase->getIsPool()?(CHPool *)pMatchAux->getPool():(CHPool *)pPhase->getPool(0);
 			if (!pPool || !pSession)
 				continue;
+			if (!pPhase->getIsPool() && pMatchAux->getCode()>1)
+				continue;
 			CHSessionPoolRound *pAuxSesP=new CHSessionPoolRound(pSession,pPool,pMatchAux->getRound());
 			CHSessionPoolRound *pSesP=(CHSessionPoolRound *)m_colDateSessionPoolRound.find(pAuxSesP);
 			if (!pSesP)
