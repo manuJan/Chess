@@ -93,6 +93,8 @@ MSLWString CHSessionPoolRound::getFullEventDescription() const
 		else
 			full += m_pPool->getSDescription();
 	}
+	else
+		full += " " + m_pPool->getPhaseLDescription();
 
 	return full;
 }
