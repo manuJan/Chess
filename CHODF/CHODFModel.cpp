@@ -205,7 +205,7 @@ MSLWString CHODFModel::getMatchLDescription(CHMatch *pMatch, const char * lang, 
 	{
 		if (pPhase->getIsPool())
 		{
-			desc += L", ";
+			desc += L" ";
 			desc += pMatch->getRoundAsString(true,false);
 			desc += L" ";
 			desc += aDef.getSMatchDescription(lang);
@@ -230,7 +230,7 @@ MSLWString CHODFModel::getMatchLDescription(CHMatch *pMatch, const char * lang, 
 	{
 		if (pPhase->getIsPool())
 		{
-			desc += L", ";
+			desc += L" ";
 			desc += pMatch->getRoundAsString(true,false);
 			desc += L" ";
 			desc += aDef.getSMatchDescription(lang);
@@ -293,7 +293,7 @@ MSLWString CHODFModel::getMatchSDescription(CHMatch *pMatch, const char * lang, 
 		{
 			if (pPhase->getIsPool())
 			{
-				desc += L", ";
+				desc += L" ";
 				desc += pMatch->getRoundAsString(false,false);
 				desc += L" ";
 				desc += aDef.getSMatchDescription(lang);
@@ -313,7 +313,7 @@ MSLWString CHODFModel::getMatchSDescription(CHMatch *pMatch, const char * lang, 
 	{
 		if (pPhase->getIsPool())
 		{
-			desc += L", ";
+			desc += L" ";
 			desc += pMatch->getRoundAsString(false,false);
 			desc += L" ";
 			desc += aDef.getSMatchDescription(lang);
