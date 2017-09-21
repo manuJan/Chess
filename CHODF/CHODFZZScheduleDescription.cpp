@@ -110,7 +110,7 @@ void CHODFZZScheduleDescription::fillLevelPhase(XMLElement * pEl_Event,ODFZZSchL
 	while( (pLang=(GLanguage *)it())!=0 )
 	{
 		if( pLang->getActiveFlag() != 0 )
-			fillPhaseDescriptionChess(pEl_Phase->setElement(m_pEntPhaseDescription), pSchPh->getData(), pLang->get());
+			fillPhaseDescriptionChess(pEl_Phase->setElement(m_pEntPhaseDescription), pSchPh->getData(), "ENG");
 	}
 
 	//Pillamos las units
@@ -195,7 +195,7 @@ MSLWString CHODFZZScheduleDescription::getPhaseSDescription(GPhase * pPhase,MSLS
 MSLWString CHODFZZScheduleDescription::getPhaseMatchILDescription(CHMatch *pMatch, MSLString lang)
 {
 	MSLWString desc = getPhaseILDescription(pMatch->getPhase(), lang);
-	desc += L", ";
+	desc += L" ";
 	desc += pMatch->getRoundAsString(true,false);
 	return desc;
 }
@@ -203,7 +203,7 @@ MSLWString CHODFZZScheduleDescription::getPhaseMatchILDescription(CHMatch *pMatc
 MSLWString CHODFZZScheduleDescription::getPhaseMatchIDescription(CHMatch *pMatch, MSLString lang)
 {
 	MSLWString desc = getPhaseIDescription(pMatch->getPhase(), lang);
-	desc += L", ";
+	desc += L" ";
 	desc += pMatch->getRoundAsString(true,false);
 	return desc;
 }
@@ -211,7 +211,7 @@ MSLWString CHODFZZScheduleDescription::getPhaseMatchIDescription(CHMatch *pMatch
 MSLWString CHODFZZScheduleDescription::getPhaseMatchLDescription(CHMatch *pMatch, MSLString lang)
 {
 	MSLWString desc = getPhaseLDescription(pMatch->getPhase(), lang);
-	desc += L", ";
+	desc += L" ";
 	desc += pMatch->getRoundAsString(true,false);
 	return desc;
 }
@@ -219,7 +219,7 @@ MSLWString CHODFZZScheduleDescription::getPhaseMatchLDescription(CHMatch *pMatch
 MSLWString CHODFZZScheduleDescription::getPhaseMatchSDescription(CHMatch *pMatch, MSLString lang)
 {
 	MSLWString desc = getPhaseSDescription(pMatch->getPhase(), lang);
-	desc += L", ";
+	desc += L" ";
 	desc += pMatch->getRoundAsString(false,false);
 	return desc;
 }
