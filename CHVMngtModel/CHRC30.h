@@ -51,6 +51,7 @@ private:
 
 	int				getPlayers(GGroup * pGroup, MSLString gender);
 
+
 private:
 	CLis*			m_pLis;
 	MSLSortedVector	m_vData;

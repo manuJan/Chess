@@ -404,6 +404,7 @@ unsigned short CHRC30::reportBody_CallBack( struct USR_TAB *pTabInf )
 		}
 		break;
 	}
+
 	
 	return PRNALL;
 }
