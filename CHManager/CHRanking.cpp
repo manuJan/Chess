@@ -1457,7 +1457,7 @@ int compPoolResultsPhase(const MSLItem** a,const MSLItem** b)
 		if (order)
 			return order;
 	}
-
+	
 	for(short i=0;i<pEvent->getNumRankOrder();i++)
 	{
 		CHEvent::TypeRank typeRnk=pEvent->getRankOrder(i);
