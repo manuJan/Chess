@@ -63,10 +63,10 @@ protected:
 	MSLWString getDataRefWRegister				(CHRegister* pRegister, MSLString reference, MSLString lang, bool bInsert);	
 	
 	bool isTrnScheduleChange					(long idTrn);
+	void onMatchUpdated							( GTHMatch * pMatch, bool bInsert, long idTrn, bool newDatas );
 	mslToolsFcCompare getOrderPoolResults		(long idScreen, GData* pData);
 	mslToolsFcCompare getOrderReferees			(long idScreen, GData* pData);
 	
-	unsigned char getRoundStatus				(CHMatch * pMatch);
 public:
 
 	// Static variables

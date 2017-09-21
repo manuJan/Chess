@@ -181,22 +181,26 @@ unsigned char CHCISItemSchUnit::getStatusCode()
 	if (m_pData && m_pData->isA()==__GTHMATCH)
 	{
 		CHMatch* pMatch = (CHMatch*)m_pData;
-		if( pMatch && pMatch->getRound()>0 )
+		if (pMatch->getRound()>0 && pMatch->getIsPool())
 		{
 			MSLSortedVector vRdMatches = pMatch->getRoundMatches();
 			CHMatch * pM = 0;
+			bool isRunning = false;
 			unsigned char statusHigh = GMemoryDataBase::eSchedulled, statusLow = GMemoryDataBase::eProtested;
 			for(int i=0;i<int(vRdMatches.entries());i++)
 			{
 				pM = (CHMatch*)vRdMatches[i];
 				if( pM )
 				{
+					isRunning = isRunning || pM->getStatus()==GMemoryDataBase::eRunning;
 					if( pM->getStatus()>statusHigh)
 						statusHigh = pM->getStatus();
 					else if( pM->getStatus()<statusLow )
 						statusLow = pM->getStatus();
 				}
 			}
+			if (isRunning)
+				return GMemoryDataBase::eRunning;
 			if( statusLow==GMemoryDataBase::eRunning || statusLow==statusHigh )
 				return statusLow;
 			else if( statusHigh==GMemoryDataBase::eProtested )
@@ -204,6 +208,8 @@ unsigned char CHCISItemSchUnit::getStatusCode()
 			else
 				return statusLow;
 		}
+		if (!pMatch->getIsPool())
+			return pMatch->getStatus();
 	}
 	return status;
 }

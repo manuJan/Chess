@@ -315,15 +315,7 @@ void CHCISProcess::setRefSchUnitResult(GCISItemSchUnitResult * pCISScheduleUnitR
 
 void CHCISProcess::setRefMatch(GTHMatch* pMatch, MSLString lang, bool bInsert)
 {
-	setRef(pMatch, REF_START_DATE		, pMatch->getStartDateAsString("%#d %b %Y",lang),lang,bInsert);
-	setRef(pMatch, REF_START_DATE_SDESC	, msl_toUpper(pMatch->getStartDateAsString("%#d %b",lang)),lang,bInsert);
-	setRef(pMatch, REF_START_TIME		, pMatch->getStartTimeAsString("%#H:%M"),lang,bInsert);
-	setRef(pMatch, REF_END_DATE			, pMatch->getEndDateAsString("%#d %b %Y",lang),lang,bInsert);	
-	setRef(pMatch, REF_END_TIME			, pMatch->getEndTimeAsString("%#H:%M"),lang,bInsert);	
-	setRef(pMatch, REF_VENUE			, pMatch->getVenueKey(),lang,bInsert); 
-	setRef(pMatch, REF_COURT			, pMatch->getCourtKey(),lang,bInsert); 
-	setRef(pMatch, REF_MATCH_NUMBER		, pMatch->getMatchNumber(),lang,bInsert);
-	setRef(pMatch, REF_STATUS			, getRoundStatus((CHMatch*)pMatch),lang,bInsert);
+	GTHCISProcess::setRefMatch(pMatch,lang,bInsert);
 	if (pMatch->getStatus()>=CHMemoryDataBase::eUnofficial)
 		setRef(pMatch, REF_RESULT, getDataRef(pMatch, REF_RESULT, lang, bInsert),lang, bInsert);
 	else
@@ -569,6 +561,22 @@ MSLWString CHCISProcess::getMatchLDescription(CHMatch *pMatch, const char * lang
 	return desc;
 }
 
+void CHCISProcess::onMatchUpdated( GTHMatch * pMatch, bool bInsert, long idTrn, bool newDatas )
+{
+	GTHCISProcess::onMatchUpdated(pMatch,bInsert,idTrn,newDatas);
+	if (pMatch->getIsPool() && pMatch->getPool())
+	{
+		CHPool* pPool = (CHPool*) pMatch->getPool();
+		MSLSortedVector vRoundMatches;
+		pPool->getRoundMatchesVector(vRoundMatches,((CHMatch*)pMatch)->getRound());
+		if (vRoundMatches.entries())
+		{														
+			pMatch = (GTHMatch*) vRoundMatches[vRoundMatches.entries()-1];
+			CISPROCESS->updateItem(pMatch,__CISITEM_SCHEDULE_UNIT, idTrn);
+		}
+	}
+}
+
 bool CHCISProcess::isTrnScheduleChange(long idTrn)
 {
 	return (idTrn==TRN_CHANGE_MATCH_STATUS);
@@ -587,33 +595,4 @@ mslToolsFcCompare CHCISProcess::getOrderReferees(long idScreen, GData* pData)
 	return orderRefereesByPosition;
 	UNREFERENCED_PARAMETER(idScreen);
 	UNREFERENCED_PARAMETER(pData);
-}
-
-unsigned char CHCISProcess::getRoundStatus(CHMatch * pMatch)
-{
-	unsigned char status = GMemoryDataBase::eSchedulled;
-	if( pMatch && pMatch->getRound()>0 )
-	{
-		MSLSortedVector vRdMatches = pMatch->getRoundMatches();
-		CHMatch * pM = 0;
-		unsigned char statusHigh = GMemoryDataBase::eSchedulled, statusLow = GMemoryDataBase::eProtested;
-		for(int i=0;i<int(vRdMatches.entries());i++)
-		{
-			pM = (CHMatch*)vRdMatches[i];
-			if( pM )
-			{
-				if( pM->getStatus()>statusHigh)
-					statusHigh = pM->getStatus();
-				else if( pM->getStatus()<statusLow )
-					statusLow = pM->getStatus();
-			}
-		}
-		if( statusLow==GMemoryDataBase::eRunning || statusLow==statusHigh )
-			return statusLow;
-		else if( statusHigh==GMemoryDataBase::eProtested )
-			return statusHigh;
-		else
-			return statusLow;
-	}
-	return status;
 }
