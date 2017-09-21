@@ -324,7 +324,10 @@ void CHCISProcess::setRefMatch(GTHMatch* pMatch, MSLString lang, bool bInsert)
 	setRef(pMatch, REF_COURT			, pMatch->getCourtKey(),lang,bInsert); 
 	setRef(pMatch, REF_MATCH_NUMBER		, pMatch->getMatchNumber(),lang,bInsert);
 	setRef(pMatch, REF_STATUS			, getRoundStatus((CHMatch*)pMatch),lang,bInsert);
-	setRef(pMatch, REF_RESULT, getDataRef(pMatch, REF_RESULT, lang, bInsert),lang, bInsert);	
+	if (pMatch->getStatus()>=CHMemoryDataBase::eUnofficial)
+		setRef(pMatch, REF_RESULT, getDataRef(pMatch, REF_RESULT, lang, bInsert),lang, bInsert);
+	else
+		setRef(pMatch, REF_RESULT, MSLWString(L""),lang, bInsert);
 }
 
 void CHCISProcess::setRefMatchResult(GTHMatchResult* pMatchResult , MSLString lang, bool bInsert)
@@ -415,9 +418,9 @@ MSLString CHCISProcess::getDataRefMatchResult(CHMatchResult* pMatchResult, MSLSt
 	{
 		MSLString desc="";
 		CHMatchResult * pOpponent = (CHMatchResult * )pMatchResult->getOpponent();
-		if (pOpponent && pOpponent->getPoolResult())
-		{
-			CHPoolResult * pPR = (CHPoolResult*) pOpponent->getPoolResult();
+		CHPoolResult * pPR = pOpponent ? (CHPoolResult*) pOpponent->getPoolResult() : 0;
+		if (pPR && pPR->getRank()!=0)
+		{			
 			desc = pPR->getRank() ? "(" + TOSTRING(pPR->getRank(),"") + ") " : "";
 		}
 				
@@ -526,9 +529,11 @@ MSLWString CHCISProcess::getMatchLDescription(CHMatch *pMatch, const char * lang
 	CHPhase *pPhase = (CHPhase *) pMatch->getPhase();
 	if (pPhase)
 	{
-		desc += L", ";
 		if (!pPhase->getIsPool())
+		{
+			desc += L", ";
 			desc += pPhase->getLDescription(lang);
+		}
 	}
 	if (pEvent->isTeam())
 	{
