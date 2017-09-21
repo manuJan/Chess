@@ -307,8 +307,7 @@ void CHCISPaint::paintRoundMatchResults(long idScreen, long idLayer, short y, CH
 		CISAPP->setText	(idLayer,COL_RES_WHITE_POINTS,y, getRefCode(pWhite,REF_PREV_PTS));
 	}
 
-	if (pMatch->getStatus()>=CHMemoryDataBase::eUnofficial)
-		CISAPP->setText	(idLayer,COL_RES_RESULT,y, getRefCode(pMatch,REF_RESULT));
+	CISAPP->setText	(idLayer,COL_RES_RESULT,y, getRefCode(pMatch,REF_RESULT));
 		
 	if (pBlack)
 	{

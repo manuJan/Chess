@@ -91,10 +91,15 @@ void CHTVApp::loadRSCLibrary()
 
 MSLString CHTVApp::getRSC_TV(const GData * pData, int typeTraslate)
 {
+	if (m_hModuleRSC==0)
+		m_hModuleRSC = CHMemoryDataBase::getHModuleRSC();
+
 	return CHMemoryDataBase::getRSC_Client(m_hModuleRSC,pData,typeTraslate,APP_TV);
 }
 
 MSLString CHTVApp::getRSC_Field(MSLString atosRSC, int typeTraslate)
 {
+	if (m_hModuleRSC==0)
+		m_hModuleRSC = CHMemoryDataBase::getHModuleRSC();
 	return CHMemoryDataBase::getRSCField_Client(m_hModuleRSC, atosRSC, typeTraslate);
 }

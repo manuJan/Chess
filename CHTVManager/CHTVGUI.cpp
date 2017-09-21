@@ -711,9 +711,9 @@ bool CHTVGUI::validateDate(MSLDate aDate)
 {
 	if( !aDate.isValid() ) 
 		return false;
-	
-	return true; // da igual el día seleccionado en el interfaz.
-	//return aDate == this->getGUIDate();
+	MSLDate guiDate = this->getGUIDate();
+	//return true; // da igual el día seleccionado en el interfaz.
+	return guiDate.isValid() && aDate == guiDate;
 }
 
 bool CHTVGUI::validateSession(const short acc)

@@ -174,3 +174,36 @@ short CHCISItemSchUnit::getCourtCode()
 	}
 	return 0;
 }
+
+unsigned char CHCISItemSchUnit::getStatusCode()
+{
+	unsigned char status = GMemoryDataBase::eSchedulled;
+	if (m_pData && m_pData->isA()==__GTHMATCH)
+	{
+		CHMatch* pMatch = (CHMatch*)m_pData;
+		if( pMatch && pMatch->getRound()>0 )
+		{
+			MSLSortedVector vRdMatches = pMatch->getRoundMatches();
+			CHMatch * pM = 0;
+			unsigned char statusHigh = GMemoryDataBase::eSchedulled, statusLow = GMemoryDataBase::eProtested;
+			for(int i=0;i<int(vRdMatches.entries());i++)
+			{
+				pM = (CHMatch*)vRdMatches[i];
+				if( pM )
+				{
+					if( pM->getStatus()>statusHigh)
+						statusHigh = pM->getStatus();
+					else if( pM->getStatus()<statusLow )
+						statusLow = pM->getStatus();
+				}
+			}
+			if( statusLow==GMemoryDataBase::eRunning || statusLow==statusHigh )
+				return statusLow;
+			else if( statusHigh==GMemoryDataBase::eProtested )
+				return statusHigh;
+			else
+				return statusLow;
+		}
+	}
+	return status;
+}
