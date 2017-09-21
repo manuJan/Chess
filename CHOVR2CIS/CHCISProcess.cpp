@@ -418,7 +418,7 @@ MSLString CHCISProcess::getDataRefMatchResult(CHMatchResult* pMatchResult, MSLSt
 		if (pOpponent && pOpponent->getPoolResult())
 		{
 			CHPoolResult * pPR = (CHPoolResult*) pOpponent->getPoolResult();
-			desc = "(" + TOSTRING(pPR->getRank(),"") + ") ";
+			desc = pPR->getRank() ? "(" + TOSTRING(pPR->getRank(),"") + ") " : "";
 		}
 				
 		desc += pMatchResult->getPointsAsString();
