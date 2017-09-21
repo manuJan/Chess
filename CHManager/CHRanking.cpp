@@ -42,8 +42,8 @@ bool poolResultsRanked(const MSLItem* p,const void *n)
 	if (!pPoolResult)
 		return false;
 
-	if (!pPoolResult->getRegister())
-		return false;
+	//if (!pPoolResult->getRegister())
+	//	return false;
 
 	if (pPoolResult->getMatchesPlayed())
 		return true;
@@ -467,6 +467,11 @@ int orderPoolResults(const MSLItem** a,const MSLItem** b)
 {
 	CHPoolResult * pA=((CHPoolResult *)(*a));
 	CHPoolResult * pB=((CHPoolResult *)(*b));
+
+	if (pA->getRegister() && !pB->getRegister())
+		return -1;
+	if (!pA->getRegister() && pB->getRegister())
+		return 1;
 	
 	CHEvent *pEvent=(CHEvent*)pA->getEvent();
 
@@ -706,6 +711,11 @@ int orderPoolResults2Ties(const MSLItem** a,const MSLItem** b)
 	CHPoolResult * pA=((CHPoolResult *)(*a));
 	CHPoolResult * pB=((CHPoolResult *)(*b));
 	
+	if (pA->getRegister() && !pB->getRegister())
+		return -1;
+	if (!pA->getRegister() && pB->getRegister())
+		return 1;
+
 	CHEvent *pEvent=(CHEvent*)pA->getEvent();
 
 	for(short i=0;i<pEvent->getNumRankOrder();i++)
@@ -907,6 +917,11 @@ int compPoolResults(const MSLItem** a,const MSLItem** b)
 	CHPoolResult * pA=((CHPoolResult *)(*a));
 	CHPoolResult * pB=((CHPoolResult *)(*b));
 	
+	if (pA->getRegister() && !pB->getRegister())
+		return -1;
+	if (!pA->getRegister() && pB->getRegister())
+		return 1;
+
 	CHEvent *pEvent=(CHEvent*)pA->getEvent();
 
 	for(short i=0;i<pEvent->getNumRankOrder();i++)
@@ -1146,6 +1161,11 @@ int compPoolResults2Ties(const MSLItem** a,const MSLItem** b)
 	CHPoolResult * pA=((CHPoolResult *)(*a));
 	CHPoolResult * pB=((CHPoolResult *)(*b));
 	
+	if (pA->getRegister() && !pB->getRegister())
+		return -1;
+	if (!pA->getRegister() && pB->getRegister())
+		return 1;
+
 	CHEvent *pEvent=(CHEvent*)pA->getEvent();
 
 	for(short i=0;i<pEvent->getNumRankOrder();i++)
@@ -1344,6 +1364,11 @@ int orderPoolResultsPhase(const MSLItem** a,const MSLItem** b)
 	CHPoolResult * pPA=((CHPoolResult *)(*a));
 	CHPoolResult * pPB=((CHPoolResult *)(*b));
 
+	if (pPA->getRegister() && !pPB->getRegister())
+		return -1;
+	if (!pPA->getRegister() && pPB->getRegister())
+		return 1;
+
 	CHEvent *pEvent=(CHEvent*)pPA->getEvent();
 
 	int order = pPA->getPhaseOrder() - pPB->getPhaseOrder();
@@ -1412,6 +1437,11 @@ int compPoolResultsPhase(const MSLItem** a,const MSLItem** b)
 {
 	CHPoolResult * pPA=((CHPoolResult *)(*a));
 	CHPoolResult * pPB=((CHPoolResult *)(*b));
+
+	if (pPA->getRegister() && !pPB->getRegister())
+		return -1;
+	if (!pPA->getRegister() && pPB->getRegister())
+		return 1;
 
 	CHEvent *pEvent=(CHEvent*)pPA->getEvent();
 
