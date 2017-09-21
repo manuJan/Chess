@@ -31,7 +31,7 @@ class CHMngtModelExport CHEvent : public GTHEvent
 	MSLDECLARE_ITEM(CHEvent)
 
 	enum TypeEvent {eNone=0, eClassic=1, eRapid=2, eBlitz=3};	
-	enum TypeRank  {eEmpty=0, eQualitative=1, ePoints=2, eMatchPoints=3, eDirectEncounter=4, eKoyaTieBreak=5, eSolkoff=6, eSonneBerger=7, eSolkoffCutLowest=8, eSolkoffCutLowestAndHighest=9, eProgressiveScore=10, eRating=11, eTeamMatchesWon=12, eMatchesWon=13, eMatchesDrawm=14,eTeamPointsWon=15  };
+	enum TypeRank  {eEmpty=0, eQualitative=1, ePoints=2, eMatchPoints=3, eDirectEncounter=4, eKoyaTieBreak=5, eSolkoff=6, eSonneBerger=7, eSolkoffCutLowest=8, eSolkoffCutLowestAndHighest=9, eProgressiveScore=10, eRating=11, eTeamMatchesWon=12, eMatchesWon=13, eMatchesDrawm=14,eTeamPointsWon=15, eAvgOppRating=16  };
 	
 public:
 	// Constructors/Destructor

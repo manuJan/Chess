@@ -543,7 +543,7 @@ int orderPoolResults(const MSLItem** a,const MSLItem** b)
 
 				break;
 			}
-			case CHEvent::eRating:
+			case CHEvent::eAvgOppRating:
 			{
 				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
 				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
@@ -554,6 +554,20 @@ int orderPoolResults(const MSLItem** a,const MSLItem** b)
 				int order = orderPoints(pointsA,pointsB);
 				if (order)
 					return order;
+				break;
+			}
+			case CHEvent::eRating:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				int pointsA = pOrigPoolResA->getInscriptionRating();
+				int pointsB = pOrigPoolResB->getInscriptionRating();
+
+				int order=pointsB - pointsA;
+				if(order)
+					return order;
+
 				break;
 			}
 			case CHEvent::eSolkoff:
@@ -801,7 +815,7 @@ int orderPoolResults2Ties(const MSLItem** a,const MSLItem** b)
 
 				break;
 			}
-			case CHEvent::eRating:
+			case CHEvent::eAvgOppRating:
 			{
 				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
 				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
@@ -812,6 +826,20 @@ int orderPoolResults2Ties(const MSLItem** a,const MSLItem** b)
 				int order = orderPoints(pointsA,pointsB);
 				if (order)
 					return order;
+				break;
+			}
+			case CHEvent::eRating:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				int pointsA = pOrigPoolResA->getInscriptionRating();
+				int pointsB = pOrigPoolResB->getInscriptionRating();
+
+				int order=pointsB - pointsA;
+				if(order)
+					return order;
+
 				break;
 			}
 			case CHEvent::eSolkoff:
@@ -954,7 +982,7 @@ int compPoolResults(const MSLItem** a,const MSLItem** b)
 
 				break;
 			}
-			case CHEvent::eRating:
+			case CHEvent::eAvgOppRating:
 			{
 				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
 				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
@@ -965,6 +993,20 @@ int compPoolResults(const MSLItem** a,const MSLItem** b)
 				int order = orderPoints(pointsA,pointsB);
 				if (order)
 					return order;
+				break;
+			}
+			case CHEvent::eRating:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				int pointsA = pOrigPoolResA->getInscriptionRating();
+				int pointsB = pOrigPoolResB->getInscriptionRating();
+
+				int order=pointsB - pointsA;
+				if(order)
+					return order;
+
 				break;
 			}
 			case CHEvent::eSolkoff:
@@ -1210,7 +1252,7 @@ int compPoolResults2Ties(const MSLItem** a,const MSLItem** b)
 
 				break;
 			}
-			case CHEvent::eRating:
+			case CHEvent::eAvgOppRating:
 			{
 				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
 				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
@@ -1221,6 +1263,20 @@ int compPoolResults2Ties(const MSLItem** a,const MSLItem** b)
 				int order = orderPoints(pointsA,pointsB);
 				if (order)
 					return order;
+				break;
+			}
+			case CHEvent::eRating:
+			{
+				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
+				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
+
+				int pointsA = pOrigPoolResA->getInscriptionRating();
+				int pointsB = pOrigPoolResB->getInscriptionRating();
+
+				int order=pointsB - pointsA;
+				if(order)
+					return order;
+
 				break;
 			}
 			case CHEvent::eSolkoff:

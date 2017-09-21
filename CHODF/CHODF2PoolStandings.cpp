@@ -87,10 +87,12 @@ void CHODF2PoolStandings::fillSportResult(MSLItem * pResult,XMLElement * pEl_Res
 	CHPoolResult * pPR = (CHPoolResult*)pResult;
 
 	if(pPR->getQualitativeCode()==DSQ)
-	{
+	{		
 		pEl_Result->setAttribute("ResultType","IRM_POINTS");
 		pEl_Result->setAttribute("IRM",DSQ);
 	}
+	
+	pEl_Result->setAttribute("Result",pPR->getPointsFStr());	
 }
 
 void CHODF2PoolStandings::fillVectorComposition(MSLItem * pCompetitor,MSLSortedVector & vComposition)

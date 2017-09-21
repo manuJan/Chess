@@ -175,7 +175,7 @@ void CHEventCriteriaGUIEx::fillGridEventCriteria()
 			colTypes.insert(new CHRankOrder(short(i+1),rankType));
 	}
 
-	for(short i=CHEvent::eQualitative ;i <=CHEvent::eTeamPointsWon ; i++)
+	for(short i=CHEvent::eQualitative ;i <=CHEvent::eAvgOppRating ; i++)
 	{
 		CHRankOrder aRankOrder(0,short(i));
 
@@ -441,6 +441,8 @@ MSLString CHEventCriteriaGUIEx::getTypeCriteria(short typeCrit)
 			return "Matches drawn";
 		case CHEvent::eTeamPointsWon:
 			return "Team points won";
+		case CHEvent::eAvgOppRating:
+			return "Avg. Opp Rating";
 	}
 	return "";
 }
