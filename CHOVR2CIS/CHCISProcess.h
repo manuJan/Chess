@@ -65,7 +65,8 @@ protected:
 	bool isTrnScheduleChange					(long idTrn);
 	mslToolsFcCompare getOrderPoolResults		(long idScreen, GData* pData);
 	mslToolsFcCompare getOrderReferees			(long idScreen, GData* pData);
-
+	
+	unsigned char getRoundStatus				(CHMatch * pMatch);
 public:
 
 	// Static variables

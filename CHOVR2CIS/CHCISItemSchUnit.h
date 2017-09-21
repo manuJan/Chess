@@ -40,6 +40,7 @@ public:
 	virtual MSLWString		getScoreA(const char * lang=0);
 	virtual MSLWString		getScoreB(const char * lang=0);
 	virtual short			getCourtCode();		
+	virtual unsigned char	getStatusCode();
 
 	virtual int				getTypeBracket();
 	virtual bool			getPaintMatchBracket();

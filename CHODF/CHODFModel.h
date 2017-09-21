@@ -50,5 +50,6 @@ public:
 	bool hasMatchesInSession		(GSession* pSession, MSLSortedVector &vMatches);
 	CHEvent * getEventSession		(GSession* pSession);
 	void fillMembers				(CHMatchResult* pMatchResult, MSLSortedVector &vMembers);
+	MSLString getCourtODFString		(CHMatch *pMatch);
 };
 
