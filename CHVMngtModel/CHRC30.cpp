@@ -26,7 +26,25 @@
 #include "..\CHMngtModel\CHEvent.h"
 #include "..\CHMngtModel\CHInscription.h"
 #include "..\CHMngtModel\CHRegister.h"
+#include "..\CHMngtModel\CHMember.h"
 #include "CHRLegends.h"
+
+static bool selectGroupInscriptions(const MSLItem* p,const void *n)
+{
+	CHInscription *pInsc = (CHInscription *)p;	
+	if( !pInsc )
+		return false;
+
+	GGroup * pGroup = (GGroup*)n;
+	if (!pGroup)
+		return false;
+
+	if( pInsc->getGroup() == pGroup->getGroup() )
+		return true;
+
+	return false;
+	UNREFERENCED_PARAMETER(n);
+}
 
 static
 int orderEntriesByGroupEventAndLDesc(const MSLItem** a, const MSLItem** b)
@@ -212,9 +230,9 @@ CReportBase::ReportReturn CHRC30::OnBody()
 
 				m_countries++;
 
-				m_t_men	+= m_men;
+				/*m_t_men	+= m_men;
 				m_t_women += m_women;
-				m_t_total += m_total;
+				m_t_total += m_total;*/
 				
 				for (int j=0;j<m_numEvents;j++)
 					m_t_division[j]+=m_division[j];
@@ -228,16 +246,16 @@ CReportBase::ReportReturn CHRC30::OnBody()
 			}
 
 			m_pGroup	= pCurrentGroup;
-			if( pCurrentIns->getSex() == MAN )
+			/*if( pCurrentIns->getSex() == MAN )
 				m_men++;
 			else if( pCurrentIns->getSex() == WOMAN )
-				m_women++;
+				m_women++;*/
 
 			int indexEvent = m_vEvents.index(pCurrentIns->getEvent());
 			if (indexEvent>=0)
 				m_division[indexEvent]++;
 
-			m_total=m_men+m_women;
+			//m_total=m_men+m_women;
 		}
 	}
 
@@ -365,15 +383,21 @@ unsigned short CHRC30::reportBody_CallBack( struct USR_TAB *pTabInf )
 				}
 				break;
 			case 2: // Men
-				m_pLis->setData(212,m_men);
+				m_men = getPlayers(m_pGroup, MAN);
+				m_t_men+=m_men;
+				m_pLis->setData(212, m_men);
 				break;
 			case 3: // Women				
-				m_pLis->setData(213,m_women);
+				m_women = getPlayers(m_pGroup, WOMAN);
+				m_t_women+=m_women;
+				m_pLis->setData(213, m_women);
 				break;
 			case 4:
 				m_pLis->setData(214,m_division[pTabInf->C_Count-1]);
 				break;
 			case 5: // Totals
+				m_total=m_men+m_women;
+				m_t_total+=m_total;
 				m_pLis->setData(215,m_total);
 				break;
 			}
@@ -410,7 +434,7 @@ unsigned short CHRC30::reportTotals_CallBack( struct USR_TAB *pTabInf )
 					m_pLis->setData(311,tmp);
 				}
 				break;
-			case 2: // Men
+			case 2: // Men				
 				m_pLis->setData(312,m_t_men);
 				break;
 			case 3: // Women
@@ -428,4 +452,46 @@ unsigned short CHRC30::reportTotals_CallBack( struct USR_TAB *pTabInf )
 	}
 	
 	return PRNALL;
+}
+
+int	CHRC30::getPlayers(GGroup * pGroup, MSLString gender)
+{
+	MSLSet colGroupInscriptions = CHMemoryDataBase::getCol(__CHINSCRIPTION).select(selectGroupInscriptions, pGroup);
+		
+	MSLSortedVector vInscriptions =	MSLSortedVector(colGroupInscriptions);
+	MSLSortedVector vRegisters;
+	for (short i=0;i<vInscriptions.entries();i++)
+	{
+		CHInscription* pIns = (CHInscription*) vInscriptions[i];
+		CHEvent *pEvent=(CHEvent*)pIns->getEvent();
+		if (pEvent->getSex()!=gender)
+			continue;
+
+		if (pIns->getType()==GRegister::individual)
+		{
+			CHRegister* pReg = (CHRegister*) pIns->getRegister();
+			if (pReg)
+			{
+				if (!vRegisters.find(pReg))
+					vRegisters.insert(pReg);			
+			}
+		}
+		else
+		{
+			MSLSortedVector vMembers;
+			pIns->getMembersVector(vMembers);
+			for (short j=0;j<vMembers.entries();j++)
+			{
+				CHMember* pMember = (CHMember*)vMembers[j];
+				if (pMember->getRegister())
+				{
+					CHRegister* pReg = (CHRegister*) pMember->getRegister();
+					if (!vRegisters.find(pReg))
+						vRegisters.insert(pReg);
+				}
+			}
+		}
+	}
+
+	return vRegisters.entries();
 }

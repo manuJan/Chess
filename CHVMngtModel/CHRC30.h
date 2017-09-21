@@ -49,6 +49,8 @@ private:
 	unsigned short	reportBody_CallBack		( struct USR_TAB *pTabInf );
 	unsigned short	reportTotals_CallBack	( struct USR_TAB *pTabInf );
 
+	int				getPlayers(GGroup * pGroup, MSLString gender);
+
 private:
 	CLis*			m_pLis;
 	MSLSortedVector	m_vData;
