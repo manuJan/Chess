@@ -226,7 +226,7 @@ void CHODF2Results::fillSportXXVenueDescription(GVenue * pVenue,XMLElement * pEl
 
 	CHMatch * pMatch=(CHMatch*)m_pData;
 	
-	//pEl_VenueDesc->setAttribute("Location",CHODFMODEL->getCourtODFString(pMatch));
+	pEl_VenueDesc->setAttribute("Location",CHODFMODEL->getCourtODFString(pMatch));
 	//pEl_VenueDesc->setAttribute("LocationName",pMatch->getCourtLDescription());
 }
 

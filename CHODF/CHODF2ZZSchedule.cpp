@@ -42,7 +42,25 @@ ODF2ZZSchLine * CHODF2ZZSchedule::createSchLine(GData * pData)
 	if (pMatch->getSubMatch())
 		return 0;
 
-	return ODF2THZZSchedule::createSchLine(pData);
+	ODF2OrderBase::TypeAction action = m_pFile->getAction();
+	ODF2ZZSchLine * pLine = new ODF2ZZSchLine(pMatch,action);
+
+	pLine->setPhaseType("3");	//Competition
+	pLine->setUnitCode  (ODF2THModel::getRSC(pMatch));
+	pLine->setUnitNumber(TOSTRING(pMatch->getMatchNumber()));
+	pLine->setUnitStatus(pMatch->getStatus()); 
+	pLine->setUnitSDate (pMatch->getStartDate());
+	pLine->setUnitSTime (pMatch->getStartTime());
+	pLine->setUnitEDate (pMatch->getEndDate());
+	pLine->setUnitETime (pMatch->getEndTime());
+	pLine->setUnitEstEDate(true);
+	pLine->setUnitMedal(ODF2THModel::getTHModel()->isMedalsMatch(pMatch));
+	pLine->setUnitVenue(pMatch->getVenueCode());
+	pLine->setUnitLocation(CHODFMODEL->getCourtODFString((CHMatch *)pMatch));//GMemoryDataBase::getMainLocationCourtCode(pMatch->getVenueCode()));
+	pLine->setSessionCode(pMatch->getSessionLDescription().toAscii());
+
+	return pLine;
+/*	return ODF2THZZSchedule::createSchLine(pData);*/
 }
 
 MSLWString CHODF2ZZSchedule::getItemNameDescription(GData * pData,const char * language/*=0*/)

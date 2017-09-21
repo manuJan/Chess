@@ -392,3 +392,13 @@ void CHODFModel::fillMembers(CHMatchResult* pMatchResult, MSLSortedVector &vMemb
 	vMembers.setFcCompare(orderMatchMembersByName);
 	vMembers.sort();	
 }
+
+MSLString CHODFModel::getCourtODFString(CHMatch *pMatch)
+{
+	if (!pMatch)
+		return "";
+	MSLString sLoc;
+	sLoc.format("C%02d",pMatch->getCourtCode());
+	return sLoc;
+}
+
