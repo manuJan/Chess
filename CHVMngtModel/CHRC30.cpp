@@ -269,10 +269,7 @@ CReportBase::ReportReturn CHRC30::OnBody()
 		return error;
 
 	m_countries++;
-	m_t_men	+= m_men;
-	m_t_women += m_women;
-	m_t_total += m_total;
-
+	
 	for (int j=0;j<m_numEvents;j++)
 		m_t_division[j]+=m_division[j];
 
@@ -378,7 +375,9 @@ unsigned short CHRC30::reportBody_CallBack( struct USR_TAB *pTabInf )
 					tmp+= m_pGroup->getGroup().toUnicode();
 					tmp+= L" - ";
 					tmp+= m_pGroup->getLDescription(m_language);
-
+					m_men=0;
+					m_women=0;
+					m_total=0;
 					m_pLis->setData(211,tmp);
 				}
 				break;
