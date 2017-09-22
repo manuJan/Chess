@@ -35,7 +35,7 @@ MSLString	CHLoadRankings::processFile(MSLWString path)
 	MSLString content = bin.buffer();
 	MSLString line; MSLString tab = "\n";
 	short idx = 1;
-	while ( content.tok(line,tab,content) )
+	while ( content.tok(tab,line,content) )
 	{
 		if (!processLine(line, idx))
 			info += "Error on line " + TOSTRING(idx) + "\n";
@@ -61,13 +61,13 @@ void		CHLoadRankings::doOut()
 bool		CHLoadRankings::processLine(MSLString& line, short rkPo)
 {
 	// TAB file
-	//rk1,seed2,categ3,name4,irtg5,NOC6,pts7,RES8,BH9,BH10,vict11,SB12
-	MSLString field; MSLString tab = "\n";
+	//rk1,seed2,categ3,name4,NOC5,irtg6,pts7,RES8,BH9,BH10,vict11,SB12
+	MSLString field; MSLString tab = "\t";
 	short count = 1;
-	CHPoolResult* pRes;
+	CHPoolResult* pRes = 0;
 	short rank;
 	double buchholtz1, buchholtz2,sonneborn;
-	while ( line.tok(field,tab,line) )
+	while ( line.tok(tab,field,line) )
 	{
 		switch (count)
 		{
@@ -88,7 +88,7 @@ bool		CHLoadRankings::processLine(MSLString& line, short rkPo)
 				pRes = findResult(seed,true);
 				break;
 			}
-		case 5:
+		case 6:
 			{
 				if (!pRes)
 					pRes = findResult((short)atoi(field),false);
@@ -96,7 +96,7 @@ bool		CHLoadRankings::processLine(MSLString& line, short rkPo)
 					return false;
 				break;
 			}
-		case 6:
+		case 5:
 			{
 				if (pRes->getGroup()!=field)
 					return false;
@@ -126,10 +126,14 @@ bool		CHLoadRankings::processLine(MSLString& line, short rkPo)
 				break;
 			}
 		}
+		count++;
 	}
-	pRes->setRank(rank);
-	pRes->setRankPo(rkPo);
-	return true;
+	if (pRes)
+	{
+		pRes->setRank(rank);
+		pRes->setRankPo(rkPo);
+	}
+	return pRes!=0;
 }
 
 CHPoolResult*	CHLoadRankings::findResult(short value, bool isSeed)

@@ -177,7 +177,7 @@ void CHRankingsGUI::onClick(long id,LPARAM lParam)
 	{
 		CHLoadRankings pLR(m_pPool);
 		pLR.browseFile(getHWnd());
-
+		fillGridPoolResultsCH();
 	}
 	return GTHManagerGUI::onClick(id,lParam);
 }
