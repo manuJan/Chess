@@ -15,8 +15,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CHOVR2CIS", "CHOVR2CIS\CHOV
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CHVMngtModel", "CHVMngtModel\CHVMngtModel.vcxproj", "{8771DED8-83EC-4C43-8245-D481D420C4C9}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GUITHManager", "..\..\ovr-general\general\gui\GUITHManager\GUITHManager2.vcxproj", "{3EB31230-77D0-4511-B537-1B94A1F68EA1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -51,10 +49,6 @@ Global
 		{8771DED8-83EC-4C43-8245-D481D420C4C9}.Debug|Win32.Build.0 = Debug|Win32
 		{8771DED8-83EC-4C43-8245-D481D420C4C9}.Release|Win32.ActiveCfg = Release|Win32
 		{8771DED8-83EC-4C43-8245-D481D420C4C9}.Release|Win32.Build.0 = Release|Win32
-		{3EB31230-77D0-4511-B537-1B94A1F68EA1}.Debug|Win32.ActiveCfg = Debug|Win32
-		{3EB31230-77D0-4511-B537-1B94A1F68EA1}.Debug|Win32.Build.0 = Debug|Win32
-		{3EB31230-77D0-4511-B537-1B94A1F68EA1}.Release|Win32.ActiveCfg = Release|Win32
-		{3EB31230-77D0-4511-B537-1B94A1F68EA1}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
