@@ -159,7 +159,7 @@ void CHEventControlOperations::setScore(long idEvent,CHMatch *pMatch)
 			}
 		}
 		
-		if (MSLMsgBox( m_pGUIEx->getHWnd() ,"Do you want to assign this incidence to the pool results?", GUI_ICO_WARNING, GUI_MB_YESNO, "CHManager Warning")==IDYES)			
+		/*if (MSLMsgBox( m_pGUIEx->getHWnd() ,"Do you want to assign this incidence to the pool results?", GUI_ICO_WARNING, GUI_MB_YESNO, "CHManager Warning")==IDYES)			
 		{
 			if((pPoolResult1) && (forfeit==1 || forfeit==3))
 			{
@@ -169,9 +169,7 @@ void CHEventControlOperations::setScore(long idEvent,CHMatch *pMatch)
 			
 			if((pPoolResult2) && (forfeit==2 || forfeit==3))
 				pPoolResult2->setQualitative(FO);
-						
-			
-		}
+		}*/
 	}
 	else
 	{
