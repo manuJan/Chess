@@ -869,7 +869,11 @@ GScore CHPoolResult::getPointsSO(short nRound/*=0*/,bool onlyRound/*=false*/)
 		{
 
 			CHMatchResult * pMatchResOpp=(CHMatchResult *)pMatchResult->getOpponent();
-			if ( pMatchResOpp && pMatchResOpp->getBye() )
+			if ( pMatchResult && pMatchResult->getBye() )
+			{
+				points += 0.5;
+			}
+			else if ( pMatchResOpp && pMatchResOpp->getBye() )
 			{				
 				points += 0.5;
 			}
@@ -885,7 +889,7 @@ GScore CHPoolResult::getPointsSO(short nRound/*=0*/,bool onlyRound/*=false*/)
 			{
 				points += 0.5;
 			}
-			else			
+			else
 				points += pMatchResult->getPointsSO();					
 		}
 	}
@@ -943,39 +947,9 @@ GScore CHPoolResult::getSolkOffF(short nRound)
 			pMatchResOpp=(CHMatchResult *)pMatchRes->getOpponent();
 			if (pMatchResOpp)
 				pPResOp=(CHPoolResult *)(pMatchResOpp->getPoolResult());
-
-			// Oponente bye
-			/*if ( pMatchResOpp && 
-				 pMatchResOpp->getBye() )
-			{
-				// calculo oponente virtual
-				// points += 0.5*nRoundsPlayed*pEvent->getTeamMatches();
-				// points += 0.5;
-				points += 0.5;
-				continue;
-			}
-			else if (!pMatchResOpp || !pPResOp || !pMatchResOpp->getInscription())
-			{
-				// calculo oponente virtual
-				// Svon = SPR + (1 - SfPR) + 0.5 * (n-R)
-				// points += 0.5*nRoundsPlayed*pEvent->getTeamMatches();
-				points += 0.5 * ( pMatch->getRound() );				
-				continue;
-			}
-			// ganador por forfeit
-			else if ( pMatchResOpp->getQualitativeCode()==FO )
-			{
-				points += 0.5;
-				continue;
-			}
-			else if ( pMatchRes->getQualitativeCode()==FO )
-			{
-				points += 0.0;
-				continue;
-			}*/
-
+			
 			if (!pMatchResOpp || 
-				 pMatchResOpp->getBye() || 
+				 pMatchResOpp->getBye() ||
 				 pMatchResOpp->getQualitativeCode()==FO ||
 				 !pMatchResOpp->getInscription() )
 			{
@@ -1010,14 +984,73 @@ GScore CHPoolResult::getSolkOffF(short nRound)
 					}
 				}
 
-				points += progressivePoints + ( pointsW - pointsFO) + 0.5 * ( nTotalRounds - pMatch->getRound());
+				points += 0.5;//  progressivePoints + ( pointsW - pointsFO) + 0.5 * ( nTotalRounds - pMatch->getRound());
 				progressivePoints+=pMatchRes->getPoints();
 				continue;
-			}
-
+			}				
 
 			if (pPResOp)
-				points += float(pPResOp->getPointsSO(maxRound));			
+			{	
+				CHMatch * pMatch = 0;
+				CHMatchResult * pMatchResult = 0;
+				MSLSortedVector vMatchResults;
+				pPResOp->getMatchResultsVector(vMatchResults);				
+				for(short j=0 ; j<vMatchResults.entries() ; j++)
+				{
+					pMatchResult = (CHMatchResult*)vMatchResults[j];
+									
+					pMatch = (CHMatch*) pMatchResult->getMatch();
+					if (!pMatch)
+						continue;
+
+					if(pMatch->isTeam() && !pMatch->getSubMatch())
+						continue;
+
+					if( pMatch && 
+						pMatch->getStatus() >= CHMemoryDataBase::eUnofficial )
+					{
+
+						CHMatchResult * pMatchResOpp=(CHMatchResult *)pMatchResult->getOpponent();
+
+						if (pMatchRes == pMatchResOpp)
+						{
+							if (pMatchResOpp && pMatchResOpp->getQualitativeCode()==FO)
+							{
+								points += 1.0;
+							}							
+							else
+							{
+								points += pMatchResult->getPointsSO();
+							}
+						}
+						else if ( pMatchResult && pMatchResult->getBye() )
+						{
+							points += 0.5;
+						}
+						else if ( pMatchResOpp && pMatchResOpp->getBye() )
+						{				
+							points += 0.5;
+						}
+						else if (pMatchResOpp && !pMatchResOpp->getInscription() ) 
+						{				
+							points += 0.5;
+						}			
+						else if (pMatchResOpp && pMatchResOpp->getQualitativeCode()==FO)
+						{
+							points += 0.5;
+						}
+						else if (pMatchResult && pMatchResult->getQualitativeCode()==FO)
+						{
+							points += 0.5;
+						}
+						else
+							points += pMatchResult->getPointsSO();					
+					}
+				}
+
+
+				//points += float(pPResOp->getPointsSO(maxRound));			
+			}
 
 			progressivePoints+=pMatchRes->getPoints();
 		}		
@@ -1063,7 +1096,6 @@ GScore CHPoolResult::getMedianSolkOffF(short nRound/*=0*/, short cutHighest/*=0*
 	short maxRound=!nRound?pPool->getNumRoundsPlayed():nRound;
 	short nTotalRounds=pPool->getNumRounds();
 
-	GScore points = 0.0;
 	GScore progressivePoints = 0.0;
 	CHMatch * pMatch = 0;
 	CHMatchResult * pMatchRes = 0;
@@ -1094,7 +1126,7 @@ GScore CHPoolResult::getMedianSolkOffF(short nRound/*=0*/, short cutHighest/*=0*
 				pPResOp=(CHPoolResult *)(pMatchResOpp->getPoolResult());
 
 			if (!pMatchResOpp || 
-				 pMatchResOpp->getBye() || 
+				 pMatchResOpp->getBye() || 				 
 				 pMatchResOpp->getQualitativeCode()==FO ||
 				 !pMatchResOpp->getInscription() )
 			{
@@ -1106,7 +1138,7 @@ GScore CHPoolResult::getMedianSolkOffF(short nRound/*=0*/, short cutHighest/*=0*
 				else if (pMatchResOpp->getBye())
 					pointsFO = 1.0;
 
-				GScore pts = progressivePoints + ( 1 - pointsFO) + 0.5 * ( nTotalRounds - pMatch->getRound());
+				GScore pts = 0.5;//progressivePoints + ( 1 - pointsFO) + 0.5 * ( nTotalRounds - pMatch->getRound());
 				//points += pts;
 				progressivePoints+=pMatchRes->getPoints();
 				vScores.insert(new GScore(pts));
@@ -1116,15 +1148,73 @@ GScore CHPoolResult::getMedianSolkOffF(short nRound/*=0*/, short cutHighest/*=0*
 
 			if (pPResOp)
 			{
-				GScore pts = pPResOp->getPointsSO(maxRound);			
+				//pPResOp->getPointsSO(maxRound);		
+				GScore points = 0.0;
+				CHMatch * pMatch = 0;
+				CHMatchResult * pMatchResult = 0;
+				MSLSortedVector vMatchResults;
+				pPResOp->getMatchResultsVector(vMatchResults);				
+				for(short i=0 ; i<vMatchResults.entries() ; i++)
+				{
+					pMatchResult = (CHMatchResult*)vMatchResults[i];
+									
+					pMatch = (CHMatch*) pMatchResult->getMatch();
+					if (!pMatch)
+						continue;
+
+					if(pMatch->isTeam() && !pMatch->getSubMatch())
+						continue;
+
+					if( pMatch && 
+						pMatch->getStatus() >= CHMemoryDataBase::eUnofficial )
+					{
+
+						CHMatchResult * pMatchResOpp=(CHMatchResult *)pMatchResult->getOpponent();
+
+						if (pMatchRes == pMatchResOpp)
+						{
+							if (pMatchResOpp && pMatchResOpp->getQualitativeCode()==FO)
+							{
+								points += 1.0;
+							}
+							else
+							{
+								points += pMatchResult->getPointsSO();	
+							}
+						}
+						else if ( pMatchResult && pMatchResult->getBye() )
+						{
+							points += 0.5;
+						}
+						else if ( pMatchResOpp && pMatchResOpp->getBye() )
+						{				
+							points += 0.5;
+						}
+						else if (pMatchResOpp && !pMatchResOpp->getInscription() ) 
+						{				
+							points += 0.5;
+						}			
+						else if (pMatchResOpp && pMatchResOpp->getQualitativeCode()==FO)
+						{
+							points += 0.5;
+						}
+						else if (pMatchResult && pMatchResult->getQualitativeCode()==FO)
+						{
+							points += 0.5;
+						}
+						else
+							points += pMatchResult->getPointsSO();					
+					}
+				}
+
 				//points += pts;			
-				vScores.insert(new GScore(pts));
+				vScores.insert(new GScore(points));
 			}
 
 			progressivePoints+=pMatchRes->getPoints();
 		}		
 	}
-
+	GScore points = 0.0;
 	vScores.setFcCompare(orderScores);
 	vScores.sort();
 	for (short i=0+cutHighest;i<vScores.entries()-cutLowest;i++)

@@ -414,12 +414,13 @@ float CHMatchResult::getPointsSO()
 	if (pMatch->hasByes())
 		return 0.5;
 
-	if (pMatch->getWinner()==((CHMatchResult*)this)->getPosition() &&
+	if (getRank()==1 &&
 	   (pMatch->getResultCode()==EV_WHITE_WINNER_F || 
 		pMatch->getResultCode()==EV_BLACK_WINNER_F) ) 
 	{
 		return 0.5;
 	}
+	
 	return m_points;
 }
 

@@ -119,6 +119,8 @@
     <ClInclude Include="CHMSLODFDataTransfer.h" />
     <ClInclude Include="CHODFLoadInscription.h" />
     <ClInclude Include="CHODFLoadRegister.h" />
+    <ClInclude Include="CHPairingsGUI.h" />
+    <ClInclude Include="CHPairingsToolBar.h" />
     <ClInclude Include="CHPhaseGUIEx.h" />
     <ClInclude Include="CHPoolResultGUIEx.h" />
     <ClInclude Include="CHPoolResultToolBar.h" />
@@ -166,6 +168,8 @@
     <ClCompile Include="CHMSLODFDataTransfer.cpp" />
     <ClCompile Include="CHODFLoadInscription.cpp" />
     <ClCompile Include="CHODFLoadRegister.cpp" />
+    <ClCompile Include="CHPairingsGUI.cpp" />
+    <ClCompile Include="CHPairingsToolBar.cpp" />
     <ClCompile Include="CHPhaseGUIEx.cpp" />
     <ClCompile Include="CHPoolResultGUIEx.cpp" />
     <ClCompile Include="CHPoolResultToolBar.cpp" />

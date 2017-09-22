@@ -28,6 +28,7 @@
 #include "CHMatchToolBar.h"
 #include "CHMatchConfigurationGUI.h"
 #include "CHRankingsGUI.h"
+#include "CHPairingsGUI.h"
 
 #include "..\CHVMngtModel\CHRoundDraw.h"
 
@@ -84,6 +85,11 @@ LRESULT CHMatchGUIEx::onLButDownToolBar(WPARAM wParam/*=0*/, LPARAM lParam/*=0*/
 	if (wParam==LX_PHASE_CHDRAW)
 	{
 		initialDraw();
+		return 0;
+	}
+	if(wParam==LX_PAIRINGS)
+	{
+		pairingsDlg();
 		return 0;
 	}
 	if(wParam==LX_MATCH_CONFIG)
@@ -391,6 +397,42 @@ void CHMatchGUIEx::rankingsDlg()
 		MSLWString title=L"Rankings " + pPool->getLDescription();
 		MSLDialog(m_hWnd,*m_pDlgRankings ,800,550,title,0,true,-1,GUI_RGB_WHITE,m_hWnd);
 		APP::unlock("Rankings "+ pPool->getKey());
+		delete m_pDlgRankings;
+		m_pDlgRankings=0;
+	}
+}
+
+void CHMatchGUIEx::pairingsDlg()
+{
+	CHPool * pPool = 0;
+	CHMatch * pMatch=getMatch();
+	if(pMatch)
+		pPool = (CHPool*)pMatch->getPool();
+	else if (m_pDataSel)
+	{
+		if (m_pDataSel->isA()==__CHPHASE)
+		{
+			CHPool *pPool = (CHPool *) ((CHPhase*)m_pDataSel)->getPool(0);
+		}
+		else if (m_pDataSel->isA()==__CHPOOL)
+		{
+			pPool = (CHPool*)m_pDataSel;
+		}
+		else if (m_pDataSel->isA()==__CHMATCH)
+		{
+			pPool = (CHPool*) ((CHMatch*)m_pDataSel)->getPool();	
+		}
+	}
+
+	if (!pPool)
+		return;
+
+	if(APP::lock("Pairings "+ pPool->getKey()))
+	{
+		m_pDlgPairings = new CHPairingsGUI(m_pTHProgression, m_pTHProgressionData,m_pTHStatusManager, CHPAIRINGSGUI_ID, pPool);
+		MSLWString title=L"Pairings " + pPool->getLDescription();
+		MSLDialog(m_hWnd,*m_pDlgPairings ,800,550,title,0,true,-1,GUI_RGB_WHITE,m_hWnd);
+		APP::unlock("Pairings "+ pPool->getKey());
 		delete m_pDlgRankings;
 		m_pDlgRankings=0;
 	}

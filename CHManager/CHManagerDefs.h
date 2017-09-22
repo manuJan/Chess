@@ -144,6 +144,7 @@
 #define LX_PHASE_CHDRAW								TB_CHMATCH_ID+1
 #define LX_MATCH_CONFIG								TB_CHMATCH_ID+2
 #define LX_RANKINGS									TB_CHMATCH_ID+3
+#define LX_PAIRINGS									TB_CHMATCH_ID+4
 
 /****************** CHMatchConfigurationGUI *********************************/
 	#define CHMATCHCONFIGGUI_ID					CH_GUI+180
@@ -228,6 +229,17 @@
 #define C_PR_CH_BUCHOLZ								GR_POOLRESULTS+18
 #define C_PR_CH_WONGAMES							GR_POOLRESULTS+19
 #define C_PR_CH_SONNEBERGER							GR_POOLRESULTS+20
+
+/****************** CHPairingsGUI *********************************/
+#define CHPAIRINGSGUI_ID					CH_GUI+260
+					
+/****************** CHPairingsToolbar *********************************/
+#define TB_PAIRINGS_ID						CH_GUI+280
+#define LB_ROUND							TB_PAIRINGS_ID+1
+#define CB_ROUND							TB_PAIRINGS_ID+2
+#define LX_LOAD_PAIRINGS					TB_PAIRINGS_ID+3
+#define LX_LOAD_RESULTS						TB_PAIRINGS_ID+4
+
 
 /***************************** ARInscriptionLineGUIEx ***********************************************/
 #define ARINSCRIPTIONLINEGUIEX_ID					CH_GUI+300
