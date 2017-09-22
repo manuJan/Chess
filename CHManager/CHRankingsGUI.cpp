@@ -154,6 +154,22 @@ LRESULT CHRankingsGUI::onFillControl(WPARAM wParam/*=0*/, LPARAM lParam/*=0*/)
 	return 0;
 }
 
+bool CHRankingsGUI::onDrag(long id,gui_dd_item* dd)
+{
+	return (!dd || (id!=GR_POOLRESULTS && dd->idTarget!=GR_POOLRESULTS)) ? false : true;
+}
+
+void CHRankingsGUI::onDrop(long id,gui_dd_item* dd)
+{
+	UNREFERENCED_PARAMETER(id);
+	if( dd->idSource == GR_POOLRESULTS && dd->idTarget == GR_POOLRESULTS )
+	{
+		int pos = dd->cellTarget->y;
+		GData * pDataMember = (GData *)dd->cellSource->lParamLine;
+		updateRanking(pDataMember,pos);
+	}
+}
+
 void CHRankingsGUI::onClick(long id,LPARAM lParam)
 {
 	return GTHManagerGUI::onClick(id,lParam);
@@ -175,7 +191,7 @@ void CHRankingsGUI::createGridPoolResults()
 	RECT aRect=getRect();
 	short hCtrl1=16;
 	
-	m_gui.doGrid(GR_POOLRESULTS,RC(aRect.left,aRect.top+hCtrl1,aRect.right-16,aRect.bottom),getStyGrid(GR_POOLRESULTS),getStyGridSel(GR_POOLRESULTS),18,getStyHeaderGrid(GR_POOLRESULTS));
+	m_gui.doGrid(GR_POOLRESULTS,RC(aRect.left,aRect.top+hCtrl1,aRect.right-16,aRect.bottom),getStyGrid(GR_POOLRESULTS),getStyGridSel(GR_POOLRESULTS),30,getStyHeaderGrid(GR_POOLRESULTS));
 	m_gui.grid_setLineColor(GR_POOLRESULTS,GUI_RGB_OFF,GUI_RGB_OFF); 
 	
 	m_gui.grid_addColumn(GR_POOLRESULTS,"",GUI_JUST_RIGHT , 35	,C_PR_RANK			);	
@@ -214,7 +230,11 @@ void CHRankingsGUI::createGridPoolResults()
 	m_gui.grid_setCellTT(GR_POOLRESULTS,m_gui.grid_findCol(GR_POOLRESULTS,C_PR_RANK			),-1,DESC(PROGRESSION_PRG_COMPPOOLRK));	
 	m_gui.grid_setCellTT(GR_POOLRESULTS,m_gui.grid_findCol(GR_POOLRESULTS,C_PR_CH_RK		),-1,DESC(PROGRESSION_PRG_COMPPOOLRK));	
 	m_gui.grid_setCellTT(GR_POOLRESULTS,m_gui.grid_findCol(GR_POOLRESULTS,C_PR_NAME			),-1,DESC(PROGRESSION_PRG_COMPNAME));
-	m_gui.grid_setCellTT(GR_POOLRESULTS,m_gui.grid_findCol(GR_POOLRESULTS,C_PR_COUNTRY		),-1,DESC(PROGRESSION_PRG_COMPCTRY));	
+	m_gui.grid_setCellTT(GR_POOLRESULTS,m_gui.grid_findCol(GR_POOLRESULTS,C_PR_COUNTRY		),-1,DESC(PROGRESSION_PRG_COMPCTRY));
+
+	m_gui.setDragDrop(GR_POOLRESULTS,"Rankings "+m_pPool->getLDescription().toAscii());
+	m_gui.setDragDropOn(GR_POOLRESULTS,true,true);
+
 }
 
 bool CHRankingsGUI::paintHeaderGrid(gui_grid_cell* cell)
@@ -434,4 +454,26 @@ void CHRankingsGUI::recalculateAllRanks(CHPoolResult *pPoolResult, short oldRank
     }
 
 	APP::out(TRN_SET_POOLRESULT);
+}
+
+void CHRankingsGUI::updateRanking(GData* pDataMember/*=0*/,long pos/*=-1*/)
+{
+	if( pDataMember && pos != -1 )
+	{
+		m_gui.grid_delLParam(GR_POOLRESULTS,LPARAM(pDataMember));
+		m_gui.grid_add      (GR_POOLRESULTS,LPARAM(pDataMember),"",false,pos);
+	}
+	CHPoolResult * pPResult = 0;
+	for(short i=0 ; i<m_gui.grid_getNLines(GR_POOLRESULTS) ; i++)
+	{
+		CHPoolResult * pPResult = (CHPoolResult *)m_gui.grid_getLParam(GR_POOLRESULTS,i);
+		if( pPResult && pPResult->getRankPo() != i+1 )
+		{
+			pPResult->setRankPo(i+1);
+			APP::out(*pPResult);
+		}
+	}
+	APP::out(TRN_SET_POOLRESULT);
+	m_gui.grid_sort(GR_POOLRESULTS, pfc_orderPoolResultsByRank);
+	SendMessage(getHWndMsgs(), UM_DATA_UPDATED, (WPARAM)GTHPOOLRESULTGUIEX_ID, (LPARAM)pPResult);	
 }

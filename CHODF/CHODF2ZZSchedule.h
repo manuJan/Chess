@@ -23,6 +23,7 @@
 #include <OVR/GUI/ODF2/ODF2THBase/ODF2THZZSchedule.h>
 
 class CHMatch;
+class ODFZZSchLine;
 
 class CHODF2ZZSchedule : public ODF2THZZSchedule
 {
@@ -31,9 +32,11 @@ public:
 	~CHODF2ZZSchedule				();
 
 protected:
-	
+	void			createSchLines		();
 	ODF2ZZSchLine * createSchLine		(GData * pData);
 
+	void fillSportScheduleUnit(XMLElement *pEl_Unit,ODF2ZZSchLine * pSchUnit);
+	
 	MSLWString getItemNameDescription	(GData * pData,const char * language=0);
 	MSLString isMedalsMatch				(CHMatch * pMatch);
 
