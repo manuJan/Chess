@@ -951,6 +951,7 @@ GScore CHPoolResult::getSolkOffF(short nRound)
 			if (!pMatchResOpp || 
 				 pMatchResOpp->getBye() ||
 				 pMatchResOpp->getQualitativeCode()==FO ||
+				 pMatchRes->getQualitativeCode()==FO ||
 				 !pMatchResOpp->getInscription() )
 			{
 				// Calculo de oponente virtual
@@ -984,7 +985,8 @@ GScore CHPoolResult::getSolkOffF(short nRound)
 					}
 				}
 
-				points += 0.5;//  progressivePoints + ( pointsW - pointsFO) + 0.5 * ( nTotalRounds - pMatch->getRound());
+				//points += 0.5;//  progressivePoints + ( pointsW - pointsFO) + 0.5 * ( nTotalRounds - pMatch->getRound());
+				points = progressivePoints + ( 1 - pointsFO) + 0.5 * ( nRoundsPlayed - pMatch->getRound());
 				progressivePoints+=pMatchRes->getPoints();
 				continue;
 			}				
@@ -1128,6 +1130,7 @@ GScore CHPoolResult::getMedianSolkOffF(short nRound/*=0*/, short cutHighest/*=0*
 			if (!pMatchResOpp || 
 				 pMatchResOpp->getBye() || 				 
 				 pMatchResOpp->getQualitativeCode()==FO ||
+				 pMatchRes->getQualitativeCode()==FO ||
 				 !pMatchResOpp->getInscription() )
 			{
 				// Calculo de oponente virtual
@@ -1138,7 +1141,8 @@ GScore CHPoolResult::getMedianSolkOffF(short nRound/*=0*/, short cutHighest/*=0*
 				else if (pMatchResOpp->getBye())
 					pointsFO = 1.0;
 
-				GScore pts = 0.5;//progressivePoints + ( 1 - pointsFO) + 0.5 * ( nTotalRounds - pMatch->getRound());
+				//GScore pts = 0.5;//progressivePoints + ( 1 - pointsFO) + 0.5 * ( nTotalRounds - pMatch->getRound());
+				GScore pts = progressivePoints + ( 1 - pointsFO) + 0.5 * ( nRoundsPlayed - pMatch->getRound());
 				//points += pts;
 				progressivePoints+=pMatchRes->getPoints();
 				vScores.insert(new GScore(pts));
