@@ -34,6 +34,8 @@ public:
 	~CHRankingsGUI();
 
 	LRESULT onFillControl			(WPARAM wParam=0, LPARAM lParam=0);
+	bool onDrag						(long id,gui_dd_item* dd);
+	void onDrop						(long id,gui_dd_item* dd);
 
 	virtual MSLGUIEx * onNewGUIEx	(long id);
 	void onClick					(long id,LPARAM lParam);
@@ -53,6 +55,8 @@ public:
 	PFN_ORDER_FC getGridSortPoolResults() const;
 
 	void recalculateAllRanks		(CHPoolResult *pPoolResult, short oldRank, short sNewRank);
+	void updateRanking				(GData* pDataMember=0,long pos=-1);
+
 private:
 
 	CHPool * m_pPool;

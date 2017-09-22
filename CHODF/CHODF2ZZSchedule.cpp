@@ -20,6 +20,23 @@ static int orderCHMembers(const MSLItem** a, const MSLItem** b)
 	return order ? order : strcmp(pMemberA->getKey(), pMemberB->getKey());
 }
 
+static int orderMatches(const MSLItem** a, const MSLItem** b)
+{
+	ODF2ZZSchLine * pLA = (ODF2ZZSchLine*)*a;
+	ODF2ZZSchLine * pLB = (ODF2ZZSchLine*)*b;
+	CHMatch* pMatchA=(CHMatch*)pLA->getData();
+	CHMatch* pMatchB=(CHMatch*)pLB->getData();
+
+	int order = pMatchA->getStartDate().value()-pMatchB->getStartDate().value();
+	if( order )
+		return order;
+	order = pMatchA->getStartTime().value()-pMatchB->getStartTime().value();
+	if( order )
+		return order;
+	order = strcmp(pMatchA->getEventSexCode(),pMatchB->getEventSexCode());
+	return order ? order : int(pMatchA->getMatchNumber()-pMatchB->getMatchNumber());
+}
+
 
 CHODF2ZZSchedule::CHODF2ZZSchedule(ODF2BuildBase * pBuild,XMLElement * pElement,ODF2FileBase * pFile,GData * pData)
 	:ODF2THZZSchedule(pBuild,pElement,pFile,pData)
@@ -28,6 +45,19 @@ CHODF2ZZSchedule::CHODF2ZZSchedule(ODF2BuildBase * pBuild,XMLElement * pElement,
 
 CHODF2ZZSchedule::~CHODF2ZZSchedule()
 {
+}
+
+void CHODF2ZZSchedule::createSchLines()
+{
+	ODF2THZZSchedule::createSchLines();
+	m_vSchLines.setFcCompare(orderMatches);
+	ODF2ZZSchLine * pL = 0;
+	for(int i=0;i<int(m_vSchLines.entries());i++)
+	{
+		pL = (ODF2ZZSchLine*)m_vSchLines[i];
+		if( pL )
+			pL->setUnitOrder(i+1);
+	}
 }
 
 ODF2ZZSchLine * CHODF2ZZSchedule::createSchLine(GData * pData)
@@ -53,14 +83,17 @@ ODF2ZZSchLine * CHODF2ZZSchedule::createSchLine(GData * pData)
 	pLine->setUnitSTime (pMatch->getStartTime());
 	pLine->setUnitEDate (pMatch->getEndDate());
 	pLine->setUnitETime (pMatch->getEndTime());
-	pLine->setUnitEstEDate(true);
 	pLine->setUnitMedal(ODF2THModel::getTHModel()->isMedalsMatch(pMatch));
 	pLine->setUnitVenue(pMatch->getVenueCode());
 	pLine->setUnitLocation(CHODFMODEL->getCourtODFString((CHMatch *)pMatch));//GMemoryDataBase::getMainLocationCourtCode(pMatch->getVenueCode()));
 	pLine->setSessionCode(pMatch->getSessionLDescription().toAscii());
 
 	return pLine;
-/*	return ODF2THZZSchedule::createSchLine(pData);*/
+}
+
+void CHODF2ZZSchedule::fillSportScheduleUnit(XMLElement *pEl_Unit,ODF2ZZSchLine * pSchUnit)
+{
+	pEl_Unit->setAttribute("Order",pSchUnit->getUnitOrder());
 }
 
 MSLWString CHODF2ZZSchedule::getItemNameDescription(GData * pData,const char * language/*=0*/)
