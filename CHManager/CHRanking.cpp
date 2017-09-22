@@ -531,7 +531,7 @@ int orderPoolResults(const MSLItem** a,const MSLItem** b)
 				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
 				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
 
-				int order = pOrigPoolResA->getMatchesWon() - pOrigPoolResB->getMatchesWon();
+				int order = pOrigPoolResB->getMatchesWon() - pOrigPoolResA->getMatchesWon();
 				if (order)
 					return order;
 
@@ -808,7 +808,7 @@ int orderPoolResults2Ties(const MSLItem** a,const MSLItem** b)
 				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
 				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
 
-				int order = pOrigPoolResA->getMatchesWon() - pOrigPoolResB->getMatchesWon();
+				int order = pOrigPoolResB->getMatchesWon() - pOrigPoolResA->getMatchesWon();
 				if (order)
 					return order;
 
@@ -991,7 +991,7 @@ int compPoolResults(const MSLItem** a,const MSLItem** b)
 				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
 				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
 
-				int order = pOrigPoolResA->getMatchesWon() - pOrigPoolResB->getMatchesWon();
+				int order = pOrigPoolResB->getMatchesWon() - pOrigPoolResA->getMatchesWon();
 				if (order)
 					return order;
 
@@ -1255,7 +1255,7 @@ int compPoolResults2Ties(const MSLItem** a,const MSLItem** b)
 				CHPoolResult * pOrigPoolResA = (CHPoolResult *)CHMemoryDataBase::find(*pA);
 				CHPoolResult * pOrigPoolResB = (CHPoolResult *)CHMemoryDataBase::find(*pB);
 
-				int order = pOrigPoolResA->getMatchesWon() - pOrigPoolResB->getMatchesWon();
+				int order = pOrigPoolResB->getMatchesWon() - pOrigPoolResA->getMatchesWon();
 				if (order)
 					return order;
 
