@@ -287,6 +287,16 @@ MSLWString CHRC74::OnGetLine(const int lineNumber,const char *language) const
 	return CReportTemplate::OnGetLine(lineNumber,language);
 }
 
+MSLDate CHRC74::OnGetEventDate() const
+{
+	CHMatch * pMatch = (CHMatch * )	m_vMatches[0];
+
+	if( pMatch )
+		return pMatch->getStartDate();
+
+	return CHReportTemplate::OnGetEventDate();
+}
+
 unsigned short CHRC74::OnCallbackFn( struct USR_TAB * pTableInfo )
 {
 	return CReportBase::OnCallbackFn(pTableInfo);
