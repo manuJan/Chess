@@ -1330,6 +1330,8 @@ GScore CHPoolResult::getSonneBergerF(short nRound/*=0*/)
 		// PASO 1.- Excluimos al oponente de menor score Match Point.
 
 		CHPoolResult * pPoolResultRemove = (CHPoolResult *)vPoolResults[vPoolResults.entries()-1];
+		if (!isTeamEvent())
+			pPoolResultRemove=0;
 						
 		// PASO 2.- Procedemos a multiplicar los MP  realizados por cada oponente por el GP obtenido contra esos oponentes.
 		for(short i=0 ; i<vMatchResults.entries() ; i++)
@@ -1353,12 +1355,20 @@ GScore CHPoolResult::getSonneBergerF(short nRound/*=0*/)
 					continue;
 
 				pPResOp = (CHPoolResult*) pOpponent->getPoolResult();
-				if (pPResOp &&
+				if (pPResOp && pPoolResultRemove &&
 					pPResOp == pPoolResultRemove)
 					continue;
 				
 				// PASO 3.- Realizamos la suma.
-				points+= pPResOp->getMatchPoints() * GScore(pMatchResult->getPoints());
+				if (isTeamEvent())
+					points+= pPResOp->getMatchPoints() * GScore(pMatchResult->getPoints());
+				else
+				{
+					if (pMatchResult->getPoints()>0.0)
+					{
+						points+= pPResOp->getPointsF() * GScore(pMatchResult->getPoints());					
+					}
+				}
 			}				
 		}
 	}
@@ -1371,7 +1381,7 @@ MSLString CHPoolResult::getSonneBergerFStr(short nRound/*=0*/)
 	GScore points=getSonneBergerF(nRound);
 
 	if((points.getScore()-int(points))>0)
-		format="###.#"; // Decimales
+		format="###.##"; // Decimales
 
 	GScore m_pointsF = GScore(points);
 	MSLString p=m_pointsF.asString(format);
