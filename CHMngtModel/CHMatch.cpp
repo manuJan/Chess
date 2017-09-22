@@ -360,15 +360,15 @@ MSLString CHMatch::getResultIncidence() const
 
 	if(pMatchResult1->isQualitative() && pMatchResult2->isQualitative())
 	{
-		result = pMatchResult1->getPointsAsString();
+		//result = pMatchResult1->getPointsAsString();
 		result += pMatchResult1->getQualitativeSDescription().toAscii();
 		result += "-";
-		result += pMatchResult2->getPointsAsString();
+		//result += pMatchResult2->getPointsAsString();
 		result += pMatchResult1->getQualitativeSDescription().toAscii();
 	}
 	else if(pMatchResult1->isQualitative())
 	{
-		result = pMatchResult1->getPointsAsString();
+		//result = pMatchResult1->getPointsAsString();
 		result += pMatchResult1->getQualitativeSDescription().toAscii();
 		result += "-";
 		result += pMatchResult2->getPointsAsString();
@@ -377,7 +377,7 @@ MSLString CHMatch::getResultIncidence() const
 	{
 		result = pMatchResult1->getPointsAsString();		
 		result += "-";
-		result += pMatchResult2->getPointsAsString();
+		//result += pMatchResult2->getPointsAsString();
 		result += pMatchResult2->getQualitativeSDescription().toAscii();
 	}
 	

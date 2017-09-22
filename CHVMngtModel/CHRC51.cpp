@@ -248,6 +248,8 @@ MSLTime CHRC51::OnGetEventTime() const
 
 MSLWString CHRC51::OnGetLine(const int lineNumber,const char *language) const
 {
+	if (lineNumber==2 && m_pHeaderPhase && m_pHeaderPhase->getPhase()==SWISS_ROUND)
+		return L"";
 	return CReportTemplate::OnGetLine(lineNumber,language);
 }
 

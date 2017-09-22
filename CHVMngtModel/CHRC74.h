@@ -49,6 +49,7 @@ private:
 		
 	MSLWString		OnGetLine(const int lineNumber,const char *language) const;
 	MSLDate			OnGetEventDate() const;
+	MSLTime			OnGetEventTime() const;
 
 	void			initLabels();
 	void			setGlobalVaris();

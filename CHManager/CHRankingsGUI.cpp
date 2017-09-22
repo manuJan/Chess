@@ -26,6 +26,7 @@
 #include "..\CHMngtModel\CHPool.h"
 #include <ovr\gui\GUITHManager\GUITHManager.h>
 #include <ovr\core\th\GTHMsgDefines.h>
+#include "CHLoadRankings.h"
 
 #include "..\CHMngtModel\CHEvent.h"
 #include "..\CHMngtModel\CHPool.h"
@@ -172,6 +173,12 @@ void CHRankingsGUI::onDrop(long id,gui_dd_item* dd)
 
 void CHRankingsGUI::onClick(long id,LPARAM lParam)
 {
+	if (id==LX_IMPORT_RK)
+	{
+		CHLoadRankings pLR(m_pPool);
+		pLR.browseFile(getHWnd());
+
+	}
 	return GTHManagerGUI::onClick(id,lParam);
 }
 
@@ -182,7 +189,8 @@ void CHRankingsGUI::createOtherControls()
 
 	MSLWString poolResults = GUITHManagerApp::getOverallSPoolDescription();
 	poolResults+=DESC(PROGRESSION_PRG_RESULTS);
-	m_gui.doLbl(LB_POOLRESULTS,RC(aRect.left,aRect.top+hCtrl,aRect.right-16,aRect.top+16+hCtrl) ,poolResults,getStyTitle(LB_POOLRESULTS));	
+	m_gui.doLbl(LB_POOLRESULTS,RC(aRect.left,aRect.top+hCtrl,(aRect.right-16)/2,aRect.top+16+hCtrl) ,poolResults,getStyTitle(LB_POOLRESULTS));	
+	m_gui.doBut(LX_IMPORT_RK,RC(aRect.right-150,aRect.top+hCtrl,(aRect.right-16),aRect.top+16+hCtrl),"Import RK");
 }
 
 

@@ -42,6 +42,8 @@ MSLString	CHLoadRankings::processFile(MSLWString path)
 		idx++;
 	}
 	doOut();
+	if (info=="")
+		info = "file processed OK!";
 	return info;
 }
 void		CHLoadRankings::doOut()

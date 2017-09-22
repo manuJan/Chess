@@ -145,6 +145,7 @@
 #define LX_MATCH_CONFIG								TB_CHMATCH_ID+2
 #define LX_RANKINGS									TB_CHMATCH_ID+3
 #define LX_PAIRINGS									TB_CHMATCH_ID+4
+#define LX_IMPORT_RK								TB_CHMATCH_ID+5
 
 /****************** CHMatchConfigurationGUI *********************************/
 	#define CHMATCHCONFIGGUI_ID					CH_GUI+180

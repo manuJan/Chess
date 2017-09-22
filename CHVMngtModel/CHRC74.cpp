@@ -290,11 +290,19 @@ MSLWString CHRC74::OnGetLine(const int lineNumber,const char *language) const
 MSLDate CHRC74::OnGetEventDate() const
 {
 	CHMatch * pMatch = (CHMatch * )	m_vMatches[0];
-
 	if( pMatch )
 		return pMatch->getStartDate();
 
 	return CHReportTemplate::OnGetEventDate();
+}
+
+MSLTime		CHRC74::OnGetEventTime() const
+{
+	CHMatch * pMatch = (CHMatch * )	m_vMatches[0];
+	if( pMatch )
+		return pMatch->getStartTime();
+
+	return CHReportTemplate::OnGetEventTime();
 }
 
 unsigned short CHRC74::OnCallbackFn( struct USR_TAB * pTableInfo )
@@ -544,6 +552,6 @@ void CHRC74::setDynamicLegends()
 		if(pMasterType->getMasterType())
 			m_pLegends->setDynamic( pMasterType->getSDescription());							
 	}
-
+	m_pLegends->setDynamic(L"FO");
 	m_pLegends->createDynamic();
 }
