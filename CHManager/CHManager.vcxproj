@@ -105,6 +105,7 @@
     <ClInclude Include="CHEventCriteriaGUIEx.h" />
     <ClInclude Include="CHEventGUI.h" />
     <ClInclude Include="CHInitialLoadGUI.h" />
+    <ClInclude Include="CHLoadRankings.h" />
     <ClInclude Include="CHManager.h" />
     <ClInclude Include="CHManagerApp.h" />
     <ClInclude Include="CHManagerDefs.h" />
@@ -155,6 +156,7 @@
     <ClCompile Include="CHEventCriteriaGUIEx.cpp" />
     <ClCompile Include="CHEventGUI.cpp" />
     <ClCompile Include="CHInitialLoadGUI.cpp" />
+    <ClCompile Include="CHLoadRankings.cpp" />
     <ClCompile Include="CHManager.cpp" />
     <ClCompile Include="CHManagerApp.cpp" />
     <ClCompile Include="CHManagerPhaseGUI.cpp" />
