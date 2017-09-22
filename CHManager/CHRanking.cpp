@@ -2120,34 +2120,37 @@ void CHRanking::userAcumulatePoolData(GTHPoolResult* pPoolResult, GTHMatchResult
 		((CHPoolResult*)pPoolResult)->setPointsF(((CHPoolResult*)pPoolResult)->getPointsF() + ((CHMatchResult*)pMatchResult)->getPoints());
 		((CHPoolResult*)pPoolResult)->setMPlayed(((CHPoolResult*)pPoolResult)->getMPlayed() + 1 );
 		
-		if (!pMatch->isTeam())
+		if (!pMatch->hasByes())
 		{
-			if (((CHMatchResult*)pMatchResult)->getPoints()==WIN_POINTS)
-				((CHPoolResult*)pPoolResult)->setMWon( ((CHPoolResult*)pPoolResult)->getMWon() + 1);
-			if (((CHMatchResult*)pMatchResult)->getPoints()==DRAW_POINTS)
-				((CHPoolResult*)pPoolResult)->setMDrawn( ((CHPoolResult*)pPoolResult)->getMDrawn() + 1);
-			if (((CHMatchResult*)pMatchResult)->getPoints()==LOST_POINTS)
-				((CHPoolResult*)pPoolResult)->setMLost( ((CHPoolResult*)pPoolResult)->getMLost() + 1);
-		}
-		else
-		{
-			MSLSortedVector vSubMatchesResult;
-			pMatchResult->getSubMatchResultsVector(vSubMatchesResult);
-			for (short i=0;i<vSubMatchesResult.entries();i++)
+			if (!pMatch->isTeam())
 			{
-				CHMatchResult * pSubMatchResult = (CHMatchResult*)vSubMatchesResult[i];
-				if (pSubMatchResult->getMatchStatus() == CHMemoryDataBase::eFinished ||
-					pSubMatchResult->getMatchStatus() == CHMemoryDataBase::eUnofficial ) 
+				if (((CHMatchResult*)pMatchResult)->getPoints()==WIN_POINTS)
+					((CHPoolResult*)pPoolResult)->setMWon( ((CHPoolResult*)pPoolResult)->getMWon() + 1);
+				if (((CHMatchResult*)pMatchResult)->getPoints()==DRAW_POINTS)
+					((CHPoolResult*)pPoolResult)->setMDrawn( ((CHPoolResult*)pPoolResult)->getMDrawn() + 1);
+				if (((CHMatchResult*)pMatchResult)->getPoints()==LOST_POINTS)
+					((CHPoolResult*)pPoolResult)->setMLost( ((CHPoolResult*)pPoolResult)->getMLost() + 1);
+			}
+			else
+			{
+				MSLSortedVector vSubMatchesResult;
+				pMatchResult->getSubMatchResultsVector(vSubMatchesResult);
+				for (short i=0;i<vSubMatchesResult.entries();i++)
 				{
-					CHMatch * pSubMatch=(CHMatch*)pSubMatchResult->getMatch();
+					CHMatchResult * pSubMatchResult = (CHMatchResult*)vSubMatchesResult[i];
+					if (pSubMatchResult->getMatchStatus() == CHMemoryDataBase::eFinished ||
+						pSubMatchResult->getMatchStatus() == CHMemoryDataBase::eUnofficial ) 
+					{
+						CHMatch * pSubMatch=(CHMatch*)pSubMatchResult->getMatch();
 
-					if (((CHMatchResult*)pSubMatchResult)->getPoints()==WIN_POINTS)
-						((CHPoolResult*)pPoolResult)->setMWon( ((CHPoolResult*)pPoolResult)->getMWon() + 1);
-					if (((CHMatchResult*)pSubMatchResult)->getPoints()==DRAW_POINTS)
-						((CHPoolResult*)pPoolResult)->setMDrawn( ((CHPoolResult*)pPoolResult)->getMDrawn() + 1);
-					if (((CHMatchResult*)pSubMatchResult)->getPoints()==LOST_POINTS && pSubMatch && pSubMatch->getResultCode()!=EV_EMPTY)
-						((CHPoolResult*)pPoolResult)->setMLost( ((CHPoolResult*)pPoolResult)->getMLost() + 1);				
-				}			
+						if (((CHMatchResult*)pSubMatchResult)->getPoints()==WIN_POINTS)
+							((CHPoolResult*)pPoolResult)->setMWon( ((CHPoolResult*)pPoolResult)->getMWon() + 1);
+						if (((CHMatchResult*)pSubMatchResult)->getPoints()==DRAW_POINTS)
+							((CHPoolResult*)pPoolResult)->setMDrawn( ((CHPoolResult*)pPoolResult)->getMDrawn() + 1);
+						if (((CHMatchResult*)pSubMatchResult)->getPoints()==LOST_POINTS && pSubMatch && pSubMatch->getResultCode()!=EV_EMPTY)
+							((CHPoolResult*)pPoolResult)->setMLost( ((CHPoolResult*)pPoolResult)->getMLost() + 1);				
+					}			
+				}
 			}
 		}
 
