@@ -48,6 +48,7 @@ private:
 	ReportReturn	paintMembers			(CHMatch *pMatch);
 		
 	MSLWString		OnGetLine(const int lineNumber,const char *language) const;
+	MSLDate			OnGetEventDate() const;
 
 	void			initLabels();
 	void			setGlobalVaris();
