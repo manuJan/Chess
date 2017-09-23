@@ -169,9 +169,9 @@ void CHPairingsGUI::loadResults()
 
 void CHPairingsGUI::loadPairings()
 {		
-	GFileDialog aFile(getHWnd(), L"csv",
-				L"*.csv",
-				L"Match Files (*.csv)\0*.csv\0All Files (*.*)\0*.*\0\0");
+	GFileDialog aFile(getHWnd(), L"txt",
+				L"*.txt",
+				L"Match Files (*.txt)\0*.txt\0All Files (*.*)\0*.*\0\0");
 
 	if(aFile.DoModal(GFileDialog::eRead)==IDOK)
 	{
@@ -218,7 +218,7 @@ CHMatch* CHPairingsGUI::loadPair(MSLSet toSend, short nLine, MSLString line)
 
 	// 1; 12; WIM, Vo Thi Kim Phung; VIE; 2349; 1; ; 1 ; GM; Lei Tingjie ; CHN; 2534; 1;
 	// Match
-	pos2 = line.index(',',pos1);
+	pos2 = line.index('\t',pos1);
 	if (pos2!=-1)
 	{
 		aux = line(pos1,pos2-pos1);
@@ -227,7 +227,7 @@ CHMatch* CHPairingsGUI::loadPair(MSLSet toSend, short nLine, MSLString line)
 	}
 
 	// Seed 1
-	pos2 = line.index(',',pos1);
+	pos2 = line.index('\t',pos1);
 	if (pos2!=-1)
 	{
 		aux = line(pos1,pos2-pos1);
@@ -236,7 +236,7 @@ CHMatch* CHPairingsGUI::loadPair(MSLSet toSend, short nLine, MSLString line)
 	}
 
 	// Master
-	pos2 = line.index(',',pos1);
+	pos2 = line.index('\t',pos1);
 	if (pos2!=-1)
 	{
 		aux = line(pos1,pos2-pos1);
@@ -245,7 +245,7 @@ CHMatch* CHPairingsGUI::loadPair(MSLSet toSend, short nLine, MSLString line)
 	}
 
 	// Name 1
-	pos2 = line.index(',',pos1);
+	pos2 = line.index('\t',pos1);
 	if (pos2!=-1)
 	{
 		aux = line(pos1,pos2-pos1);
@@ -255,7 +255,7 @@ CHMatch* CHPairingsGUI::loadPair(MSLSet toSend, short nLine, MSLString line)
 
 
 	// Country 1
-	pos2 = line.index(',',pos1);
+	pos2 = line.index('\t',pos1);
 	if (pos2!=-1)
 	{
 		aux = line(pos1,pos2-pos1);
@@ -263,7 +263,7 @@ CHMatch* CHPairingsGUI::loadPair(MSLSet toSend, short nLine, MSLString line)
 		pos1=pos2+1;
 	}
 	// Rating 1
-	pos2 = line.index(',',pos1);
+	pos2 = line.index('\t',pos1);
 	if (pos2!=-1)
 	{
 		aux = line(pos1,pos2-pos1);
@@ -271,7 +271,7 @@ CHMatch* CHPairingsGUI::loadPair(MSLSet toSend, short nLine, MSLString line)
 		pos1=pos2+1;
 	}
 	// Points 1
-	pos2 = line.index(',',pos1);
+	pos2 = line.index('\t',pos1);
 	if (pos2!=-1)
 	{
 		aux = line(pos1,pos2-pos1);
@@ -279,7 +279,7 @@ CHMatch* CHPairingsGUI::loadPair(MSLSet toSend, short nLine, MSLString line)
 		pos1=pos2+1;
 	}
 	// Result
-	pos2 = line.index(',',pos1);
+	pos2 = line.index('\t',pos1);
 	if (pos2!=-1)
 	{
 		aux = line(pos1,pos2-pos1);
@@ -287,7 +287,7 @@ CHMatch* CHPairingsGUI::loadPair(MSLSet toSend, short nLine, MSLString line)
 		pos1=pos2+1;
 	}
 	// Points 2
-	pos2 = line.index(',',pos1);
+	pos2 = line.index('\t',pos1);
 	if (pos2!=-1)
 	{
 		aux = line(pos1,pos2-pos1);
@@ -295,7 +295,7 @@ CHMatch* CHPairingsGUI::loadPair(MSLSet toSend, short nLine, MSLString line)
 		pos1=pos2+1;
 	}
 	// Master
-	pos2 = line.index(',',pos1);
+	pos2 = line.index('\t',pos1);
 	if (pos2!=-1)
 	{
 		aux = line(pos1,pos2-pos1);
@@ -304,7 +304,7 @@ CHMatch* CHPairingsGUI::loadPair(MSLSet toSend, short nLine, MSLString line)
 	}
 
 	// Name 1
-	pos2 = line.index(',',pos1);
+	pos2 = line.index('\t',pos1);
 	if (pos2!=-1)
 	{
 		aux = line(pos1,pos2-pos1);
@@ -314,7 +314,7 @@ CHMatch* CHPairingsGUI::loadPair(MSLSet toSend, short nLine, MSLString line)
 
 
 	// Country 1
-	pos2 = line.index(',',pos1);
+	pos2 = line.index('\t',pos1);
 	if (pos2!=-1)
 	{
 		aux = line(pos1,pos2-pos1);
@@ -322,7 +322,7 @@ CHMatch* CHPairingsGUI::loadPair(MSLSet toSend, short nLine, MSLString line)
 		pos1=pos2+1;
 	}
 	// Rating 1
-	pos2 = line.index(',',pos1);
+	pos2 = line.index('\t',pos1);
 	if (pos2!=-1)
 	{
 		aux = line(pos1,pos2-pos1);
