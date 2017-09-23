@@ -213,19 +213,19 @@ Table 1 /* Cabecera Tabla Ranking */
 			{ outline_right=0 }{ outline_left =1 }
 			{ data=1005, Offset_dx=&Vari[306], Offset_dy=55 }
 
-		/* Cartel Win by Members */
-		cell[17] { call=&Vari[107], height= &Vari[5], width=&Vari[207] }
-			{ outline_upper=1 }{ outline_lower=1 }
-			{ outline_right=0 }{ outline_left =1 }
-			{ Run_line=101, Offset_lx=&Vari[307], Offset_ly=35 }
-			
 		/* Cartel Points */
-		cell[18] { call=&Vari[108], height=&Vari[5], width=&Vari[208] }
+		cell[17] { call=&Vari[108], height=&Vari[5], width=&Vari[208] }
 			{ outline_upper=1 }{ outline_lower=1 }
 			{ outline_right=1 }{ outline_left =1 }
 			{ Run_line=102, Offset_lx=&Vari[308], Offset_ly=35 }
 			/*{ data=1007, Offset_dx=&Vari[308], Offset_dy=55 }*/
 
+		/* Cartel Win by Members */
+		cell[18] { call=&Vari[107], height= &Vari[5], width=&Vari[207] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=1 }{ outline_left =1 }
+			{ Run_line=101, Offset_lx=&Vari[307], Offset_ly=35 }
+			
 		/* Cartel Solkoff */
 		cell[19] { call=0, height=&Vari[5], width=&Vari[209] }
 			{ outline_upper=1 }{ outline_lower=1 }
@@ -295,17 +295,17 @@ Table 2 /* Cuerpo Tabla Ranking */
 			{ outline_right=0 }{ outline_left =1 }
 			{ data=2006, Offset_dx=&Vari[406], Offset_dy=55 }
 							
-		/* Win by Members */
-		cell[17] { call=&Vari[107], height=&Vari[6], width=&Vari[207] }
-			{ outline_upper=1 }{ outline_lower=1 }
-			{ outline_right=0 }{ outline_left =1 }
-			{ data=2007, Offset_dx=&Vari[407], Offset_dy=55 }
-
 		/* Points */
-		cell[18] { call=&Vari[108], height=&Vari[6], width=&Vari[208] }
+		cell[17] { call=&Vari[108], height=&Vari[6], width=&Vari[208] }
 			{ outline_upper=1 }{ outline_lower=1 }
 			{ outline_right=1 }{ outline_left =1 }
 			{ data=2008, Offset_dx=&Vari[408], Offset_dy=55 }
+
+		/* Win by Members */
+		cell[18] { call=&Vari[107], height=&Vari[6], width=&Vari[207] }
+			{ outline_upper=1 }{ outline_lower=1 }
+			{ outline_right=1 }{ outline_left =1 }
+			{ data=2007, Offset_dx=&Vari[407], Offset_dy=55 }
 
 		/* Solkoff */
 		cell[19] { call=0, height=&Vari[6], width=&Vari[209] }
