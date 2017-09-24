@@ -635,13 +635,22 @@ MSLSortedVector CHRC58::getMatchesSession(GSession *pSession)
 
 MSLDate CHRC58::OnGetEventDate() const
 {
-	return INVALID_DATE;
+	CHMatch * pMatch = (CHMatch * )	m_vMatches[0];
+	if( pMatch )
+		return pMatch->getStartDate();
+
+	return CHReportTemplate::OnGetEventDate();
 }
 
-MSLTime CHRC58::OnGetEventTime() const
+MSLTime		CHRC58::OnGetEventTime() const
 {
-	return INVALID_TIME;
+	CHMatch * pMatch = (CHMatch * )	m_vMatches[0];
+	if( pMatch )
+		return pMatch->getStartTime();
+
+	return CHReportTemplate::OnGetEventTime();
 }
+
 CReportBase::ReportReturn CHRC58::paintLegend()
 {
 	m_pLegends->runLis(); // Pintamos las leyendas.
