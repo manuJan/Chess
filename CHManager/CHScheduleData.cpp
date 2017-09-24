@@ -85,7 +85,7 @@ void CHScheduleData::onMatchScheduled(GTHMatch* pMatch)
 	GTHScheduleData::onMatchScheduled(pMatch);
 
 	// Assigno el tablero
-	CHPool * pPool = (CHPool * ) pMatch->getPool();
+/*	CHPool * pPool = (CHPool * ) pMatch->getPool();
 	MSLSortedVector vRoundMatches;
 	pPool->getRoundMatchesVector( vRoundMatches, ((CHMatch*)pMatch)->getRound());
 
@@ -118,7 +118,7 @@ void CHScheduleData::onMatchScheduled(GTHMatch* pMatch)
 			if (!pMatch->getCourt())
 				pMatch->setCourtCode(1);
 		}
-	}
+	}*/
 	
 	APP::out(*pMatch);
 	APP::out(TRN_SET_MATCH);
@@ -178,9 +178,9 @@ bool CHScheduleData::onScheduleChangeSubMatch(CHMatch * pMatch)
 		else if (pSubMatch->getCourtCode()!=courtCodeSubMatch)
 		{
 			pSubMatch->setVenueCode(pMatch->getVenueCode());
-			pSubMatch->setCourtCode(courtCodeSubMatch);
+			pSubMatch->setCourtCode(i+1);//courtCodeSubMatch);
 			rtn=true;
-			courtCodeSubMatch++;
+//			courtCodeSubMatch++;
 		}		
 
 		if (rtn)
