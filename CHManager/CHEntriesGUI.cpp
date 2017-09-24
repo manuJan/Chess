@@ -503,7 +503,7 @@ void CHEntriesGUI::calculateTeamsRatings(GEvent *pEvent, bool reset)
 		for (short i=0; i<vInscriptions.entries(); i++ )
 		{
 			CHInscription *pInscription=(CHInscription *)vInscriptions[i];			
-			short rating=0;
+			int rating=0;
 			MSLSortedVector vMembers;
 			pInscription->getMembersVector(vMembers);
 			for (short j=0;j<vMembers.entries();j++)
@@ -579,8 +579,8 @@ void CHEntriesGUI::calculateSeedsFromRating(GEvent *pEvent, bool reset)
 		
 		pInscription->setKConst(getKConst(pInscription));
 		// Le pongo el rating de los miembros
-		if(pEv->isTeam())
-			pInscription->setRating(getTeamRating(pInscription));
+		//if(pEv->isTeam())
+		//	pInscription->setRating(getTeamRating(pInscription));
 
 		if (changeSeed)
 		{
