@@ -192,8 +192,7 @@ CReportBase::ReportReturn CHRC58::OnBody()
 			// Pintamos el letrero de la sesión
 			if( m_pCurrentSession )
 			{
-				MSLString sessionDetailed=getSessionDetailed();
-				m_pLis->setData(2000,sessionDetailed);
+				getSessionDetailed();
 				if ( !m_pLis->runline( 1020 ) )
 					return OnError(error,1020);
 			}
@@ -550,10 +549,12 @@ MSLWString CHRC58::getSessionDetailed()
 			}
 		}
 	}
-
+	// Asigno primera línea
+	m_pLis->setData(2000, aux);
+	
+	aux = L"";	
 	if( counterTotal )
 	{
-		aux += ", ";
 		aux += m_pLis->getData(1007);
 		aux += " ";
 		aux += TOWSTRING(counterTotal);
@@ -562,9 +563,10 @@ MSLWString CHRC58::getSessionDetailed()
 			aux += m_pLis->getData(1001);
 		else
 			aux += m_pLis->getData(1002);
+		//Asigno segunda línea
+		m_pLis->setData(2001,aux);
 	}
-
-	return aux;
+	return "";//aux;
 }
 
 CReportBase::ReportReturn CHRC58::paintDateEvent()

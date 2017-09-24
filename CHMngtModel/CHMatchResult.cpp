@@ -590,7 +590,7 @@ MSLWString CHMatchResult::getMatchMemberSDescription() const
 		if(pMatchMember && pMatchMember->getRegister())
 		{
 			if(i!=0)
-				 txt+="-"+pMatchMember->getPrnSName();
+				 txt+=" / "+pMatchMember->getPrnSName();
 			else txt+=pMatchMember->getPrnSName();
 		}
 	}
