@@ -2140,7 +2140,7 @@ void CHRanking::userAcumulatePoolData(GTHPoolResult* pPoolResult, GTHMatchResult
 					((CHPoolResult*)pPoolResult)->setMWon( ((CHPoolResult*)pPoolResult)->getMWon() + 1);
 				if (((CHMatchResult*)pMatchResult)->getPoints()==pMatchResultOpp->getPoints())
 					((CHPoolResult*)pPoolResult)->setMDrawn( ((CHPoolResult*)pPoolResult)->getMDrawn() + 1);
-				if (((CHMatchResult*)pMatchResult)->getPoints()<=pMatchResultOpp->getPoints())
+				if (((CHMatchResult*)pMatchResult)->getPoints()<pMatchResultOpp->getPoints())
 					((CHPoolResult*)pPoolResult)->setMLost( ((CHPoolResult*)pPoolResult)->getMLost() + 1);
 			}
 
