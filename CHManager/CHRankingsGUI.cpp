@@ -31,6 +31,7 @@
 #include "..\CHMngtModel\CHEvent.h"
 #include "..\CHMngtModel\CHPool.h"
 #include "..\CHMngtModel\CHPoolResult.h"
+#include "..\CHMngtModel\CHMatch.h"
 
 static int orderPoolResultsByRank(const MSLItem** a, const MSLItem** b)
 {
@@ -179,6 +180,10 @@ void CHRankingsGUI::onClick(long id,LPARAM lParam)
 		pLR.browseFile(getHWnd());
 		fillGridPoolResultsCH();
 	}
+	if (id==LX_IMPORT_RK+1)
+	{
+		calculateWinLossDrawAllPoolResults();
+	}
 	return GTHManagerGUI::onClick(id,lParam);
 }
 
@@ -191,6 +196,7 @@ void CHRankingsGUI::createOtherControls()
 	poolResults+=DESC(PROGRESSION_PRG_RESULTS);
 	m_gui.doLbl(LB_POOLRESULTS,RC(aRect.left,aRect.top+hCtrl,(aRect.right-16)/2,aRect.top+16+hCtrl) ,poolResults,getStyTitle(LB_POOLRESULTS));	
 	m_gui.doBut(LX_IMPORT_RK,RC(aRect.right-150,aRect.top+hCtrl,(aRect.right-16),aRect.top+16+hCtrl),"Import RK");
+	m_gui.doBut(LX_IMPORT_RK+1,RC(aRect.right-250,aRect.top+hCtrl,(aRect.right-150),aRect.top+16+hCtrl),"Calculate WLD all");
 }
 
 
@@ -484,4 +490,88 @@ void CHRankingsGUI::updateRanking(GData* pDataMember/*=0*/,long pos/*=-1*/)
 	APP::out(TRN_SET_POOLRESULT);
 	m_gui.grid_sort(GR_POOLRESULTS, pfc_orderPoolResultsByRank);
 	SendMessage(getHWndMsgs(), UM_DATA_UPDATED, (WPARAM)GTHPOOLRESULTGUIEX_ID, (LPARAM)pPResult);	
+}
+
+void CHRankingsGUI::calculateWinLossDrawAllPoolResults()
+{
+	CHPoolResult * pPResult = 0;
+	bool changed=false;
+	for(short i=0 ; i<m_gui.grid_getNLines(GR_POOLRESULTS) ; i++)
+	{
+		CHPoolResult * pPResult = (CHPoolResult *)m_gui.grid_getLParam(GR_POOLRESULTS,i);
+		if( pPResult )
+		{
+			float pointf = 0.;
+			short mplayed = 0;
+			short w = 0;
+			short l = 0;
+			short d = 0;
+			MSLSortedVector vMatchResult;
+			pPResult->getMatchResultsVector(vMatchResult);
+
+			CHMatchResult *pMatchResult=0;
+			for(short i=0; i<vMatchResult.entries();i++)
+			{
+				pMatchResult=(CHMatchResult*)vMatchResult[i];
+				if(pMatchResult && (pMatchResult->getInscription() && pPResult->getInscription()))
+				{
+					CHMatch* pMatch = (CHMatch*)pMatchResult->getMatch();
+					if (pMatch->getSubCode())
+						continue;
+
+					if  ( pMatch && 
+						( pMatch->getStatus() == CHMemoryDataBase::eFinished ||
+						  pMatch->getStatus() == CHMemoryDataBase::eUnofficial ) )
+					{
+//						pointf += pMatchResult->getPoints();
+						mplayed++;
+						if (!pMatch->hasByes())
+						{
+							CHMatchResult* pMatchResultOpp = (CHMatchResult*)((CHMatchResult*)pMatchResult)->getOpponent();
+							if (((CHMatchResult*)pMatchResult)->getPoints()>pMatchResultOpp->getPoints())
+								w++;
+							if (((CHMatchResult*)pMatchResult)->getPoints()==pMatchResultOpp->getPoints())
+								d++;
+							if (((CHMatchResult*)pMatchResult)->getPoints()<pMatchResultOpp->getPoints())
+								l++;
+						}
+					}
+				}
+			}
+/*			if (pPResult->getPointsF() != pointf)
+			{
+				pPResult->setPointsF(pointf);
+				changed = true;
+			}*/
+			if (pPResult->getMPlayed() != mplayed)
+			{
+				pPResult->setMPlayed(mplayed);
+				changed = true;
+			}
+			if (pPResult->getMWon() != w)
+			{
+				pPResult->setMWon(w);
+				changed = true;
+			}
+			if (pPResult->getMDrawn() != d)
+			{
+				pPResult->setMDrawn(d);
+				changed = true;
+			}
+			if (pPResult->getMLost() != l)
+			{
+				pPResult->setMLost(l);
+				changed = true;
+			}
+
+			if (changed)
+				APP::out(*pPResult);
+		}
+	}
+	if (changed)
+	{
+		APP::out(TRN_SET_POOLRESULT);
+		m_gui.grid_sort(GR_POOLRESULTS, pfc_orderPoolResultsByRank);
+		SendMessage(getHWndMsgs(), UM_DATA_UPDATED, (WPARAM)GTHPOOLRESULTGUIEX_ID, (LPARAM)pPResult);
+	}
 }
