@@ -373,8 +373,9 @@ void CHODF2Results::fillSportResult(MSLItem * pResult,XMLElement * pEl_Result)
 
 	if (pMR->getQualitativeCode()==OK)
 	{		
-		bool paintRank = ( pMatch && pMatch->getStatus()==CHMemoryDataBase::eFinished);
-
+		pEl_Result->setAttribute("ResultType","POINTS");
+		
+		bool paintRank = false;//( pMatch && pMatch->getStatus()==CHMemoryDataBase::eFinished);
 		if (paintRank && pMR->getRank())
 		{
 			pEl_Result->setAttribute("Rank",pMR->getRank());			
@@ -383,8 +384,6 @@ void CHODF2Results::fillSportResult(MSLItem * pResult,XMLElement * pEl_Result)
 				pEl_Result->setAttribute("RankEqual","Y");
 			else
 				pEl_Result->setAttribute("RankEqual","N");
-
-			pEl_Result->setAttribute("ResultType","POINTS");
 		}				
 	}
 	else
