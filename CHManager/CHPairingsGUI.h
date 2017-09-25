@@ -25,6 +25,7 @@
 class CHPool;
 class CHPoolResult;
 class CHPairingsToolBar;
+class CHEvent;
 
 class CHPairingsGUI : public GTHMatchGUIEx
 {
@@ -44,9 +45,10 @@ public:
 
 	bool canInsertMatch				(GTHMatch *pMatch);
 
-	void loadPairings				();
+	void loadPairings				(CHEvent * pEvent);
 	void loadResults				();
 	CHMatch* loadPair				(MSLSet toSend, short nLine, MSLString line);
+	CHMatch* loadPairTeam			(MSLSet toSend, short nLine, MSLString line);
 	CHMatch* loadResult				(MSLSet toSend, short nLine, MSLString line);
 
 	CHPoolResult * findPoolResultSeed(MSLString seed);

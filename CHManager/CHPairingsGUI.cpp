@@ -118,7 +118,7 @@ LRESULT CHPairingsGUI::onLButDownToolBar(WPARAM wParam/*=0*/, LPARAM lParam/*=0*
 {
 	if (wParam==LX_LOAD_PAIRINGS)
 	{
-		loadPairings();
+		loadPairings(m_pPool?(CHEvent*)m_pPool->getEvent():0);
 		return 0;
 	}
 	if (wParam==LX_LOAD_RESULTS)
@@ -167,7 +167,7 @@ void CHPairingsGUI::loadResults()
 	}
 }
 
-void CHPairingsGUI::loadPairings()
+void CHPairingsGUI::loadPairings(CHEvent * pEvent)
 {		
 	GFileDialog aFile(getHWnd(), L"txt",
 				L"*.txt",
@@ -190,7 +190,7 @@ void CHPairingsGUI::loadPairings()
 		{	
 			line = buffer(pos1,pos2-pos1);
 			
-			CHMatch *pMatch  = loadPair(toSend, nLine, line);
+			CHMatch *pMatch  = pEvent && pEvent->isTeam() ? loadPairTeam(toSend, nLine, line) : loadPair(toSend, nLine, line);
 
 			pos1 = pos2+1;
 			pos2 = buffer.index(endLine,pos1);			
@@ -216,7 +216,7 @@ CHMatch* CHPairingsGUI::loadPair(MSLSet toSend, short nLine, MSLString line)
 	MSLString trash=NULLSTRING;
 	
 
-	// 1; 12; WIM, Vo Thi Kim Phung; VIE; 2349; 1; ; 1 ; GM; Lei Tingjie ; CHN; 2534; 1;
+	// 1; 12; WIM; Vo Thi Kim Phung; VIE; 2349; 1; ; 1 ; GM; Lei Tingjie ; CHN; 2534; 1;
 	// Match
 	pos2 = line.index('\t',pos1);
 	if (pos2!=-1)
@@ -327,6 +327,134 @@ CHMatch* CHPairingsGUI::loadPair(MSLSet toSend, short nLine, MSLString line)
 	{
 		aux = line(pos1,pos2-pos1);
 		trash = aux.strip(MSLString::both,'"');
+		pos1=pos2+1;
+	}
+	// Seed 2
+	aux = line(pos1,line.length()-pos1);
+	seed2 = aux.strip(MSLString::both,'"');
+	
+	MSLSortedVector vRoundMatches;
+	m_pPool->getRoundMatchesVector(vRoundMatches,m_selRound);
+
+	CHMatch * pMatch = (CHMatch * ) vRoundMatches[nLine];
+	if (pMatch)
+	{
+		CHMatchResult * pWhite = pMatch->getWhite();
+		CHMatchResult * pBlack = pMatch->getBlack();
+
+		if (name1=="bye")
+		{
+			CHPoolResult *pPoolResult = findBye();	
+			if (pPoolResult)
+				m_pTHProgression->setData(pPoolResult, pWhite);			
+			m_pTHProgression->setData(0, pWhite, true, true, true);
+		}
+		else
+		{			
+			CHPoolResult * pPoolResult = findPoolResultSeed(seed1);
+			if (pPoolResult && pWhite)
+				m_pTHProgression->setData(pPoolResult, pWhite);			
+		}
+		if (name2=="bye")
+		{
+			CHPoolResult *pPoolResult = findBye();	
+			if (pPoolResult)
+				m_pTHProgression->setData(pPoolResult, pBlack);			
+			m_pTHProgression->setData(0, pBlack, true, true, true);
+		}
+		else
+		{
+			CHPoolResult * pPoolResult = findPoolResultSeed(seed2);
+			if (pPoolResult && pBlack)			
+				m_pTHProgression->setData(pPoolResult, pBlack);
+		}
+
+	}
+	return 0;
+}
+
+CHMatch* CHPairingsGUI::loadPairTeam(MSLSet toSend, short nLine, MSLString line)
+{
+	long pos1 = 0;
+	long pos2 = 0;
+	long pos3 = 0;
+
+	MSLString match=NULLSTRING;
+	MSLString name1=NULLSTRING;
+	MSLString seed1=NULLSTRING;
+	MSLString seed2=NULLSTRING;
+	MSLString name2=NULLSTRING;
+	
+	MSLString aux=NULLSTRING;
+	MSLString trash=NULLSTRING;
+	
+
+	// Match
+	// 1;7;Turkmenistan;0;;;0;China;1
+	pos2 = line.index('\t',pos1);
+	if (pos2!=-1)
+	{
+		aux = line(pos1,pos2-pos1);
+		match = aux.strip(MSLString::both,'"');
+		pos1=pos2+1;
+	}
+
+	// Seed 1
+	pos2 = line.index('\t',pos1);
+	if (pos2!=-1)
+	{
+		aux = line(pos1,pos2-pos1);
+		seed1 = aux.strip(MSLString::both,'"');
+		pos1=pos2+1;
+	}
+
+	// Name Team 1
+	pos2 = line.index('\t',pos1);
+	if (pos2!=-1)
+	{
+		aux = line(pos1,pos2-pos1);
+		name1 = aux.strip(MSLString::both,'"');
+		pos1=pos2+1;
+	}
+
+	// Points 1
+	pos2 = line.index('\t',pos1);
+	if (pos2!=-1)
+	{
+		aux = line(pos1,pos2-pos1);
+		trash = aux.strip(MSLString::both,'"');
+		pos1=pos2+1;
+	}
+	// Result
+	pos2 = line.index('\t',pos1);
+	if (pos2!=-1)
+	{
+		aux = line(pos1,pos2-pos1);
+		trash = aux.strip(MSLString::both,'"');
+		pos1=pos2+1;
+	}
+	// Result
+	pos2 = line.index('\t',pos1);
+	if (pos2!=-1)
+	{
+		aux = line(pos1,pos2-pos1);
+		trash = aux.strip(MSLString::both,'"');
+		pos1=pos2+1;
+	}
+	// Points 2
+	pos2 = line.index('\t',pos1);
+	if (pos2!=-1)
+	{
+		aux = line(pos1,pos2-pos1);
+		trash = aux.strip(MSLString::both,'"');
+		pos1=pos2+1;
+	}
+	// Name Team 2
+	pos2 = line.index('\t',pos1);
+	if (pos2!=-1)
+	{
+		aux = line(pos1,pos2-pos1);
+		name2 = aux.strip(MSLString::both,'"');
 		pos1=pos2+1;
 	}
 	// Seed 2
