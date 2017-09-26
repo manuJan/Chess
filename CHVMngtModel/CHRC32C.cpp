@@ -232,6 +232,15 @@ void CHRC32C::centerReport()
 	m_pLis->setVari(1,corx);
 }
 
+MSLDate CHRC32C::OnGetEventDate() const
+{
+	return INVALID_DATE;
+}
+
+MSLTime CHRC32C::OnGetEventTime() const
+{
+	return INVALID_TIME;
+}
 //////////////////////////////////////////////////////////////////////
 // CallBack Methods
 //////////////////////////////////////////////////////////////////////

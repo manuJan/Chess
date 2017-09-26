@@ -46,6 +46,9 @@ private:
 	void			centerReport();
 	void			initLabels();
 
+	MSLDate			OnGetEventDate() const;
+	MSLTime			OnGetEventTime() const;
+
 	unsigned short	reportHeader_CallBack	( struct USR_TAB *pTabInf );
 	unsigned short	reportBody_CallBack		( struct USR_TAB *pTabInf );
 
