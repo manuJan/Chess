@@ -358,6 +358,32 @@ int orderMatchResultByTeamPointsEliminatory(const MSLItem** a,const MSLItem** b)
 						 return order;
 				}
 			}
+			// Ganador 3er partido negras
+			CHMatch * pSubMatch3 = (CHMatch*) vSubMatches[vSubMatches.entries()-1];
+			if (pSubMatch3)
+			{
+				CHMatchResult * pWhite = (CHMatchResult*) pSubMatch3->getWhite();
+				CHMatchResult * pBlack = (CHMatchResult*) pSubMatch3->getBlack();
+
+				GScore pointsA=pWhite->getPoints();
+				GScore pointsB=pBlack->getPoints();
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order==0)
+				{
+					if ( pWhite->getInscription() == pA->getInscription() &&
+						 pBlack->getInscription() == pB->getInscription() )
+					{
+						// Ganador el B
+						return 1;
+					}
+					if (pWhite->getInscription() == pB->getInscription() &&
+						pBlack->getInscription() == pA->getInscription() )
+					{
+						return -1;
+					}
+				}
+			}
 		}
 	}
 
@@ -454,6 +480,33 @@ int compMatchResultByTeamPointsEliminatory(const MSLItem** a,const MSLItem** b)
 					int order = orderPoints(pointsB,pointsA);
 					if (order)
 						 return order;
+				}
+			}
+
+			// Ganador 3er partido negras
+			CHMatch * pSubMatch3 = (CHMatch*) vSubMatches[vSubMatches.entries()-1];
+			if (pSubMatch3)
+			{
+				CHMatchResult * pWhite = (CHMatchResult*) pSubMatch3->getWhite();
+				CHMatchResult * pBlack = (CHMatchResult*) pSubMatch3->getBlack();
+
+				GScore pointsA=pWhite->getPoints();
+				GScore pointsB=pBlack->getPoints();
+
+				int order = orderPoints(pointsA,pointsB);
+				if (order==0)
+				{
+					if ( pWhite->getInscription() == pA->getInscription() &&
+						 pBlack->getInscription() == pB->getInscription() )
+					{
+						// Ganador el B
+						return 1;
+					}
+					if (pWhite->getInscription() == pB->getInscription() &&
+						pBlack->getInscription() == pA->getInscription() )
+					{
+						return -1;
+					}
 				}
 			}
 		}
