@@ -57,6 +57,8 @@ public:
 	void recalculateAllRanks		(CHPoolResult *pPoolResult, short oldRank, short sNewRank);
 	void updateRanking				(GData* pDataMember=0,long pos=-1);
 
+	void calculateWinLossDrawAllPoolResults();
+
 private:
 
 	CHPool * m_pPool;
