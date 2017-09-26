@@ -57,6 +57,19 @@ int orderMatchMemberByRating(const MSLItem** a, const MSLItem** b)
 	return strcmp(pMMA->getKey(),pMMB->getKey());
 }
 
+static 
+int orderMatchMemberByOrder(const MSLItem** a, const MSLItem** b) 
+{       
+        GTHMatchMember *pMMA = (GTHMatchMember *)(*a); 
+        GTHMatchMember *pMMB = (GTHMatchMember *)(*b);   
+
+		int order =pMMA->getMatchMember() - pMMB->getMatchMember(); 
+        if(order)
+			return order; 
+
+        return strcmp(pMMA->getKey(),pMMB->getKey()); 
+}
+
 CHProgression::CHProgression(MSLGUIEx* pGUIEx)
 :GTHProgression(pGUIEx)
 {
@@ -169,11 +182,11 @@ void CHProgression::setAutoSubMatchesAssign(CHMatch *pMatch)
 
 	CHMatchResult * pMR1 = (CHMatchResult*)pMatch->getHome();
 	MSLSortedVector vMatchMembers1;
-	pMR1->getMatchMembersVector(vMatchMembers1,orderMatchMemberByRating);
+	pMR1->getMatchMembersVector(vMatchMembers1,orderMatchMemberByOrder);
 
 	CHMatchResult * pMR2 = (CHMatchResult*)pMatch->getAway();	
 	MSLSortedVector vMatchMembers2;
-	pMR2->getMatchMembersVector(vMatchMembers2,orderMatchMemberByRating);
+	pMR2->getMatchMembersVector(vMatchMembers2,orderMatchMemberByOrder);
 
 	for (short i=0;i<vSubMatches.entries();i++)
 	{
