@@ -358,6 +358,7 @@ int orderMatchResultByTeamPointsEliminatory(const MSLItem** a,const MSLItem** b)
 						 return order;
 				}
 			}
+
 			// Ganador 3er partido negras
 			CHMatch * pSubMatch3 = (CHMatch*) vSubMatches[vSubMatches.entries()-1];
 			if (pSubMatch3)
