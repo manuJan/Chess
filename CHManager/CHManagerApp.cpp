@@ -65,7 +65,7 @@ GMemoryDataBase *CHManagerApp::onNewMemory()
 
 MSLWString CHManagerApp::onGetTitle() const
 {
-	return L"CH Manager";
+	return L"CH Manager V1.0";
 }
 
 
