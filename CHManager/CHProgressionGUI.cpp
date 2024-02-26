@@ -152,8 +152,16 @@ bool CHProgressionGUI::checkInitialDraw(GTHPhase* pPhase)
 {
 	if (pPhase->getStatus() >= GTHMemoryDataBase::eStartList)
 	{
-		MSLMsgBox( m_gui.getHWndBase() ,"The status of the phase is not valid",GUI_ICO_ERROR, GUI_MB_OK, "ARManager Error");					
-		return false;
+/*		MSLMsgBox( m_gui.getHWndBase() ,"The status of the phase is not valid",GUI_ICO_ERROR, GUI_MB_OK, "ARManager Error");					
+		return false;*/
+
+		long value = MSLMsgBox(m_hWnd, L"The status of the phase is not valid, do you continue?",GUI_ICO_QUESTION,GUI_MB_OKCANCEL,_T("CHManager Error"));
+		if (value == IDCANCEL)
+			return false;
+
+		value = MSLMsgBox(m_hWnd, L"Really, do you want to continue?",GUI_ICO_QUESTION,GUI_MB_OKCANCEL,_T("CHManager Error"));
+		if (value == IDCANCEL)
+			return false;
 	}
 
 	return true;

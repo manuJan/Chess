@@ -244,8 +244,13 @@ bool CHEnableEventGUIEx::canChangeEvent(CHEvent *pEvent, int col)
 		pEvent->getStatus()>=CHMemoryDataBase::eRunning &&
 		col == C_EV_TEAM_CFG)
 	{
-		MSLMsgBox(m_hWnd, L"The event is running, this value cannot be changed",GUI_ICO_STOP,GUI_MB_OK,L"Events");
-		return false;
+/*		MSLMsgBox(m_hWnd, L"The event is running, this value cannot be changed",GUI_ICO_STOP,GUI_MB_OK,L"Events");
+		return false;*/
+		long value = MSLMsgBox(m_hWnd, L"The event is running, do you want to change it?",GUI_ICO_QUESTION,GUI_MB_OKCANCEL,L"Events");
+		if (value == IDOK)
+			return true;
+		else
+			return false;
 	}
 
 	return true;

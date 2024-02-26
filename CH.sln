@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CHOVR2CIS", "CHOVR2CIS\CHOV
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CHVMngtModel", "CHVMngtModel\CHVMngtModel.vcxproj", "{8771DED8-83EC-4C43-8245-D481D420C4C9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CHCSVDownload", "CHCSVDownload\CHCSVDownload.vcxproj", "{05351CF2-DCB1-4ECA-9AF3-33E8E6705665}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -49,6 +51,10 @@ Global
 		{8771DED8-83EC-4C43-8245-D481D420C4C9}.Debug|Win32.Build.0 = Debug|Win32
 		{8771DED8-83EC-4C43-8245-D481D420C4C9}.Release|Win32.ActiveCfg = Release|Win32
 		{8771DED8-83EC-4C43-8245-D481D420C4C9}.Release|Win32.Build.0 = Release|Win32
+		{05351CF2-DCB1-4ECA-9AF3-33E8E6705665}.Debug|Win32.ActiveCfg = Debug|Win32
+		{05351CF2-DCB1-4ECA-9AF3-33E8E6705665}.Debug|Win32.Build.0 = Debug|Win32
+		{05351CF2-DCB1-4ECA-9AF3-33E8E6705665}.Release|Win32.ActiveCfg = Release|Win32
+		{05351CF2-DCB1-4ECA-9AF3-33E8E6705665}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

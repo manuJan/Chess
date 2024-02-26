@@ -1,0 +1,169 @@
+Type(0=Discipline 1=RegisterType 2=GenderType 3=Event 4=Function 5=Position),CC,ATOS,comment
+/////////////////////////////////////////////////////////////////////////////////
+//Discipline Common Codes Translation to Internal Discipline Codes
+/////////////////////////////////////////////////////////////////////////////////
+0,ATH,AT,ATHLETICS
+0,BMX,CB,BMX CYCLING
+0,CHE,CH,CHESS
+0,CRD,CR,ROAD CYCLING
+0,CTR,CT,TRACK CYCLING
+0,GAR,GA,ARTISTIC GYMNASTICS
+0,GLF,GO,GOLF
+0,MTB,CM,MOUNTAIN BIKE CYCLING
+0,TRI,TR,TRIATHLON
+/////////////////////////////////////////////////////////////////////////////////
+//Discipline Functions Common Codes Translation to Internal Regtypes Codes
+/////////////////////////////////////////////////////////////////////////////////
+1,AA01,0,Athlete
+1,P01,0,Alternate Athlete
+1,A1,6,Judge 1 of the Panel A
+1,A2,6,Judge 2 of the Panel A
+1,A3,6,Judge 3 of the Panel A
+1,A4,6,Judge 4 of the Panel A
+1,A5,6,Judge 5 of the Panel A
+1,A6,6,Judge 6 of the Panel A
+1,A7,6,Judge 7 of the Panel A
+1,ALT_JDG,6,Alternate Judge
+1,AR,6,Assistant Referee
+1,B1,6,Judge 1 of the Panel B
+1,B2,6,Judge 2 of the Panel B
+1,B3,6,Judge 3 of the Panel B
+1,B4,6,Judge 4 of the Panel B
+1,B5,6,Judge 5 of the Panel B
+1,B6,6,Judge 6 of the Panel B
+1,B7,6,Judge 7 of the Panel B
+1,D1,6,GAR-Difficulty Judge 1
+1,D2,6,GAR-Difficulty Judge 2
+1,E1,6,Execution Judge 1
+1,E2,6,Execution Judge 2
+1,E3,6,Execution Judge 3
+1,E4,6,Execution Judge 4
+1,E5,6,Execution Judge 5
+1,E6,6,Execution Judge 6
+1,ER1,6,GAR-Execution Reference Judge 1
+1,ER2,6,GAR-Execution Reference Judge 2
+1,J1,6,Judge 1
+1,J2,6,Judge 2
+1,J3,6,Judge 3
+1,J4,6,Judge 4
+1,J5,6,Judge 5
+1,J6,6,Judge 6
+1,J7,6,Judge 7
+1,JU,6,Judge
+1,LINE_JU,6,GAR-Line Judge
+1,LINE_JU1,6,GAR-Line Judge 1
+1,LINE_JU2,6,GAR-Line Judge 2
+1,ME,6,GAR-Member
+1,PR,6,GAR-President
+1,RE,6,Referee
+1,S1,6,Synchronisation judge 1
+1,S2,6,Synchronisation judge 2
+1,S3,6,Synchronisation judge 3
+1,S4,6,Synchronisation judge 4
+1,S5,6,Synchronisation judge 5
+1,SUP_BB,6,GAR-Beam Supervisor
+1,SUP_F,6,GAR-Floor Supervisor
+1,SUP_HB,6,GAR-Horizontal Bar Supervisor
+1,SUP_PB,6,GAR-Parallel Bars Supervisor
+1,SUP_PH,6,GAR-Pommel Horse Supervisor
+1,SUP_SR,6,GAR-Rings Supervisor
+1,SUP_UB,6,GAR-Uneven Bars Supervisor
+1,SUP_V,6,GAR-Vault Supervisor
+1,TIME_JU,6,GAR-Time Judge
+1,TIME_JU1,6,GAR-Time Judge 1
+1,TIME_JU2,6,GAR-Time Judge 2
+1,AST_COA,15,Assistant Coach
+1,CADDY,15,Caddy
+1,COACH,15,Coach
+1,CHOR,15,Choreographer
+/////////////////////////////////////////////////////////////////////////////////
+//Gender Common Codes Translation to internal Gender Codes
+/////////////////////////////////////////////////////////////////////////////////
+2,M,M,coincide cc con codigo interno
+2,W,W,coincide cc con codigo interno
+2,F,W,por si mandan F en la columna Gender
+2,X,X,coincide cc con codigo interno
+/////////////////////////////////////////////////////////////////////////////////
+//Event Common Codes Translation to internal Event Codes
+/////////////////////////////////////////////////////////////////////////////////
+//BMX Event Common Codes Translation
+3,BMXINDIVID-----------,001,BMX-BMX MEN and BMX WOMEN
+//CHE Event Common Codes Translation
+3,CHERAPID-------------,002,CHE-RAPID MEN and RAPID WOMEN
+3,CHEBLITZ-------------,003,CHE-BLITZ MEN and BLITZ WOMEN
+3,CHETEAMRAPID---------,401,CHE-TEAM RAPID MEN and TEAM RAPID WOMEN
+//CRD Event Common Codes Translation
+3,CRDRR----------------,012,CRD-ROAD RACE MEN and ROAD RACE WOMEN
+3,CRDTT----------------,011,CRD-TIME TRIAL MEN and TIME TRIAL WOMEN
+//CTR Event Common Codes Translation
+3,CTRSPRINT------------,001,CTR-SPRINT MEN and SPRINT WOMEN
+3,CTRKILO--------------,021,CTR-1000m TIME TRIAL MEN
+3,CTR500M--------------,020,CTR-500m TIME TRIAL WOMEN
+3,CTRSPRTEAM3----------,401,CTR-TEAM SPRINT MEN and TEAM SPRINT WOMEN
+3,CTRMPURSUIT-----------,014,CTR-4000m IND PURSUIT MEN
+3,CTRWPURSUIT-----------,013,CTR-3000m IND PURSUIT WOMEN
+3,CTRPURTEAM4----------,402,CTR-TEAM PURSUIT MEN and TEAM PURSUIT WOMEN
+3,CTRSCRATCH-----------,051,CTR-15km SCRATCH RACE MEN and 10km SCRATCH RACE WOMEN
+3,CTRPOINTS------------,031,CTR-40km POINTS RACE MEN and 25km POINTS RACE WOMEN
+3,CTRELIMIN------------,006,CTR-ELIMINATION RACE MEN and ELIMINATION RACE WOMEN
+3,CTRKEIRIN------------,008,CTR-KEIRIN MEN and KEIRIN WOMEN
+3,CTRMADISON-----------,430,CTR-MADISON MEN and MADISON WOMEN
+3,CTRMOMNIUM------------,131,CTR-OMNIUM MEN
+3,CTRWOMNIUM------------,131,CTR-OMNIUM WOMEN
+//MTB Event Common Codes Translation
+3,MTBXCTRY-------------,021,MTB-CROSS-COUNTRY MEN and CROSS-COUNTRY WOMEN
+//GAR Event Common Codes Translation
+3,GARM1APFX-------------,460,GAR-MEN FLOOR EXERCISE 061
+3,GARM1APPH-------------,460,GAR-MEN POMMEL HORSE 062
+3,GARM1APSR-------------,460,GAR-MEN RINGS 063
+3,GARM1APVT-------------,460,GAR-MEN VAULT 064
+3,GARM1APPB-------------,460,GAR-MEN PARALLEL BARS 065
+3,GARM1APHB-------------,460,GAR-MEN HORIZONTAL BAR 066
+3,GARMTEAM--------------,460,GAR-MEN TEAM
+3,GARW1APVT-------------,440,GAR-WOMEN VAULT 041
+3,GARW1APUB-------------,440,GAR-WOMEN UNEVEN BARS 042
+3,GARW1APBB-------------,440,GAR-WOMEN BALANCE BEAM 043
+3,GARW1APFX-------------,440,GAR-WOMEN FLOOR EXERCISE 044
+3,GARWTEAM--------------,440,GAR-WOMEN TEAM
+3,GARM1APFX---JNR-------,460,GAR-MEN JUNIOR FLOOR EXERCISE
+3,GARM1APPH---JNR-------,460,GAR-MEN JUNIOR POMMEL HORSE
+3,GARM1APSR---JNR-------,460,GAR-MEN JUNIOR RINGS
+3,GARM1APVT---JNR-------,460,GAR-MEN JUNIOR VAULT
+3,GARM1APPB---JNR-------,460,GAR-MEN JUNIOR PARALLEL BARS
+3,GARM1APHB---JNR-------,460,GAR-MEN JUNIOR HORIZONTAL BAR
+3,GARMTEAM----JNR-------,460,GAR-MEN JUNIOR TEAM
+3,GARW1APVT---JNR-------,440,GAR-WOMEN JUNIOR VAULT
+3,GARW1APUB---JNR-------,440,GAR-WOMEN JUNIOR UNEVEN BARS
+3,GARW1APBB---JNR-------,440,GAR-WOMEN JUNIOR BALANCE BEAM
+3,GARW1APFX---JNR-------,440,GAR-WOMEN JUNIOR FLOOR EXERCISE
+3,GARWTEAM----JNR-------,440,GAR-WOMEN JUNIOR TEAM
+//GLF Event Common Codes Translation
+3,GLFTEAM2-------------,401,GLF-TEAM COMPETITION MEN and TEAM COMPETITION WOMEN
+3,GLFTEAM4-------------,401,GLF-TEAM COMPETITION MIXED
+//TRI Event Common Codes Translation
+3,TRIOLYMPIC-----------,001,TRI-INDIVIDUAL
+3,TRITEAM4-------------,400,TRI-TEAM RELAY
+3,TRIXTEAM4-------------,400,TRI-TEAM RELAY
+/////////////////////////////////////////////////////////////////////////////////
+//Discipline Functions Common Codes Translation to internal Function Codes
+/////////////////////////////////////////////////////////////////////////////////
+//GAR Discipline Functions Common Codes Translation to Internal Functions Codes
+4,GARD1,3,GAR-Difficulty Judge
+4,GARD2,3,GAR-Difficulty Judge
+4,GARE1,4,GAR-Execution Judge
+4,GARE2,4,GAR-Execution Judge
+4,GARE3,4,GAR-Execution Judge
+4,GARE4,4,GAR-Execution Judge
+4,GARE5,4,GAR-Execution Judge
+4,GARER1,5,GAR-Execution Reference Judge
+4,GARER2,5,GAR-Execution Reference Judge
+4,GARLINE_JU,7,GAR-Line Judge
+4,GARLINE_JU1,7,GAR-Line Judge
+4,GARLINE_JU2,7,GAR-Line Judge
+4,GARTIME_JU,6,GAR-Time Judge
+4,GARTIME_JU1,6,GAR-Time Judge
+4,GARTIME_JU2,6,GAR-Time Judge
+4,GARJU,1,GAR-Superior Jury
+//TRI Discipline Functions Common Codes Translation to Internal Functions Codes
+4,TRIJU,21,TRI-Members of Jury
+4,TRIRE,40,TRI-Race Referee

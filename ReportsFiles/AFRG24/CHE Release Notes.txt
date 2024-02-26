@@ -1,0 +1,14 @@
+AGA2024 - Chess
+
+20240224
+ODF 
+CC 
+
+** New Features
+
+** Fixed
+
+** Improvements
+
+** Additional notes
+	Initial version

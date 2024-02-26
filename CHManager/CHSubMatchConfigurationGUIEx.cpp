@@ -300,7 +300,7 @@ void CHSubMatchConfigurationGUIEx::fillComboStatus(CHMatch * pMatch)
 {
 	m_gui.combo_reset(CB_SUBMATCH_CNF);
 
-	if(pMatch->getStatus()==CHMemoryDataBase::eSchedulled)
+/*	if(pMatch->getStatus()==CHMemoryDataBase::eSchedulled)
 	{
 		GStatus * pStatus=CHMemoryDataBase::findStatus(CHMemoryDataBase::eStartList);
 		if(pStatus)
@@ -323,7 +323,27 @@ void CHSubMatchConfigurationGUIEx::fillComboStatus(CHMatch * pMatch)
 		GStatus * pStatus=CHMemoryDataBase::findStatus(CHMemoryDataBase::eFinished);
 		if(pStatus)
 			m_gui.combo_add(CB_SUBMATCH_CNF,pStatus->getLDescription(),CHMemoryDataBase::eFinished);
-	}
+	}*/
+
+	GStatus * pStatus=CHMemoryDataBase::findStatus(CHMemoryDataBase::eSchedulled);
+	if(pStatus)
+		m_gui.combo_add(CB_SUBMATCH_CNF,pStatus->getLDescription(),CHMemoryDataBase::eSchedulled);
+
+	pStatus=CHMemoryDataBase::findStatus(CHMemoryDataBase::eStartList);
+	if(pStatus)
+		m_gui.combo_add(CB_SUBMATCH_CNF,pStatus->getLDescription(),CHMemoryDataBase::eStartList);
+
+	pStatus=CHMemoryDataBase::findStatus(CHMemoryDataBase::eRunning);
+	if(pStatus)
+		m_gui.combo_add(CB_SUBMATCH_CNF,pStatus->getLDescription(),CHMemoryDataBase::eRunning);
+
+	pStatus=CHMemoryDataBase::findStatus(CHMemoryDataBase::eUnofficial);
+	if(pStatus)
+		m_gui.combo_add(CB_SUBMATCH_CNF,pStatus->getLDescription(),CHMemoryDataBase::eUnofficial);
+
+	pStatus=CHMemoryDataBase::findStatus(CHMemoryDataBase::eFinished);
+	if(pStatus)
+		m_gui.combo_add(CB_SUBMATCH_CNF,pStatus->getLDescription(),CHMemoryDataBase::eFinished);
 }
 
 
@@ -599,8 +619,16 @@ void CHSubMatchConfigurationGUIEx::editSubMatchMember(CHMatch *pMatch, int col, 
 
 	if(pMatch && pMatch->getStatus()>=CHMemoryDataBase::eRunning)
 	{
-		MSLMsgBox(m_hWnd, L"You can't change members.\nThe Match is started",GUI_ICO_WARNING,GUI_MB_OK,_T("Match Type Result"));
-		return;
+/*		MSLMsgBox(m_hWnd, L"You can't change members.\nThe Match is started",GUI_ICO_WARNING,GUI_MB_OK,_T("Match Type Result"));
+		return;*/
+
+		long value = MSLMsgBox(m_hWnd, L"The match has started, do you want to change members?",GUI_ICO_QUESTION,GUI_MB_OKCANCEL,_T("Match Type Result"));
+		if (value == IDCANCEL)
+			return;
+
+		value = MSLMsgBox(m_hWnd, L"Really, do you want to change members?",GUI_ICO_QUESTION,GUI_MB_OKCANCEL,_T("Match Type Result"));
+		if (value == IDCANCEL)
+			return;
 	}
 
 	GTHMatchMember * pMM=0;

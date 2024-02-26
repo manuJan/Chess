@@ -1,0 +1,32 @@
+#include "StdAfx.h"
+#include "CHCSVDownLoadGUI.h"
+
+CHCSVDownLoadApp::CHCSVDownLoadApp()
+:CSVDownLoadApp()
+{
+}
+
+CHCSVDownLoadApp::~CHCSVDownLoadApp()
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Virtual methods inherited from MSLApp
+////////////////////////////////////////////////////////////////////////////////////////
+GMemoryDataBase *CHCSVDownLoadApp::onNewMemory()	
+{  
+	return new CHMemoryDataBase();
+}
+
+MSLWString CHCSVDownLoadApp::onGetTitle() const
+{
+	return L"CHCSVDownLoad";
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Virtual methods inherited from MSLAfterInitialLoadApp
+////////////////////////////////////////////////////////////////////////////////////////
+CSVDownLoadGUI* CHCSVDownLoadApp::onNewLoadGUI() const
+{
+	return new CHCSVDownLoadGUI(CSVDOWNLOAD_ID);
+}

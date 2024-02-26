@@ -293,14 +293,30 @@ void CHMatchGUIEx::initialDraw()
 	if (pPhase && 
 	   (pPhase->getStatus() > CHMemoryDataBase::eSchedulled))
 	{
-		MSLMsgBox(m_hWnd, L"The status of the phase must be less than schedule",GUI_ICO_STOP,GUI_MB_OK,L"Draw");
-		return;
+/*		MSLMsgBox(m_hWnd, L"The status of the phase must be less than schedule",GUI_ICO_STOP,GUI_MB_OK,L"Draw");
+		return;*/
+
+		long value = MSLMsgBox(m_hWnd, L"The status of the phase must be less than schedule, do you want to draw?",GUI_ICO_QUESTION,GUI_MB_OKCANCEL,L"Draw");
+		if (value == IDCANCEL)
+			return;
+
+		value = MSLMsgBox(m_hWnd, L"Really, do you want to draw?",GUI_ICO_QUESTION,GUI_MB_OKCANCEL,L"Draw");
+		if (value == IDCANCEL)
+			return;
 	}
 
 	if (pPhase->hasCompetitors())
 	{
-		MSLMsgBox(m_hWnd, L"This event has some competitors, remove all before",GUI_ICO_STOP,GUI_MB_OK,L"Draw");		
-		return;
+/*		MSLMsgBox(m_hWnd, L"This event has some competitors, remove all before",GUI_ICO_STOP,GUI_MB_OK,L"Draw");		
+		return;*/
+
+		long value = MSLMsgBox(m_hWnd, L"This event has some competitors, do you want to draw?",GUI_ICO_QUESTION,GUI_MB_OKCANCEL,L"Draw");
+		if (value == IDCANCEL)
+			return;
+
+		value = MSLMsgBox(m_hWnd, L"Really, do you want to draw?",GUI_ICO_QUESTION,GUI_MB_OKCANCEL,L"Draw");
+		if (value == IDCANCEL)
+			return;
 	}
 	
 	m_pTHProgression->doInitialDraw(pPhase,GTHProgression::eRandom);
