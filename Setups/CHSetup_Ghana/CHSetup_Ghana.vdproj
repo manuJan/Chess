@@ -297,12 +297,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_2C719DF712234F49A241657B87D2C55D"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_2E1C36BE939948EE8DD153D88FAF1147"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -335,24 +329,6 @@
         {
         "MsmKey" = "8:_3407F0998CCF4637961058FD09D64087"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_37B0FEC56F7247E2948710B489B09902"
-        "OwnerKey" = "8:_09E5A420B7AD4C1DA1FA5BF554409DC6"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_37B0FEC56F7247E2948710B489B09902"
-        "OwnerKey" = "8:_CFBD98A9104647B5BEA866861C404A18"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_37B0FEC56F7247E2948710B489B09902"
-        "OwnerKey" = "8:_CD4F7F5828C248E78E8DF977AB094277"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -509,6 +485,12 @@
         {
         "MsmKey" = "8:_5541DC966E4C232C3B49754D501C2A86"
         "OwnerKey" = "8:_CD4F7F5828C248E78E8DF977AB094277"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_57D8915F1393450FA89AFE128F11BA29"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -789,6 +771,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_9644C3B71DB144EC9957E7DB0AA35F7C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_97AA5C9BA9B84E19A71B881A62DB4904"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1005,6 +993,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C2B4362835434A4B818FBFBB674B3BBB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C31406F7B82E44B48579AAC90ABC7280"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1131,12 +1125,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_CE298D24FE05483D9391D6F68DF2DCAC"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_CEC473D786BE4B3BA009DAAE4EECC9B9"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1205,6 +1193,24 @@
         {
         "MsmKey" = "8:_D74AB2F8165A4FA4BB991D74605399EE"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D9152EC6BA114A7683E7D9F13E5777FC"
+        "OwnerKey" = "8:_09E5A420B7AD4C1DA1FA5BF554409DC6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D9152EC6BA114A7683E7D9F13E5777FC"
+        "OwnerKey" = "8:_CFBD98A9104647B5BEA866861C404A18"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D9152EC6BA114A7683E7D9F13E5777FC"
+        "OwnerKey" = "8:_CD4F7F5828C248E78E8DF977AB094277"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1342,6 +1348,12 @@
         "Entry"
         {
         "MsmKey" = "8:_F38D2B79D4204EA290C8115529526DC2"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F3974D5A4A3D456FAB98ECC1662192CE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2483,26 +2495,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2C719DF712234F49A241657B87D2C55D"
-            {
-            "SourcePath" = "8:..\\..\\CHCSVDownload\\config\\LinkDataCommonCodes.csv"
-            "TargetName" = "8:LinkDataCommonCodes.csv"
-            "Tag" = "8:"
-            "Folder" = "8:_EFDC78E66746482D981AEB32C276459A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2E1C36BE939948EE8DD153D88FAF1147"
             {
             "SourcePath" = "8:..\\..\\..\\..\\OVR-General\\common\\lang\\ZZ.APPMODEL.ESP.txt"
@@ -3101,6 +3093,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_57D8915F1393450FA89AFE128F11BA29"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\OVR-General\\general\\gui\\CSVDownLoad\\Config\\AFRICAN2024\\LinkDataColum.csv"
+            "TargetName" = "8:LinkDataColum.csv"
+            "Tag" = "8:"
+            "Folder" = "8:_EFDC78E66746482D981AEB32C276459A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_58A29EF0874646A5BD0EB7DCBAB0A54A"
@@ -3974,6 +3986,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9644C3B71DB144EC9957E7DB0AA35F7C"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\OVR-General\\general\\gui\\CSVDownLoad\\Config\\AFRICAN2024\\LinkDataCommonCodes.csv"
+            "TargetName" = "8:LinkDataCommonCodes.csv"
+            "Tag" = "8:"
+            "Folder" = "8:_EFDC78E66746482D981AEB32C276459A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_97AA5C9BA9B84E19A71B881A62DB4904"
             {
             "SourcePath" = "8:..\\..\\..\\..\\OVR-General\\common\\reports\\ReportsFiles\\ZZ.C92.lis"
@@ -4694,6 +4726,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C2B4362835434A4B818FBFBB674B3BBB"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\OVR-General\\general\\gui\\CSVDownLoad\\Config\\AFRICAN2024\\LinkDataCountry.csv"
+            "TargetName" = "8:LinkDataCountry.csv"
+            "Tag" = "8:"
+            "Folder" = "8:_EFDC78E66746482D981AEB32C276459A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C31406F7B82E44B48579AAC90ABC7280"
             {
             "SourcePath" = "8:..\\..\\..\\..\\OVR-General\\common\\reports\\ReportsFiles\\ZZ.C38W.lis"
@@ -5022,26 +5074,6 @@
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C5E929F0241B498FB94634FC3EF47E69"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CE298D24FE05483D9391D6F68DF2DCAC"
-            {
-            "SourcePath" = "8:..\\..\\CHCSVDownload\\config\\LinkDataColum.csv"
-            "TargetName" = "8:LinkDataColum.csv"
-            "Tag" = "8:"
-            "Folder" = "8:_EFDC78E66746482D981AEB32C276459A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5736,6 +5768,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F3974D5A4A3D456FAB98ECC1662192CE"
+            {
+            "SourcePath" = "8:..\\..\\DataBase\\Data\\NUMBERING.txt"
+            "TargetName" = "8:NUMBERING.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_C5B142EAC776476BA9566B08530BB55F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F4689FDE08324D24B4AF2EA55AF20736"
             {
             "SourcePath" = "8:..\\..\\..\\..\\OVR-General\\common\\lang\\GUI.COMMON.ENG.txt"
@@ -6129,7 +6181,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Chess"
         "ProductCode" = "8:{7C759570-A113-4B3D-A836-EE06E1E57286}"
-        "PackageCode" = "8:{3619017F-1ECD-4471-A049-B2FB8A59952B}"
+        "PackageCode" = "8:{63311BF1-CB74-4CAF-9BDC-3FC5AA9DDB59}"
         "UpgradeCode" = "8:{01EEE604-38C1-4F02-A42A-419F9ECC56D6}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -6737,7 +6789,7 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_37B0FEC56F7247E2948710B489B09902"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_D9152EC6BA114A7683E7D9F13E5777FC"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"

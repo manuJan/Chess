@@ -22,6 +22,9 @@ public:
 	MSLString getMedical(CSVRegister *pRegisterCSV);
 	MSLString getEventGender(MSLWString ic_sport, MSLWString ic_eventCode, MSLWString ic_genderCode);
 
+	//event inscription
+	virtual GEvent *getEventInscription(CSVRegister *pRegisterCSV,MSLWString columnEventName,MSLWString columnGenderName,MSLWString eventCategory);
+
 	GRegister *getDoubleRegister(GEvent *pEvent,const char *NOC);			//Sport
 
 	void composeDoublesName(CHRegister *pRegister,const char *language = 0,bool erase = false);

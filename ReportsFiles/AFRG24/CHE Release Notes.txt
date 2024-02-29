@@ -1,5 +1,20 @@
 AGA2024 - Chess
 
+20240229
+ODF 
+CC 
+
+** New Features
+
+** Fixed
+
+** Improvements
+
+** Additional notes
+	Updated event files for database
+	Updated csvdonwload
+
+
 20240224
 ODF 
 CC 
